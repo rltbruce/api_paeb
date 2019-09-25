@@ -19,40 +19,50 @@ class District extends REST_Controller {
         $id_region = $this->get('id_region');
             
         if ($id_region) 
-        {
-            $data = $this->DistrictManager->findByregion($id_region);
-        }
-        else
-        {
-            if ($id) 
+        {   $data = array();
+            $tmp = $this->DistrictManager->findByregion($id_region);
+            if ($tmp) 
             {
-                $data = array();
-                $district = $this->DistrictManager->findById($id);
-                $region = $this->RegionManager->findById($district->id_region);
-                $data['id'] = $district->id;
-                $data['code'] = $district->code;
-                $data['nom'] = $district->nom;
-                $data['region'] = $region;
-            } 
-            else 
-            {
-                $menu = $this->DistrictManager->findAll();
-                if ($menu) 
+                foreach ($tmp as $key => $value) 
                 {
-                    foreach ($menu as $key => $value) 
-                    {
-                        $region = array();
-                        $region = $this->RegionManager->findById($value->id_region);
-                        $data[$key]['id'] = $value->id;
-                        $data[$key]['code'] = $value->code;
-                        $data[$key]['nom'] = $value->nom;
-                        $data[$key]['region'] = $region;
-                    }
-                } 
-                else
-                    $data = array();
+                    $region = array();
+                    $region = $this->RegionManager->findById($value->id_region);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['nom'] = $value->nom;
+                    $data[$key]['region'] = $region;
+                }
             }
         }
+        elseif ($id)
+        {
+            $data = array();
+            $district = $this->DistrictManager->findById($id);
+            $region = $this->RegionManager->findById($district->id_region);
+            $data['id'] = $district->id;
+            $data['code'] = $district->code;
+            $data['nom'] = $district->nom;
+            $data['region'] = $region;
+        } 
+        else 
+        {
+            $menu = $this->DistrictManager->findAll();
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $region = array();
+                    $region = $this->RegionManager->findById($value->id_region);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['nom'] = $value->nom;
+                    $data[$key]['region'] = $region;
+                }
+            } 
+                else
+                    $data = array();
+        }
+    
         
         if (count($data)>0) {
             $this->response([
@@ -77,7 +87,7 @@ class District extends REST_Controller {
                 $data = array(
                     'code' => $this->post('code'),
                     'nom' => $this->post('nom'),
-                    'id_region' => $this->post('region_id')
+                    'id_region' => $this->post('id_region')
                 );
                 if (!$data) {
                     $this->response([
@@ -104,7 +114,7 @@ class District extends REST_Controller {
                 $data = array(
                     'code' => $this->post('code'),
                     'nom' => $this->post('nom'),
-                    'id_region' => $this->post('region_id')
+                    'id_region' => $this->post('id_region')
                 );
                 if (!$data || !$id) {
                     $this->response([

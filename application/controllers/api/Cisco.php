@@ -5,22 +5,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Commune extends REST_Controller {
+class Cisco extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('commune_model', 'CommuneManager');
+        $this->load->model('cisco_model', 'CiscoManager');
         $this->load->model('district_model', 'DistrictManager');
     }
-    public function index_get() {
+
+    public function index_get() 
+    {
         $id = $this->get('id');
         $id_district = $this->get('id_district');
-        $id_region = $this->get('id_region');
-		$taiza="";
-        if ($id_district)
-        {
-            $data = array();
-            $tmp = $this->CommuneManager->findBydistrict($id_district);
+            
+        if ($id_district) 
+        {   $data = array();
+            $tmp = $this->CiscoManager->findBydistrict($id_district);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -29,44 +29,46 @@ class Commune extends REST_Controller {
                     $district = $this->DistrictManager->findById($value->id_district);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
-                    $data[$key]['nom'] = $value->nom;
+                    $data[$key]['description'] = $value->description;
                     $data[$key]['district'] = $district;
                 }
             }
-        }elseif ($id) 
+        }
+        elseif ($id)
         {
             $data = array();
-            $commune = $this->CommuneManager->findById($id);
-            $district = $this->DistrictManager->findById($commune->id_district);
-            $data['id'] = $commune->id;
-            $data['code'] = $commune->code;
-            $data['nom'] = $commune->nom;
+            $cisco = $this->CiscoManager->findById($id);
+            $district = $this->DistrictManager->findById($cisco->id_district);
+            $data['id'] = $cisco->id;
+            $data['code'] = $cisco->code;
+            $data['description'] = $cisco->description;
             $data['district'] = $district;
-        }else
+        } 
+        else 
         {
-			$taiza="findAll no nataony";
-            $menu = $this->CommuneManager->findAll();
-            if ($menu)
+            $menu = $this->CiscoManager->findAll();
+            if ($menu) 
             {
-                foreach ($menu as $key => $value)
+                foreach ($menu as $key => $value) 
                 {
                     $district = array();
                     $district = $this->DistrictManager->findById($value->id_district);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
-                    $data[$key]['nom'] = $value->nom;
+                    $data[$key]['description'] = $value->description;
                     $data[$key]['district'] = $district;
                 }
-            } else
+            } 
+                else
                     $data = array();
         }
+    
         
         if (count($data)>0) {
             $this->response([
                 'status' => TRUE,
                 'response' => $data,
-                'message' => $taiza,
-                // 'message' => 'Get data success',
+                'message' => 'Get data success',
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
@@ -76,14 +78,15 @@ class Commune extends REST_Controller {
             ], REST_Controller::HTTP_OK);
         }
     }
-    public function index_post() {
+    public function index_post() 
+    {
         $id = $this->post('id') ;
         $supprimer = $this->post('supprimer') ;
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
                     'code' => $this->post('code'),
-                    'nom' => $this->post('nom'),
+                    'description' => $this->post('description'),
                     'id_district' => $this->post('id_district')
                 );
                 if (!$data) {
@@ -93,8 +96,8 @@ class Commune extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->CommuneManager->add($data);
-                if (!is_null($dataId))  {
+                $dataId = $this->CiscoManager->add($data);
+                if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
                         'response' => $dataId,
@@ -106,11 +109,11 @@ class Commune extends REST_Controller {
                         'response' => 0,
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
-                }         
+                }
             } else {
                 $data = array(
                     'code' => $this->post('code'),
-                    'nom' => $this->post('nom'),
+                    'description' => $this->post('description'),
                     'id_district' => $this->post('id_district')
                 );
                 if (!$data || !$id) {
@@ -118,31 +121,31 @@ class Commune extends REST_Controller {
                         'status' => FALSE,
                         'response' => 0,
                         'message' => 'No request found'
-                            ], REST_Controller::HTTP_BAD_REQUEST);
+                    ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->CommuneManager->update($id, $data);
+                $update = $this->CiscoManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
                         'response' => 1,
                         'message' => 'Update data success'
-                            ], REST_Controller::HTTP_OK);
+                    ], REST_Controller::HTTP_OK);
                 } else {
                     $this->response([
                         'status' => FALSE,
                         'message' => 'No request found'
-                            ], REST_Controller::HTTP_OK);
+                    ], REST_Controller::HTTP_OK);
                 }
             }
         } else {
             if (!$id) {
-            $this->response([
-                'status' => FALSE,
-                'response' => 0,
-                'message' => 'No request found'
-                    ], REST_Controller::HTTP_BAD_REQUEST);
+                $this->response([
+                    'status' => FALSE,
+                    'response' => 0,
+                    'message' => 'No request found'
+                        ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->CommuneManager->delete($id);
+            $delete = $this->CiscoManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,
@@ -156,7 +159,7 @@ class Commune extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_OK);
             }
-        }      
+        }        
     }
 }
 /* End of file controllername.php */

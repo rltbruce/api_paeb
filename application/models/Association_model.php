@@ -1,47 +1,49 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Commune_model extends CI_Model {
-    protected $table = 'commune';
+class Association_model extends CI_Model {
+    protected $table = 'association';
 
-    public function add($commune) {
-        $this->db->set($this->_set($commune))
+    public function add($association) {
+        $this->db->set($this->_set($association))
                             ->insert($this->table);
-        if($this->db->affected_rows() === 1)
-        {
+        if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
         }else{
             return null;
         }                    
     }
-    public function update($id, $commune) {
-        $this->db->set($this->_set($commune))
+    public function update($id, $association) {
+        $this->db->set($this->_set($association))
                             ->where('id', (int) $id)
                             ->update($this->table);
-        if($this->db->affected_rows() === 1) {
+        if($this->db->affected_rows() === 1)
+        {
             return true;
         }else{
             return null;
         }                      
     }
-    public function _set($commune) {
+    public function _set($association) {
         return array(
-            'code'           =>      $commune['code'],
-            'nom'            =>      $commune['nom'],
-            'id_district'    =>      $commune['id_district']                       
+            'code'         =>      $association['code'],
+            'description'  =>      $association['description'],
+            'id_commune'   =>      $association['id_commune'],
+            'id_cisco'     =>      $association['id_cisco']                       
         );
     }
     public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);
-        if($this->db->affected_rows() === 1) {
+        if($this->db->affected_rows() === 1)
+        {
             return true;
         }else{
             return null;
         }  
     }
-    public function findAll() {
+    public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('nom')
+                        ->order_by('description')
                         ->get()
                         ->result();
         if($result)
@@ -58,25 +60,12 @@ class Commune_model extends CI_Model {
             return $q->row();
         }
     }
-    public function findByIdTable($id) {
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("id", $id)
-                        ->order_by('id', 'asc')
-                        ->get()
-                        ->result();
-        if($result) {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
 
-    public function findBydistrict($id_district) {               
+    public function findBycommune($id_commune) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where('id_district',$id_district)
-                        ->order_by('nom')
+                        ->where('id_commune',$id_commune)
+                        ->order_by('description')
                         ->get()
                         ->result();
         if($result)
@@ -85,6 +74,6 @@ class Commune_model extends CI_Model {
         }else{
             return null;
         }                 
-    }	
-    
+    } 
+
 }

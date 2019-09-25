@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class District_model extends CI_Model {
-    protected $table = 'district';
+class Attachement_model extends CI_Model {
+    protected $table = 'attachement';
 
-    public function add($district) {
-        $this->db->set($this->_set($district))
+    public function add($attachement) {
+        $this->db->set($this->_set($attachement))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class District_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $district) {
-        $this->db->set($this->_set($district))
+    public function update($id, $attachement) {
+        $this->db->set($this->_set($attachement))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,11 +23,10 @@ class District_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($district) {
+    public function _set($attachement) {
         return array(
-            'code'          =>      $district['code'],
-            'nom'           =>      $district['nom'],
-            'id_region'     =>      $district['id_region']                       
+            'code'          =>      $attachement['code'],
+            'description'   =>      $attachement['description']                       
         );
     }
     public function delete($id) {
@@ -42,7 +41,7 @@ class District_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('nom')
+                        ->order_by('description')
                         ->get()
                         ->result();
         if($result)
@@ -59,20 +58,5 @@ class District_model extends CI_Model {
             return $q->row();
         }
     }
-
-    public function findByregion($id_region) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where('id_region',$id_region)
-                        ->order_by('nom')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    } 
 
 }
