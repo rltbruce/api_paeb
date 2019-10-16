@@ -34,6 +34,7 @@ class Ecole extends REST_Controller {
                     $data[$key]['latitude'] = $value->latitude;
                     $data[$key]['longitude'] = $value->longitude;
                     $data[$key]['altitude'] = $value->altitude;
+                    $data[$key]['ponderation'] = $value->ponderation;
                     $data[$key]['commune'] = $commune;
                 }
             }
@@ -50,6 +51,7 @@ class Ecole extends REST_Controller {
             $data['latitude'] = $ecole->latitude;
             $data['longitude'] = $ecole->longitude;
             $data['altitude'] = $ecole->altitude;
+            $data['ponderation'] = $ecole->ponderation;
             $data['commune'] = $commune;
         } 
         else 
@@ -68,6 +70,7 @@ class Ecole extends REST_Controller {
                     $data[$key]['latitude'] = $value->latitude;
                     $data[$key]['longitude'] = $value->longitude;
                     $data[$key]['altitude'] = $value->altitude;
+                    $data[$key]['ponderation'] = $value->ponderation;
                     $data[$key]['commune'] = $commune;
                 }
             } 
@@ -103,6 +106,7 @@ class Ecole extends REST_Controller {
                     'latitude' => $this->post('latitude'),
                     'longitude' => $this->post('longitude'),
                     'altitude' => $this->post('altitude'),
+                    'ponderation' => $this->post('ponderation'),
                     'id_commune' => $this->post('id_commune')
                 );
                 if (!$data) {
@@ -134,6 +138,7 @@ class Ecole extends REST_Controller {
                     'latitude' => $this->post('latitude'),
                     'longitude' => $this->post('longitude'),
                     'altitude' => $this->post('altitude'),
+                    'ponderation' => $this->post('ponderation'),
                     'id_commune' => $this->post('id_commune')
                 );
                 if (!$data || !$id) {
