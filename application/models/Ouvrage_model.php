@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Attachement_model extends CI_Model {
-    protected $table = 'attachement';
+class Ouvrage_model extends CI_Model {
+    protected $table = 'ouvrage';
 
-    public function add($attachement) {
-        $this->db->set($this->_set($attachement))
+    public function add($ouvrage) {
+        $this->db->set($this->_set($ouvrage))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Attachement_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $attachement) {
-        $this->db->set($this->_set($attachement))
+    public function update($id, $ouvrage) {
+        $this->db->set($this->_set($ouvrage))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,12 +23,11 @@ class Attachement_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($attachement) {
+    public function _set($ouvrage) {
         return array(
-            'libelle'       =>      $attachement['libelle'],
-            'description'   =>      $attachement['description'],
-            'ponderation'   =>      $attachement['ponderation'],
-            'id_ouvrage'    => $attachement['id_ouvrage']                       
+            'libelle'       =>      $ouvrage['libelle'],
+            'description'   =>      $ouvrage['description'],
+            'id_categorie_ouvrage' => $ouvrage['id_categorie_ouvrage']                        
         );
     }
     public function delete($id) {
@@ -60,11 +59,11 @@ class Attachement_model extends CI_Model {
             return $q->row();
         }
     }
-    public function findByouvrage($id_ouvrage)
-    {               
+
+    public function findBycategorie_ouvrage($id_categorie_ouvrage) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where('id_ouvrage',$id_ouvrage)
+                        ->where('id_categorie_ouvrage',$id_categorie_ouvrage)
                         ->order_by('description')
                         ->get()
                         ->result();

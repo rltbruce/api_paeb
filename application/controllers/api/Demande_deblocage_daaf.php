@@ -5,60 +5,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Attachement extends REST_Controller {
+class Demande_deblocage_daaf extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('attachement_model', 'AttachementManager');
-        $this->load->model('ouvrage_model', 'OuvrageManager');
+        $this->load->model('demande_deblocage_daaf_model', 'Demande_deblocage_daafManager');
+        $this->load->model('programmation_model', 'ProgrammationManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_ouvrage = $this->get('id_ouvrage');
+        $id_programmation = $this->get('id_programmation');
             
-        if ($id_ouvrage) 
-        {   $data = array();
-            $tmp = $this->AttachementManager->findByouvrage($id_ouvrage);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $ouvrage = array();
-                    $ouvrage = $this->OuvrageManager->findById($value->id_ouvrage);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation'] = $value->ponderation;
-                    $data[$key]['ouvrage'] = $ouvrage;
-                }
-            }
-        }
-        elseif ($id)
+        if ($id)
         {
             $data = array();
-            $attachement = $this->AttachementManager->findById($id);
-            $ouvrage = $this->OuvrageManager->findById($attachement->id_ouvrage);
-            $data['id'] = $attachement->id;
-            $data['libelle'] = $attachement->libelle;
-            $data['description'] = $attachement->description;
-            $data['ponderation'] = $attachement->ponderation;
-            $data['ouvrage'] = $ouvrage;
+            $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($id);
+            $programmation = $this->ProgrammationManager->findById($demande_deblocage_daaf->id_programmation);
+            $data['id'] = $demande_deblocage_daaf->id;
+            $data['code'] = $demande_deblocage_daaf->code;
+            $data['description'] = $demande_deblocage_daaf->description;
+            $data['date'] = $demande_deblocage_daaf->date;
+            $data['programmation'] = $programmation;
         } 
         else 
         {
-            $menu = $this->AttachementManager->findAll();
+            $menu = $this->Demande_deblocage_daafManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $ouvrage = $this->OuvrageManager->findById($value->id_ouvrage);
+                    $programmation= array();
+                    $programmation = $this->ProgrammationManager->findById($value->id_programmation);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['code'] = $value->code;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation'] = $value->ponderation;
-                    $data[$key]['ouvrage'] = $ouvrage;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['programmation'] = $programmation;
                 }
             } 
                 else
@@ -87,10 +71,10 @@ class Attachement extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
+                    'code' => $this->post('code'),
                     'description' => $this->post('description'),
-                    'ponderation' => $this->post('ponderation'),
-                    'id_ouvrage' => $this->post('id_ouvrage')
+                    'date' => $this->post('date'),
+                    'id_programmation' => $this->post('id_programmation')
                 );
                 if (!$data) {
                     $this->response([
@@ -99,7 +83,7 @@ class Attachement extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->AttachementManager->add($data);
+                $dataId = $this->Demande_deblocage_daafManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -115,10 +99,10 @@ class Attachement extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
+                    'code' => $this->post('code'),
                     'description' => $this->post('description'),
-                    'ponderation' => $this->post('ponderation'),
-                    'id_ouvrage' => $this->post('id_ouvrage')
+                    'date' => $this->post('date'),
+                    'id_programmation' => $this->post('id_programmation')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -127,7 +111,7 @@ class Attachement extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->AttachementManager->update($id, $data);
+                $update = $this->Demande_deblocage_daafManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -149,7 +133,7 @@ class Attachement extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->AttachementManager->delete($id);         
+            $delete = $this->Demande_deblocage_daafManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

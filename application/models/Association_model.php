@@ -27,8 +27,7 @@ class Association_model extends CI_Model {
         return array(
             'code'         =>      $association['code'],
             'description'  =>      $association['description'],
-            'id_commune'   =>      $association['id_commune'],
-            'id_cisco'     =>      $association['id_cisco']                       
+            'id_ecole'   =>      $association['id_ecole']                       
         );
     }
     public function delete($id) {

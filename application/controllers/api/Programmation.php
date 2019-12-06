@@ -5,60 +5,38 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Attachement extends REST_Controller {
+class Programmation extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('attachement_model', 'AttachementManager');
-        $this->load->model('ouvrage_model', 'OuvrageManager');
+        $this->load->model('programmation_model', 'ProgrammationManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_ouvrage = $this->get('id_ouvrage');
             
-        if ($id_ouvrage) 
-        {   $data = array();
-            $tmp = $this->AttachementManager->findByouvrage($id_ouvrage);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $ouvrage = array();
-                    $ouvrage = $this->OuvrageManager->findById($value->id_ouvrage);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation'] = $value->ponderation;
-                    $data[$key]['ouvrage'] = $ouvrage;
-                }
-            }
-        }
-        elseif ($id)
+        if ($id)
         {
             $data = array();
-            $attachement = $this->AttachementManager->findById($id);
-            $ouvrage = $this->OuvrageManager->findById($attachement->id_ouvrage);
-            $data['id'] = $attachement->id;
-            $data['libelle'] = $attachement->libelle;
-            $data['description'] = $attachement->description;
-            $data['ponderation'] = $attachement->ponderation;
-            $data['ouvrage'] = $ouvrage;
+            $programmation = $this->ProgrammationManager->findById($id);
+            $data['id'] = $programmation->id;
+            $data['date'] = $programmation->date;
+            $data['description'] = $programmation->description;
+            $data['montant_total_prevu'] = $programmation->montant_total_prevu;
         } 
         else 
         {
-            $menu = $this->AttachementManager->findAll();
+            $menu = $this->ProgrammationManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
-                {
-                    $ouvrage = $this->OuvrageManager->findById($value->id_ouvrage);
+                {                    
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['date'] = $value->date;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation'] = $value->ponderation;
-                    $data[$key]['ouvrage'] = $ouvrage;
+                    $data[$key]['montant_total_prevu'] = $value->montant_total_prevu;
+                    
                 }
             } 
                 else
@@ -87,10 +65,10 @@ class Attachement extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
+                    'date' => $this->post('date'),
                     'description' => $this->post('description'),
-                    'ponderation' => $this->post('ponderation'),
-                    'id_ouvrage' => $this->post('id_ouvrage')
+                    'montant_total_prevu' => $this->post('montant_total_prevu'),
+                    
                 );
                 if (!$data) {
                     $this->response([
@@ -99,7 +77,7 @@ class Attachement extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->AttachementManager->add($data);
+                $dataId = $this->ProgrammationManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -115,10 +93,10 @@ class Attachement extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
+                    'date' => $this->post('date'),
                     'description' => $this->post('description'),
-                    'ponderation' => $this->post('ponderation'),
-                    'id_ouvrage' => $this->post('id_ouvrage')
+                    'montant_total_prevu' => $this->post('montant_total_prevu'),
+                    
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -127,7 +105,7 @@ class Attachement extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->AttachementManager->update($id, $data);
+                $update = $this->ProgrammationManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -149,7 +127,7 @@ class Attachement extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->AttachementManager->delete($id);         
+            $delete = $this->ProgrammationManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

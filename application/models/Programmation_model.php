@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Attachement_model extends CI_Model {
-    protected $table = 'attachement';
+class Programmation_model extends CI_Model {
+    protected $table = 'programmation';
 
-    public function add($attachement) {
-        $this->db->set($this->_set($attachement))
+    public function add($programmation) {
+        $this->db->set($this->_set($programmation))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Attachement_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $attachement) {
-        $this->db->set($this->_set($attachement))
+    public function update($id, $programmation) {
+        $this->db->set($this->_set($programmation))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,12 +23,11 @@ class Attachement_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($attachement) {
+    public function _set($programmation) {
         return array(
-            'libelle'       =>      $attachement['libelle'],
-            'description'   =>      $attachement['description'],
-            'ponderation'   =>      $attachement['ponderation'],
-            'id_ouvrage'    => $attachement['id_ouvrage']                       
+            'date'       =>      $programmation['date'],
+            'description'   =>      $programmation['description'],
+            'montant_total_prevu'   =>      $programmation['montant_total_prevu']                       
         );
     }
     public function delete($id) {
@@ -59,21 +58,6 @@ class Attachement_model extends CI_Model {
         if ($q->num_rows() > 0) {
             return $q->row();
         }
-    }
-    public function findByouvrage($id_ouvrage)
-    {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where('id_ouvrage',$id_ouvrage)
-                        ->order_by('description')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
     }
 
 }

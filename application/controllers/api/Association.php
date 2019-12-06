@@ -10,31 +10,28 @@ class Association extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('association_model', 'AssociationManager');
-        $this->load->model('cisco_model', 'CiscoManager');
-        $this->load->model('commune_model', 'CommuneManager');
+        $this->load->model('ecole_model', 'EcoleManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_commune = $this->get('id_commune');
+        $id_ecole = $this->get('id_ecole');
             
-        if ($id_commune) 
+        if ($id_ecole) 
         {   $data = array();
-            $tmp = $this->CiscoManager->findBycommune($id_commune);
+            $tmp = $this->AssociationManager->findByecole($id_ecole);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $commune = array();
+                    $ecole = array();
                     $cisco = array();
-                    $commune = $this->CommuneManager->findById($value->id_commune);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $ecole = $this->EcoleManager->findById($value->id_ecole);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['code'] = $value->code;
+                    $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['commune'] = $commune;
-                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['ecole'] = $ecole;
                 }
             }
         }
@@ -42,13 +39,11 @@ class Association extends REST_Controller {
         {
             $data = array();
             $association = $this->AssociationManager->findById($id);
-            $commune = $this->CommuneManager->findById($association->id_commune);
-            $cisco = $this->CiscoManager->findById($association->id_cisco);
+            $ecole = $this->EcoleManager->findById($association->id_ecole);
             $data['id'] = $association->id;
-            $data['code'] = $association->code;
+            $data['libelle'] = $association->libelle;
             $data['description'] = $association->description;
-            $data['commune'] = $commune;
-            $data['cisco'] = $cisco;
+            $data['ecole'] = $ecole;
         } 
         else 
         {
@@ -57,15 +52,13 @@ class Association extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $commune = array();
+                    $ecole = array();
                     $cisco = array();
-                    $commune = $this->CommuneManager->findById($value->id_commune);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $ecole = $this->EcoleManager->findById($value->id_ecole);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['code'] = $value->code;
+                    $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['commune'] = $commune;
-                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['ecole'] = $ecole;
                 }
             } 
                 else
@@ -94,10 +87,9 @@ class Association extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'code' => $this->post('code'),
+                    'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'id_commune' => $this->post('id_commune'),
-                    'id_cisco' => $this->post('id_cisco')
+                    'id_ecole' => $this->post('id_ecole')
                 );
                 if (!$data) {
                     $this->response([
@@ -122,10 +114,9 @@ class Association extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'code' => $this->post('code'),
+                    'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'id_commune' => $this->post('id_commune'),
-                    'id_cisco' => $this->post('id_cisco')
+                    'id_ecole' => $this->post('id_ecole')
                 );
                 if (!$data || !$id) {
                     $this->response([
