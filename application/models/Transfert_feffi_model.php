@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Association_model extends CI_Model {
-    protected $table = 'association';
+class Transfert_feffi_model extends CI_Model {
+    protected $table = 'transfert_feffi';
 
-    public function add($association) {
-        $this->db->set($this->_set($association))
+    public function add($transfert_feffi) {
+        $this->db->set($this->_set($transfert_feffi))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Association_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $association) {
-        $this->db->set($this->_set($association))
+    public function update($id, $transfert_feffi) {
+        $this->db->set($this->_set($transfert_feffi))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,11 +23,14 @@ class Association_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($association) {
+    public function _set($transfert_feffi) {
         return array(
-            'code'         =>      $association['code'],
-            'description'  =>      $association['description'],
-            'id_ecole'   =>      $association['id_ecole']                       
+            'code'          =>      $transfert_feffi['code'],
+            'description'   =>      $transfert_feffi['description'],
+            'montant'       =>      $transfert_feffi['montant'],
+            'num_facture'   =>      $transfert_feffi['num_facture'],
+            'date'          =>      $transfert_feffi['date'],
+            'id_convention'    =>  $transfert_feffi['id_convention']                       
         );
     }
     public function delete($id) {
@@ -60,10 +63,10 @@ class Association_model extends CI_Model {
         }
     }
 
-    public function findBycommune($id_commune) {               
+    public function findAllByprogramme($id_convention) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where('id_commune',$id_commune)
+                        ->where("id_convention", $id_convention)
                         ->order_by('description')
                         ->get()
                         ->result();

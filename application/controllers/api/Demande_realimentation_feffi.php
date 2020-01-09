@@ -5,60 +5,64 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Association extends REST_Controller {
+class Demande_realimentation_feffi extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('association_model', 'AssociationManager');
-        $this->load->model('ecole_model', 'EcoleManager');
+        $this->load->model('demande_realimentation_feffi_model', 'Demande_realimentation_feffiManager');
+        $this->load->model('convention_model', 'ConventionManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_ecole = $this->get('id_ecole');
-            
-        if ($id_ecole) 
-        {   $data = array();
-            $tmp = $this->AssociationManager->findByecole($id_ecole);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $ecole = array();
-                    $cisco = array();
-                    $ecole = $this->EcoleManager->findById($value->id_ecole);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ecole'] = $ecole;
-                }
-            }
-        }
-        elseif ($id)
+        $id_convention = $this->get('id_convention');
+        $menu = $this->get('menu');
+
+        if ($menu=='getdemande_realimentation_convention')
         {
-            $data = array();
-            $association = $this->AssociationManager->findById($id);
-            $ecole = $this->EcoleManager->findById($association->id_ecole);
-            $data['id'] = $association->id;
-            $data['libelle'] = $association->libelle;
-            $data['description'] = $association->description;
-            $data['ecole'] = $ecole;
-        } 
-        else 
-        {
-            $menu = $this->AssociationManager->findAll();
+            $menu = $this->Demande_realimentation_feffiManager->findByIdconvention($id_convention);
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $ecole = array();
-                    $cisco = array();
-                    $ecole = $this->EcoleManager->findById($value->id_ecole);
+                    $convention= array();
+                    $convention = $this->ConventionManager->findById($value->id_convention);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['ecole'] = $ecole;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['convention'] = $convention;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($id)
+        {
+            $data = array();
+            $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->findById($id);
+            $convention = $this->ConventionManager->findById($demande_realimentation_feffi->id_convention);
+            $data['id'] = $demande_realimentation_feffi->id;
+            $data['libelle'] = $demande_realimentation_feffi->libelle;
+            $data['description'] = $demande_realimentation_feffi->description;
+            $data['date'] = $demande_realimentation_feffi->date;
+            $data['convention'] = $convention;
+        } 
+        else 
+        {
+            $menu = $this->Demande_realimentation_feffiManager->findAll();
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $convention= array();
+                    $convention = $this->ConventionManager->findById($value->id_convention);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['convention'] = $convention;
                 }
             } 
                 else
@@ -89,7 +93,8 @@ class Association extends REST_Controller {
                 $data = array(
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'id_ecole' => $this->post('id_ecole')
+                    'date' => $this->post('date'),
+                    'id_convention' => $this->post('id_convention')
                 );
                 if (!$data) {
                     $this->response([
@@ -98,7 +103,7 @@ class Association extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->AssociationManager->add($data);
+                $dataId = $this->Demande_realimentation_feffiManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -116,7 +121,8 @@ class Association extends REST_Controller {
                 $data = array(
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'id_ecole' => $this->post('id_ecole')
+                    'date' => $this->post('date'),
+                    'id_convention' => $this->post('id_convention')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -125,7 +131,7 @@ class Association extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->AssociationManager->update($id, $data);
+                $update = $this->Demande_realimentation_feffiManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -147,7 +153,7 @@ class Association extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->AssociationManager->delete($id);         
+            $delete = $this->Demande_realimentation_feffiManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

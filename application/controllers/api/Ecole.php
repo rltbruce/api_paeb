@@ -10,23 +10,23 @@ class Ecole extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('ecole_model', 'EcoleManager');
-        $this->load->model('commune_model', 'CommuneManager');
+        $this->load->model('fokontany_model', 'FokontanyManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_commune = $this->get('id_commune');
+        $id_fokontany = $this->get('id_fokontany');
             
-        if ($id_commune) 
+        if ($id_fokontany) 
         {   $data = array();
-            $tmp = $this->EcoleManager->findBycommune($id_commune);
+            $tmp = $this->EcoleManager->findByfokontany($id_fokontany);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $commune = array();
-                    $commune = $this->CommuneManager->findById($value->id_commune);
+                    $fokontany = array();
+                    $fokontany = $this->FokontanyManager->findById($value->id_fokontany);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['lieu'] = $value->lieu;
@@ -35,7 +35,7 @@ class Ecole extends REST_Controller {
                     $data[$key]['longitude'] = $value->longitude;
                     $data[$key]['altitude'] = $value->altitude;
                     $data[$key]['ponderation'] = $value->ponderation;
-                    $data[$key]['commune'] = $commune;
+                    $data[$key]['fokontany'] = $fokontany;
                 }
             }
         }
@@ -43,7 +43,7 @@ class Ecole extends REST_Controller {
         {
             $data = array();
             $ecole = $this->EcoleManager->findById($id);
-            $commune = $this->CommuneManager->findById($ecole->id_commune);
+            $fokontany = $this->FokontanyManager->findById($ecole->id_fokontany);
             $data['id'] = $ecole->id;
             $data['code'] = $ecole->code;
             $data['lieu'] = $ecole->lieu;
@@ -52,7 +52,7 @@ class Ecole extends REST_Controller {
             $data['longitude'] = $ecole->longitude;
             $data['altitude'] = $ecole->altitude;
             $data['ponderation'] = $ecole->ponderation;
-            $data['commune'] = $commune;
+            $data['fokontany'] = $fokontany;
         } 
         else 
         {
@@ -61,8 +61,8 @@ class Ecole extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $commune = array();
-                    $commune = $this->CommuneManager->findById($value->id_commune);
+                    $fokontany = array();
+                    $fokontany = $this->FokontanyManager->findById($value->id_fokontany);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['lieu'] = $value->lieu;
@@ -71,7 +71,7 @@ class Ecole extends REST_Controller {
                     $data[$key]['longitude'] = $value->longitude;
                     $data[$key]['altitude'] = $value->altitude;
                     $data[$key]['ponderation'] = $value->ponderation;
-                    $data[$key]['commune'] = $commune;
+                    $data[$key]['fokontany'] = $fokontany;
                 }
             } 
                 else
@@ -107,7 +107,7 @@ class Ecole extends REST_Controller {
                     'longitude' => $this->post('longitude'),
                     'altitude' => $this->post('altitude'),
                     'ponderation' => $this->post('ponderation'),
-                    'id_commune' => $this->post('id_commune')
+                    'id_fokontany' => $this->post('id_fokontany')
                 );
                 if (!$data) {
                     $this->response([
@@ -139,7 +139,7 @@ class Ecole extends REST_Controller {
                     'longitude' => $this->post('longitude'),
                     'altitude' => $this->post('altitude'),
                     'ponderation' => $this->post('ponderation'),
-                    'id_commune' => $this->post('id_commune')
+                    'id_fokontany' => $this->post('id_fokontany')
                 );
                 if (!$data || !$id) {
                     $this->response([

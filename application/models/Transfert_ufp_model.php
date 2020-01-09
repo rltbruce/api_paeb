@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Demande_deblocage_daaf_model extends CI_Model {
-    protected $table = 'demande_deblocage_daaf';
+class Transfert_ufp_model extends CI_Model {
+    protected $table = 'transfert_ufp';
 
-    public function add($demande_deblocage_daaf) {
-        $this->db->set($this->_set($demande_deblocage_daaf))
+    public function add($transfert_ufp) {
+        $this->db->set($this->_set($transfert_ufp))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Demande_deblocage_daaf_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $demande_deblocage_daaf) {
-        $this->db->set($this->_set($demande_deblocage_daaf))
+    public function update($id, $transfert_ufp) {
+        $this->db->set($this->_set($transfert_ufp))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,12 +23,14 @@ class Demande_deblocage_daaf_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($demande_deblocage_daaf) {
+    public function _set($transfert_ufp) {
         return array(
-            'code'          =>      $demande_deblocage_daaf['code'],
-            'description'   =>      $demande_deblocage_daaf['description'],
-            'date'          =>      $demande_deblocage_daaf['date'],
-            'id_programmation'    =>  $demande_deblocage_daaf['id_programmation']                       
+            'code'          =>      $transfert_ufp['code'],
+            'description'   =>      $transfert_ufp['description'],
+            'montant'       =>      $transfert_ufp['montant'],
+            'num_facture'   =>      $transfert_ufp['num_facture'],
+            'date'          =>      $transfert_ufp['date'],
+            'id_programmation'    =>  $transfert_ufp['id_programmation']                       
         );
     }
     public function delete($id) {

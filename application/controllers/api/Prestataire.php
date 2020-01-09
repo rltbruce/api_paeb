@@ -21,7 +21,7 @@ class Prestataire extends REST_Controller {
             $data = array();
             $prestataire = $this->PrestataireManager->findById($id);
             $data['id'] = $prestataire->id;
-            $data['code'] = $prestataire->code;
+            $data['telephone'] = $prestataire->telephone;
             $data['nom'] = $prestataire->nom;
             $data['nif'] = $prestataire->nif;
             $data['stat'] = $prestataire->stat;
@@ -36,7 +36,7 @@ class Prestataire extends REST_Controller {
                 {
                     $district = array();
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['code'] = $value->code;
+                    $data[$key]['telephone'] = $value->telephone;
                     $data[$key]['nom'] = $value->nom;
                     $data[$key]['nif'] = $value->nif;
                     $data[$key]['stat'] = $value->stat;
@@ -69,7 +69,7 @@ class Prestataire extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'code' => $this->post('code'),
+                    'telephone' => $this->post('telephone'),
                     'nom' => $this->post('nom'),
                     'nif' => $this->post('nif'),
                     'stat' => $this->post('stat'),
@@ -98,7 +98,7 @@ class Prestataire extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'code' => $this->post('code'),
+                    'telephone' => $this->post('telephone'),
                     'nom' => $this->post('nom'),
                     'nif' => $this->post('nif'),
                     'stat' => $this->post('stat'),

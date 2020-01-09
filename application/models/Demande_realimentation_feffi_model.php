@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Demande_deblocage_daaf_model extends CI_Model {
-    protected $table = 'demande_deblocage_daaf';
+class Demande_realimentation_feffi_model extends CI_Model {
+    protected $table = 'demande_realimentation_feffi';
 
-    public function add($demande_deblocage_daaf) {
-        $this->db->set($this->_set($demande_deblocage_daaf))
+    public function add($demande_realimentation_feffi) {
+        $this->db->set($this->_set($demande_realimentation_feffi))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Demande_deblocage_daaf_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $demande_deblocage_daaf) {
-        $this->db->set($this->_set($demande_deblocage_daaf))
+    public function update($id, $demande_realimentation_feffi) {
+        $this->db->set($this->_set($demande_realimentation_feffi))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,12 +23,12 @@ class Demande_deblocage_daaf_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($demande_deblocage_daaf) {
+    public function _set($demande_realimentation_feffi) {
         return array(
-            'code'          =>      $demande_deblocage_daaf['code'],
-            'description'   =>      $demande_deblocage_daaf['description'],
-            'date'          =>      $demande_deblocage_daaf['date'],
-            'id_programmation'    =>  $demande_deblocage_daaf['id_programmation']                       
+            'libelle'          =>      $demande_realimentation_feffi['libelle'],
+            'description'   =>      $demande_realimentation_feffi['description'],
+            'date'          =>      $demande_realimentation_feffi['date'],
+            'id_convention'    =>  $demande_realimentation_feffi['id_convention']                       
         );
     }
     public function delete($id) {
@@ -61,10 +61,10 @@ class Demande_deblocage_daaf_model extends CI_Model {
         }
     }
 
-    public function findAllByprogramme($id_programmation) {               
+    public function findByIdconvention($id_convention) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_programmation", $id_programmation)
+                        ->where("id_convention", $id_convention)
                         ->order_by('description')
                         ->get()
                         ->result();

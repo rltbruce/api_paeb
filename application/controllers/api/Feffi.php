@@ -5,34 +5,60 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Ouvrage extends REST_Controller {
+class Feffi extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('ouvrage_model', 'OuvrageManager');
+        $this->load->model('feffi_model', 'FeffiManager');
+        $this->load->model('ecole_model', 'EcoleManager');
     }
 
     public function index_get() 
     {
-        $id = $this->get('id');    
-        if ($id)
+        $id = $this->get('id');
+        $id_ecole = $this->get('id_ecole');
+            
+        if ($id_ecole) 
+        {   $data = array();
+            $tmp = $this->AssociationManager->findByecole($id_ecole);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $ecole = array();
+                    $cisco = array();
+                    $ecole = $this->EcoleManager->findById($value->id_ecole);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['denomination'] = $value->denomination;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ecole'] = $ecole;
+                }
+            }
+        }
+        elseif ($id)
         {
             $data = array();
-            $ouvrage = $this->OuvrageManager->findById($id);
-            $data['id'] = $ouvrage->id;
-            $data['libelle'] = $ouvrage->libelle;
-            $data['description'] = $ouvrage->description;
+            $feffi = $this->FeffiManager->findById($id);
+            $ecole = $this->EcoleManager->findById($feffi->id_ecole);
+            $data['id'] = $feffi->id;
+            $data['denomination'] = $feffi->denomination;
+            $data['description'] = $feffi->description;
+            $data['ecole'] = $ecole;
         } 
         else 
         {
-            $menu = $this->OuvrageManager->findAll();
+            $menu = $this->FeffiManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
-                {  
+                {
+                    $ecole = array();
+                    $cisco = array();
+                    $ecole = $this->EcoleManager->findById($value->id_ecole);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['denomination'] = $value->denomination;
                     $data[$key]['description'] = $value->description;
+                    $data[$key]['ecole'] = $ecole;
                 }
             } 
                 else
@@ -61,8 +87,9 @@ class Ouvrage extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description')
+                    'denomination' => $this->post('denomination'),
+                    'description' => $this->post('description'),
+                    'id_ecole' => $this->post('id_ecole')
                 );
                 if (!$data) {
                     $this->response([
@@ -71,7 +98,7 @@ class Ouvrage extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->OuvrageManager->add($data);
+                $dataId = $this->FeffiManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -87,8 +114,9 @@ class Ouvrage extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description')
+                    'denomination' => $this->post('denomination'),
+                    'description' => $this->post('description'),
+                    'id_ecole' => $this->post('id_ecole')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -97,7 +125,7 @@ class Ouvrage extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->OuvrageManager->update($id, $data);
+                $update = $this->FeffiManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -119,7 +147,7 @@ class Ouvrage extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->OuvrageManager->delete($id);         
+            $delete = $this->FeffiManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

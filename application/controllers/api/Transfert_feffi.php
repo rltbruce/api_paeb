@@ -5,34 +5,70 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Ouvrage extends REST_Controller {
+class Transfert_feffi extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('ouvrage_model', 'OuvrageManager');
+        $this->load->model('transfert_feffi_model', 'Transfert_feffiManager');
+        $this->load->model('convention_model', 'ConventionManager');
     }
 
     public function index_get() 
     {
-        $id = $this->get('id');    
-        if ($id)
+        $id = $this->get('id');
+        $id_convention = $this->get('id_convention');
+        $menu = $this->get('menu');
+            
+        if ($menu=='gettransfert_feffi_programme')
+        {
+            $tmp = $this->Transfert_feffiManager->findAllByprogramme($id_convention);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $convention= array();
+                    $convention = $this->ConventionManager->findById($value->id_convention);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['num_facture'] = $value->num_facture;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['convention'] = $convention;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($id)
         {
             $data = array();
-            $ouvrage = $this->OuvrageManager->findById($id);
-            $data['id'] = $ouvrage->id;
-            $data['libelle'] = $ouvrage->libelle;
-            $data['description'] = $ouvrage->description;
+            $transfert_feffi = $this->Transfert_feffiManager->findById($id);
+            $convention = $this->ConventionManager->findById($transfert_feffi->id_convention);
+            $data['id'] = $transfert_feffi->id;
+            $data['code'] = $transfert_feffi->code;
+            $data['description'] = $transfert_feffi->description;
+            $data['montant'] = $transfert_feffi->montant;
+            $data['num_facture'] = $transfert_feffi->num_facture;
+            $data['date'] = $transfert_feffi->date;
+            $data['convention'] = $convention;
         } 
         else 
         {
-            $menu = $this->OuvrageManager->findAll();
+            $menu = $this->Transfert_feffiManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
-                {  
+                {
+                    $convention= array();
+                    $convention = $this->ConventionManager->findById($value->id_convention);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['code'] = $value->code;
                     $data[$key]['description'] = $value->description;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['num_facture'] = $value->num_facture;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['convention'] = $convention;
                 }
             } 
                 else
@@ -61,8 +97,12 @@ class Ouvrage extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description')
+                    'code' => $this->post('code'),
+                    'description' => $this->post('description'),
+                    'montant' => $this->post('montant'),
+                    'num_facture' => $this->post('num_facture'),
+                    'date' => $this->post('date'),
+                    'id_convention' => $this->post('id_convention')
                 );
                 if (!$data) {
                     $this->response([
@@ -71,7 +111,7 @@ class Ouvrage extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->OuvrageManager->add($data);
+                $dataId = $this->Transfert_feffiManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -87,8 +127,12 @@ class Ouvrage extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description')
+                    'code' => $this->post('code'),
+                    'description' => $this->post('description'),
+                    'montant' => $this->post('montant'),
+                    'num_facture' => $this->post('num_facture'),
+                    'date' => $this->post('date'),
+                    'id_convention' => $this->post('id_convention')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -97,7 +141,7 @@ class Ouvrage extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->OuvrageManager->update($id, $data);
+                $update = $this->Transfert_feffiManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -119,7 +163,7 @@ class Ouvrage extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->OuvrageManager->delete($id);         
+            $delete = $this->Transfert_feffiManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

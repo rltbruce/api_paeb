@@ -1,7 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Convention_model extends CI_Model {
-    protected $table = 'convention';
+class Convention_cisco_feffi_model extends CI_Model {
+    protected $table = 'convention_cisco_feffi';
 
     public function add($convention) {
         $this->db->set($this->_set($convention))
@@ -28,8 +28,7 @@ class Convention_model extends CI_Model {
             'numero_convention'  =>   $convention['numero_convention'],
             'description'   =>      $convention['description'],
             'id_cisco'     =>      $convention['id_cisco'],
-            'id_association'  =>   $convention['id_association'],
-            'id_categorie_ouvrage'   =>      $convention['id_categorie_ouvrage'],
+            'id_feffi'  =>   $convention['id_feffi'],
             'id_ouvrage'     =>      $convention['id_ouvrage'],
             'montant_prevu'  =>   $convention['montant_prevu'],
             'montant_reel'   =>      $convention['montant_reel'],
@@ -88,6 +87,21 @@ class Convention_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("validation",0)
+                        ->order_by('numero_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findAllValide() {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation",1)
                         ->order_by('numero_convention')
                         ->get()
                         ->result();

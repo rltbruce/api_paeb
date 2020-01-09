@@ -32,7 +32,7 @@ class Ecole_model extends CI_Model {
             'longitude'     =>      $ecole['longitude'],
             'altitude'      =>      $ecole['altitude'],
             'ponderation'   =>      $ecole['ponderation'],
-            'id_commune'    =>      $ecole['id_commune']                       
+            'id_fokontany'    =>    $ecole['id_fokontany']                       
         );
     }
     public function delete($id) {

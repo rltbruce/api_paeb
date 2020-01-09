@@ -17,8 +17,27 @@ class Demande_deblocage_daaf extends REST_Controller {
     {
         $id = $this->get('id');
         $id_programmation = $this->get('id_programmation');
-            
-        if ($id)
+        $menu = $this->get('menu');
+        if ($menu=='getdemande_deblocage_daaf_programme')
+        {
+            $tmp = $this->Demande_deblocage_daafManager->findAllByprogramme($id_programmation);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $programmation= array();
+                    $programmation = $this->ProgrammationManager->findById($value->id_programmation);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['programmation'] = $programmation;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($id)
         {
             $data = array();
             $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($id);

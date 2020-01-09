@@ -25,7 +25,7 @@ class prestataire_model extends CI_Model {
     }
     public function _set($prestataire) {
         return array(
-            'code'  => $prestataire['code'],
+            'telephone'  => $prestataire['telephone'],
             'nom'   => $prestataire['nom'],
             'nif'   => $prestataire['nif'],
             'stat'  => $prestataire['stat'],

@@ -26,8 +26,7 @@ class Ouvrage_model extends CI_Model {
     public function _set($ouvrage) {
         return array(
             'libelle'       =>      $ouvrage['libelle'],
-            'description'   =>      $ouvrage['description'],
-            'id_categorie_ouvrage' => $ouvrage['id_categorie_ouvrage']                        
+            'description'   =>      $ouvrage['description']                       
         );
     }
     public function delete($id) {
@@ -58,21 +57,6 @@ class Ouvrage_model extends CI_Model {
         if ($q->num_rows() > 0) {
             return $q->row();
         }
-    }
-
-    public function findBycategorie_ouvrage($id_categorie_ouvrage) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where('id_categorie_ouvrage',$id_categorie_ouvrage)
-                        ->order_by('description')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
     }
 
 }
