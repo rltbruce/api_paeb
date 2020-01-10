@@ -5,11 +5,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Categorie_ouvrage extends REST_Controller {
+class Acces_zone extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('categorie_ouvrage_model', 'Categorie_ouvrageManager');
+        $this->load->model('acces_zone_model', 'Acces_zoneManager');
     }
 
     public function index_get() 
@@ -19,14 +19,14 @@ class Categorie_ouvrage extends REST_Controller {
         if ($id)
         {
             $data = array();
-            $categorie_ouvrage = $this->Categorie_ouvrageManager->findById($id);
-            $data['id'] = $categorie_ouvrage->id;
-            $data['libelle'] = $categorie_ouvrage->libelle;
-            $data['description'] = $categorie_ouvrage->description;;
+            $acces_zone= $this->Acces_zoneManager->findById($id);
+            $data['id'] = $acces_zone->id;
+            $data['libelle'] = $acces_zone->libelle;
+            $data['description'] = $acces_zone->description;;
         } 
         else 
         {
-            $menu = $this->Categorie_ouvrageManager->findAll();
+            $menu = $this->Acces_zoneManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
@@ -72,7 +72,7 @@ class Categorie_ouvrage extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Categorie_ouvrageManager->add($data);
+                $dataId = $this->Acces_zoneManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -98,7 +98,7 @@ class Categorie_ouvrage extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Categorie_ouvrageManager->update($id, $data);
+                $update = $this->Acces_zoneManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -120,7 +120,7 @@ class Categorie_ouvrage extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Categorie_ouvrageManager->delete($id);         
+            $delete = $this->Acces_zoneManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

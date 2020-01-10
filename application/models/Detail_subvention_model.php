@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Categorie_ouvrage_model extends CI_Model {
-    protected $table = 'categorie_ouvrage';
+class Detail_subvention_model extends CI_Model {
+    protected $table = 'detail_subvention';
 
-    public function add($categorie_ouvrage) {
-        $this->db->set($this->_set($categorie_ouvrage))
+    public function add($detail_subvention) {
+        $this->db->set($this->_set($detail_subvention))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Categorie_ouvrage_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $categorie_ouvrage) {
-        $this->db->set($this->_set($categorie_ouvrage))
+    public function update($id, $detail_subvention) {
+        $this->db->set($this->_set($detail_subvention))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,10 +23,15 @@ class Categorie_ouvrage_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($categorie_ouvrage) {
+    public function _set($detail_subvention) {
         return array(
-            'libelle'       =>      $categorie_ouvrage['libelle'],
-            'description'   =>      $categorie_ouvrage['description']                       
+            'id_acces_zone'     => $detail_subvention['id_acces_zone'],
+            'id_zone_subvention' => $detail_subvention['id_zone_subvention'],
+            'cout_maitrise_oeuvre' => $detail_subvention['cout_maitrise_oeuvre'],
+            'cout_batiment'     => $detail_subvention['cout_batiment'],
+            'cout_latrine'      => $detail_subvention['cout_latrine'],
+            'cout_mobilier'     => $detail_subvention['cout_mobilier'],
+            'cout_sousprojet'   => $detail_subvention['cout_sousprojet']                       
         );
     }
     public function delete($id) {
@@ -41,7 +46,7 @@ class Categorie_ouvrage_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('description')
+                        ->order_by('cout_batiment')
                         ->get()
                         ->result();
         if($result)
