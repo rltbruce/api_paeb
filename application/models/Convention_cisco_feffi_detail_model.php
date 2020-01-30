@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Transfert_feffi_model extends CI_Model {
-    protected $table = 'transfert_feffi';
+class Convention_cisco_feffi_detail_model extends CI_Model {
+    protected $table = 'convention_cisco_feffi_detail';
 
-    public function add($transfert_feffi) {
-        $this->db->set($this->_set($transfert_feffi))
+    public function add($convention) {
+        $this->db->set($this->_set($convention))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Transfert_feffi_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $transfert_feffi) {
-        $this->db->set($this->_set($transfert_feffi))
+    public function update($id, $convention) {
+        $this->db->set($this->_set($convention))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,15 +23,13 @@ class Transfert_feffi_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($transfert_feffi) {
+    public function _set($convention) {
         return array(
-            'code'          =>      $transfert_feffi['code'],
-            'description'   =>      $transfert_feffi['description'],
-            'montant'       =>      $transfert_feffi['montant'],
-            'num_facture'   =>      $transfert_feffi['num_facture'],
-            'date'          =>      $transfert_feffi['date'],
-            'id_convention'    =>  $transfert_feffi['id_convention']                       
-        );
+            'intitule' => $convention['intitule'],
+            'montant_total' =>    $convention['montant_total'],
+            'id_zone_subvention' => $convention['id_zone_subvention'],
+            'id_acces_zone' => $convention['id_acces_zone'],
+            'id_convention_entete'=> $convention['id_convention_entete']);
     }
     public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);
@@ -45,7 +43,7 @@ class Transfert_feffi_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('description')
+                        ->order_by('intitule')
                         ->get()
                         ->result();
         if($result)
@@ -63,11 +61,11 @@ class Transfert_feffi_model extends CI_Model {
         }
     }
 
-    public function findAllByprogramme($id_convention) {               
+    public function findAllByEntete($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_convention", $id_convention)
-                        ->order_by('description')
+                        ->where("id_convention_entete",$id_convention_entete)
+                        ->order_by('intitule')
                         ->get()
                         ->result();
         if($result)

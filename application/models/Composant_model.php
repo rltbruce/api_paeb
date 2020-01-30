@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Demande_deblocage_daaf_model extends CI_Model {
-    protected $table = 'demande_deblocage_daaf';
+class Composant_model extends CI_Model {
+    protected $table = 'composant';
 
-    public function add($demande_deblocage_daaf) {
-        $this->db->set($this->_set($demande_deblocage_daaf))
+    public function add($composant) {
+        $this->db->set($this->_set($composant))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Demande_deblocage_daaf_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $demande_deblocage_daaf) {
-        $this->db->set($this->_set($demande_deblocage_daaf))
+    public function update($id, $composant) {
+        $this->db->set($this->_set($composant))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,13 +23,12 @@ class Demande_deblocage_daaf_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($demande_deblocage_daaf) {
+    public function _set($composant) {
         return array(
-            'code'          =>      $demande_deblocage_daaf['code'],
-            'description'   =>      $demande_deblocage_daaf['description'],
-            'date'          =>      $demande_deblocage_daaf['date'],
-            'id_convention_ufpdaaf'    =>  $demande_deblocage_daaf['id_convention_ufpdaaf']                       
-        );
+            'cout_maitrise_oeuvre' => $composant['cout_maitrise_oeuvre'],
+            'cout_sous_projet' =>    $composant['cout_sous_projet'],
+            'id_zone_subvention' => $composant['id_zone_subvention'],
+            'id_acces_zone' => $composant['id_acces_zone']);
     }
     public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);
@@ -43,7 +42,7 @@ class Demande_deblocage_daaf_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('objet')
+                        ->order_by('id_zone_subvention')
                         ->get()
                         ->result();
         if($result)
@@ -61,11 +60,19 @@ class Demande_deblocage_daaf_model extends CI_Model {
         }
     }
 
-    public function findAllByconvention_ufpdaaf($id_convention_ufpdaaf) {               
+    public function findByAcceszone_zonesubvention($id_acces_zone,$id_zone_subvention) {               
+        $this->db->where("id_acces_zone", $id_acces_zone)
+        ->where("id_zone_subvention", $id_zone_subvention);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }                
+    }
+   /* public function findByAcceszone_zonesubvention($id_acces_zone,$id_zone_subvention) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_convention_ufpdaaf", $id_convention_ufpdaaf)
-                        ->order_by('objet')
+                        ->where("id_acces_zone",$id_acces_zone)
+                        ->where("id_zone_subvention",$id_zone_subvention)
                         ->get()
                         ->result();
         if($result)
@@ -74,6 +81,6 @@ class Demande_deblocage_daaf_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
+    }  */
 
 }

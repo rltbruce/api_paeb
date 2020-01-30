@@ -58,7 +58,7 @@ class Fokontany_model extends CI_Model {
             return null;
         }                 
     }    
-	public function find_Fokontany_avec_Commune_et_District_et_Region($id=null) {
+	/*public function find_Fokontany_avec_Commune_et_District_et_Region($id=null) {
 		// Selection fokotany avec description commune,district et region
 		$requete='select f.id,f.nom,f.code,f.id_commune,c.nom as commune,c.district_id,d.nom as district,d.region_id,r.nom as region
                 from fokontany as f
@@ -104,8 +104,8 @@ class Fokontany_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
-    public function findById($id) {
+    }*/
+    /*public function findById($id) {
 		// Selection par id
         $result =  $this->db->select('*')
                         ->from($this->table)
@@ -118,6 +118,13 @@ class Fokontany_model extends CI_Model {
         }else{
             return null;
         }                 
-    }	
+    }*/	
+    public function findById($id)  {
+        $this->db->where("id", $id);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+    }
 }
 ?>

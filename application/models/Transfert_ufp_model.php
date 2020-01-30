@@ -30,7 +30,7 @@ class Transfert_ufp_model extends CI_Model {
             'montant'       =>      $transfert_ufp['montant'],
             'num_facture'   =>      $transfert_ufp['num_facture'],
             'date'          =>      $transfert_ufp['date'],
-            'id_programmation'    =>  $transfert_ufp['id_programmation']                       
+            'id_demande_deblo_daaf'    =>  $transfert_ufp['id_demande_deblo_daaf']                       
         );
     }
     public function delete($id) {
@@ -63,10 +63,10 @@ class Transfert_ufp_model extends CI_Model {
         }
     }
 
-    public function findAllByprogramme($id_programmation) {               
+    public function findAllBydemande_deblocage_daaf($id_demande_deblo_daaf) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_programmation", $id_programmation)
+                        ->where("id_demande_deblo_daaf", $id_demande_deblo_daaf)
                         ->order_by('description')
                         ->get()
                         ->result();

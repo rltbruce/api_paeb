@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Demande_deblocage_daaf_model extends CI_Model {
-    protected $table = 'demande_deblocage_daaf';
+class Piece_justificatif_feffi_model extends CI_Model {
+    protected $table = 'piece_justificatif_feffi';
 
-    public function add($demande_deblocage_daaf) {
-        $this->db->set($this->_set($demande_deblocage_daaf))
+    public function add($piece_justificatif_feffi) {
+        $this->db->set($this->_set($piece_justificatif_feffi))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Demande_deblocage_daaf_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $demande_deblocage_daaf) {
-        $this->db->set($this->_set($demande_deblocage_daaf))
+    public function update($id, $piece_justificatif_feffi) {
+        $this->db->set($this->_set($piece_justificatif_feffi))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,12 +23,12 @@ class Demande_deblocage_daaf_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($demande_deblocage_daaf) {
+    public function _set($piece_justificatif_feffi) {
         return array(
-            'code'          =>      $demande_deblocage_daaf['code'],
-            'description'   =>      $demande_deblocage_daaf['description'],
-            'date'          =>      $demande_deblocage_daaf['date'],
-            'id_convention_ufpdaaf'    =>  $demande_deblocage_daaf['id_convention_ufpdaaf']                       
+            'description'   =>      $piece_justificatif_feffi['description'],
+            'fichier'   =>      $piece_justificatif_feffi['fichier'],
+            'date'          =>      $piece_justificatif_feffi['date'],
+            'id_demande_rea_feffi'    =>  $piece_justificatif_feffi['id_demande_rea_feffi']                       
         );
     }
     public function delete($id) {
@@ -43,7 +43,7 @@ class Demande_deblocage_daaf_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('objet')
+                        ->order_by('description')
                         ->get()
                         ->result();
         if($result)
@@ -61,11 +61,11 @@ class Demande_deblocage_daaf_model extends CI_Model {
         }
     }
 
-    public function findAllByconvention_ufpdaaf($id_convention_ufpdaaf) {               
+    public function findAllBydemande($id_demande_rea_feffi) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_convention_ufpdaaf", $id_convention_ufpdaaf)
-                        ->order_by('objet')
+                        ->where("id_demande_rea_feffi", $id_demande_rea_feffi)
+                        ->order_by('description')
                         ->get()
                         ->result();
         if($result)

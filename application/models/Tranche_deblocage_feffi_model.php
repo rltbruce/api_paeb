@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Demande_deblocage_daaf_model extends CI_Model {
-    protected $table = 'demande_deblocage_daaf';
+class Tranche_deblocage_feffi_model extends CI_Model {
+    protected $table = 'tranche_deblocage_feffi';
 
-    public function add($demande_deblocage_daaf) {
-        $this->db->set($this->_set($demande_deblocage_daaf))
+    public function add($tranche_deblocage_feffi) {
+        $this->db->set($this->_set($tranche_deblocage_feffi))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Demande_deblocage_daaf_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $demande_deblocage_daaf) {
-        $this->db->set($this->_set($demande_deblocage_daaf))
+    public function update($id, $tranche_deblocage_feffi) {
+        $this->db->set($this->_set($tranche_deblocage_feffi))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,12 +23,13 @@ class Demande_deblocage_daaf_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($demande_deblocage_daaf) {
+    public function _set($tranche_deblocage_feffi) {
         return array(
-            'code'          =>      $demande_deblocage_daaf['code'],
-            'description'   =>      $demande_deblocage_daaf['description'],
-            'date'          =>      $demande_deblocage_daaf['date'],
-            'id_convention_ufpdaaf'    =>  $demande_deblocage_daaf['id_convention_ufpdaaf']                       
+            'code'      =>  $tranche_deblocage_feffi['code'],
+            'libelle'      =>  $tranche_deblocage_feffi['libelle'],
+            'periode'      =>  $tranche_deblocage_feffi['periode'],
+            'pourcentage'  =>  $tranche_deblocage_feffi['pourcentage'],
+            'description'  =>  $tranche_deblocage_feffi['description']                       
         );
     }
     public function delete($id) {
@@ -43,7 +44,7 @@ class Demande_deblocage_daaf_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('objet')
+                        ->order_by('code')
                         ->get()
                         ->result();
         if($result)
@@ -59,21 +60,6 @@ class Demande_deblocage_daaf_model extends CI_Model {
         if ($q->num_rows() > 0) {
             return $q->row();
         }
-    }
-
-    public function findAllByconvention_ufpdaaf($id_convention_ufpdaaf) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("id_convention_ufpdaaf", $id_convention_ufpdaaf)
-                        ->order_by('objet')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
     } 
 
 }

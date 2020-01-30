@@ -27,6 +27,7 @@ class Detail_subvention_model extends CI_Model {
         return array(
             'id_acces_zone'     => $detail_subvention['id_acces_zone'],
             'id_zone_subvention' => $detail_subvention['id_zone_subvention'],
+            'id_detail_ouvrage' => $detail_subvention['id_detail_ouvrage'],
             'cout_maitrise_oeuvre' => $detail_subvention['cout_maitrise_oeuvre'],
             'cout_batiment'     => $detail_subvention['cout_batiment'],
             'cout_latrine'      => $detail_subvention['cout_latrine'],

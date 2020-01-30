@@ -5,63 +5,64 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Demande_deblocage_daaf extends REST_Controller {
+class Composant extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('demande_deblocage_daaf_model', 'Demande_deblocage_daafManager');
-        $this->load->model('convention_daff_ufp_model', 'Convention_daff_ufpManager');
+        $this->load->model('composant_model', 'ComposantManager');
+        $this->load->model('zone_subvention_model', 'Zone_subventionManager');
+        $this->load->model('acces_zone_model', 'Acces_zoneManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_convention_ufpdaaf = $this->get('id_convention_ufpdaaf');
-        if ($id_convention_ufpdaaf)
+        $menu = $this->get('menu');
+        $id_zone_subvention = $this->get('id_zone_subvention');
+        $id_acces_zone = $this->get('id_acces_zone');
+
+        if ($menu=="getcomposantByZonesubventionAcces")
         {
-            $tmp = $this->Demande_deblocage_daafManager->findAllByconvention_ufpdaaf($id_convention_ufpdaaf);
-            if ($tmp) 
+            $data = array();
+            $composant = $this->ComposantManager->findByAcceszone_zonesubvention($id_acces_zone,$id_zone_subvention);
+            if($composant)
             {
-                foreach ($tmp as $key => $value) 
-                {
-                    $convention_ufpdaaf= array();
-                    $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($value->id_convention_ufpdaaf);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['objet'] = $value->bjet;
-                    $data[$key]['id_tranche'] = $value->id_tranche;
-                    $data[$key]['id_compte_daaf'] = $value->id_compte_daaf;
-                    $data[$key]['convention_daff_ufp'] = $convention_daff_ufp;
-                }
-            } 
-                else
-                    $data = array();
+               $data['id'] = $composant->id;
+                $data['cout_maitrise_oeuvre'] = $composant->cout_maitrise_oeuvre;
+                $data['cout_sous_projet'] = $composant->cout_sous_projet; 
+            }            
+            
         }
         elseif ($id)
         {
             $data = array();
-            $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($id);
-            $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($demande_deblocage_daaf->id_convention_ufpdaaf);
-            $data['id'] = $demande_deblocage_daaf->id;
-            $data['objet'] = $demande_deblocage_daaf->objet;
-            $data['id_tranche'] = $demande_deblocage_daaf->id_tranche;
-            $data['id_compte_daaf'] = $demande_deblocage_daaf->id_compte_daaf;
-            $data['convention_daff_ufp'] = $convention_daff_ufp;
+            $composant = $this->ComposantManager->findById($id);
+            $zone_subvention = $this->Zone_subventionManager->findById($composant->id_zone_subvention);
+            $acces_zone = $this->Acces_zoneManager->findById($composant->id_acces_zone);
+
+            $data['id'] = $composant->id;
+            $data['cout_maitrise_oeuvre'] = $composant->cout_maitrise_oeuvre;
+            $data['cout_sous_projet'] = $composant->cout_sous_projet;                    
+            $data['zone_subvention'] = $zone_subvention;
+            $data['acces_zone'] = $acces_zone;
         } 
         else 
         {
-            $menu = $this->Demande_deblocage_daafManager->findAll();
+            $menu = $this->ComposantManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $convention_daff_ufp= array();
-                    $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($value->id_convention_ufpdaaf);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['objet'] = $value->bjet;
-                    $data[$key]['id_tranche'] = $value->id_tranche;
-                    $data[$key]['id_compte_daaf'] = $value->id_compte_daaf;
-                    $data[$key]['convention_daff_ufp'] = $convention_daff_ufp;
+                    $data = array();
+                    $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
+                    $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
 
+                    $data[$key]['id'] = $value->id;                    
+                    $data[$key]['zone_subvention'] = $zone_subvention;
+                    $data[$key]['acces_zone'] = $acces_zone;
+                    $data[$key]['cout_maitrise_oeuvre'] = $value->cout_maitrise_oeuvre;
+                    $data[$key]['cout_sous_projet'] = $value->cout_sous_projet;
+                    
                 }
             } 
                 else
@@ -90,10 +91,10 @@ class Demande_deblocage_daaf extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'objet' => $this->post('objet'),
-                    'id_tranche' => $this->post('id_tranche'),
-                    'id_compte_daaf' => $this->post('id_compte_daaf'),
-                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf')
+                    'cout_maitrise_oeuvre' => $this->post('cout_maitrise_oeuvre'),
+                    'cout_sous_projet' => $this->post('cout_sous_projet'),
+                    'id_zone_subvention' => $this->post('id_zone_subvention'),
+                    'id_acces_zone' => $this->post('id_acces_zone')
                 );
                 if (!$data) {
                     $this->response([
@@ -102,7 +103,7 @@ class Demande_deblocage_daaf extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Demande_deblocage_daafManager->add($data);
+                $dataId = $this->ComposantManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -118,10 +119,10 @@ class Demande_deblocage_daaf extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'objet' => $this->post('objet'),
-                    'id_tranche' => $this->post('id_tranche'),
-                    'id_compte_daaf' => $this->post('id_compte_daaf'),
-                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf')
+                    'cout_maitrise_oeuvre' => $this->post('cout_maitrise_oeuvre'),
+                    'cout_sous_projet' => $this->post('cout_sous_projet'),
+                    'id_zone_subvention' => $this->post('id_zone_subvention'),
+                    'id_acces_zone' => $this->post('id_acces_zone')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -130,7 +131,7 @@ class Demande_deblocage_daaf extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Demande_deblocage_daafManager->update($id, $data);
+                $update = $this->ComposantManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -152,7 +153,7 @@ class Demande_deblocage_daaf extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Demande_deblocage_daafManager->delete($id);         
+            $delete = $this->ComposantManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

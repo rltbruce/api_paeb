@@ -5,70 +5,58 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Transfert_feffi extends REST_Controller {
+class Tranche_deblocage_feffi extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('transfert_feffi_model', 'Transfert_feffiManager');
-        $this->load->model('convention_model', 'ConventionManager');
+        $this->load->model('tranche_deblocage_feffi_model', 'Tranche_deblocage_feffiManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_convention = $this->get('id_convention');
-        $menu = $this->get('menu');
+        $poucentage = $this->get('poucentage');
             
-        if ($menu=='gettransfert_feffi_programme')
-        {
-            $tmp = $this->Transfert_feffiManager->findAllByprogramme($id_convention);
+        if ($poucentage) 
+        {   $data = array();
+            $tmp = $this->Tranche_deblocage_feffiManager->findBydistrict($poucentage);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $convention= array();
-                    $convention = $this->ConventionManager->findById($value->id_convention);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
+                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['periode'] = $value->periode;
+                    $data[$key]['pourcentage'] = $value->pourcentage;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['montant'] = $value->montant;
-                    $data[$key]['num_facture'] = $value->num_facture;
-                    $data[$key]['date'] = $value->date;
-                    $data[$key]['convention'] = $convention;
                 }
-            } 
-                else
-                    $data = array();
+            }
         }
         elseif ($id)
         {
             $data = array();
-            $transfert_feffi = $this->Transfert_feffiManager->findById($id);
-            $convention = $this->ConventionManager->findById($transfert_feffi->id_convention);
-            $data['id'] = $transfert_feffi->id;
-            $data['code'] = $transfert_feffi->code;
-            $data['description'] = $transfert_feffi->description;
-            $data['montant'] = $transfert_feffi->montant;
-            $data['num_facture'] = $transfert_feffi->num_facture;
-            $data['date'] = $transfert_feffi->date;
-            $data['convention'] = $convention;
+            $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($id);
+            $data['id'] = $tranche_deblocage_feffi->id;
+            $data['code'] = $tranche_deblocage_feffi->code;
+            $data['libelle'] = $tranche_deblocage_feffi->libelle;
+            $data['periode'] = $tranche_deblocage_feffi->periode;
+            $data['pourcentage'] = $tranche_deblocage_feffi->pourcentage;
+            $data['description'] = $tranche_deblocage_feffi->description;
         } 
         else 
         {
-            $menu = $this->Transfert_feffiManager->findAll();
+            $menu = $this->Tranche_deblocage_feffiManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $convention= array();
-                    $convention = $this->ConventionManager->findById($value->id_convention);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
+                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['periode'] = $value->periode;                    
+                    $data[$key]['pourcentage'] = $value->pourcentage;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['montant'] = $value->montant;
-                    $data[$key]['num_facture'] = $value->num_facture;
-                    $data[$key]['date'] = $value->date;
-                    $data[$key]['convention'] = $convention;
                 }
             } 
                 else
@@ -97,12 +85,11 @@ class Transfert_feffi extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
+                    'libelle' => $this->post('libelle'),
                     'code' => $this->post('code'),
-                    'description' => $this->post('description'),
-                    'montant' => $this->post('montant'),
-                    'num_facture' => $this->post('num_facture'),
-                    'date' => $this->post('date'),
-                    'id_convention' => $this->post('id_convention')
+                    'periode' => $this->post('periode'),
+                    'poucentage' => $this->post('poucentage'),
+                    'description' => $this->post('description')
                 );
                 if (!$data) {
                     $this->response([
@@ -111,7 +98,7 @@ class Transfert_feffi extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Transfert_feffiManager->add($data);
+                $dataId = $this->Tranche_deblocage_feffiManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -128,11 +115,10 @@ class Transfert_feffi extends REST_Controller {
             } else {
                 $data = array(
                     'code' => $this->post('code'),
-                    'description' => $this->post('description'),
-                    'montant' => $this->post('montant'),
-                    'num_facture' => $this->post('num_facture'),
-                    'date' => $this->post('date'),
-                    'id_convention' => $this->post('id_convention')
+                    'libelle' => $this->post('libelle'),
+                    'periode' => $this->post('periode'),
+                    'poucentage' => $this->post('poucentage'),
+                    'description' => $this->post('description')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -141,7 +127,7 @@ class Transfert_feffi extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Transfert_feffiManager->update($id, $data);
+                $update = $this->Tranche_deblocage_feffiManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -163,7 +149,7 @@ class Transfert_feffi extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Transfert_feffiManager->delete($id);         
+            $delete = $this->Tranche_deblocage_feffiManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

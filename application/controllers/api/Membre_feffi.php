@@ -5,63 +5,66 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Demande_deblocage_daaf extends REST_Controller {
+class Membre_feffi extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('demande_deblocage_daaf_model', 'Demande_deblocage_daafManager');
-        $this->load->model('convention_daff_ufp_model', 'Convention_daff_ufpManager');
+        $this->load->model('membre_feffi_model', 'Membre_feffiManager');
+        $this->load->model('feffi_model', 'FeffiManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_convention_ufpdaaf = $this->get('id_convention_ufpdaaf');
-        if ($id_convention_ufpdaaf)
-        {
-            $tmp = $this->Demande_deblocage_daafManager->findAllByconvention_ufpdaaf($id_convention_ufpdaaf);
+        $id_feffi = $this->get('id_feffi');
+            
+        if ($id_feffi) 
+        {   $data = array();
+            $tmp = $this->Membre_feffiManager->findByfeffi($id_feffi);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $convention_ufpdaaf= array();
-                    $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($value->id_convention_ufpdaaf);
+                    $feffi = array();
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['objet'] = $value->bjet;
-                    $data[$key]['id_tranche'] = $value->id_tranche;
-                    $data[$key]['id_compte_daaf'] = $value->id_compte_daaf;
-                    $data[$key]['convention_daff_ufp'] = $convention_daff_ufp;
+                    $data[$key]['nom'] = $value->nom;
+                    $data[$key]['prenom'] = $value->prenom;
+                    $data[$key]['age'] = $value->age;
+                    $data[$key]['sexe'] = $value->sexe;
+                    $data[$key]['occupation'] = $value->occupation;
+                    $data[$key]['feffi'] = $feffi;
                 }
-            } 
-                else
-                    $data = array();
+            }
         }
         elseif ($id)
         {
             $data = array();
-            $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($id);
-            $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($demande_deblocage_daaf->id_convention_ufpdaaf);
-            $data['id'] = $demande_deblocage_daaf->id;
-            $data['objet'] = $demande_deblocage_daaf->objet;
-            $data['id_tranche'] = $demande_deblocage_daaf->id_tranche;
-            $data['id_compte_daaf'] = $demande_deblocage_daaf->id_compte_daaf;
-            $data['convention_daff_ufp'] = $convention_daff_ufp;
+            $membre_feffi = $this->Membre_feffiManager->findById($id);
+            $feffi = $this->FeffiManager->findById($membre_feffi->id_ouvrage);
+            
+            $data['id'] = $membre_feffi->id;
+            $data['nom'] = $membre_feffi->nom;
+            $data['prenom'] = $membre_feffi->prenom;
+            $data['age'] = $membre_feffi->age;
+            $data['sexe'] = $membre_feffi->sexe;
+            $data['occupation'] = $membre_feffi->occupation;
+            $data['feffi'] = $feffi;
         } 
         else 
         {
-            $menu = $this->Demande_deblocage_daafManager->findAll();
+            $menu = $this->Membre_feffiManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $convention_daff_ufp= array();
-                    $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($value->id_convention_ufpdaaf);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $data['id'] = $value->id;
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['objet'] = $value->bjet;
-                    $data[$key]['id_tranche'] = $value->id_tranche;
-                    $data[$key]['id_compte_daaf'] = $value->id_compte_daaf;
-                    $data[$key]['convention_daff_ufp'] = $convention_daff_ufp;
-
+                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['cout_latrine'] = $value->cout_latrine;
+                    $data[$key]['feffi'] = $feffi;
                 }
             } 
                 else
@@ -90,10 +93,12 @@ class Demande_deblocage_daaf extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'objet' => $this->post('objet'),
-                    'id_tranche' => $this->post('id_tranche'),
-                    'id_compte_daaf' => $this->post('id_compte_daaf'),
-                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf')
+                    'nom' => $this->post('nom'),
+                    'prenom' => $this->post('prenom'),
+                    'sexe' => $this->post('sexe'),
+                    'age' => $this->post('age'),
+                    'occupation' => $this->post('occupation'),
+                    'id_feffi' => $this->post('id_feffi')
                 );
                 if (!$data) {
                     $this->response([
@@ -102,7 +107,7 @@ class Demande_deblocage_daaf extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Demande_deblocage_daafManager->add($data);
+                $dataId = $this->Membre_feffiManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -118,10 +123,12 @@ class Demande_deblocage_daaf extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'objet' => $this->post('objet'),
-                    'id_tranche' => $this->post('id_tranche'),
-                    'id_compte_daaf' => $this->post('id_compte_daaf'),
-                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf')
+                    'nom' => $this->post('nom'),
+                    'prenom' => $this->post('prenom'),
+                    'sexe' => $this->post('sexe'),
+                    'age' => $this->post('age'),
+                    'occupation' => $this->post('occupation'),
+                    'id_feffi' => $this->post('id_feffi')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -130,7 +137,7 @@ class Demande_deblocage_daaf extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Demande_deblocage_daafManager->update($id, $data);
+                $update = $this->Membre_feffiManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -152,7 +159,7 @@ class Demande_deblocage_daaf extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Demande_deblocage_daafManager->delete($id);         
+            $delete = $this->Membre_feffiManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

@@ -5,48 +5,42 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Convention_cisco_feffi extends REST_Controller {
+class Convention_cisco_feffi_entete extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('convention_cisco_feffi_model', 'Convention_cisco_feffiManager');
+        $this->load->model('convention_cisco_feffi_entete_model', 'Convention_cisco_feffi_enteteManager');
         $this->load->model('cisco_model', 'CiscoManager');
         $this->load->model('feffi_model', 'FeffiManager');
-        $this->load->model('ouvrage_model', 'OuvrageManager');
-        $this->load->model('programmation_model', 'ProgrammationManager');
+        $this->load->model('convention_daff_ufp_model', 'Convention_daff_ufpManager');
     }
 
     public function index_get() 
     {
-        $id = $this->get('id');
-        $id_programmation = $this->get('id_programmation');        
+        $id = $this->get('id');       
         $menu = $this->get('menu');
+        $id_convention_ufpdaaf = $this->get('id_convention_ufpdaaf');
 
         if ($menu=='getconventionvalide')
         {
-            $menu = $this->Convention_cisco_feffiManager->findAllValide();
+            $menu = $this->Convention_cisco_feffi_enteteManager->findAllValide();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $convention = array();
                     $cisco = array();
                     $feffi = array();
-                    $ouvrage = array();
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $ouvrage = $this->OuvrageManager->findById($value->id_ouvrage);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-
-                    $data[$key]['numero_convention'] = $value->numero_convention;
-                    $data[$key]['description'] = $value->description;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
-                    $data[$key]['ouvrage'] = $ouvrage;
-                    $data[$key]['montant_prevu'] = $value->montant_prevu;
-                    $data[$key]['montant_reel'] = $value->montant_reel;
-                    $data[$key]['date'] = $value->date;
+                    $data[$key]['numero_convention'] = $value->numero_convention;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['date_signature'] = $value->date_signature;                    
+                    $data[$key]['financement'] = $value->financement;
+                    $data[$key]['delai'] = $value->delai;
+
                 }
             } 
                 else
@@ -54,122 +48,103 @@ class Convention_cisco_feffi extends REST_Controller {
         } 
         elseif ($menu=='getconventioninvalide')
         {
-            $menu = $this->Convention_cisco_feffiManager->findAllInvalide();
+            $menu = $this->Convention_cisco_feffi_enteteManager->findAllInvalide();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $convention = array();
                     $cisco = array();
                     $feffi = array();
-                    $ouvrage = array();
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $ouvrage = $this->OuvrageManager->findById($value->id_ouvrage);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-
-                    $data[$key]['numero_convention'] = $value->numero_convention;
-                    $data[$key]['description'] = $value->description;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
-                    $data[$key]['ouvrage'] = $ouvrage;
-                    $data[$key]['montant_prevu'] = $value->montant_prevu;
-                    $data[$key]['montant_reel'] = $value->montant_reel;
-                    $data[$key]['date'] = $value->date;
+                    $data[$key]['numero_convention'] = $value->numero_convention;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['date_signature'] = $value->date_signature;                    
+                    $data[$key]['financement'] = $value->financement;
+                    $data[$key]['delai'] = $value->delai;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($id_convention_ufpdaaf)
+        {
+            $menu = $this->Convention_cisco_feffi_enteteManager->findAllByufpdaaf($id_convention_ufpdaaf);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $cisco = array();
+                    $feffi = array();
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+                    $data[$key]['numero_convention'] = $value->numero_convention;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['date_signature'] = $value->date_signature;                    
+                    $data[$key]['financement'] = $value->financement;
+                    $data[$key]['delai'] = $value->delai;
+                    if($value->id_convention_ufpdaaf)
+                    {
+                      $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($value->id_convention_ufpdaaf);
+                      $data[$key]['convention_daff_ufp'] = $convention_daff_ufp;
+
+                    }
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($id)
+        {
+            $data = array();
+            $menu = $this->Convention_cisco_feffi_enteteManager->findByIdObjet($id);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $cisco = array();
+                    $feffi = array();
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+                    $data[$key]['numero_convention'] = $value->numero_convention;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['date_signature'] = $value->date_signature;                    
+                    $data[$key]['financement'] = $value->financement;
+                    $data[$key]['delai'] = $value->delai;
                 }
             } 
                 else
                     $data = array();
         } 
-        elseif ($menu=='getconventionvalide_programme')
-        {
-            $menu = $this->Convention_cisco_feffiManager->findByProgrammationValide($id_programmation);
-
-            if ($menu) 
-            {
-                foreach ($menu as $key => $value) 
-                {
-                    $convention = array();
-                    $cisco = array();
-                    $feffi = array();
-                    $categorie_ouvrage = array();
-                    $ouvrage = array();
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $ouvrage = $this->OuvrageManager->findById($value->id_ouvrage);
-                    $programmation = $this->ProgrammationManager->findById($value->id_programmation);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-
-                    $data[$key]['numero_convention'] = $value->numero_convention;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['cisco'] = $cisco;
-                    $data[$key]['feffi'] = $feffi;
-                    $data[$key]['ouvrage'] = $ouvrage;
-                    $data[$key]['montant_prevu'] = $value->montant_prevu;
-                    $data[$key]['montant_reel'] = $value->montant_reel;
-                    $data[$key]['date'] = $value->date;                    
-                    $data[$key]['programmation'] = $programmation;
-                    
-                }
-            }else{
-                $data = array();
-            }
-                    
-        }
-        elseif ($id)
-        {
-            $data = array();
-            $convention = $this->Convention_cisco_feffiManager->findById($id);
-            $cisco = $this->CiscoManager->findById($convention->id_cisco);
-            $feffi = $this->FeffiManager->findById($convention->id_feffi);
-            if ($convention->id_programmation!=0 && $convention->id_programmation!=null)
-            {
-              $programmation = $this->ProgrammationManager->findById($convention->id_programmation);
-              $data['programmation'] = $convention->programmation;
-            }
-            $Ouvrage = $this->OuvrageManager->findById($convention->id_ouvrage);
-            $data['id'] = $convention->id;
-            $data['numero_convention'] = $convention->numero_convention;
-            $data['description'] = $convention->description;
-            $data['cisco'] = $cisco;
-            $data['feffi'] = $feffi;
-            $data['ouvrage'] = $ouvrage;
-            $data['montant_prevu'] = $convention->montant_prevu;
-            $data['montant_reel'] = $convention->montant_reel;
-            $data['date'] = $convention->date;
-        } 
         else 
         {
-            $menu = $this->Convention_cisco_feffiManager->findAll();
+            $menu = $this->Convention_cisco_feffi_enteteManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $convention = array();
                     $cisco = array();
                     $feffi = array();
-                    $ouvrage = array();
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $ouvrage = $this->OuvrageManager->findById($value->id_ouvrage);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-
-                    $data[$key]['numero_convention'] = $value->numero_convention;
-                    $data[$key]['description'] = $value->description;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
-                    $data[$key]['ouvrage'] = $ouvrage;
-                    $data[$key]['montant_prevu'] = $value->montant_prevu;
-                    $data[$key]['montant_reel'] = $value->montant_reel;
-                    $data[$key]['date'] = $value->date;
-                    if ($value->id_programmation!=0 && $value->id_programmation!=null)
-                    {
-                      $programmation = $this->ProgrammationManager->findById($value->id_programmation);
-                      $data[$key]['programmation'] = $programmation;
-                    }
+                    $data[$key]['numero_convention'] = $value->numero_convention;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['date_signature'] = $value->date_signature;                    
+                    $data[$key]['financement'] = $value->financement;
+                    $data[$key]['delai'] = $value->delai;
+                    
                 }
             } 
                 else
@@ -199,15 +174,14 @@ class Convention_cisco_feffi extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'numero_convention' => $this->post('numero_convention'),
-                    'description' => $this->post('description'),
-                    'id_ouvrage' => $this->post('id_ouvrage'),
+                    'objet' => $this->post('objet'),
                     'id_cisco' => $this->post('id_cisco'),
                     'id_feffi' => $this->post('id_feffi'),
-                    'montant_prevu' => $this->post('montant_prevu'),
-                    'montant_reel' => $this->post('montant_reel'),
-                    'date' => $this->post('date'),
+                    'financement' => $this->post('financement'),
+                    'date_signature' => $this->post('date_signature'),
+                    'delai' => $this->post('delai'),
                     'validation' => $this->post('validation'),
-                    'id_programmation' => $this->post('id_programmation')
+                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf')
                 );
                 if (!$data) {
                     $this->response([
@@ -216,7 +190,7 @@ class Convention_cisco_feffi extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Convention_cisco_feffiManager->add($data);
+                $dataId = $this->Convention_cisco_feffi_enteteManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -233,15 +207,14 @@ class Convention_cisco_feffi extends REST_Controller {
             } else {
                 $data = array(
                     'numero_convention' => $this->post('numero_convention'),
-                    'description' => $this->post('description'),
-                    'id_ouvrage' => $this->post('id_ouvrage'),
+                    'objet' => $this->post('objet'),
                     'id_cisco' => $this->post('id_cisco'),
                     'id_feffi' => $this->post('id_feffi'),
-                    'montant_prevu' => $this->post('montant_prevu'),
-                    'montant_reel' => $this->post('montant_reel'),
-                    'date' => $this->post('date'),
+                    'financement' => $this->post('financement'),
+                    'date_signature' => $this->post('date_signature'),
+                    'delai' => $this->post('delai'),
                     'validation' => $this->post('validation'),
-                    'id_programmation' => $this->post('id_programmation')
+                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -250,7 +223,7 @@ class Convention_cisco_feffi extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Convention_cisco_feffiManager->update($id, $data);
+                $update = $this->Convention_cisco_feffi_enteteManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -272,7 +245,7 @@ class Convention_cisco_feffi extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Convention_cisco_feffiManager->delete($id);         
+            $delete = $this->Convention_cisco_feffi_enteteManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

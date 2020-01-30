@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Demande_deblocage_daaf_model extends CI_Model {
-    protected $table = 'demande_deblocage_daaf';
+class Membre_feffi_model extends CI_Model {
+    protected $table = 'membre_feffi';
 
-    public function add($demande_deblocage_daaf) {
-        $this->db->set($this->_set($demande_deblocage_daaf))
+    public function add($membre_feffi) {
+        $this->db->set($this->_set($membre_feffi))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Demande_deblocage_daaf_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $demande_deblocage_daaf) {
-        $this->db->set($this->_set($demande_deblocage_daaf))
+    public function update($id, $membre_feffi) {
+        $this->db->set($this->_set($membre_feffi))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,12 +23,14 @@ class Demande_deblocage_daaf_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($demande_deblocage_daaf) {
+    public function _set($membre_feffi) {
         return array(
-            'code'          =>      $demande_deblocage_daaf['code'],
-            'description'   =>      $demande_deblocage_daaf['description'],
-            'date'          =>      $demande_deblocage_daaf['date'],
-            'id_convention_ufpdaaf'    =>  $demande_deblocage_daaf['id_convention_ufpdaaf']                       
+            'nom'       =>      $membre_feffi['nom'],
+            'prenom'   =>      $membre_feffi['prenom'],
+            'sexe'   =>      $membre_feffi['sexe'],
+            'age'   =>      $membre_feffi['age'],
+            'occupation'   => $membre_feffi['occupation'],
+            'id_feffi'    => $membre_feffi['id_feffi']                       
         );
     }
     public function delete($id) {
@@ -43,7 +45,7 @@ class Demande_deblocage_daaf_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('objet')
+                        ->order_by('nom')
                         ->get()
                         ->result();
         if($result)
@@ -61,11 +63,11 @@ class Demande_deblocage_daaf_model extends CI_Model {
         }
     }
 
-    public function findAllByconvention_ufpdaaf($id_convention_ufpdaaf) {               
+    public function findByfeffi($id_feffi) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_convention_ufpdaaf", $id_convention_ufpdaaf)
-                        ->order_by('objet')
+                        ->where("id_feffi", $id_feffi)
+                        ->order_by('nom')
                         ->get()
                         ->result();
         if($result)
@@ -74,6 +76,5 @@ class Demande_deblocage_daaf_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
-
+    }
 }

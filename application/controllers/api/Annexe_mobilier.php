@@ -5,63 +5,60 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Demande_deblocage_daaf extends REST_Controller {
+class Annexe_mobilier extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('demande_deblocage_daaf_model', 'Demande_deblocage_daafManager');
-        $this->load->model('convention_daff_ufp_model', 'Convention_daff_ufpManager');
+        $this->load->model('annexe_mobilier_model', 'Annexe_mobilierManager');
+        $this->load->model('batiment_ouvrage_model', 'Batiment_ouvrageManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_convention_ufpdaaf = $this->get('id_convention_ufpdaaf');
-        if ($id_convention_ufpdaaf)
-        {
-            $tmp = $this->Demande_deblocage_daafManager->findAllByconvention_ufpdaaf($id_convention_ufpdaaf);
+        $id_batiment_ouvrage = $this->get('id_batiment_ouvrage');
+            
+        if ($id_batiment_ouvrage) 
+        {   $data = array();
+            $tmp = $this->Annexe_mobilierManager->findBybatiment_ouvrage($id_batiment_ouvrage);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $convention_ufpdaaf= array();
-                    $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($value->id_convention_ufpdaaf);
+                    $batiment_ouvrage = array();
+                    $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['objet'] = $value->bjet;
-                    $data[$key]['id_tranche'] = $value->id_tranche;
-                    $data[$key]['id_compte_daaf'] = $value->id_compte_daaf;
-                    $data[$key]['convention_daff_ufp'] = $convention_daff_ufp;
+                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
                 }
-            } 
-                else
-                    $data = array();
+            }
         }
         elseif ($id)
         {
             $data = array();
-            $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($id);
-            $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($demande_deblocage_daaf->id_convention_ufpdaaf);
-            $data['id'] = $demande_deblocage_daaf->id;
-            $data['objet'] = $demande_deblocage_daaf->objet;
-            $data['id_tranche'] = $demande_deblocage_daaf->id_tranche;
-            $data['id_compte_daaf'] = $demande_deblocage_daaf->id_compte_daaf;
-            $data['convention_daff_ufp'] = $convention_daff_ufp;
+            $annexe_mobilier = $this->Annexe_mobilierManager->findById($id);
+            $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($annexe_mobilier->id_batiment_ouvrage);
+            $data['id'] = $annexe_mobilier->id;
+            $data['libelle'] = $annexe_mobilier->libelle;
+            $data['description'] = $annexe_mobilier->description;
+            $data['cout_mobilier'] = $annexe_mobilier->cout_mobilier;
+            $data['batiment_ouvrage'] = $batiment_ouvrage;
         } 
         else 
         {
-            $menu = $this->Demande_deblocage_daafManager->findAll();
+            $menu = $this->Annexe_mobilierManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $convention_daff_ufp= array();
-                    $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($value->id_convention_ufpdaaf);
+                    $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['objet'] = $value->bjet;
-                    $data[$key]['id_tranche'] = $value->id_tranche;
-                    $data[$key]['id_compte_daaf'] = $value->id_compte_daaf;
-                    $data[$key]['convention_daff_ufp'] = $convention_daff_ufp;
-
+                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
                 }
             } 
                 else
@@ -90,10 +87,10 @@ class Demande_deblocage_daaf extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'objet' => $this->post('objet'),
-                    'id_tranche' => $this->post('id_tranche'),
-                    'id_compte_daaf' => $this->post('id_compte_daaf'),
-                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf')
+                    'libelle' => $this->post('libelle'),
+                    'description' => $this->post('description'),
+                    'cout_mobilier' => $this->post('cout_mobilier'),
+                    'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage')
                 );
                 if (!$data) {
                     $this->response([
@@ -102,7 +99,7 @@ class Demande_deblocage_daaf extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Demande_deblocage_daafManager->add($data);
+                $dataId = $this->Annexe_mobilierManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -118,10 +115,10 @@ class Demande_deblocage_daaf extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'objet' => $this->post('objet'),
-                    'id_tranche' => $this->post('id_tranche'),
-                    'id_compte_daaf' => $this->post('id_compte_daaf'),
-                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf')
+                    'libelle' => $this->post('libelle'),
+                    'description' => $this->post('description'),
+                    'cout_mobilier' => $this->post('cout_mobilier'),
+                    'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -130,7 +127,7 @@ class Demande_deblocage_daaf extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Demande_deblocage_daafManager->update($id, $data);
+                $update = $this->Annexe_mobilierManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -152,7 +149,7 @@ class Demande_deblocage_daaf extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Demande_deblocage_daafManager->delete($id);         
+            $delete = $this->Annexe_mobilierManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

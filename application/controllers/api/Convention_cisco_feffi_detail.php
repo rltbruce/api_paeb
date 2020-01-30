@@ -5,59 +5,84 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Detail_subvention extends REST_Controller {
+class Convention_cisco_feffi_detail extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('detail_subvention_model', 'Detail_subventionManager');
+        $this->load->model('convention_cisco_feffi_detail_model', 'Convention_cisco_feffi_detailManager');
+        $this->load->model('convention_cisco_feffi_entete_model', 'Convention_cisco_feffi_enteteManager');
         $this->load->model('zone_subvention_model', 'Zone_subventionManager');
         $this->load->model('acces_zone_model', 'Acces_zoneManager');
-        $this->load->model('detail_ouvrage_model', 'Detail_ouvrageManager');
+        $this->load->model('composant_model', 'ComposantManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-            
-        if ($id)
+        $id_convention_entete = $this->get('id_convention_entete');
+
+        if ($id_convention_entete)
+        {
+            $detail = $this->Convention_cisco_feffi_detailManager->findAllByEntete($id_convention_entete );
+            if ($detail) 
+            {
+                foreach ($detail as $key => $value) 
+                {                     
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
+                    $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
+                    $composant = $this->ComposantManager->findByAcceszone_zonesubvention($value->id_acces_zone, $value->id_zone_subvention);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['montant_total'] = $value->montant_total;                    
+                    $data[$key]['zone_subvention'] = $zone_subvention;
+                    $data[$key]['acces_zone'] = $acces_zone;
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['composant'] = $composant;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($id)
         {
             $data = array();
-            $detail_subvention = $this->Detail_subventionManager->findById($id);
+            $convention_detail = $this->Convention_cisco_feffi_detailManager->findById($id);
+            $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($convention_detail->$id_convention_entete);
+            $zone_subvention = $this->Zone_subventionManager->findById($convention_detail->id_zone_subvention);
+            $acces_zone = $this->Acces_zoneManager->findById($convention_detail->id_acces_zone);
+            $composant = $this->ComposantManager->findByAcceszone_zonesubvention($convention_detail->id_acces_zone, $convention_detail->id_zone_subvention);
 
-            $zone_subvention = $this->Zone_subventionManager->findById($detail_subvention->id_zone_subvention);
-            $acces_zone = $this->Acces_zoneManager->findById($detail_subvention->id_acces_zone);
-            $detail_ouvrage = $this->Detail_ouvrageManager->findById($detail_subvention->id_detail_ouvrage);
-
-            $data['id'] = $detail_subvention->id;
-            $data['cout_maitrise_oeuvre'] = $detail_subvention->cout_maitrise_oeuvre;
-            $data['cout_batiment']   = $detail_subvention->cout_batiment;
-            $data['cout_latrine']    = $detail_subvention->cout_latrine;
-            $data['cout_mobilier']   = $detail_subvention->cout_mobilier;
-            $data['cout_sousprojet'] = $detail_subvention->cout_sousprojet;
-            $data['acces_zone']      = $acces_zone;
+            $data['id'] = $convention_detail->id;
+            $data['intitule'] = $convention_detail->intitule;
+            $data['montant_total'] = $convention_detail->montant_total;                    
             $data['zone_subvention'] = $zone_subvention;
-            $data['detail_ouvrage']  = $detail_ouvrage;
+            $data['acces_zone'] = $acces_zone;
+            $data['convention_entete'] = $convention_detail->convention_entete;
+            $data['composant'] = $composant;
         } 
         else 
         {
-            $menu = $this->Detail_subventionManager->findAll();
+            $menu = $this->Convention_cisco_feffi_enteteManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
+                    $data = array();
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->$id_convention_entete);
                     $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
                     $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
-                    $detail_ouvrage = $this->Detail_ouvrageManager->findById($value->id_detail_ouvrage);
+                    $composant = $this->ComposantManager->findByAcceszone_zonesubvention($value->id_acces_zone, $value->id_zone_subvention);
 
-                    $data[$key]['id']              = $value->id;
-                    $data[$key]['cout_maitrise_oeuvre'] = $value->cout_maitrise_oeuvre;
-                    $data[$key]['cout_batiment']   = $value->cout_batiment;
-                    $data[$key]['cout_latrine']    = $value->cout_latrine;
-                    $data[$key]['cout_mobilier']   = $value->cout_mobilier;
-                    $data[$key]['cout_sousprojet'] = $value->cout_sousprojet;
-                    $data[$key]['acces_zone']      = $acces_zone;
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['montant_total'] = $value->montant_total;                    
                     $data[$key]['zone_subvention'] = $zone_subvention;
-                    $data[$key]['detail_ouvrage']  = $detail_ouvrage;
+                    $data[$key]['acces_zone'] = $acces_zone;
+                    $data[$key]['convention_entete'] = $value->convention_entete;
+                    $data[$key]['composant'] = $composant;
+                    
                 }
             } 
                 else
@@ -86,14 +111,11 @@ class Detail_subvention extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'id_acces_zone'     => $this->post('id_acces_zone'),
+                    'intitule' => $this->post('intitule'),
+                    'montant_total' => $this->post('montant_total'),
                     'id_zone_subvention' => $this->post('id_zone_subvention'),
-                    'cout_maitrise_oeuvre' => $this->post('cout_maitrise_oeuvre'),
-                    'cout_batiment'     => $this->post('cout_batiment'),
-                    'cout_latrine'      => $this->post('cout_latrine'),
-                    'cout_mobilier'     => $this->post('cout_mobilier'),
-                    'cout_sousprojet'   => $this->post('cout_sousprojet'),
-                    'id_detail_ouvrage'   => $this->post('id_detail_ouvrage')
+                    'id_acces_zone' => $this->post('id_acces_zone'),
+                    'id_convention_entete' => $this->post('id_convention_entete')
                 );
                 if (!$data) {
                     $this->response([
@@ -102,7 +124,7 @@ class Detail_subvention extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Detail_subventionManager->add($data);
+                $dataId = $this->Convention_cisco_feffi_detailManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -118,14 +140,11 @@ class Detail_subvention extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'id_acces_zone'     => $this->post('id_acces_zone'),
+                    'intitule' => $this->post('intitule'),
+                    'montant_total' => $this->post('montant_total'),
                     'id_zone_subvention' => $this->post('id_zone_subvention'),
-                    'cout_maitrise_oeuvre' => $this->post('cout_maitrise_oeuvre'),
-                    'cout_batiment'     => $this->post('cout_batiment'),
-                    'cout_latrine'      => $this->post('cout_latrine'),
-                    'cout_mobilier'     => $this->post('cout_mobilier'),
-                    'cout_sousprojet'   => $this->post('cout_sousprojet'),
-                    'id_detail_ouvrage'   => $this->post('id_detail_ouvrage')
+                    'id_acces_zone' => $this->post('id_acces_zone'),
+                    'id_convention_entete' => $this->post('id_convention_entete')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -134,7 +153,7 @@ class Detail_subvention extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Detail_subventionManager->update($id, $data);
+                $update = $this->Convention_cisco_feffi_detailManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -156,7 +175,7 @@ class Detail_subvention extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Detail_subventionManager->delete($id);         
+            $delete = $this->Convention_cisco_feffi_detailManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

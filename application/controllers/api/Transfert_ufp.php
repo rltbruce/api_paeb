@@ -10,31 +10,30 @@ class Transfert_ufp extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('transfert_ufp_model', 'Transfert_ufpManager');
-        $this->load->model('programmation_model', 'ProgrammationManager');
+        $this->load->model('demande_deblocage_daaf_model', 'Demande_deblocage_daafManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_programmation = $this->get('id_programmation');
-        $menu = $this->get('menu');
+        $id_demande_deblo_daaf = $this->get('id_demande_deblo_daaf');
             
-        if ($menu=='gettransfert_ufp_programme')
+        if ($id_demande_deblo_daaf)
         {
-            $tmp = $this->Transfert_ufpManager->findAllByprogramme($id_programmation);
+            $tmp = $this->Transfert_ufpManager->findAllBydemande_deblocage_daaf($id_demande_deblo_daaf);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $programmation= array();
-                    $programmation = $this->ProgrammationManager->findById($value->id_programmation);
+                    $demande_deblocage_daaf= array();
+                    $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($value->id_demande_deblo_daaf);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['montant'] = $value->montant;
                     $data[$key]['num_facture'] = $value->num_facture;
                     $data[$key]['date'] = $value->date;
-                    $data[$key]['programmation'] = $programmation;
+                    $data[$key]['demande_deblocage_daaf'] = $demande_deblocage_daaf;
                 }
             } 
                 else
@@ -44,14 +43,14 @@ class Transfert_ufp extends REST_Controller {
         {
             $data = array();
             $transfert_ufp = $this->Transfert_ufpManager->findById($id);
-            $programmation = $this->ProgrammationManager->findById($transfert_ufp->id_programmation);
+            $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($transfert_ufp->id_demande_deblo_daaf);
             $data['id'] = $transfert_ufp->id;
             $data['code'] = $transfert_ufp->code;
             $data['description'] = $transfert_ufp->description;
             $data['montant'] = $transfert_ufp->montant;
             $data['num_facture'] = $transfert_ufp->num_facture;
             $data['date'] = $transfert_ufp->date;
-            $data['programmation'] = $programmation;
+            $data['demande_deblocage_daaf'] = $demande_deblocage_daaf;
         } 
         else 
         {
@@ -60,15 +59,15 @@ class Transfert_ufp extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $programmation= array();
-                    $programmation = $this->ProgrammationManager->findById($value->id_programmation);
+                    $demande_deblocage_daaf= array();
+                    $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($value->id_demande_deblo_daaf);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['montant'] = $value->montant;
                     $data[$key]['num_facture'] = $value->num_facture;
                     $data[$key]['date'] = $value->date;
-                    $data[$key]['programmation'] = $programmation;
+                    $data[$key]['demande_deblocage_daaf'] = $demande_deblocage_daaf;
                 }
             } 
                 else
@@ -102,7 +101,7 @@ class Transfert_ufp extends REST_Controller {
                     'montant' => $this->post('montant'),
                     'num_facture' => $this->post('num_facture'),
                     'date' => $this->post('date'),
-                    'id_programmation' => $this->post('id_programmation')
+                    'id_demande_deblo_daaf' => $this->post('id_demande_deblo_daaf')
                 );
                 if (!$data) {
                     $this->response([
@@ -132,7 +131,7 @@ class Transfert_ufp extends REST_Controller {
                     'montant' => $this->post('montant'),
                     'num_facture' => $this->post('num_facture'),
                     'date' => $this->post('date'),
-                    'id_programmation' => $this->post('id_programmation')
+                    'id_demande_deblo_daaf' => $this->post('id_demande_deblo_daaf')
                 );
                 if (!$data || !$id) {
                     $this->response([

@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Attachement_model extends CI_Model {
-    protected $table = 'attachement';
+class Annexe_latrine_model extends CI_Model {
+    protected $table = 'annexe_latrine';
 
-    public function add($attachement) {
-        $this->db->set($this->_set($attachement))
+    public function add($annexe_latrine) {
+        $this->db->set($this->_set($annexe_latrine))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Attachement_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $attachement) {
-        $this->db->set($this->_set($attachement))
+    public function update($id, $annexe_latrine) {
+        $this->db->set($this->_set($annexe_latrine))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,12 +23,12 @@ class Attachement_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($attachement) {
+    public function _set($annexe_latrine) {
         return array(
-            'libelle'       =>      $attachement['libelle'],
-            'description'   =>      $attachement['description'],
-            'ponderation'   =>      $attachement['ponderation'],
-            'id_ouvrage'    => $attachement['id_ouvrage']                       
+            'libelle'       =>      $annexe_latrine['libelle'],
+            'description'   =>      $annexe_latrine['description'],
+            'cout_latrine'   =>      $annexe_latrine['cout_latrine'],
+            'id_batiment_ouvrage'    => $annexe_latrine['id_batiment_ouvrage']                       
         );
     }
     public function delete($id) {
@@ -60,11 +60,11 @@ class Attachement_model extends CI_Model {
             return $q->row();
         }
     }
-    public function findByouvrage($id_ouvrage)
-    {               
+
+    public function findBybatiment_ouvrage($id_batiment_ouvrage) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where('id_ouvrage',$id_ouvrage)
+                        ->where("id_batiment_ouvrage", $id_batiment_ouvrage)
                         ->order_by('description')
                         ->get()
                         ->result();
@@ -75,5 +75,4 @@ class Attachement_model extends CI_Model {
             return null;
         }                 
     }
-
 }

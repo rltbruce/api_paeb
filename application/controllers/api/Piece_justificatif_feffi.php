@@ -5,60 +5,64 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Attachement extends REST_Controller {
+class Piece_justificatif_feffi extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('attachement_model', 'AttachementManager');
-        $this->load->model('ouvrage_model', 'OuvrageManager');
+        $this->load->model('piece_justificatif_feffi_model', 'Piece_justificatif_feffiManager');
+       $this->load->model('demande_realimentation_feffi_model', 'Demande_realimentation_feffiManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_ouvrage = $this->get('id_ouvrage');
+        $id_demande_rea_feffi = $this->get('id_demande_rea_feffi');
+        $menu = $this->get('menu');
             
-        if ($id_ouvrage) 
-        {   $data = array();
-            $tmp = $this->AttachementManager->findByouvrage($id_ouvrage);
+        if ($id_demande_rea_feffi)
+        {
+            $tmp = $this->Piece_justificatif_feffiManager->findAllBydemande($id_demande_rea_feffi);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $ouvrage = array();
-                    $ouvrage = $this->OuvrageManager->findById($value->id_ouvrage);
+                    $demande_realimentation_feffi= array();
+                    $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->findById($value->id_demande_rea_feffi);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation'] = $value->ponderation;
-                    $data[$key]['ouvrage'] = $ouvrage;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['demande_realimentation_feffi'] = $demande_realimentation_feffi;
                 }
-            }
+            } 
+                else
+                    $data = array();
         }
         elseif ($id)
         {
             $data = array();
-            $attachement = $this->AttachementManager->findById($id);
-            $ouvrage = $this->OuvrageManager->findById($attachement->id_ouvrage);
-            $data['id'] = $attachement->id;
-            $data['libelle'] = $attachement->libelle;
-            $data['description'] = $attachement->description;
-            $data['ponderation'] = $attachement->ponderation;
-            $data['ouvrage'] = $ouvrage;
+            $piece_justificatif_feffi = $this->Piece_justificatif_feffiManager->findById($id);
+            $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->findById($piece_justificatif_feffi->id_demande_rea_feffi);
+            $data['id'] = $piece_justificatif_feffi->id;
+            $data['description'] = $piece_justificatif_feffi->description;
+            $data['fichier'] = $piece_justificatif_feffi->fichier;
+            $data['date'] = $piece_justificatif_feffi->date;
+            $data['demande_realimentation_feffi'] = $demande_realimentation_feffi;
         } 
         else 
         {
-            $menu = $this->AttachementManager->findAll();
+            $menu = $this->Piece_justificatif_feffiManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $ouvrage = $this->OuvrageManager->findById($value->id_ouvrage);
+                    $demande_realimentation_feffi= array();
+                    $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->findById($value->id_demande_rea_feffi);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation'] = $value->ponderation;
-                    $data[$key]['ouvrage'] = $ouvrage;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['demande_realimentation_feffi'] = $demande_realimentation_feffi;
                 }
             } 
                 else
@@ -87,10 +91,10 @@ class Attachement extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'ponderation' => $this->post('ponderation'),
-                    'id_ouvrage' => $this->post('id_ouvrage')
+                    'fichier' => $this->post('fichier'),
+                    'date' => $this->post('date'),
+                    'id_demande_rea_feffi' => $this->post('id_demande_rea_feffi')
                 );
                 if (!$data) {
                     $this->response([
@@ -99,7 +103,7 @@ class Attachement extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->AttachementManager->add($data);
+                $dataId = $this->Piece_justificatif_feffiManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -115,10 +119,10 @@ class Attachement extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'ponderation' => $this->post('ponderation'),
-                    'id_ouvrage' => $this->post('id_ouvrage')
+                    'fichier' => $this->post('fichier'),
+                    'date' => $this->post('date'),
+                    'id_demande_rea_feffi' => $this->post('id_demande_rea_feffi')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -127,7 +131,7 @@ class Attachement extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->AttachementManager->update($id, $data);
+                $update = $this->Piece_justificatif_feffiManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -149,7 +153,7 @@ class Attachement extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->AttachementManager->delete($id);         
+            $delete = $this->Piece_justificatif_feffiManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,
