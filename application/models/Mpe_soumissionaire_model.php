@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Prestataire_model extends CI_Model {
-    protected $table = 'prestataire';
+class Mpe_soumissionaire_model extends CI_Model {
+    protected $table = 'mpe_soumissionaire';
 
-    public function add($prestataire) {
-        $this->db->set($this->_set($prestataire))
+    public function add($ouvrage_construction) {
+        $this->db->set($this->_set($ouvrage_construction))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Prestataire_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $prestataire) {
-        $this->db->set($this->_set($prestataire))
+    public function update($id, $ouvrage_construction) {
+        $this->db->set($this->_set($ouvrage_construction))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,16 +23,12 @@ class Prestataire_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($prestataire) {
+    public function _set($ouvrage_construction) {
         return array(
-            'telephone'  => $prestataire['telephone'],
-            'nom'   => $prestataire['nom'],
-            'nif'   => $prestataire['nif'],
-            'stat'  => $prestataire['stat'],
-            'siege' => $prestataire['siege']                       
-        );
+            'id_passation_marches' => $ouvrage_construction['id_passation_marches'],
+            'id_prestataire' => $ouvrage_construction['id_prestataire']);
     }
-    public function delete($id) {
+   public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);
         if($this->db->affected_rows() === 1)
         {
@@ -44,7 +40,7 @@ class Prestataire_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('nom')
+                        ->order_by('id')
                         ->get()
                         ->result();
         if($result)
@@ -61,5 +57,20 @@ class Prestataire_model extends CI_Model {
             return $q->row();
         }
     }
+
+    public function findAllByPassation($id_passation_marches) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_passation_marches",$id_passation_marches)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    } 
 
 }

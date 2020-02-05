@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Prestataire_model extends CI_Model {
-    protected $table = 'prestataire';
+class Bureau_etude_model extends CI_Model {
+    protected $table = 'bureau_etude';
 
-    public function add($prestataire) {
-        $this->db->set($this->_set($prestataire))
+    public function add($bureau_etude) {
+        $this->db->set($this->_set($bureau_etude))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Prestataire_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $prestataire) {
-        $this->db->set($this->_set($prestataire))
+    public function update($id, $bureau_etude) {
+        $this->db->set($this->_set($bureau_etude))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,13 +23,13 @@ class Prestataire_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($prestataire) {
+    public function _set($bureau_etude) {
         return array(
-            'telephone'  => $prestataire['telephone'],
-            'nom'   => $prestataire['nom'],
-            'nif'   => $prestataire['nif'],
-            'stat'  => $prestataire['stat'],
-            'siege' => $prestataire['siege']                       
+            'telephone'  => $bureau_etude['telephone'],
+            'nom'   => $bureau_etude['nom'],
+            'nif'   => $bureau_etude['nif'],
+            'stat'  => $bureau_etude['stat'],
+            'siege' => $bureau_etude['siege']                       
         );
     }
     public function delete($id) {

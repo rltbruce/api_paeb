@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Prestataire_model extends CI_Model {
-    protected $table = 'prestataire';
+class Justificatif_facture_model extends CI_Model {
+    protected $table = 'justificatif_facture_pre';
 
-    public function add($prestataire) {
-        $this->db->set($this->_set($prestataire))
+    public function add($justificatif_facture) {
+        $this->db->set($this->_set($justificatif_facture))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Prestataire_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $prestataire) {
-        $this->db->set($this->_set($prestataire))
+    public function update($id, $justificatif_facture) {
+        $this->db->set($this->_set($justificatif_facture))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,13 +23,11 @@ class Prestataire_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($prestataire) {
+    public function _set($justificatif_facture) {
         return array(
-            'telephone'  => $prestataire['telephone'],
-            'nom'   => $prestataire['nom'],
-            'nif'   => $prestataire['nif'],
-            'stat'  => $prestataire['stat'],
-            'siege' => $prestataire['siege']                       
+            'description'   =>      $justificatif_facture['description'],
+            'fichier'   =>      $justificatif_facture['fichier'],
+            'id_demande_pay_pre'    =>  $justificatif_facture['id_demande_pay_pre']                       
         );
     }
     public function delete($id) {
@@ -44,7 +42,7 @@ class Prestataire_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('nom')
+                        ->order_by('description')
                         ->get()
                         ->result();
         if($result)
@@ -61,5 +59,20 @@ class Prestataire_model extends CI_Model {
             return $q->row();
         }
     }
+
+    public function findAllBydemande($id_demande_pay_pre) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_pay_pre", $id_demande_pay_pre)
+                        ->order_by('description')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    } 
 
 }
