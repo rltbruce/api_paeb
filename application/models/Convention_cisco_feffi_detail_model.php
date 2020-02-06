@@ -29,7 +29,8 @@ class Convention_cisco_feffi_detail_model extends CI_Model {
             'montant_total' =>    $convention['montant_total'],
             'id_zone_subvention' => $convention['id_zone_subvention'],
             'id_acces_zone' => $convention['id_acces_zone'],
-            'id_convention_entete'=> $convention['id_convention_entete']);
+            'id_convention_entete'=> $convention['id_convention_entete'],
+            'avancement'=> $convention['avancement']);
     }
     public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);

@@ -35,7 +35,8 @@ class Convention_cisco_feffi_detail extends REST_Controller {
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['intitule'] = $value->intitule;
-                    $data[$key]['montant_total'] = $value->montant_total;                    
+                    $data[$key]['montant_total'] = $value->montant_total;
+                    $data[$key]['avancement'] = $value->avancement;                    
                     $data[$key]['zone_subvention'] = $zone_subvention;
                     $data[$key]['acces_zone'] = $acces_zone;
                     $data[$key]['convention_entete'] = $convention_entete;
@@ -56,7 +57,8 @@ class Convention_cisco_feffi_detail extends REST_Controller {
 
             $data['id'] = $convention_detail->id;
             $data['intitule'] = $convention_detail->intitule;
-            $data['montant_total'] = $convention_detail->montant_total;                    
+            $data['montant_total'] = $convention_detail->montant_total;
+            $data['avancement'] = $convention_detail->avancement;                    
             $data['zone_subvention'] = $zone_subvention;
             $data['acces_zone'] = $acces_zone;
             $data['convention_entete'] = $convention_detail->convention_entete;
@@ -77,7 +79,8 @@ class Convention_cisco_feffi_detail extends REST_Controller {
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['intitule'] = $value->intitule;
-                    $data[$key]['montant_total'] = $value->montant_total;                    
+                    $data[$key]['montant_total'] = $value->montant_total;
+                    $data[$key]['avancement'] = $value->avancement;                    
                     $data[$key]['zone_subvention'] = $zone_subvention;
                     $data[$key]['acces_zone'] = $acces_zone;
                     $data[$key]['convention_entete'] = $value->convention_entete;
@@ -115,7 +118,8 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                     'montant_total' => $this->post('montant_total'),
                     'id_zone_subvention' => $this->post('id_zone_subvention'),
                     'id_acces_zone' => $this->post('id_acces_zone'),
-                    'id_convention_entete' => $this->post('id_convention_entete')
+                    'id_convention_entete' => $this->post('id_convention_entete'),
+                    'avancement' => $this->post('avancement')
                 );
                 if (!$data) {
                     $this->response([
@@ -144,7 +148,8 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                     'montant_total' => $this->post('montant_total'),
                     'id_zone_subvention' => $this->post('id_zone_subvention'),
                     'id_acces_zone' => $this->post('id_acces_zone'),
-                    'id_convention_entete' => $this->post('id_convention_entete')
+                    'id_convention_entete' => $this->post('id_convention_entete'),
+                    'avancement' => $this->post('avancement')
                 );
                 if (!$data || !$id) {
                     $this->response([
