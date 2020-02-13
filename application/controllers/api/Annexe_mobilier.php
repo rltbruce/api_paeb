@@ -28,8 +28,12 @@ class Annexe_mobilier extends REST_Controller {
                     $batiment_ouvrage = array();
                     $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
+                    $data[$key]['nbr_banc'] = $value->nbr_banc;
+                    $data[$key]['nbr_table_maitre'] = $value->nbr_table_maitre;
+                    $data[$key]['nbr_table_maitre'] = $value->nbr_table_maitre;
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
                     $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
                 }
@@ -43,6 +47,9 @@ class Annexe_mobilier extends REST_Controller {
             $data['id'] = $annexe_mobilier->id;
             $data['libelle'] = $annexe_mobilier->libelle;
             $data['description'] = $annexe_mobilier->description;
+            $data['nbr_banc'] = $annexe_mobilier->nbr_banc;
+            $data['nbr_table_maitre'] = $annexe_mobilier->nbr_table_maitre;
+            $data['nbr_table_maitre'] = $annexe_mobilier->nbr_table_maitre;
             $data['cout_mobilier'] = $annexe_mobilier->cout_mobilier;
             $data['batiment_ouvrage'] = $batiment_ouvrage;
         } 
@@ -55,8 +62,12 @@ class Annexe_mobilier extends REST_Controller {
                 {
                     $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
+                    $data[$key]['nbr_banc'] = $value->nbr_banc;
+                    $data[$key]['nbr_table_maitre'] = $value->nbr_table_maitre;
+                    $data[$key]['nbr_table_maitre'] = $value->nbr_table_maitre;
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
                     $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
                 }
@@ -87,8 +98,13 @@ class Annexe_mobilier extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
+                    'code' => $this->post('code'),
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
+                    'nbr_banc' => $this->post('nbr_banc'),
+                    'nbr_table_maitre' => $this->post('nbr_table_maitre'),
+                    'nbr_banc' => $this->post('nbr_banc'),
+                    'nbr_chais_maitre' => $this->post('nbr_chais_maitre'),
                     'cout_mobilier' => $this->post('cout_mobilier'),
                     'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage')
                 );
@@ -115,8 +131,13 @@ class Annexe_mobilier extends REST_Controller {
                 }
             } else {
                 $data = array(
+                    'code' => $this->post('code'),
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
+                    'nbr_banc' => $this->post('nbr_banc'),
+                    'nbr_table_maitre' => $this->post('nbr_table_maitre'),
+                    'nbr_banc' => $this->post('nbr_banc'),
+                    'nbr_chais_maitre' => $this->post('nbr_chais_maitre'),
                     'cout_mobilier' => $this->post('cout_mobilier'),
                     'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage')
                 );

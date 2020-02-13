@@ -4,7 +4,7 @@ class Demande_payement_prestataire_model extends CI_Model {
     protected $table = 'demande_payement_prestataire';
 
     public function add($demande_payement_prestataire) {
-        $this->db->set($this->_set($demande_payement_prestataire))
+        $this->db->set($this->_set($demande_payement_prestataire))                
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -14,6 +14,7 @@ class Demande_payement_prestataire_model extends CI_Model {
     }
     public function update($id, $demande_payement_prestataire) {
         $this->db->set($this->_set($demande_payement_prestataire))
+                ->set('date_approbation', 'NOW()', false)
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -27,6 +28,7 @@ class Demande_payement_prestataire_model extends CI_Model {
         return array(
             'objet'          =>      $demande_payement_prestataire['objet'],
             'description'   =>      $demande_payement_prestataire['description'],
+            'ref_facture'   =>      $demande_payement_prestataire['ref_facture'],
             'montant'   =>      $demande_payement_prestataire['montant'],
             'date'          =>      $demande_payement_prestataire['date'],
             'id_contrat_prestataire'    =>  $demande_payement_prestataire['id_contrat_prestataire'],
@@ -63,11 +65,40 @@ class Demande_payement_prestataire_model extends CI_Model {
         }
     }
 
-    public function findAllInvalideBycontrat_prestataire($id_contrat_prestataire) {               
+    public function findAllInvalide() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
                         ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+        public function findAllValide() {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation", 2)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+            public function findAllValidetechnique() {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation", 1)
                         ->order_by('id')
                         ->get()
                         ->result();

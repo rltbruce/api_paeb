@@ -13,7 +13,7 @@ class Latrine_construction extends REST_Controller {
         $this->load->model('latrine_construction_model', 'Latrine_constructionManager');
         $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
         $this->load->model('annexe_latrine_model', 'Annexe_latrineManager');
-        $this->load->model('attachement_latrine_model', 'Attachement_latrineManager');
+        //$this->load->model('attachement_latrine_model', 'Attachement_latrineManager');
     }
 
     public function index_get() 
@@ -30,11 +30,11 @@ class Latrine_construction extends REST_Controller {
                 {                     
                     $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
                     $annexe_latrine = $this->Annexe_latrineManager->findById($value->id_annexe_latrine);
-                    $attachement_latrine = $this->Attachement_latrineManager->findById($value->id_attachement_latrine);
+                    //$attachement_latrine = $this->Attachement_latrineManager->findById($value->id_attachement_latrine);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['annexe_latrine'] = $annexe_latrine;
-                    $data[$key]['attachement_latrine'] = $attachement_latrine;
+                    //$data[$key]['attachement_latrine'] = $attachement_latrine;
                     $data[$key]['batiment_construction'] = $batiment_construction;
                 }
             } 
@@ -48,10 +48,10 @@ class Latrine_construction extends REST_Controller {
 
             $batiment_construction = $this->Batiment_constructionManager->findById($latrine_construction->id_batiment_construction);
 
-            $attachement_latrine = $this->Attachement_latrineManager->findById($latrine_construction->id_attachement_latrine);
+           // $attachement_latrine = $this->Attachement_latrineManager->findById($latrine_construction->id_attachement_latrine);
 
             $data['id'] = $batiment_construction->id;
-            $data['attachement_latrine'] = $attachement_latrine;
+            //$data['attachement_latrine'] = $attachement_latrine;
             $data['latrine_construction'] = $latrine_construction;
             $data['batiment_construction'] = $batiment_construction;
         } 
@@ -67,11 +67,11 @@ class Latrine_construction extends REST_Controller {
 
                     $annexe_latrine = $this->Annexe_latrineManager->findById($value->id_annexe_latrine);
 
-                    $attachement_latrine = $this->Attachement_latrineManager->findById($value->id_attachement_latrine);
+                    ////$attachement_latrine = $this->Attachement_latrineManager->findById($value->id_attachement_latrine);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['annexe_latrine'] = $annexe_latrine;
-                    $data[$key]['attachement_latrine'] = $attachement_latrine;
+                    //$data[$key]['attachement_latrine'] = $attachement_latrine;
                     $data[$key]['batiment_construction'] = $batiment_construction;
                     
                 }
@@ -129,7 +129,7 @@ class Latrine_construction extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'id_annexe_latrine' => $this->post('id_annexe_latrine'),
-                    'id_attachement_latrine' => $this->post('id_attachement_latrine'),
+                    //'id_attachement_latrine' => $this->post('id_attachement_latrine'),
                     'id_batiment_construction' => $this->post('id_batiment_construction')
                 );
                 if (!$data) {
@@ -156,7 +156,7 @@ class Latrine_construction extends REST_Controller {
             } else {
                 $data = array(
                     'id_annexe_latrine' => $this->post('id_annexe_latrine'),
-                    'id_attachement_latrine' => $this->post('id_attachement_latrine'),
+                    //'id_attachement_latrine' => $this->post('id_attachement_latrine'),
                     'id_batiment_construction' => $this->post('id_batiment_construction')
                 );
                 if (!$data || !$id) {

@@ -29,8 +29,12 @@ class Feffi extends REST_Controller {
                     $cisco = array();
                     $ecole = $this->EcoleManager->findById($value->id_ecole);
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['identifiant'] = $value->identifiant;
                     $data[$key]['denomination'] = $value->denomination;
-                    $data[$key]['description'] = $value->description;
+                    $data[$key]['nbr_feminin'] = $value->nbr_feminin;
+                    $data[$key]['nbr_total'] = $value->nbr_total;
+                    $data[$key]['adresse'] = $value->adresse;
+                    $data[$key]['observation'] = $value->observation;
                     $data[$key]['ecole'] = $ecole;
                 }
             }
@@ -41,8 +45,12 @@ class Feffi extends REST_Controller {
             $feffi = $this->FeffiManager->findById($id);
             $ecole = $this->EcoleManager->findById($feffi->id_ecole);
             $data['id'] = $feffi->id;
+            $data['identifiant'] = $feffi->identifiant;
             $data['denomination'] = $feffi->denomination;
-            $data['description'] = $feffi->description;
+            $data['nbr_feminin'] = $feffi->nbr_feminin;
+            $data['nbr_total'] = $feffi->nbr_total;
+            $data['adresse'] = $feffi->adresse;
+            $data['observation'] = $feffi->observation;
             $data['ecole'] = $ecole;
         } 
         else 
@@ -56,8 +64,12 @@ class Feffi extends REST_Controller {
                     $cisco = array();
                     $ecole = $this->EcoleManager->findById($value->id_ecole);
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['identifiant'] = $value->identifiant;
                     $data[$key]['denomination'] = $value->denomination;
-                    $data[$key]['description'] = $value->description;
+                    $data[$key]['nbr_feminin'] = $value->nbr_feminin;
+                    $data[$key]['nbr_total'] = $value->nbr_total;
+                    $data[$key]['adresse'] = $value->adresse;
+                    $data[$key]['observation'] = $value->observation;
                     $data[$key]['ecole'] = $ecole;
                 }
             } 
@@ -87,8 +99,12 @@ class Feffi extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
+                    'identifiant' => $this->post('identifiant'),
                     'denomination' => $this->post('denomination'),
-                    'description' => $this->post('description'),
+                    'nbr_feminin' => $this->post('nbr_feminin'),
+                    'nbr_total' => $this->post('nbr_total'),
+                    'adresse' => $this->post('adresse'),
+                    'observation' => $this->post('observation'),
                     'id_ecole' => $this->post('id_ecole')
                 );
                 if (!$data) {
@@ -114,8 +130,12 @@ class Feffi extends REST_Controller {
                 }
             } else {
                 $data = array(
+                    'identifiant' => $this->post('identifiant'),
                     'denomination' => $this->post('denomination'),
-                    'description' => $this->post('description'),
+                    'nbr_feminin' => $this->post('nbr_feminin'),
+                    'nbr_total' => $this->post('nbr_total'),
+                    'adresse' => $this->post('adresse'),
+                    'observation' => $this->post('observation'),
                     'id_ecole' => $this->post('id_ecole')
                 );
                 if (!$data || !$id) {

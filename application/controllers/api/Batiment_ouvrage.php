@@ -21,10 +21,10 @@ class Batiment_ouvrage extends REST_Controller {
         $id_acces_zone = $this->get('id_acces_zone');
         $id_zone_subvention = $this->get('id_zone_subvention');
             
-        if ($menu=='getdetailByZoneOuvrage') 
+        if ($menu=='getbatimentByZone') 
         {   $data = array();
             //$tmp = array();
-            $tmp = $this->Batiment_ouvrageManager->findByZoneOuvrage($id_ouvrage,$id_zone_subvention,$id_acces_zone);
+            $tmp = $this->Batiment_ouvrageManager->findByZone($id_zone_subvention,$id_acces_zone);
             //$data=$tmp;
            if ($tmp) 
             {
@@ -36,8 +36,10 @@ class Batiment_ouvrage extends REST_Controller {
                     $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
                     $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
+                    $data[$key]['nbr_salle'] = $value->nbr_salle;
                     $data[$key]['cout_batiment'] = $value->cout_batiment;
                     $data[$key]['cout_maitrise_oeuvre'] = $value->cout_maitrise_oeuvre;
                     $data[$key]['cout_sous_projet'] = $value->cout_sous_projet;
@@ -57,8 +59,10 @@ class Batiment_ouvrage extends REST_Controller {
             $acces_zone = $this->Acces_zoneManager->findById($batiment_ouvrage->id_acces_zone);
             $zone_subvention = $this->Zone_subventionManager->findById($batiment_ouvrage->id_zone_subvention);
             $data['id'] = $batiment_ouvrage->id;
+            $data['code'] = $batiment_ouvrage->code;
             $data['libelle'] = $batiment_ouvrage->libelle;
             $data['description'] = $batiment_ouvrage->description;
+            $data['nbr_salle'] = $batiment_ouvrage->nbr_salle;
             $data['cout_batiment'] = $batiment_ouvrage->cout_batiment;
             $data['cout_maitrise_oeuvre'] = $batiment_ouvrage->cout_maitrise_oeuvre;
             $data['cout_sous_projet'] = $batiment_ouvrage->cout_sous_projet;
@@ -78,8 +82,10 @@ class Batiment_ouvrage extends REST_Controller {
                     $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
                     $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
+                    $data[$key]['nbr_salle'] = $value->nbr_salle;
                     $data[$key]['cout_batiment'] = $value->cout_batiment;
                     $data[$key]['cout_maitrise_oeuvre'] = $value->cout_maitrise_oeuvre;
                     $data[$key]['cout_sous_projet'] = $value->cout_sous_projet;
@@ -113,8 +119,10 @@ class Batiment_ouvrage extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
+                    'code' => $this->post('code'),
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
+                    'nbr_salle' => $this->post('nbr_salle'),
                     'cout_batiment' => $this->post('cout_batiment'),
                     'cout_maitrise_oeuvre' => $this->post('cout_maitrise_oeuvre'),
                     'cout_sous_projet' => $this->post('cout_sous_projet'),
@@ -144,8 +152,10 @@ class Batiment_ouvrage extends REST_Controller {
                 }
             } else {
                 $data = array(
+                    'code' => $this->post('code'),
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
+                    'nbr_salle' => $this->post('nbr_salle'),
                     'cout_batiment' => $this->post('cout_batiment'),
                     'cout_maitrise_oeuvre' => $this->post('cout_maitrise_oeuvre'),
                     'cout_sous_projet' => $this->post('cout_sous_projet'),

@@ -25,8 +25,12 @@ class Annexe_mobilier_model extends CI_Model {
     }
     public function _set($annexe_mobilier) {
         return array(
+            'code'       =>      $annexe_mobilier['code'],
             'libelle'       =>      $annexe_mobilier['libelle'],
             'description'   =>      $annexe_mobilier['description'],
+            'nbr_banc'       =>      $annexe_mobilier['nbr_banc'],
+            'nbr_table_maitre'       =>      $annexe_mobilier['nbr_table_maitre'],
+            'nbr_chais_maitre'       =>      $annexe_mobilier['nbr_chais_maitre'],
             'cout_mobilier'   =>      $annexe_mobilier['cout_mobilier'],
             'id_batiment_ouvrage'    => $annexe_mobilier['id_batiment_ouvrage']                       
         );

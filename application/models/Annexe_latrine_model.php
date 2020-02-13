@@ -25,8 +25,11 @@ class Annexe_latrine_model extends CI_Model {
     }
     public function _set($annexe_latrine) {
         return array(
+            'code'       =>      $annexe_latrine['code'],
             'libelle'       =>      $annexe_latrine['libelle'],
             'description'   =>      $annexe_latrine['description'],
+            'nbr_box_latrine'       =>      $annexe_latrine['nbr_box_latrine'],
+            'nbr_point_eau'       =>      $annexe_latrine['nbr_point_eau'],
             'cout_latrine'   =>      $annexe_latrine['cout_latrine'],
             'id_batiment_ouvrage'    => $annexe_latrine['id_batiment_ouvrage']                       
         );

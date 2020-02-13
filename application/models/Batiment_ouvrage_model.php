@@ -25,8 +25,10 @@ class Batiment_ouvrage_model extends CI_Model {
     }
     public function _set($batiment_ouvrage) {
         return array(
+            'code'   =>      $batiment_ouvrage['code'],
             'libelle'       =>      $batiment_ouvrage['libelle'],
             'description'   =>      $batiment_ouvrage['description'],
+            'nbr_salle'   =>      $batiment_ouvrage['nbr_salle'],
             'cout_batiment' =>      $batiment_ouvrage['cout_batiment'],
             'cout_maitrise_oeuvre' =>      $batiment_ouvrage['cout_maitrise_oeuvre'],
             'cout_sous_projet'     =>      $batiment_ouvrage['cout_sous_projet'],
@@ -78,14 +80,12 @@ class Batiment_ouvrage_model extends CI_Model {
             return null;
         }                 
     }*/
-  /*  public function findByZoneOuvrage($id_ouvrage,$id_zone_subvention,$id_acces_zone)
+    public function findByZone($id_zone_subvention,$id_acces_zone)
     {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where('id_ouvrage',$id_ouvrage)
                         ->where('id_zone_subvention',$id_zone_subvention)
                         ->where('id_acces_zone',$id_acces_zone)
-                        ->order_by('id_ouvrage')
                         ->get()
                         ->result();
         if($result)
@@ -94,7 +94,7 @@ class Batiment_ouvrage_model extends CI_Model {
         }else{
             return null;
         }                 
-    }*/
+    }
 
    /* public function findByZoneOuvrageessai($id_ouvrage,$id_zone_subvention,$id_acces_zone)
     {               

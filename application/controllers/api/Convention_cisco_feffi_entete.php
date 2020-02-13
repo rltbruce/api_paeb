@@ -13,6 +13,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
         $this->load->model('cisco_model', 'CiscoManager');
         $this->load->model('feffi_model', 'FeffiManager');
         $this->load->model('convention_daff_ufp_model', 'Convention_daff_ufpManager');
+        $this->load->model('compte_feffi_model', 'Compte_feffiManager');
+        $this->load->model('ecole_model', 'EcoleManager');
     }
 
     public function index_get() 
@@ -32,14 +34,19 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $feffi = array();
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
-                    $data[$key]['numero_convention'] = $value->numero_convention;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['date_signature'] = $value->date_signature;                    
-                    $data[$key]['financement'] = $value->financement;
+                    $data[$key]['ref_financement'] = $value->ref_financement;
                     $data[$key]['delai'] = $value->delai;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['compte_feffi'] = $compte_feffi;
+                    $data[$key]['ecole'] = $ecole;
 
                 }
             } 
@@ -57,14 +64,19 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $feffi = array();
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
-                    $data[$key]['numero_convention'] = $value->numero_convention;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['date_signature'] = $value->date_signature;                    
-                    $data[$key]['financement'] = $value->financement;
+                    $data[$key]['ref_financement'] = $value->ref_financement;
                     $data[$key]['delai'] = $value->delai;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['compte_feffi'] = $compte_feffi;
+                     $data[$key]['ecole'] = $ecole;
                 }
             } 
                 else
@@ -81,14 +93,19 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $feffi = array();
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
-                    $data[$key]['numero_convention'] = $value->numero_convention;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['date_signature'] = $value->date_signature;                    
-                    $data[$key]['financement'] = $value->financement;
+                    $data[$key]['ref_financement'] = $value->ref_financement;
                     $data[$key]['delai'] = $value->delai;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['compte_feffi'] = $compte_feffi;
+                     $data[$key]['ecole'] = $ecole;
                     if($value->id_convention_ufpdaaf)
                     {
                       $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($value->id_convention_ufpdaaf);
@@ -112,14 +129,19 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $feffi = array();
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
-                    $data[$key]['numero_convention'] = $value->numero_convention;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['date_signature'] = $value->date_signature;                    
-                    $data[$key]['financement'] = $value->financement;
+                    $data[$key]['ref_financement'] = $value->ref_financement;
                     $data[$key]['delai'] = $value->delai;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['compte_feffi'] = $compte_feffi;
+                     $data[$key]['ecole'] = $ecole;
                 }
             } 
                 else
@@ -136,14 +158,19 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $feffi = array();
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
-                    $data[$key]['numero_convention'] = $value->numero_convention;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['date_signature'] = $value->date_signature;                    
-                    $data[$key]['financement'] = $value->financement;
+                    $data[$key]['ref_financement'] = $value->ref_financement;
                     $data[$key]['delai'] = $value->delai;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['compte_feffi'] = $compte_feffi;
+                     $data[$key]['ecole'] = $ecole;
                     
                 }
             } 
@@ -173,15 +200,17 @@ class Convention_cisco_feffi_entete extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'numero_convention' => $this->post('numero_convention'),
+                    'ref_convention' => $this->post('ref_convention'),
                     'objet' => $this->post('objet'),
                     'id_cisco' => $this->post('id_cisco'),
                     'id_feffi' => $this->post('id_feffi'),
-                    'financement' => $this->post('financement'),
+                    'ref_financement' => $this->post('ref_financement'),
                     'date_signature' => $this->post('date_signature'),
                     'delai' => $this->post('delai'),
                     'validation' => $this->post('validation'),
-                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf')
+                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf'),
+                    'id_compte_feffi' => $this->post('id_compte_feffi'),
+                    'observation' => $this->post('observation')
                 );
                 if (!$data) {
                     $this->response([
@@ -206,15 +235,17 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'numero_convention' => $this->post('numero_convention'),
+                    'ref_convention' => $this->post('ref_convention'),
                     'objet' => $this->post('objet'),
                     'id_cisco' => $this->post('id_cisco'),
                     'id_feffi' => $this->post('id_feffi'),
-                    'financement' => $this->post('financement'),
+                    'ref_financement' => $this->post('ref_financement'),
                     'date_signature' => $this->post('date_signature'),
                     'delai' => $this->post('delai'),
                     'validation' => $this->post('validation'),
-                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf')
+                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf'),
+                    'id_compte_feffi' => $this->post('id_compte_feffi'),
+                    'observation' => $this->post('observation')
                 );
                 if (!$data || !$id) {
                     $this->response([

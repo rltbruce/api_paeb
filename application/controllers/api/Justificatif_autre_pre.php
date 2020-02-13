@@ -5,36 +5,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Batiment_construction extends REST_Controller {
+class Justificatif_autre_pre extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
-        $this->load->model('convention_cisco_feffi_detail_model', 'Convention_cisco_feffi_detailManager');
-        $this->load->model('batiment_ouvrage_model', 'Batiment_ouvrageManager');
-        //$this->load->model('attachement_batiment_model', 'Attachement_batimentManager');
+        $this->load->model('justificatif_autre_pre_model', 'Justificatif_autre_preManager');
+       $this->load->model('demande_payement_prestataire_model', 'Demande_payement_prestataireManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_convention_detail = $this->get('id_convention_detail');
-
-        if ($id_convention_detail)
+        $id_demande_pay_pre = $this->get('id_demande_pay_pre');
+            
+        if ($id_demande_pay_pre)
         {
-            $batiment_construction = $this->Batiment_constructionManager->findAllByDetail($id_convention_detail );
-            if ($batiment_construction) 
+            $tmp = $this->Justificatif_autre_preManager->findAllBydemande($id_demande_pay_pre);
+            if ($tmp) 
             {
-                foreach ($batiment_construction as $key => $value) 
-                {                     
-                    $convention_detail = $this->Convention_cisco_feffi_detailManager->findById($value->id_convention_detail);
-                    $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
-                    //$attachement_batiment = $this->Attachement_batimentManager->findById($value->id_attachement_batiment);
-
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_payement_prestataire= array();
+                    $demande_payement_prestataire = $this->Demande_payement_prestataireManager->findById($value->id_demande_pay_pre);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
-                    //$data[$key]['attachement_batiment'] = $attachement_batiment;
-                    $data[$key]['convention_detail'] = $convention_detail;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['fichier'] = $value->fichier;
+                    //$data[$key]['date'] = $value->date;
+                    $data[$key]['demande_payement_prestataire'] = $demande_payement_prestataire;
                 }
             } 
                 else
@@ -43,34 +40,28 @@ class Batiment_construction extends REST_Controller {
         elseif ($id)
         {
             $data = array();
-            $batiment_construction = $this->Batiment_constructionManager->findById($id);
-            $convention_detail = $this->Convention_cisco_feffi_detailManager->findById($batiment_construction->id_convention_detail);
-           // $attachement_batiment = $this->Attachement_batimentManager->findById($batiment_construction->id_attachement_batiment);
-            $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($batiment_construction->id_batiment_ouvrage);
-
-            $data['id'] = $batiment_construction->id;
-            //$data['attachement_batiment'] = $attachement_batiment;
-            $data['convention_detail'] = $convention_detail;
-            $data['batiment_ouvrage'] = $batiment_ouvrage;
+            $justificatif_autre_pre = $this->Justificatif_autre_preManager->findById($id);
+            $demande_payement_prestataire = $this->Demande_payement_prestataireManager->findById($justificatif_autre_pre->id_demande_pay_pre);
+            $data['id'] = $justificatif_autre_pre->id;
+            $data['description'] = $justificatif_autre_pre->description;
+            $data['fichier'] = $justificatif_autre_pre->fichier;
+            //$data['date'] = $justificatif_autre_pre->date;
+            $data['demande_payement_prestataire'] = $demande_payement_prestataire;
         } 
         else 
         {
-            $menu = $this->Convention_cisco_feffi_enteteManager->findAll();
+            $menu = $this->Justificatif_autre_preManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $data = array();
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->$id_convention_entete);
-
-                    //$attachement_batiment = $this->Attachement_batimentManager->findById($value->id_attachement_batiment);
-                    $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
-
+                    $demande_payement_prestataire= array();
+                    $demande_payement_prestataire = $this->Demande_payement_prestataireManager->findById($value->id_demande_pay_pre);
                     $data[$key]['id'] = $value->id;
-                    //$data[$key]['attachement_batiment'] = $attachement_batiment;
-                    $data[$key]['convention_detail'] = $convention_detail;
-                    $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
-                    
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['fichier'] = $value->fichier;
+                    //$data[$key]['date'] = $value->date;
+                    $data[$key]['demande_payement_prestataire'] = $demande_payement_prestataire;
                 }
             } 
                 else
@@ -96,14 +87,12 @@ class Batiment_construction extends REST_Controller {
     {
         $id = $this->post('id') ;
         $supprimer = $this->post('supprimer') ;
-        $menu = $this->post('menu') ;
-        //$id_convention_detail = $this->post('id_convention_detail');
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage'),
-                    //'id_attachement_batiment' => $this->post('id_attachement_batiment'),
-                    'id_convention_detail' => $this->post('id_convention_detail')
+                    'description' => $this->post('description'),
+                    'fichier' => $this->post('fichier'),
+                    'id_demande_pay_pre' => $this->post('id_demande_pay_pre')
                 );
                 if (!$data) {
                     $this->response([
@@ -112,7 +101,7 @@ class Batiment_construction extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Batiment_constructionManager->add($data);
+                $dataId = $this->Justificatif_autre_preManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -128,9 +117,9 @@ class Batiment_construction extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage'),
-                    //'id_attachement_batiment' => $this->post('id_attachement_batiment'),
-                    'id_convention_detail' => $this->post('id_convention_detail')
+                    'description' => $this->post('description'),
+                    'fichier' => $this->post('fichier'),
+                    'id_demande_pay_pre' => $this->post('id_demande_pay_pre')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -139,7 +128,7 @@ class Batiment_construction extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Batiment_constructionManager->update($id, $data);
+                $update = $this->Justificatif_autre_preManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -161,7 +150,7 @@ class Batiment_construction extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Batiment_constructionManager->delete($id);         
+            $delete = $this->Justificatif_autre_preManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

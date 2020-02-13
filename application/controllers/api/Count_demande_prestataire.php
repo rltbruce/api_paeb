@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Count_payement_prestataire extends REST_Controller {
+class Count_demande_prestataire extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -21,10 +21,11 @@ class Count_payement_prestataire extends REST_Controller {
         {
            $demande_payement_prestataire = $this->Demande_payement_prestataireManager->countAllByInvalide(0);          
             $data = $demande_payement_prestataire;
-        } 
-        else 
+        }
+        if ($invalide==2)
         {
-            $data = array();
+           $demande_payement_prestataire = $this->Demande_payement_prestataireManager->countAllByInvalide(1);          
+            $data = $demande_payement_prestataire;
         }
     
         

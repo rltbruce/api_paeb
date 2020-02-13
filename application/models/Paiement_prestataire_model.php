@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Latrine_construction_model extends CI_Model {
-    protected $table = 'latrine_construction';
+class Paiement_prestataire_model extends CI_Model {
+    protected $table = 'paiement_prestataire';
 
-    public function add($latrine_construction) {
-        $this->db->set($this->_set($latrine_construction))
+    public function add($prestataire) {
+        $this->db->set($this->_set($prestataire))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Latrine_construction_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $latrine_construction) {
-        $this->db->set($this->_set($latrine_construction))
+    public function update($id, $prestataire) {
+        $this->db->set($this->_set($prestataire))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,11 +23,15 @@ class Latrine_construction_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($latrine_construction) {
+    public function _set($prestataire) {
         return array(
-            'id_annexe_latrine' => $latrine_construction['id_annexe_latrine'],
-            //'id_attachement_latrine' => $latrine_construction['id_attachement_latrine'],
-            'id_batiment_construction'=> $latrine_construction['id_batiment_construction']);
+            'montant_paiement'       =>      $prestataire['montant_paiement'],
+            'cumul'       =>      $prestataire['cumul'],
+            'pourcentage_paiement'   =>      $prestataire['pourcentage_paiement'],
+            'date_paiement'       =>      $prestataire['date_paiement'],
+            'observation'       =>      $prestataire['observation'],
+            'id_demande_prestataire'    => $prestataire['id_demande_prestataire']                       
+        );
     }
     public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);
@@ -59,10 +63,10 @@ class Latrine_construction_model extends CI_Model {
         }
     }
 
-    public function findAllByBatiment($id_batiment_construction) {               
+    public function findBydemande_prestataire($id_demande_prestataire) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_batiment_construction",$id_batiment_construction)
+                        ->where("id_demande_prestataire", $id_demande_prestataire)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -73,15 +77,4 @@ class Latrine_construction_model extends CI_Model {
             return null;
         }                 
     }
-
-  /*  public function supressionBydetail($id) {
-        $this->db->where('id_convention_detail', (int) $id)->delete($this->table);
-        if($this->db->affected_rows() === 1)
-        {
-            return true;
-        }else{
-            return null;
-        }  
-    } */
-
 }

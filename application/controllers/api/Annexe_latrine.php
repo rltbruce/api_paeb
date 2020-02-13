@@ -28,8 +28,11 @@ class Annexe_latrine extends REST_Controller {
                     $batiment_ouvrage = array();
                     $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
+                    $data[$key]['nbr_box_latrine'] = $value->nbr_box_latrine;
+                    $data[$key]['nbr_point_eau'] = $value->nbr_point_eau;
                     $data[$key]['cout_latrine'] = $value->cout_latrine;
                     $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
                 }
@@ -41,8 +44,11 @@ class Annexe_latrine extends REST_Controller {
             $annexe_latrine = $this->Annexe_latrineManager->findById($id);
             $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($annexe_latrine->id_ouvrage);
             $data['id'] = $annexe_latrine->id;
+            $data['code'] = $annexe_latrine->code;
             $data['libelle'] = $annexe_latrine->libelle;
             $data['description'] = $annexe_latrine->description;
+            $data['nbr_box_latrine'] = $annexe_latrine->nbr_box_latrine;
+            $data['nbr_point_eau'] = $annexe_latrine->nbr_point_eau;
             $data['cout_latrine'] = $annexe_latrine->cout_latrine;
             $data['batiment_ouvrage'] = $batiment_ouvrage;
         } 
@@ -55,8 +61,11 @@ class Annexe_latrine extends REST_Controller {
                 {
                     $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
+                    $data[$key]['nbr_box_latrine'] = $value->nbr_box_latrine;
+                    $data[$key]['nbr_point_eau'] = $value->nbr_point_eau;
                     $data[$key]['cout_latrine'] = $value->cout_latrine;
                     $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
                 }
@@ -87,8 +96,11 @@ class Annexe_latrine extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
+                    'code' => $this->post('code'),
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
+                    'nbr_box_latrine' => $this->post('nbr_box_latrine'),
+                    'nbr_point_eau' => $this->post('nbr_point_eau'),
                     'cout_latrine' => $this->post('cout_latrine'),
                     'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage')
                 );
@@ -115,8 +127,11 @@ class Annexe_latrine extends REST_Controller {
                 }
             } else {
                 $data = array(
+                    'code' => $this->post('code'),
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
+                    'nbr_box_latrine' => $this->post('nbr_box_latrine'),
+                    'nbr_point_eau' => $this->post('nbr_point_eau'),
                     'cout_latrine' => $this->post('cout_latrine'),
                     'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage')
                 );

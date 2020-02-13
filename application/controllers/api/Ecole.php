@@ -11,6 +11,8 @@ class Ecole extends REST_Controller {
         parent::__construct();
         $this->load->model('ecole_model', 'EcoleManager');
         $this->load->model('fokontany_model', 'FokontanyManager');
+        $this->load->model('zone_subvention_model', 'Zone_subventionManager');
+        $this->load->model('acces_zone_model', 'Acces_zoneManager');
     }
 
     public function index_get() 
@@ -27,6 +29,8 @@ class Ecole extends REST_Controller {
                 {
                     $fokontany = array();
                     $fokontany = $this->FokontanyManager->findById($value->id_fokontany);
+                    $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
+                    $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['lieu'] = $value->lieu;
@@ -34,7 +38,8 @@ class Ecole extends REST_Controller {
                     $data[$key]['latitude'] = $value->latitude;
                     $data[$key]['longitude'] = $value->longitude;
                     $data[$key]['altitude'] = $value->altitude;
-                    $data[$key]['ponderation'] = $value->ponderation;
+                    $data[$key]['zone_subvention'] = $zone_subvention;
+                    $data[$key]['acces_zone'] = $acces_zone;
                     $data[$key]['fokontany'] = $fokontany;
                 }
             }
@@ -44,6 +49,8 @@ class Ecole extends REST_Controller {
             $data = array();
             $ecole = $this->EcoleManager->findById($id);
             $fokontany = $this->FokontanyManager->findById($ecole->id_fokontany);
+            $zone_subvention = $this->Zone_subventionManager->findById($ecole->id_zone_subvention);
+            $acces_zone = $this->Acces_zoneManager->findById($ecole->id_acces_zone);
             $data['id'] = $ecole->id;
             $data['code'] = $ecole->code;
             $data['lieu'] = $ecole->lieu;
@@ -51,7 +58,8 @@ class Ecole extends REST_Controller {
             $data['latitude'] = $ecole->latitude;
             $data['longitude'] = $ecole->longitude;
             $data['altitude'] = $ecole->altitude;
-            $data['ponderation'] = $ecole->ponderation;
+            $data['zone_subvention'] = $zone_subvention;
+            $data['acces_zone'] = $acces_zone;
             $data['fokontany'] = $fokontany;
         } 
         else 
@@ -63,6 +71,8 @@ class Ecole extends REST_Controller {
                 {
                     $fokontany = array();
                     $fokontany = $this->FokontanyManager->findById($value->id_fokontany);
+                    $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
+                    $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['lieu'] = $value->lieu;
@@ -70,7 +80,8 @@ class Ecole extends REST_Controller {
                     $data[$key]['latitude'] = $value->latitude;
                     $data[$key]['longitude'] = $value->longitude;
                     $data[$key]['altitude'] = $value->altitude;
-                    $data[$key]['ponderation'] = $value->ponderation;
+                    $data[$key]['zone_subvention'] = $zone_subvention;
+                    $data[$key]['acces_zone'] = $acces_zone;
                     $data[$key]['fokontany'] = $fokontany;
                 }
             } 
@@ -106,7 +117,8 @@ class Ecole extends REST_Controller {
                     'latitude' => $this->post('latitude'),
                     'longitude' => $this->post('longitude'),
                     'altitude' => $this->post('altitude'),
-                    'ponderation' => $this->post('ponderation'),
+                    'id_zone_subvention' => $this->post('id_zone_subvention'),
+                    'id_acces_zone' => $this->post('id_acces_zone'),
                     'id_fokontany' => $this->post('id_fokontany')
                 );
                 if (!$data) {
@@ -138,7 +150,8 @@ class Ecole extends REST_Controller {
                     'latitude' => $this->post('latitude'),
                     'longitude' => $this->post('longitude'),
                     'altitude' => $this->post('altitude'),
-                    'ponderation' => $this->post('ponderation'),
+                    'id_zone_subvention' => $this->post('id_zone_subvention'),
+                    'id_acces_zone' => $this->post('id_acces_zone'),
                     'id_fokontany' => $this->post('id_fokontany')
                 );
                 if (!$data || !$id) {

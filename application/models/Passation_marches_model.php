@@ -38,9 +38,9 @@ class Passation_marches_model extends CI_Model {
             'date_signature_contrat'   => $passation_marches['date_signature_contrat'],
             'date_os' => $passation_marches['date_os'],
             'observation' => $passation_marches['observation'],
-
             'id_convention_entete' => $passation_marches['id_convention_entete'],
-            'id_prestataire' => $passation_marches['id_prestataire']                       
+            'id_prestataire' => $passation_marches['id_prestataire'],
+            'validation' => $passation_marches['validation'],                       
         );
     }
     public function delete($id) {

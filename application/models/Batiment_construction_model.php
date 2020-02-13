@@ -26,7 +26,7 @@ class Batiment_construction_model extends CI_Model {
     public function _set($ouvrage_construction) {
         return array(
             'id_batiment_ouvrage' => $ouvrage_construction['id_batiment_ouvrage'],
-            'id_attachement_batiment' => $ouvrage_construction['id_attachement_batiment'],
+            //'id_attachement_batiment' => $ouvrage_construction['id_attachement_batiment'],
             'id_convention_detail'=> $ouvrage_construction['id_convention_detail']);
     }
    /* public function delete($id) {
@@ -88,20 +88,6 @@ class Batiment_construction_model extends CI_Model {
             return null;
         }                 
     }
-
-    public function supressionBydetail($id) {
-        $this->db->from($this->table)
-                ->join('latrine_construction', 'latrine_construction.id_batiment_construction = batiment_construction.id')
-                ->join('mobilier_construction', 'mobilier_construction.id_batiment_construction = batiment_construction.id')
-                ->where('id_convention_detail', (int) $id)
-        ->delete($this->table);
-                    ;
-        if($this->db->affected_rows() === 1)
-        {
-            return true;
-        }else{
-            return null;
-        }  
-    } 
+ 
 
 }

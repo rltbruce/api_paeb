@@ -29,7 +29,7 @@ class Compte_feffi extends REST_Controller {
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['nom_banque'] = $value->nom_banque;
-                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['rib'] = $value->rib;
                     $data[$key]['adresse_banque'] = $value->adresse_banque;
                     $data[$key]['numero_compte'] = $value->numero_compte;
                     $data[$key]['nom_titulaire'] = $value->nom_titulaire;
@@ -43,7 +43,7 @@ class Compte_feffi extends REST_Controller {
             $compte_feffi = $this->Compte_feffiManager->findById($id);
             $feffi = $this->FeffiManager->findById($compte_feffi->id_feffi);
             $data['id'] = $compte_feffi->id;
-            $data['intitule'] = $compte_feffi->intitule;
+            $data['rib'] = $compte_feffi->rib;
             $data['nom_banque'] = $compte_feffi->nom_banque;
             $data['numero_compte'] = $compte_feffi->numero_compte;
             $data['adresse_banque'] = $compte_feffi->adresse_banque;
@@ -60,7 +60,7 @@ class Compte_feffi extends REST_Controller {
                     $feffi = array();
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['rib'] = $value->rib;
                     $data[$key]['nom_banque'] = $value->nom_banque;
                     $data[$key]['numero_compte'] = $value->numero_compte;
                     $data[$key]['adresse_banque'] = $value->adresse_banque;
@@ -94,7 +94,7 @@ class Compte_feffi extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'intitule' => $this->post('intitule'),
+                    'rib' => $this->post('rib'),
                     'nom_banque' => $this->post('nom_banque'),
                     'adresse_banque' => $this->post('adresse_banque'),
                     'numero_compte' => $this->post('numero_compte'),
@@ -124,7 +124,7 @@ class Compte_feffi extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'intitule' => $this->post('intitule'),
+                    'rib' => $this->post('rib'),
                     'nom_banque' => $this->post('nom_banque'),
                     'adresse_banque' => $this->post('adresse_banque'),
                     'numero_compte' => $this->post('numero_compte'),

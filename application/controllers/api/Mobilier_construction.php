@@ -13,7 +13,7 @@ class Mobilier_construction extends REST_Controller {
         $this->load->model('mobilier_construction_model', 'Mobilier_constructionManager');
         $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
         $this->load->model('annexe_mobilier_model', 'Annexe_mobilierManager');
-        $this->load->model('attachement_mobilier_model', 'Attachement_mobilierManager');
+        //$this->load->model('attachement_mobilier_model', 'Attachement_mobilierManager');
     }
 
     public function index_get() 
@@ -30,11 +30,11 @@ class Mobilier_construction extends REST_Controller {
                 {                     
                     $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
                     $annexe_mobilier = $this->Annexe_mobilierManager->findById($value->id_annexe_mobilier);
-                    $attachement_mobilier = $this->Attachement_mobilierManager->findById($value->id_attachement_mobilier);
+                    //$attachement_mobilier = $this->Attachement_mobilierManager->findById($value->id_attachement_mobilier);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['annexe_mobilier'] = $annexe_mobilier;
-                    $data[$key]['attachement_mobilier'] = $attachement_mobilier;
+                    //$data[$key]['attachement_mobilier'] = $attachement_mobilier;
                     $data[$key]['batiment_construction'] = $batiment_construction;
                 }
             } 
@@ -48,10 +48,10 @@ class Mobilier_construction extends REST_Controller {
 
             $batiment_construction = $this->Batiment_constructionManager->findById($mobilier_construction->id_batiment_construction);
 
-            $attachement_mobilier = $this->Attachement_mobilierManager->findById($mobilier_construction->id_attachement_mobilier);
+            //$attachement_mobilier = $this->Attachement_mobilierManager->findById($mobilier_construction->id_attachement_mobilier);
 
             $data['id'] = $batiment_construction->id;
-            $data['attachement_mobilier'] = $attachement_mobilier;
+            //$data['attachement_mobilier'] = $attachement_mobilier;
             $data['mobilier_construction'] = $mobilier_construction;
             $data['batiment_construction'] = $batiment_construction;
         } 
@@ -67,11 +67,11 @@ class Mobilier_construction extends REST_Controller {
 
                     $annexe_mobilier = $this->Annexe_mobilierManager->findById($value->id_annexe_mobilier);
 
-                    $attachement_mobilier = $this->Attachement_mobilierManager->findById($value->id_attachement_mobilier);
+                    //$attachement_mobilier = $this->Attachement_mobilierManager->findById($value->id_attachement_mobilier);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['annexe_mobilier'] = $annexe_mobilier;
-                    $data[$key]['attachement_mobilier'] = $attachement_mobilier;
+                    //$data[$key]['attachement_mobilier'] = $attachement_mobilier;
                     $data[$key]['batiment_construction'] = $batiment_construction;
                     
                 }
@@ -129,7 +129,7 @@ class Mobilier_construction extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'id_annexe_mobilier' => $this->post('id_annexe_mobilier'),
-                    'id_attachement_mobilier' => $this->post('id_attachement_mobilier'),
+                    //'id_attachement_mobilier' => $this->post('id_attachement_mobilier'),
                     'id_batiment_construction' => $this->post('id_batiment_construction')
                 );
                 if (!$data) {
@@ -156,7 +156,7 @@ class Mobilier_construction extends REST_Controller {
             } else {
                 $data = array(
                     'id_annexe_mobilier' => $this->post('id_annexe_mobilier'),
-                    'id_attachement_mobilier' => $this->post('id_attachement_mobilier'),
+                    //'id_attachement_mobilier' => $this->post('id_attachement_mobilier'),
                     'id_batiment_construction' => $this->post('id_batiment_construction')
                 );
                 if (!$data || !$id) {

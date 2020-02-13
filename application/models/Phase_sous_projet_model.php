@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Latrine_construction_model extends CI_Model {
-    protected $table = 'latrine_construction';
+class Phase_sous_projet_model extends CI_Model {
+    protected $table = 'phase_sous_projet';
 
-    public function add($latrine_construction) {
-        $this->db->set($this->_set($latrine_construction))
+    public function add($phase_sous_projet) {
+        $this->db->set($this->_set($phase_sous_projet))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Latrine_construction_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $latrine_construction) {
-        $this->db->set($this->_set($latrine_construction))
+    public function update($id, $phase_sous_projet) {
+        $this->db->set($this->_set($phase_sous_projet))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,11 +23,17 @@ class Latrine_construction_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($latrine_construction) {
+    public function _set($phase_sous_projet) {
         return array(
-            'id_annexe_latrine' => $latrine_construction['id_annexe_latrine'],
-            //'id_attachement_latrine' => $latrine_construction['id_attachement_latrine'],
-            'id_batiment_construction'=> $latrine_construction['id_batiment_construction']);
+
+            'id_infrastructure' => $phase_sous_projet['id_infrastructure'],
+            'id_designation_infrastructure'   => $phase_sous_projet['id_designation_infrastructure'],
+            'id_element_a_verifier'    => $phase_sous_projet['id_element_a_verifier'],
+            'date_verification'   => $phase_sous_projet['date_verification'],
+            'conformite' => $phase_sous_projet['conformite'],
+            'observation' => $phase_sous_projet['observation'],
+            'id_prestation_mpe' => $phase_sous_projet['id_prestation_mpe']                      
+        );
     }
     public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);
@@ -41,7 +47,7 @@ class Latrine_construction_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('id')
+                        ->order_by('id_infrastructure')
                         ->get()
                         ->result();
         if($result)
@@ -59,10 +65,10 @@ class Latrine_construction_model extends CI_Model {
         }
     }
 
-    public function findAllByBatiment($id_batiment_construction) {               
+    public function findAllByPrestation_mpe($id_prestation_mpe) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_batiment_construction",$id_batiment_construction)
+                        ->where("id_prestation_mpe", $id_prestation_mpe)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -73,15 +79,5 @@ class Latrine_construction_model extends CI_Model {
             return null;
         }                 
     }
-
-  /*  public function supressionBydetail($id) {
-        $this->db->where('id_convention_detail', (int) $id)->delete($this->table);
-        if($this->db->affected_rows() === 1)
-        {
-            return true;
-        }else{
-            return null;
-        }  
-    } */
 
 }

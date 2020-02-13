@@ -143,7 +143,7 @@ class Passation_marches extends REST_Controller {
                     'date_signature_contrat'   => $this->post('date_signature_contrat'),
                     'date_os' => $this->post('date_os'),
                     'observation' => $this->post('observation'),
-
+                    'validation' => $this->post('validation'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
                     'id_prestataire' => $this->post('id_prestataire'),
                 );
@@ -183,7 +183,7 @@ class Passation_marches extends REST_Controller {
                     'date_signature_contrat'   => $this->post('date_signature_contrat'),
                     'date_os' => $this->post('date_os'),
                     'observation' => $this->post('observation'),
-
+                    'validation' => $this->post('validation'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
                     'id_prestataire' => $this->post('id_prestataire')
                 );

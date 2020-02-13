@@ -26,7 +26,7 @@ class Mobilier_construction_model extends CI_Model {
     public function _set($mobilier_construction) {
         return array(
             'id_annexe_mobilier' => $mobilier_construction['id_annexe_mobilier'],
-            'id_attachement_mobilier' => $mobilier_construction['id_attachement_mobilier'],
+            //'id_attachement_mobilier' => $mobilier_construction['id_attachement_mobilier'],
             'id_batiment_construction'=> $mobilier_construction['id_batiment_construction']);
     }
     public function delete($id) {

@@ -25,7 +25,7 @@ class Compte_feffi_model extends CI_Model {
     }
     public function _set($compte_feffi) {
         return array(
-            'intitule'          =>      $compte_feffi['intitule'],
+            'rib'          =>      $compte_feffi['rib'],
             'nom_banque'          =>      $compte_feffi['nom_banque'],
             'numero_compte'           =>      $compte_feffi['numero_compte'],
             'adresse_banque'          =>      $compte_feffi['adresse_banque'],

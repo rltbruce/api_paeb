@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Feffi_model extends CI_Model {
-    protected $table = 'feffi';
+class Terrassement_model extends CI_Model {
+    protected $table = 'terrassement';
 
-    public function add($feffi) {
-        $this->db->set($this->_set($feffi))
+    public function add($terrassement) {
+        $this->db->set($this->_set($terrassement))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Feffi_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $feffi) {
-        $this->db->set($this->_set($feffi))
+    public function update($id, $terrassement) {
+        $this->db->set($this->_set($terrassement))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,15 +23,10 @@ class Feffi_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($feffi) {
+    public function _set($terrassement) {
         return array(
-            'identifiant' => $feffi['identifiant'],
-            'denomination' => $feffi['denomination'],
-            'nbr_feminin' => $feffi['nbr_feminin'],
-            'nbr_total' => $feffi['nbr_total'],
-            'adresse' => $feffi['adresse'],
-            'observation' => $feffi['observation'],
-            'id_ecole'   =>      $feffi['id_ecole']                       
+            'designation'       =>      $terrassement['designation'],
+            'description'   =>      $terrassement['description']                       
         );
     }
     public function delete($id) {
@@ -46,7 +41,7 @@ class Feffi_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('identifiant')
+                        ->order_by('description')
                         ->get()
                         ->result();
         if($result)
@@ -63,20 +58,5 @@ class Feffi_model extends CI_Model {
             return $q->row();
         }
     }
-
-    public function findBycommune($id_commune) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where('id_commune',$id_commune)
-                        ->order_by('description')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    } 
 
 }

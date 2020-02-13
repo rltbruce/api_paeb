@@ -5,73 +5,70 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Batiment_construction extends REST_Controller {
+class Avancement_batiment extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
-        $this->load->model('convention_cisco_feffi_detail_model', 'Convention_cisco_feffi_detailManager');
-        $this->load->model('batiment_ouvrage_model', 'Batiment_ouvrageManager');
-        //$this->load->model('attachement_batiment_model', 'Attachement_batimentManager');
+        $this->load->model('avancement_batiment_model', 'Avancement_batimentManager');
+        $this->load->model('attachement_batiment_model', 'Attachement_batimentManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_convention_detail = $this->get('id_convention_detail');
+        $id_batiment_construction = $this->get('id_batiment_construction');
+        $menu = $this->get('menu');
 
-        if ($id_convention_detail)
-        {
-            $batiment_construction = $this->Batiment_constructionManager->findAllByDetail($id_convention_detail );
-            if ($batiment_construction) 
-            {
-                foreach ($batiment_construction as $key => $value) 
-                {                     
-                    $convention_detail = $this->Convention_cisco_feffi_detailManager->findById($value->id_convention_detail);
-                    $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
-                    //$attachement_batiment = $this->Attachement_batimentManager->findById($value->id_attachement_batiment);
-
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
-                    //$data[$key]['attachement_batiment'] = $attachement_batiment;
-                    $data[$key]['convention_detail'] = $convention_detail;
-                }
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($id)
-        {
-            $data = array();
-            $batiment_construction = $this->Batiment_constructionManager->findById($id);
-            $convention_detail = $this->Convention_cisco_feffi_detailManager->findById($batiment_construction->id_convention_detail);
-           // $attachement_batiment = $this->Attachement_batimentManager->findById($batiment_construction->id_attachement_batiment);
-            $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($batiment_construction->id_batiment_ouvrage);
-
-            $data['id'] = $batiment_construction->id;
-            //$data['attachement_batiment'] = $attachement_batiment;
-            $data['convention_detail'] = $convention_detail;
-            $data['batiment_ouvrage'] = $batiment_ouvrage;
-        } 
-        else 
-        {
-            $menu = $this->Convention_cisco_feffi_enteteManager->findAll();
+         if ($menu=='getavancementBybatiment')
+         {
+            $menu = $this->Avancement_batimentManager->findAllByBatiment_construction($id_batiment_construction);
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $data = array();
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->$id_convention_entete);
-
-                    //$attachement_batiment = $this->Attachement_batimentManager->findById($value->id_attachement_batiment);
-                    $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
+                    $attachement_batiment = $this->Attachement_batimentManager->findById($value->id_attachement_batiment);
 
                     $data[$key]['id'] = $value->id;
-                    //$data[$key]['attachement_batiment'] = $attachement_batiment;
-                    $data[$key]['convention_detail'] = $convention_detail;
-                    $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
-                    
-                }
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['intitule']   = $value->intitule;
+                    $data[$key]['observation']    = $value->observation;
+                    $data[$key]['date']   = $value->date;
+                    $data[$key]['attachement_batiment'] = $attachement_batiment;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($id)
+        {
+            $data = array();
+            $avancement_batiment = $this->Avancement_batimentManager->findById($id);
+
+            $attachement_batiment = $this->Attachement_batimentManager->findById($avancement_batiment->id_attachement_batiment);
+
+            $data['id'] = $avancement_batiment->id;
+            $data['description'] = $avancement_batiment->description;
+            $data['intitule']   = $avancement_batiment->intitule;
+            $data['observation']    = $avancement_batiment->observation;
+            $data['date']   = $avancement_batiment->date;
+            $data['attachement_batiment'] = $attachement_batiment;
+        } 
+        else 
+        {
+            $menu = $this->Avancement_batimentManager->findAll();
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $attachement_batiment = $this->Attachement_batimentManager->findById($value->id_attachement_batiment);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['intitule']   = $value->intitule;
+                    $data[$key]['observation']    = $value->observation;
+                    $data[$key]['date']   = $value->date;
+                    $data[$key]['attachement_batiment'] = $attachement_batiment;
+                        }
             } 
                 else
                     $data = array();
@@ -96,14 +93,16 @@ class Batiment_construction extends REST_Controller {
     {
         $id = $this->post('id') ;
         $supprimer = $this->post('supprimer') ;
-        $menu = $this->post('menu') ;
-        //$id_convention_detail = $this->post('id_convention_detail');
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage'),
-                    //'id_attachement_batiment' => $this->post('id_attachement_batiment'),
-                    'id_convention_detail' => $this->post('id_convention_detail')
+                    'id' => $this->post('id'),
+                    'description' => $this->post('description'),
+                    'intitule'   => $this->post('intitule'),
+                    'observation'    => $this->post('observation'),
+                    'date'   => $this->post('date'),
+                    'id_batiment_construction' => $this->post('id_batiment_construction'),
+                    'id_attachement_batiment' => $this->post('id_attachement_batiment')
                 );
                 if (!$data) {
                     $this->response([
@@ -112,7 +111,7 @@ class Batiment_construction extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Batiment_constructionManager->add($data);
+                $dataId = $this->Avancement_batimentManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -128,9 +127,13 @@ class Batiment_construction extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage'),
-                    //'id_attachement_batiment' => $this->post('id_attachement_batiment'),
-                    'id_convention_detail' => $this->post('id_convention_detail')
+                    'id' => $this->post('id'),
+                    'description' => $this->post('description'),
+                    'intitule'   => $this->post('intitule'),
+                    'observation'    => $this->post('observation'),
+                    'date'   => $this->post('date'),
+                    'id_batiment_construction' => $this->post('id_batiment_construction'),
+                    'id_attachement_batiment' => $this->post('id_attachement_batiment')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -139,7 +142,7 @@ class Batiment_construction extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Batiment_constructionManager->update($id, $data);
+                $update = $this->Avancement_batimentManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -161,7 +164,7 @@ class Batiment_construction extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Batiment_constructionManager->delete($id);         
+            $delete = $this->Avancement_batimentManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,
