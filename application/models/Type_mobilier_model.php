@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Latrine_construction_model extends CI_Model {
-    protected $table = 'latrine_construction';
+class Type_mobilier_model extends CI_Model {
+    protected $table = 'type_mobilier';
 
-    public function add($latrine_construction) {
-        $this->db->set($this->_set($latrine_construction))
+    public function add($type_mobilier) {
+        $this->db->set($this->_set($type_mobilier))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Latrine_construction_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $latrine_construction) {
-        $this->db->set($this->_set($latrine_construction))
+    public function update($id, $type_mobilier) {
+        $this->db->set($this->_set($type_mobilier))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,12 +23,18 @@ class Latrine_construction_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($latrine_construction) {
+    public function _set($type_mobilier) {
         return array(
-            'id_type_latrine' => $latrine_construction['id_type_latrine'],            
-            'id_batiment_construction'=> $latrine_construction['id_batiment_construction'],
-            'cout_unitaire'=> $latrine_construction['cout_unitaire'],
-            'nbr_latrine'=> $latrine_construction['nbr_latrine']);
+            'code'       =>      $type_mobilier['code'],
+            'libelle'       =>      $type_mobilier['libelle'],
+            'description'   =>      $type_mobilier['description'],
+            /*'nbr_banc'       =>      $type_mobilier['nbr_banc'],
+            'nbr_table_maitre'       =>      $type_mobilier['nbr_table_maitre'],
+            'nbr_chais_maitre'       =>      $type_mobilier['nbr_chais_maitre'],*/
+            'cout_mobilier'   =>      $type_mobilier['cout_mobilier'],
+            'id_acces_zone' => $type_mobilier['id_acces_zone'],
+            'id_zone_subvention' => $type_mobilier['id_zone_subvention']                        
+        );
     }
     public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);
@@ -42,7 +48,7 @@ class Latrine_construction_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('id')
+                        ->order_by('description')
                         ->get()
                         ->result();
         if($result)
@@ -60,11 +66,12 @@ class Latrine_construction_model extends CI_Model {
         }
     }
 
-    public function findAllByBatiment($id_batiment_construction) {               
+    public function findByZone($id_zone_subvention,$id_acces_zone)
+    {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_batiment_construction",$id_batiment_construction)
-                        ->order_by('id')
+                        ->where('id_zone_subvention',$id_zone_subvention)
+                        ->where('id_acces_zone',$id_acces_zone)
                         ->get()
                         ->result();
         if($result)
@@ -74,15 +81,5 @@ class Latrine_construction_model extends CI_Model {
             return null;
         }                 
     }
-
-  /*  public function supressionBydetail($id) {
-        $this->db->where('id_convention_detail', (int) $id)->delete($this->table);
-        if($this->db->affected_rows() === 1)
-        {
-            return true;
-        }else{
-            return null;
-        }  
-    } */
 
 }

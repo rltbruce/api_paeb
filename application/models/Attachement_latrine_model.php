@@ -28,7 +28,7 @@ class Attachement_latrine_model extends CI_Model {
             'libelle'       =>      $attachement['libelle'],
             'description'   =>      $attachement['description'],
             'ponderation_latrine'   =>      $attachement['ponderation_latrine'],
-            'id_annexe_latrine'    => $attachement['id_annexe_latrine']                       
+            'id_type_latrine'    => $attachement['id_type_latrine']                       
         );
     }
     public function delete($id) {
@@ -60,11 +60,11 @@ class Attachement_latrine_model extends CI_Model {
             return $q->row();
         }
     }
-    public function findByannexe_latrine($id_annexe_latrine)
+    public function findBytype_latrine($id_type_latrine)
     {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where('id_annexe_latrine',$id_annexe_latrine)
+                        ->where('id_type_latrine',$id_type_latrine)
                         ->order_by('description')
                         ->get()
                         ->result();

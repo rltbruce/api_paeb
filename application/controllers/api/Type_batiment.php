@@ -5,69 +5,86 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Annexe_latrine extends REST_Controller {
+class Type_batiment extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('annexe_latrine_model', 'Annexe_latrineManager');
-        $this->load->model('batiment_ouvrage_model', 'Batiment_ouvrageManager');
+        $this->load->model('type_batiment_model', 'Type_batimentManager');
+        $this->load->model('zone_subvention_model', 'Zone_subventionManager');
+        $this->load->model('acces_zone_model', 'Acces_zoneManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_batiment_ouvrage = $this->get('id_batiment_ouvrage');
+        $menu = $this->get('menu');
+        $id_acces_zone = $this->get('id_acces_zone');
+        $id_zone_subvention = $this->get('id_zone_subvention');
             
-        if ($id_batiment_ouvrage) 
+        if ($menu=='getbatimentByZone') 
         {   $data = array();
-            $tmp = $this->Annexe_latrineManager->findBybatiment_ouvrage($id_batiment_ouvrage);
-            if ($tmp) 
+            //$tmp = array();
+            $tmp = $this->Type_batimentManager->findByZone($id_zone_subvention,$id_acces_zone);
+            //$data=$tmp;
+           if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $batiment_ouvrage = array();
-                    $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
+                    $acces_zone = array();
+                    $zone_subvention = array();
+
+                    $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
+                    $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['nbr_box_latrine'] = $value->nbr_box_latrine;
-                    $data[$key]['nbr_point_eau'] = $value->nbr_point_eau;
-                    $data[$key]['cout_latrine'] = $value->cout_latrine;
-                    $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
+                    $data[$key]['nbr_salle'] = $value->nbr_salle;
+                    $data[$key]['cout_batiment'] = $value->cout_batiment;
+                    $data[$key]['acces_zone'] = $acces_zone;
+                    $data[$key]['zone_subvention'] = $zone_subvention;
                 }
-            }
+           }
         }
         elseif ($id)
         {
             $data = array();
-            $annexe_latrine = $this->Annexe_latrineManager->findById($id);
-            $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($annexe_latrine->id_ouvrage);
-            $data['id'] = $annexe_latrine->id;
-            $data['code'] = $annexe_latrine->code;
-            $data['libelle'] = $annexe_latrine->libelle;
-            $data['description'] = $annexe_latrine->description;
-            $data['nbr_box_latrine'] = $annexe_latrine->nbr_box_latrine;
-            $data['nbr_point_eau'] = $annexe_latrine->nbr_point_eau;
-            $data['cout_latrine'] = $annexe_latrine->cout_latrine;
-            $data['batiment_ouvrage'] = $batiment_ouvrage;
+            $type_batiment = $this->Type_batimentManager->findById($id);
+
+            $acces_zone = array();
+            $zone_subvention = array();
+
+            $acces_zone = $this->Acces_zoneManager->findById($type_batiment->id_acces_zone);
+            $zone_subvention = $this->Zone_subventionManager->findById($type_batiment->id_zone_subvention);
+            $data['id'] = $type_batiment->id;
+            $data['code'] = $type_batiment->code;
+            $data['libelle'] = $type_batiment->libelle;
+            $data['description'] = $type_batiment->description;
+            $data['nbr_salle'] = $type_batiment->nbr_salle;
+            $data['cout_batiment'] = $type_batiment->cout_batiment;
+            $data['acces_zone'] = $acces_zone;
+            $data['zone_subvention'] = $zone_subvention;
         } 
         else 
         {
-            $menu = $this->Annexe_latrineManager->findAll();
+            $menu = $this->Type_batimentManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
+                    $acces_zone = array();
+                    $zone_subvention = array();
+
+                    $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
+                    $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['nbr_box_latrine'] = $value->nbr_box_latrine;
-                    $data[$key]['nbr_point_eau'] = $value->nbr_point_eau;
-                    $data[$key]['cout_latrine'] = $value->cout_latrine;
-                    $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
+                    $data[$key]['nbr_salle'] = $value->nbr_salle;
+                    $data[$key]['cout_batiment'] = $value->cout_batiment;
+                    $data[$key]['acces_zone'] = $acces_zone;
+                    $data[$key]['zone_subvention'] = $zone_subvention;
                 }
             } 
                 else
@@ -99,10 +116,10 @@ class Annexe_latrine extends REST_Controller {
                     'code' => $this->post('code'),
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'nbr_box_latrine' => $this->post('nbr_box_latrine'),
-                    'nbr_point_eau' => $this->post('nbr_point_eau'),
-                    'cout_latrine' => $this->post('cout_latrine'),
-                    'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage')
+                    'nbr_salle' => $this->post('nbr_salle'),
+                    'cout_batiment' => $this->post('cout_batiment'),
+                    'id_zone_subvention' => $this->post('id_zone_subvention'),
+                    'id_acces_zone' => $this->post('id_acces_zone')
                 );
                 if (!$data) {
                     $this->response([
@@ -111,7 +128,7 @@ class Annexe_latrine extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Annexe_latrineManager->add($data);
+                $dataId = $this->Type_batimentManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -130,10 +147,10 @@ class Annexe_latrine extends REST_Controller {
                     'code' => $this->post('code'),
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'nbr_box_latrine' => $this->post('nbr_box_latrine'),
-                    'nbr_point_eau' => $this->post('nbr_point_eau'),
-                    'cout_latrine' => $this->post('cout_latrine'),
-                    'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage')
+                    'nbr_salle' => $this->post('nbr_salle'),
+                    'cout_batiment' => $this->post('cout_batiment'),
+                    'id_zone_subvention' => $this->post('id_zone_subvention'),
+                    'id_acces_zone' => $this->post('id_acces_zone')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -142,7 +159,7 @@ class Annexe_latrine extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Annexe_latrineManager->update($id, $data);
+                $update = $this->Type_batimentManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -164,7 +181,7 @@ class Annexe_latrine extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Annexe_latrineManager->delete($id);         
+            $delete = $this->Type_batimentManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

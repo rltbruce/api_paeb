@@ -25,9 +25,10 @@ class Mobilier_construction_model extends CI_Model {
     }
     public function _set($mobilier_construction) {
         return array(
-            'id_annexe_mobilier' => $mobilier_construction['id_annexe_mobilier'],
-            //'id_attachement_mobilier' => $mobilier_construction['id_attachement_mobilier'],
-            'id_batiment_construction'=> $mobilier_construction['id_batiment_construction']);
+            'id_type_mobilier' => $mobilier_construction['id_type_mobilier'],
+            'id_batiment_construction'=> $mobilier_construction['id_batiment_construction'],
+            'cout_unitaire'=> $mobilier_construction['cout_unitaire'],
+            'nbr_mobilier'=> $mobilier_construction['nbr_mobilier']);
     }
     public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);

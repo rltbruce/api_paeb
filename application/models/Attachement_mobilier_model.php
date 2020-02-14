@@ -28,7 +28,7 @@ class Attachement_mobilier_model extends CI_Model {
             'libelle'       =>      $attachement['libelle'],
             'description'   =>      $attachement['description'],
             'ponderation_mobilier'   =>      $attachement['ponderation_mobilier'],
-            'id_annexe_mobilier'    => $attachement['id_annexe_mobilier']                       
+            'id_type_mobilier'    => $attachement['id_type_mobilier']                       
         );
     }
     public function delete($id) {
@@ -60,11 +60,11 @@ class Attachement_mobilier_model extends CI_Model {
             return $q->row();
         }
     }
-    public function findByannexe_mobilier($id_annexe_mobilier)
+    public function findBytype_mobilier($id_type_mobilier)
     {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where('id_annexe_mobilier',$id_annexe_mobilier)
+                        ->where('id_type_mobilier',$id_type_mobilier)
                         ->order_by('description')
                         ->get()
                         ->result();

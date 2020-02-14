@@ -12,7 +12,7 @@ class Mobilier_construction extends REST_Controller {
         
         $this->load->model('mobilier_construction_model', 'Mobilier_constructionManager');
         $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
-        $this->load->model('annexe_mobilier_model', 'Annexe_mobilierManager');
+        $this->load->model('type_mobilier_model', 'Type_mobilierManager');
         //$this->load->model('attachement_mobilier_model', 'Attachement_mobilierManager');
     }
 
@@ -29,13 +29,13 @@ class Mobilier_construction extends REST_Controller {
                 foreach ($mobilier_construction as $key => $value) 
                 {                     
                     $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
-                    $annexe_mobilier = $this->Annexe_mobilierManager->findById($value->id_annexe_mobilier);
-                    //$attachement_mobilier = $this->Attachement_mobilierManager->findById($value->id_attachement_mobilier);
+                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
 
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['annexe_mobilier'] = $annexe_mobilier;
-                    //$data[$key]['attachement_mobilier'] = $attachement_mobilier;
+                    $data[$key]['type_mobilier'] = $type_mobilier;
                     $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_mobilier'] = $value->nbr_mobilier;
                 }
             } 
                 else
@@ -47,13 +47,13 @@ class Mobilier_construction extends REST_Controller {
             $mobilier_construction = $this->Mobilier_constructionManager->findById($id);
 
             $batiment_construction = $this->Batiment_constructionManager->findById($mobilier_construction->id_batiment_construction);
-
-            //$attachement_mobilier = $this->Attachement_mobilierManager->findById($mobilier_construction->id_attachement_mobilier);
+            $type_mobilier = $this->Type_mobilierManager->findById($mobilier_construction->id_type_mobilier);
 
             $data['id'] = $batiment_construction->id;
-            //$data['attachement_mobilier'] = $attachement_mobilier;
             $data['mobilier_construction'] = $mobilier_construction;
             $data['batiment_construction'] = $batiment_construction;
+            $data['cout_unitaire'] = $mobilier_construction->cout_unitaire;
+            $data['nbr_mobilier'] = $mobilier_construction->nbr_mobilier;
         } 
         else 
         {
@@ -65,14 +65,13 @@ class Mobilier_construction extends REST_Controller {
                     $data = array();
                     $batiment_construction = $this->Convention_cisco_feffi_detailManager->findById($value->id_batiment_construction);
 
-                    $annexe_mobilier = $this->Annexe_mobilierManager->findById($value->id_annexe_mobilier);
-
-                    //$attachement_mobilier = $this->Attachement_mobilierManager->findById($value->id_attachement_mobilier);
+                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
 
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['annexe_mobilier'] = $annexe_mobilier;
-                    //$data[$key]['attachement_mobilier'] = $attachement_mobilier;
+                    $data[$key]['type_mobilier'] = $type_mobilier;
                     $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_mobilier'] = $value->nbr_mobilier;
                     
                 }
             } 
@@ -128,9 +127,10 @@ class Mobilier_construction extends REST_Controller {
         elseif ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'id_annexe_mobilier' => $this->post('id_annexe_mobilier'),
-                    //'id_attachement_mobilier' => $this->post('id_attachement_mobilier'),
-                    'id_batiment_construction' => $this->post('id_batiment_construction')
+                    'id_type_mobilier' => $this->post('id_type_mobilier'),
+                    'id_batiment_construction' => $this->post('id_batiment_construction'),
+                    'nbr_mobilier' => $this->post('nbr_mobilier'),
+                    'cout_unitaire' => $this->post('cout_unitaire')
                 );
                 if (!$data) {
                     $this->response([
@@ -155,9 +155,10 @@ class Mobilier_construction extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'id_annexe_mobilier' => $this->post('id_annexe_mobilier'),
-                    //'id_attachement_mobilier' => $this->post('id_attachement_mobilier'),
-                    'id_batiment_construction' => $this->post('id_batiment_construction')
+                    'id_type_mobilier' => $this->post('id_type_mobilier'),
+                    'id_batiment_construction' => $this->post('id_batiment_construction'),
+                    'nbr_mobilier' => $this->post('nbr_mobilier'),
+                    'cout_unitaire' => $this->post('cout_unitaire')
                 );
                 if (!$data || !$id) {
                     $this->response([

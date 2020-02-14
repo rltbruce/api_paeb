@@ -10,28 +10,28 @@ class Attachement_latrine extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('attachement_latrine_model', 'Attachement_latrineManager');
-        $this->load->model('annexe_latrine_model', 'Annexe_latrineManager');
+        $this->load->model('type_latrine_model', 'Type_latrineManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_annexe_latrine = $this->get('id_annexe_latrine');
+        $id_type_latrine = $this->get('id_type_latrine');
             
-        if ($id_annexe_latrine) 
+        if ($id_type_latrine) 
         {   $data = array();
-            $tmp = $this->Attachement_latrineManager->findByannexe_latrine($id_annexe_latrine);
+            $tmp = $this->Attachement_latrineManager->findBytype_latrine($id_type_latrine);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $annexe_latrine = array();
-                    $annexe_latrine = $this->Annexe_latrineManager->findById($value->id_annexe_latrine);
+                    $type_latrine = array();
+                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['ponderation_latrine'] = $value->ponderation_latrine;
-                    $data[$key]['annexe_latrine'] = $annexe_latrine;
+                    $data[$key]['type_latrine'] = $type_latrine;
                 }
             }
         }
@@ -39,12 +39,12 @@ class Attachement_latrine extends REST_Controller {
         {
             $data = array();
             $attachement_latrine = $this->Attachement_latrineManager->findById($id);
-            $annexe_latrine = $this->Annexe_latrineManager->findById($attachement_latrine->id_annexe_latrine);
+            $type_latrine = $this->Type_latrineManager->findById($attachement_latrine->id_type_latrine);
             $data['id'] = $attachement_latrine->id;
             $data['libelle'] = $attachement_latrine->libelle;
             $data['description'] = $attachement_latrine->description;
             $data['ponderation_latrine'] = $attachement_latrine->ponderation_latrine;
-            $data['annexe_latrine'] = $annexe_latrine;
+            $data['type_latrine'] = $type_latrine;
         } 
         else 
         {
@@ -53,12 +53,12 @@ class Attachement_latrine extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $annexe_latrine = $this->Annexe_latrineManager->findById($value->id_annexe_latrine);
+                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['ponderation_latrine'] = $value->ponderation_latrine;
-                    $data[$key]['annexe_latrine'] = $annexe_latrine;
+                    $data[$key]['type_latrine'] = $type_latrine;
                 }
             } 
                 else
@@ -90,7 +90,7 @@ class Attachement_latrine extends REST_Controller {
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
                     'ponderation_latrine' => $this->post('ponderation_latrine'),
-                    'id_annexe_latrine' => $this->post('id_annexe_latrine')
+                    'id_type_latrine' => $this->post('id_type_latrine')
                 );
                 if (!$data) {
                     $this->response([
@@ -118,7 +118,7 @@ class Attachement_latrine extends REST_Controller {
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
                     'ponderation_latrine' => $this->post('ponderation_latrine'),
-                    'id_annexe_latrine' => $this->post('id_annexe_latrine')
+                    'id_type_latrine' => $this->post('id_type_latrine')
                 );
                 if (!$data || !$id) {
                     $this->response([

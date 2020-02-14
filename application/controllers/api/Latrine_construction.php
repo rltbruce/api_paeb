@@ -12,7 +12,7 @@ class Latrine_construction extends REST_Controller {
         
         $this->load->model('latrine_construction_model', 'Latrine_constructionManager');
         $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
-        $this->load->model('annexe_latrine_model', 'Annexe_latrineManager');
+        $this->load->model('type_latrine_model', 'Type_latrineManager');
         //$this->load->model('attachement_latrine_model', 'Attachement_latrineManager');
     }
 
@@ -29,13 +29,13 @@ class Latrine_construction extends REST_Controller {
                 foreach ($latrine_construction as $key => $value) 
                 {                     
                     $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
-                    $annexe_latrine = $this->Annexe_latrineManager->findById($value->id_annexe_latrine);
-                    //$attachement_latrine = $this->Attachement_latrineManager->findById($value->id_attachement_latrine);
+                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
 
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['annexe_latrine'] = $annexe_latrine;
-                    //$data[$key]['attachement_latrine'] = $attachement_latrine;
+                    $data[$key]['type_latrine'] = $type_latrine;
                     $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_latrine'] = $value->nbr_latrine;
                 }
             } 
                 else
@@ -47,13 +47,13 @@ class Latrine_construction extends REST_Controller {
             $latrine_construction = $this->Latrine_constructionManager->findById($id);
 
             $batiment_construction = $this->Batiment_constructionManager->findById($latrine_construction->id_batiment_construction);
-
-           // $attachement_latrine = $this->Attachement_latrineManager->findById($latrine_construction->id_attachement_latrine);
+            $type_latrine = $this->Type_latrineManager->findById($latrine_construction->id_type_latrine);
 
             $data['id'] = $batiment_construction->id;
-            //$data['attachement_latrine'] = $attachement_latrine;
-            $data['latrine_construction'] = $latrine_construction;
             $data['batiment_construction'] = $batiment_construction;
+            $data['type_latrine'] = $type_latrine;
+            $data['cout_unitaire'] = $latrine_construction->cout_unitaire;
+            $data['nbr_latrine'] = $latrine_construction->nbr_latrine;
         } 
         else 
         {
@@ -65,14 +65,13 @@ class Latrine_construction extends REST_Controller {
                     $data = array();
                     $batiment_construction = $this->Convention_cisco_feffi_detailManager->findById($value->id_batiment_construction);
 
-                    $annexe_latrine = $this->Annexe_latrineManager->findById($value->id_annexe_latrine);
-
-                    ////$attachement_latrine = $this->Attachement_latrineManager->findById($value->id_attachement_latrine);
+                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
 
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['annexe_latrine'] = $annexe_latrine;
-                    //$data[$key]['attachement_latrine'] = $attachement_latrine;
+                    $data[$key]['type_latrine'] = $type_latrine;
                     $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_latrine'] = $value->nbr_latrine;
                     
                 }
             } 
@@ -100,7 +99,7 @@ class Latrine_construction extends REST_Controller {
         $id = $this->post('id') ;
         $supprimer = $this->post('supprimer') ;
         $menu = $this->post('menu') ;
-        $id_latrine_construction = $this->post('id_latrine_construction');
+       /* $id_latrine_construction = $this->post('id_latrine_construction');
         if ($menu=='supressionBydetail')
         {
             if (!$id_latrine_construction) {
@@ -125,12 +124,14 @@ class Latrine_construction extends REST_Controller {
                         ], REST_Controller::HTTP_OK);
             }
         }
-        elseif ($supprimer == 0) {
+        else*/
+            if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'id_annexe_latrine' => $this->post('id_annexe_latrine'),
-                    //'id_attachement_latrine' => $this->post('id_attachement_latrine'),
-                    'id_batiment_construction' => $this->post('id_batiment_construction')
+                    'id_type_latrine' => $this->post('id_type_latrine'),
+                    'id_batiment_construction' => $this->post('id_batiment_construction'),
+                    'nbr_latrine' => $this->post('nbr_latrine'),
+                    'cout_unitaire' => $this->post('cout_unitaire')
                 );
                 if (!$data) {
                     $this->response([
@@ -155,7 +156,7 @@ class Latrine_construction extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'id_annexe_latrine' => $this->post('id_annexe_latrine'),
+                    'id_type_latrine' => $this->post('id_type_latrine'),
                     //'id_attachement_latrine' => $this->post('id_attachement_latrine'),
                     'id_batiment_construction' => $this->post('id_batiment_construction')
                 );

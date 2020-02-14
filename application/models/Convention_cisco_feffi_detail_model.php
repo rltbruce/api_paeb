@@ -28,7 +28,12 @@ class Convention_cisco_feffi_detail_model extends CI_Model {
             'intitule' => $convention['intitule'],
             'montant_total' =>    $convention['montant_total'],
             'id_convention_entete'=> $convention['id_convention_entete'],
-            'avancement'=> $convention['avancement']);
+            'avancement'=> $convention['avancement'],
+            'date_signature' => $convention['date_signature'],
+            'delai' => $convention['delai'],
+            'id_compte_feffi' => $convention['id_compte_feffi'],
+            'observation' => $convention['observation'] );
+                   
     }
     public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);
@@ -77,7 +82,7 @@ class Convention_cisco_feffi_detail_model extends CI_Model {
 
         public function supressionBytete($id) {
         $this->db->from($this->table)
-                ->join('convention_cisco_feffi_detail', 'convention_cisco_feffi_detail.id_convention_entete = convention_cisco_feffi_entete.id')
+                //->join('convention_cisco_feffi_detail', 'convention_cisco_feffi_detail.id_convention_entete = convention_cisco_feffi_entete.id')
                // ->join('mobilier_construction', 'mobilier_construction.id_batiment_construction = batiment_construction.id')
                 ->where('id_convention_entete', (int) $id)
         ->delete($this->table);
