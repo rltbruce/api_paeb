@@ -5,28 +5,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Batiment_ouvrage extends REST_Controller {
+class type_mobilier extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('batiment_ouvrage_model', 'Batiment_ouvrageManager');
+        $this->load->model('type_mobilier_model', 'Type_mobilierManager');
         $this->load->model('zone_subvention_model', 'Zone_subventionManager');
         $this->load->model('acces_zone_model', 'Acces_zoneManager');
     }
 
     public function index_get() 
     {
-        $id = $this->get('id');
-        $menu = $this->get('menu');
-        $id_acces_zone = $this->get('id_acces_zone');
+        $id = $this->get('id');;
         $id_zone_subvention = $this->get('id_zone_subvention');
+        $id_acces_zone = $this->get('id_acces_zone');
+        $menu = $this->get('menu');
             
-        if ($menu=='getbatimentByZone') 
+        if ($menu=='getByZone') 
         {   $data = array();
-            //$tmp = array();
-            $tmp = $this->Batiment_ouvrageManager->findByZone($id_zone_subvention,$id_acces_zone);
-            //$data=$tmp;
-           if ($tmp) 
+            $tmp = $this->Type_mobilierManager->findByZone($id_zone_subvention,$id_acces_zone);
+            if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
@@ -35,43 +33,41 @@ class Batiment_ouvrage extends REST_Controller {
 
                     $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
                     $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
+                    $data[$key]['acces_zone'] = $acces_zone;
+                    $data[$key]['zone_subvention'] = $zone_subvention;
+
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['nbr_salle'] = $value->nbr_salle;
-                    $data[$key]['cout_batiment'] = $value->cout_batiment;
-                    $data[$key]['cout_maitrise_oeuvre'] = $value->cout_maitrise_oeuvre;
-                    $data[$key]['cout_sous_projet'] = $value->cout_sous_projet;
-                    $data[$key]['acces_zone'] = $acces_zone;
-                    $data[$key]['zone_subvention'] = $zone_subvention;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    
                 }
-           }
+            }
         }
         elseif ($id)
         {
             $data = array();
-            $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($id);
-
+            $type_mobilier = $this->Type_mobilierManager->findById($id);
             $acces_zone = array();
             $zone_subvention = array();
 
-            $acces_zone = $this->Acces_zoneManager->findById($batiment_ouvrage->id_acces_zone);
-            $zone_subvention = $this->Zone_subventionManager->findById($batiment_ouvrage->id_zone_subvention);
-            $data['id'] = $batiment_ouvrage->id;
-            $data['code'] = $batiment_ouvrage->code;
-            $data['libelle'] = $batiment_ouvrage->libelle;
-            $data['description'] = $batiment_ouvrage->description;
-            $data['nbr_salle'] = $batiment_ouvrage->nbr_salle;
-            $data['cout_batiment'] = $batiment_ouvrage->cout_batiment;
-            $data['cout_maitrise_oeuvre'] = $batiment_ouvrage->cout_maitrise_oeuvre;
-            $data['cout_sous_projet'] = $batiment_ouvrage->cout_sous_projet;
+            $acces_zone = $this->Acces_zoneManager->findById($type_batiment->id_acces_zone);
+            $zone_subvention = $this->Zone_subventionManager->findById($type_batiment->id_zone_subvention);
+            $data['id'] = $type_mobilier->id;
+            $data['libelle'] = $type_mobilier->libelle;
+            $data['description'] = $type_mobilier->description;
+            /*$data['nbr_banc'] = $type_mobilier->nbr_banc;
+            $data['nbr_table_maitre'] = $type_mobilier->nbr_table_maitre;
+            $data['nbr_table_maitre'] = $type_mobilier->nbr_table_maitre;*/
+            $data['cout_mobilier'] = $type_mobilier->cout_mobilier;
             $data['acces_zone'] = $acces_zone;
             $data['zone_subvention'] = $zone_subvention;
+            
         } 
         else 
         {
-            $menu = $this->Batiment_ouvrageManager->findAll();
+            $menu = $this->Type_mobilierManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
@@ -81,16 +77,17 @@ class Batiment_ouvrage extends REST_Controller {
 
                     $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
                     $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
+                    $data[$key]['acces_zone'] = $acces_zone;
+                    $data[$key]['zone_subvention'] = $zone_subvention;
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['nbr_salle'] = $value->nbr_salle;
-                    $data[$key]['cout_batiment'] = $value->cout_batiment;
-                    $data[$key]['cout_maitrise_oeuvre'] = $value->cout_maitrise_oeuvre;
-                    $data[$key]['cout_sous_projet'] = $value->cout_sous_projet;
-                    $data[$key]['acces_zone'] = $acces_zone;
-                    $data[$key]['zone_subvention'] = $zone_subvention;
+                    /*$data[$key]['nbr_banc'] = $value->nbr_banc;
+                    $data[$key]['nbr_table_maitre'] = $value->nbr_table_maitre;
+                    $data[$key]['nbr_table_maitre'] = $value->nbr_table_maitre;*/
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    
                 }
             } 
                 else
@@ -122,10 +119,11 @@ class Batiment_ouvrage extends REST_Controller {
                     'code' => $this->post('code'),
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'nbr_salle' => $this->post('nbr_salle'),
-                    'cout_batiment' => $this->post('cout_batiment'),
-                    'cout_maitrise_oeuvre' => $this->post('cout_maitrise_oeuvre'),
-                    'cout_sous_projet' => $this->post('cout_sous_projet'),
+                    /*'nbr_banc' => $this->post('nbr_banc'),
+                    'nbr_table_maitre' => $this->post('nbr_table_maitre'),
+                    'nbr_banc' => $this->post('nbr_banc'),
+                    'nbr_chais_maitre' => $this->post('nbr_chais_maitre'),*/
+                    'cout_mobilier' => $this->post('cout_mobilier'),
                     'id_zone_subvention' => $this->post('id_zone_subvention'),
                     'id_acces_zone' => $this->post('id_acces_zone')
                 );
@@ -136,7 +134,7 @@ class Batiment_ouvrage extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Batiment_ouvrageManager->add($data);
+                $dataId = $this->Type_mobilierManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -155,10 +153,11 @@ class Batiment_ouvrage extends REST_Controller {
                     'code' => $this->post('code'),
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'nbr_salle' => $this->post('nbr_salle'),
-                    'cout_batiment' => $this->post('cout_batiment'),
-                    'cout_maitrise_oeuvre' => $this->post('cout_maitrise_oeuvre'),
-                    'cout_sous_projet' => $this->post('cout_sous_projet'),
+                    /*'nbr_banc' => $this->post('nbr_banc'),
+                    'nbr_table_maitre' => $this->post('nbr_table_maitre'),
+                    'nbr_banc' => $this->post('nbr_banc'),
+                    'nbr_chais_maitre' => $this->post('nbr_chais_maitre'),*/
+                    'cout_mobilier' => $this->post('cout_mobilier'),
                     'id_zone_subvention' => $this->post('id_zone_subvention'),
                     'id_acces_zone' => $this->post('id_acces_zone')
                 );
@@ -169,7 +168,7 @@ class Batiment_ouvrage extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Batiment_ouvrageManager->update($id, $data);
+                $update = $this->Type_mobilierManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -191,7 +190,7 @@ class Batiment_ouvrage extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Batiment_ouvrageManager->delete($id);         
+            $delete = $this->Type_mobilierManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

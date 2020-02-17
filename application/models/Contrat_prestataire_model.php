@@ -36,7 +36,8 @@ class Contrat_prestataire_model extends CI_Model {
             'date_reel_deb_trav' => $contrat_prestataire['date_reel_deb_trav'],
             'delai_execution' => $contrat_prestataire['delai_execution'],
             'id_convention_entete' => $contrat_prestataire['id_convention_entete'],
-            'id_prestataire' => $contrat_prestataire['id_prestataire']                      
+            'id_prestataire' => $contrat_prestataire['id_prestataire'],
+            'paiement_recu' => $contrat_prestataire['paiement_recu']                      
         );
     }
     public function delete($id) {

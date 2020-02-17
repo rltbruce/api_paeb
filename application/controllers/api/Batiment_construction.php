@@ -11,7 +11,7 @@ class Batiment_construction extends REST_Controller {
         parent::__construct();
         $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
         $this->load->model('convention_cisco_feffi_detail_model', 'Convention_cisco_feffi_detailManager');
-        $this->load->model('batiment_ouvrage_model', 'Batiment_ouvrageManager');
+        $this->load->model('type_batiment_model', 'Type_batimentManager');
         //$this->load->model('attachement_batiment_model', 'Attachement_batimentManager');
     }
 
@@ -28,13 +28,13 @@ class Batiment_construction extends REST_Controller {
                 foreach ($batiment_construction as $key => $value) 
                 {                     
                     $convention_detail = $this->Convention_cisco_feffi_detailManager->findById($value->id_convention_detail);
-                    $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
-                    //$attachement_batiment = $this->Attachement_batimentManager->findById($value->id_attachement_batiment);
-
+                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
+                    
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
-                    //$data[$key]['attachement_batiment'] = $attachement_batiment;
+                    $data[$key]['type_batiment'] = $type_batiment;                    
                     $data[$key]['convention_detail'] = $convention_detail;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_batiment'] = $value->nbr_batiment;
                 }
             } 
                 else
@@ -45,13 +45,13 @@ class Batiment_construction extends REST_Controller {
             $data = array();
             $batiment_construction = $this->Batiment_constructionManager->findById($id);
             $convention_detail = $this->Convention_cisco_feffi_detailManager->findById($batiment_construction->id_convention_detail);
-           // $attachement_batiment = $this->Attachement_batimentManager->findById($batiment_construction->id_attachement_batiment);
-            $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($batiment_construction->id_batiment_ouvrage);
+            $type_batiment = $this->Type_batimentManager->findById($batiment_construction->id_type_batiment);
 
             $data['id'] = $batiment_construction->id;
-            //$data['attachement_batiment'] = $attachement_batiment;
             $data['convention_detail'] = $convention_detail;
-            $data['batiment_ouvrage'] = $batiment_ouvrage;
+            $data['type_batiment'] = $type_batiment;
+            $data['cout_unitaire'] = $batiment_construction->cout_unitaire;
+            $data['nbr_batiment'] = $batiment_construction->nbr_batiment;
         } 
         else 
         {
@@ -62,14 +62,14 @@ class Batiment_construction extends REST_Controller {
                 {
                     $data = array();
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->$id_convention_entete);
-
-                    //$attachement_batiment = $this->Attachement_batimentManager->findById($value->id_attachement_batiment);
-                    $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
+                   
+                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
 
                     $data[$key]['id'] = $value->id;
-                    //$data[$key]['attachement_batiment'] = $attachement_batiment;
                     $data[$key]['convention_detail'] = $convention_detail;
-                    $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
+                    $data[$key]['type_batiment'] = $type_batiment;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_batiment'] = $value->nbr_batiment;
                     
                 }
             } 
@@ -101,9 +101,10 @@ class Batiment_construction extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage'),
-                    //'id_attachement_batiment' => $this->post('id_attachement_batiment'),
-                    'id_convention_detail' => $this->post('id_convention_detail')
+                    'id_type_batiment' => $this->post('id_type_batiment'),
+                    'id_convention_detail' => $this->post('id_convention_detail'),
+                    'cout_unitaire'=> $this->post('cout_unitaire'),
+                    'nbr_batiment'=> $this->post('nbr_batiment')
                 );
                 if (!$data) {
                     $this->response([
@@ -128,9 +129,10 @@ class Batiment_construction extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage'),
-                    //'id_attachement_batiment' => $this->post('id_attachement_batiment'),
-                    'id_convention_detail' => $this->post('id_convention_detail')
+                    'id_type_batiment' => $this->post('id_type_batiment'),
+                    'id_convention_detail' => $this->post('id_convention_detail'),
+                    'cout_unitaire'=> $this->post('cout_unitaire'),
+                    'nbr_batiment'=> $this->post('nbr_batiment')
                 );
                 if (!$data || !$id) {
                     $this->response([

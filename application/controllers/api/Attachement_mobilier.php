@@ -10,28 +10,28 @@ class Attachement_mobilier extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('attachement_mobilier_model', 'Attachement_mobilierManager');
-        $this->load->model('annexe_mobilier_model', 'Annexe_mobilierManager');
+        $this->load->model('type_mobilier_model', 'Type_mobilierManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_annexe_mobilier = $this->get('id_annexe_mobilier');
+        $id_type_mobilier = $this->get('id_type_mobilier');
             
-        if ($id_annexe_mobilier) 
+        if ($id_type_mobilier) 
         {   $data = array();
-            $tmp = $this->Attachement_mobilierManager->findByannexe_mobilier($id_annexe_mobilier);
+            $tmp = $this->Attachement_mobilierManager->findBytype_mobilier($id_type_mobilier);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $annexe_mobilier = array();
-                    $annexe_mobilier = $this->Annexe_mobilierManager->findById($value->id_annexe_mobilier);
+                    $type_mobilier = array();
+                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['ponderation_mobilier'] = $value->ponderation_mobilier;
-                    $data[$key]['annexe_mobilier'] = $annexe_mobilier;
+                    $data[$key]['type_mobilier'] = $type_mobilier;
                 }
             }
         }
@@ -39,12 +39,12 @@ class Attachement_mobilier extends REST_Controller {
         {
             $data = array();
             $attachement_mobilier = $this->Attachement_mobilierManager->findById($id);
-            $annexe_mobilier = $this->Annexe_mobilierManager->findById($attachement_mobilier->id_annexe_mobilier);
+            $type_mobilier = $this->Type_mobilierManager->findById($attachement_mobilier->id_type_mobilier);
             $data['id'] = $attachement_mobilier->id;
             $data['libelle'] = $attachement_mobilier->libelle;
             $data['description'] = $attachement_mobilier->description;
             $data['ponderation_mobilier'] = $attachement_mobilier->ponderation_mobilier;
-            $data['annexe_mobilier'] = $annexe_mobilier;
+            $data['type_mobilier'] = $type_mobilier;
         } 
         else 
         {
@@ -53,12 +53,12 @@ class Attachement_mobilier extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $annexe_mobilier = $this->Annexe_mobilierManager->findById($value->id_annexe_mobilier);
+                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['ponderation_mobilier'] = $value->ponderation_mobilier;
-                    $data[$key]['annexe_mobilier'] = $annexe_mobilier;
+                    $data[$key]['type_mobilier'] = $type_mobilier;
                 }
             } 
                 else
@@ -90,7 +90,7 @@ class Attachement_mobilier extends REST_Controller {
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
                     'ponderation_mobilier' => $this->post('ponderation_mobilier'),
-                    'id_annexe_mobilier' => $this->post('id_annexe_mobilier')
+                    'id_type_mobilier' => $this->post('id_type_mobilier')
                 );
                 if (!$data) {
                     $this->response([
@@ -118,7 +118,7 @@ class Attachement_mobilier extends REST_Controller {
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
                     'ponderation_mobilier' => $this->post('ponderation_mobilier'),
-                    'id_annexe_mobilier' => $this->post('id_annexe_mobilier')
+                    'id_type_mobilier' => $this->post('id_type_mobilier')
                 );
                 if (!$data || !$id) {
                     $this->response([

@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Annexe_latrine_model extends CI_Model {
-    protected $table = 'annexe_latrine';
+class Type_batiment_model extends CI_Model {
+    protected $table = 'type_batiment';
 
-    public function add($annexe_latrine) {
-        $this->db->set($this->_set($annexe_latrine))
+    public function add($type_batiment) {
+        $this->db->set($this->_set($type_batiment))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Annexe_latrine_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $annexe_latrine) {
-        $this->db->set($this->_set($annexe_latrine))
+    public function update($id, $type_batiment) {
+        $this->db->set($this->_set($type_batiment))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,15 +23,15 @@ class Annexe_latrine_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($annexe_latrine) {
+    public function _set($type_batiment) {
         return array(
-            'code'       =>      $annexe_latrine['code'],
-            'libelle'       =>      $annexe_latrine['libelle'],
-            'description'   =>      $annexe_latrine['description'],
-            'nbr_box_latrine'       =>      $annexe_latrine['nbr_box_latrine'],
-            'nbr_point_eau'       =>      $annexe_latrine['nbr_point_eau'],
-            'cout_latrine'   =>      $annexe_latrine['cout_latrine'],
-            'id_batiment_ouvrage'    => $annexe_latrine['id_batiment_ouvrage']                       
+            'code'   =>      $type_batiment['code'],
+            'libelle'       =>      $type_batiment['libelle'],
+            'description'   =>      $type_batiment['description'],
+            'nbr_salle'   =>      $type_batiment['nbr_salle'],
+            'cout_batiment' =>      $type_batiment['cout_batiment'],
+            'id_acces_zone' => $type_batiment['id_acces_zone'],
+            'id_zone_subvention' => $type_batiment['id_zone_subvention']                       
         );
     }
     public function delete($id) {
@@ -46,7 +46,7 @@ class Annexe_latrine_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('description')
+                        ->order_by('libelle')
                         ->get()
                         ->result();
         if($result)
@@ -64,11 +64,12 @@ class Annexe_latrine_model extends CI_Model {
         }
     }
 
-    public function findBybatiment_ouvrage($id_batiment_ouvrage) {               
+    public function findByZone($id_zone_subvention,$id_acces_zone)
+    {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_batiment_ouvrage", $id_batiment_ouvrage)
-                        ->order_by('description')
+                        ->where('id_zone_subvention',$id_zone_subvention)
+                        ->where('id_acces_zone',$id_acces_zone)
                         ->get()
                         ->result();
         if($result)
@@ -78,4 +79,5 @@ class Annexe_latrine_model extends CI_Model {
             return null;
         }                 
     }
+
 }

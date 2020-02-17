@@ -10,28 +10,28 @@ class Attachement_batiment extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('attachement_batiment_model', 'Attachement_batimentManager');
-        $this->load->model('batiment_ouvrage_model', 'Batiment_ouvrageManager');
+        $this->load->model('type_batiment_model', 'Type_batimentManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_batiment_ouvrage = $this->get('id_batiment_ouvrage');
+        $id_type_batiment = $this->get('id_type_batiment');
             
-        if ($id_batiment_ouvrage) 
+        if ($id_type_batiment) 
         {   $data = array();
-            $tmp = $this->Attachement_batimentManager->findBybatiment_ouvrage($id_batiment_ouvrage);
+            $tmp = $this->Attachement_batimentManager->findBytype_batiment($id_type_batiment);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $batiment_ouvrage = array();
-                    $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
+                    $type_batiment = array();
+                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['ponderation_batiment'] = $value->ponderation_batiment;
-                    $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
+                    $data[$key]['type_batiment'] = $type_batiment;
                 }
             }
         }
@@ -39,12 +39,12 @@ class Attachement_batiment extends REST_Controller {
         {
             $data = array();
             $attachement_batiment = $this->Attachement_batimentManager->findById($id);
-            $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($attachement_batiment->id_batiment_ouvrage);
+            $type_batiment = $this->Type_batimentManager->findById($attachement_batiment->id_type_batiment);
             $data['id'] = $attachement_batiment->id;
             $data['libelle'] = $attachement_batiment->libelle;
             $data['description'] = $attachement_batiment->description;
             $data['ponderation_batiment'] = $attachement_batiment->ponderation_batiment;
-            $data['batiment_ouvrage'] = $batiment_ouvrage;
+            $data['type_batiment'] = $type_batiment;
         } 
         else 
         {
@@ -53,12 +53,12 @@ class Attachement_batiment extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $batiment_ouvrage = $this->Batiment_ouvrageManager->findById($value->id_batiment_ouvrage);
+                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['ponderation_batiment'] = $value->ponderation_batiment;
-                    $data[$key]['batiment_ouvrage'] = $batiment_ouvrage;
+                    $data[$key]['type_batiment'] = $type_batiment;
                 }
             } 
                 else
@@ -90,7 +90,7 @@ class Attachement_batiment extends REST_Controller {
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
                     'ponderation_batiment' => $this->post('ponderation_batiment'),
-                    'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage')
+                    'id_type_batiment' => $this->post('id_type_batiment')
                 );
                 if (!$data) {
                     $this->response([
@@ -118,7 +118,7 @@ class Attachement_batiment extends REST_Controller {
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
                     'ponderation_batiment' => $this->post('ponderation_batiment'),
-                    'id_batiment_ouvrage' => $this->post('id_batiment_ouvrage')
+                    'id_type_batiment' => $this->post('id_type_batiment')
                 );
                 if (!$data || !$id) {
                     $this->response([

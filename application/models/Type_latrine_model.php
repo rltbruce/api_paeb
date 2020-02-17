@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Annexe_mobilier_model extends CI_Model {
-    protected $table = 'annexe_mobilier';
+class Type_latrine_model extends CI_Model {
+    protected $table = 'type_latrine';
 
-    public function add($annexe_mobilier) {
-        $this->db->set($this->_set($annexe_mobilier))
+    public function add($type_latrine) {
+        $this->db->set($this->_set($type_latrine))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Annexe_mobilier_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $annexe_mobilier) {
-        $this->db->set($this->_set($annexe_mobilier))
+    public function update($id, $type_latrine) {
+        $this->db->set($this->_set($type_latrine))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,16 +23,16 @@ class Annexe_mobilier_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($annexe_mobilier) {
+    public function _set($type_latrine) {
         return array(
-            'code'       =>      $annexe_mobilier['code'],
-            'libelle'       =>      $annexe_mobilier['libelle'],
-            'description'   =>      $annexe_mobilier['description'],
-            'nbr_banc'       =>      $annexe_mobilier['nbr_banc'],
-            'nbr_table_maitre'       =>      $annexe_mobilier['nbr_table_maitre'],
-            'nbr_chais_maitre'       =>      $annexe_mobilier['nbr_chais_maitre'],
-            'cout_mobilier'   =>      $annexe_mobilier['cout_mobilier'],
-            'id_batiment_ouvrage'    => $annexe_mobilier['id_batiment_ouvrage']                       
+            'code'       =>      $type_latrine['code'],
+            'libelle'       =>      $type_latrine['libelle'],
+            'description'   =>      $type_latrine['description'],
+            'nbr_box_latrine'       =>      $type_latrine['nbr_box_latrine'],
+            'nbr_point_eau'       =>      $type_latrine['nbr_point_eau'],
+            'cout_latrine'   =>      $type_latrine['cout_latrine'],
+            'id_acces_zone' => $type_latrine['id_acces_zone'],
+            'id_zone_subvention' => $type_latrine['id_zone_subvention']                       
         );
     }
     public function delete($id) {
@@ -65,11 +65,12 @@ class Annexe_mobilier_model extends CI_Model {
         }
     }
 
-    public function findBybatiment_ouvrage($id_batiment_ouvrage) {               
+    public function findByZone($id_zone_subvention,$id_acces_zone)
+    {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_batiment_ouvrage", $id_batiment_ouvrage)
-                        ->order_by('description')
+                        ->where('id_zone_subvention',$id_zone_subvention)
+                        ->where('id_acces_zone',$id_acces_zone)
                         ->get()
                         ->result();
         if($result)
@@ -79,5 +80,4 @@ class Annexe_mobilier_model extends CI_Model {
             return null;
         }                 
     }
-
 }

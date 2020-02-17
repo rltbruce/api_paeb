@@ -3,8 +3,8 @@
 class Batiment_construction_model extends CI_Model {
     protected $table = 'batiment_construction';
 
-    public function add($ouvrage_construction) {
-        $this->db->set($this->_set($ouvrage_construction))
+    public function add($batiment_construction) {
+        $this->db->set($this->_set($batiment_construction))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Batiment_construction_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $ouvrage_construction) {
-        $this->db->set($this->_set($ouvrage_construction))
+    public function update($id, $batiment_construction) {
+        $this->db->set($this->_set($batiment_construction))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,11 +23,13 @@ class Batiment_construction_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($ouvrage_construction) {
+    public function _set($batiment_construction) {
         return array(
-            'id_batiment_ouvrage' => $ouvrage_construction['id_batiment_ouvrage'],
-            //'id_attachement_batiment' => $ouvrage_construction['id_attachement_batiment'],
-            'id_convention_detail'=> $ouvrage_construction['id_convention_detail']);
+            'id_type_batiment' => $batiment_construction['id_type_batiment'],
+            'id_convention_detail'=> $batiment_construction['id_convention_detail'],
+            'cout_unitaire'=> $batiment_construction['cout_unitaire'],
+            'nbr_batiment'=> $batiment_construction['nbr_batiment']);
+            
     }
    /* public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);

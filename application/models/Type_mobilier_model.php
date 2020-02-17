@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Compte_feffi_model extends CI_Model {
-    protected $table = 'compte_feffi';
+class Type_mobilier_model extends CI_Model {
+    protected $table = 'type_mobilier';
 
-    public function add($compte_feffi) {
-        $this->db->set($this->_set($compte_feffi))
+    public function add($type_mobilier) {
+        $this->db->set($this->_set($type_mobilier))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Compte_feffi_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $compte_feffi) {
-        $this->db->set($this->_set($compte_feffi))
+    public function update($id, $type_mobilier) {
+        $this->db->set($this->_set($type_mobilier))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,14 +23,17 @@ class Compte_feffi_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($compte_feffi) {
+    public function _set($type_mobilier) {
         return array(
-            'rib'          =>      $compte_feffi['rib'],
-            'nom_banque'          =>      $compte_feffi['nom_banque'],
-            'numero_compte'           =>      $compte_feffi['numero_compte'],
-            'adresse_banque'          =>      $compte_feffi['adresse_banque'],
-            'id_membre_feffi'           =>      $compte_feffi['id_membre_feffi'],
-            'id_feffi'     =>      $compte_feffi['id_feffi']                       
+            'code'       =>      $type_mobilier['code'],
+            'libelle'       =>      $type_mobilier['libelle'],
+            'description'   =>      $type_mobilier['description'],
+            /*'nbr_banc'       =>      $type_mobilier['nbr_banc'],
+            'nbr_table_maitre'       =>      $type_mobilier['nbr_table_maitre'],
+            'nbr_chais_maitre'       =>      $type_mobilier['nbr_chais_maitre'],*/
+            'cout_mobilier'   =>      $type_mobilier['cout_mobilier'],
+            'id_acces_zone' => $type_mobilier['id_acces_zone'],
+            'id_zone_subvention' => $type_mobilier['id_zone_subvention']                        
         );
     }
     public function delete($id) {
@@ -45,7 +48,7 @@ class Compte_feffi_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('nom_banque')
+                        ->order_by('description')
                         ->get()
                         ->result();
         if($result)
@@ -63,11 +66,12 @@ class Compte_feffi_model extends CI_Model {
         }
     }
 
-    public function findByfeffi($id_feffi) {               
+    public function findByZone($id_zone_subvention,$id_acces_zone)
+    {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where('id_feffi',$id_feffi)
-                        ->order_by('nom_banque')
+                        ->where('id_zone_subvention',$id_zone_subvention)
+                        ->where('id_acces_zone',$id_acces_zone)
                         ->get()
                         ->result();
         if($result)
@@ -76,6 +80,6 @@ class Compte_feffi_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
+    }
 
 }

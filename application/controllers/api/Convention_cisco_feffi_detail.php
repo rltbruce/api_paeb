@@ -11,9 +11,10 @@ class Convention_cisco_feffi_detail extends REST_Controller {
         parent::__construct();
         $this->load->model('convention_cisco_feffi_detail_model', 'Convention_cisco_feffi_detailManager');
         $this->load->model('convention_cisco_feffi_entete_model', 'Convention_cisco_feffi_enteteManager');
+        $this->load->model('compte_feffi_model', 'Compte_feffiManager');
         //$this->load->model('zone_subvention_model', 'Zone_subventionManager');
         //$this->load->model('acces_zone_model', 'Acces_zoneManager');
-        $this->load->model('composant_model', 'ComposantManager');
+       // $this->load->model('composant_model', 'ComposantManager');
     }
 
     public function index_get() 
@@ -33,7 +34,8 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     //$zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
                     //$acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
-                    $composant = $this->ComposantManager->findByAcceszone_zonesubvention($id_acces_zone, $id_zone_subvention);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
+                    //$composant = $this->ComposantManager->findByAcceszone_zonesubvention($id_acces_zone, $id_zone_subvention);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['intitule'] = $value->intitule;
@@ -42,7 +44,11 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                     //$data[$key]['zone_subvention'] = $zone_subvention;
                     //$data[$key]['acces_zone'] = $acces_zone;
                     $data[$key]['convention_entete'] = $convention_entete;
-                    $data[$key]['composant'] = $composant;
+                    //$data[$key]['composant'] = $composant;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['delai'] = $value->delai;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['compte_feffi'] = $compte_feffi;
                 }
             } 
                 else
@@ -55,7 +61,8 @@ class Convention_cisco_feffi_detail extends REST_Controller {
             $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($convention_detail->$id_convention_entete);
            // $zone_subvention = $this->Zone_subventionManager->findById($convention_detail->id_zone_subvention);
             //$acces_zone = $this->Acces_zoneManager->findById($convention_detail->id_acces_zone);
-            $composant = $this->ComposantManager->findByAcceszone_zonesubvention($id_acces_zone, $id_zone_subvention);
+            $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
+            //$composant = $this->ComposantManager->findByAcceszone_zonesubvention($id_acces_zone, $id_zone_subvention);
 
             $data['id'] = $convention_detail->id;
             $data['intitule'] = $convention_detail->intitule;
@@ -64,7 +71,11 @@ class Convention_cisco_feffi_detail extends REST_Controller {
             //$data['zone_subvention'] = $zone_subvention;
             //$data['acces_zone'] = $acces_zone;
             $data['convention_entete'] = $convention_detail->convention_entete;
-            $data['composant'] = $composant;
+            //$data['composant'] = $composant;
+            $data['date_signature'] = $convention_detail->date_signature;
+            $data['delai'] = $convention_detail->delai;
+            $data['observation'] = $convention_detail->observation;
+            $data['compte_feffi'] = $compte_feffi;
         } 
         else 
         {
@@ -77,7 +88,8 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->$id_convention_entete);
                     //$zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
                     //$acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
-                    $composant = $this->ComposantManager->findByAcceszone_zonesubvention($id_acces_zone, $id_zone_subvention);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
+                    //$composant = $this->ComposantManager->findByAcceszone_zonesubvention($id_acces_zone, $id_zone_subvention);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['intitule'] = $value->intitule;
@@ -86,7 +98,11 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                     //$data[$key]['zone_subvention'] = $zone_subvention;
                     //$data[$key]['acces_zone'] = $acces_zone;
                     $data[$key]['convention_entete'] = $value->convention_entete;
-                    $data[$key]['composant'] = $composant;
+                    //$data[$key]['composant'] = $composant;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['delai'] = $value->delai;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['compte_feffi'] = $compte_feffi;
                     
                 }
             } 
@@ -146,7 +162,10 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                     'montant_total' => $this->post('montant_total'),
                     'avancement' => $this->post('avancement'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'avancement' => $this->post('avancement')
+                    'date_signature' => $this->post('date_signature'),
+                    'delai' => $this->post('delai'),
+                    'id_compte_feffi' => $this->post('id_compte_feffi'),
+                    'observation' => $this->post('observation')
                 );
                 if (!$data) {
                     $this->response([
@@ -175,7 +194,10 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                     'montant_total' => $this->post('montant_total'),
                     'avancement' => $this->post('avancement'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'avancement' => $this->post('avancement')
+                    'date_signature' => $this->post('date_signature'),
+                    'delai' => $this->post('delai'),
+                    'id_compte_feffi' => $this->post('id_compte_feffi'),
+                    'observation' => $this->post('observation')
                 );
                 if (!$data || !$id) {
                     $this->response([

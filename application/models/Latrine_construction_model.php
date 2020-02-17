@@ -25,9 +25,10 @@ class Latrine_construction_model extends CI_Model {
     }
     public function _set($latrine_construction) {
         return array(
-            'id_annexe_latrine' => $latrine_construction['id_annexe_latrine'],
-            //'id_attachement_latrine' => $latrine_construction['id_attachement_latrine'],
-            'id_batiment_construction'=> $latrine_construction['id_batiment_construction']);
+            'id_type_latrine' => $latrine_construction['id_type_latrine'],            
+            'id_batiment_construction'=> $latrine_construction['id_batiment_construction'],
+            'cout_unitaire'=> $latrine_construction['cout_unitaire'],
+            'nbr_latrine'=> $latrine_construction['nbr_latrine']);
     }
     public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);

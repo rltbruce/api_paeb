@@ -28,7 +28,7 @@ class Attachement_batiment_model extends CI_Model {
             'libelle'       =>      $attachement['libelle'],
             'description'   =>      $attachement['description'],
             'ponderation_batiment'   =>      $attachement['ponderation_batiment'],
-            'id_batiment_ouvrage'    => $attachement['id_batiment_ouvrage']                       
+            'id_type_batiment'    => $attachement['id_type_batiment']                       
         );
     }
     public function delete($id) {
@@ -60,11 +60,11 @@ class Attachement_batiment_model extends CI_Model {
             return $q->row();
         }
     }
-    public function findBybatiment_ouvrage($id_batiment_ouvrage)
+    public function findBytype_batiment($id_type_batiment)
     {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where('id_batiment_ouvrage',$id_batiment_ouvrage)
+                        ->where('id_type_batiment',$id_type_batiment)
                         ->order_by('description')
                         ->get()
                         ->result();
