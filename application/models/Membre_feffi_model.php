@@ -77,4 +77,24 @@ class Membre_feffi_model extends CI_Model {
             return null;
         }                 
     }
+
+    public function Count_membrebyId($id) 
+    {
+        $this->db->select('count(DISTINCT(id)) as nbr_membre')
+        ->where("id_feffi", $id);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+    }
+    public function Count_femininbyId($id) 
+    {
+        $this->db->select('count(DISTINCT(id)) as nbr_feminin')
+        ->where("id_feffi", $id)
+        ->where("sexe", 2);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+    }
 }

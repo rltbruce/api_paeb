@@ -11,6 +11,7 @@ class Feffi extends REST_Controller {
         parent::__construct();
         $this->load->model('feffi_model', 'FeffiManager');
         $this->load->model('ecole_model', 'EcoleManager');
+        $this->load->model('membre_feffi_model', 'Membre_feffiManager');
     }
 
     public function index_get() 
@@ -20,7 +21,7 @@ class Feffi extends REST_Controller {
             
         if ($id_ecole) 
         {   $data = array();
-            $tmp = $this->AssociationManager->findByecole($id_ecole);
+            $tmp = $this->FeffiManager->findByecole($id_ecole);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -28,11 +29,14 @@ class Feffi extends REST_Controller {
                     $ecole = array();
                     $cisco = array();
                     $ecole = $this->EcoleManager->findById($value->id_ecole);
+                    $nbr_membre= $this->Membre_feffiManager->count_membrebyId($value->id);
+                    $nbr_feminin= $this->Membre_feffiManager->count_femininbyId($value->id);
+                    $data[$key]['nbr_membre'] = $nbr_membre->nbr_membre;
+                    $data[$key]['nbr_feminin'] = $nbr_feminin->nbr_feminin;
                     $data[$key]['id'] = $value->id;
                     $data[$key]['identifiant'] = $value->identifiant;
                     $data[$key]['denomination'] = $value->denomination;
-                    $data[$key]['nbr_feminin'] = $value->nbr_feminin;
-                    $data[$key]['nbr_total'] = $value->nbr_total;
+                    
                     $data[$key]['adresse'] = $value->adresse;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['ecole'] = $ecole;
@@ -44,11 +48,13 @@ class Feffi extends REST_Controller {
             $data = array();
             $feffi = $this->FeffiManager->findById($id);
             $ecole = $this->EcoleManager->findById($feffi->id_ecole);
+            $nbr_membre= $this->Membre_feffiManager->count_membrebyId($feffi->id);
+            $nbr_feminin= $this->Membre_feffiManager->count_femininbyId($feffi->id);
+            $data[$key]['nbr_membre'] = $nbr_membre->nb;
+            $data[$key]['nbr_feminin'] = $nbr_feminin->nbr_feminin;
             $data['id'] = $feffi->id;
             $data['identifiant'] = $feffi->identifiant;
             $data['denomination'] = $feffi->denomination;
-            $data['nbr_feminin'] = $feffi->nbr_feminin;
-            $data['nbr_total'] = $feffi->nbr_total;
             $data['adresse'] = $feffi->adresse;
             $data['observation'] = $feffi->observation;
             $data['ecole'] = $ecole;
@@ -63,11 +69,13 @@ class Feffi extends REST_Controller {
                     $ecole = array();
                     $cisco = array();
                     $ecole = $this->EcoleManager->findById($value->id_ecole);
+                    $nbr_membre= $this->Membre_feffiManager->count_membrebyId($value->id);
+                    $nbr_feminin= $this->Membre_feffiManager->count_femininbyId($value->id);
+                    $data[$key]['nbr_membre'] = $nbr_membre->nbr_membre;
+                    $data[$key]['nbr_feminin'] = $nbr_feminin->nbr_feminin;
                     $data[$key]['id'] = $value->id;
                     $data[$key]['identifiant'] = $value->identifiant;
                     $data[$key]['denomination'] = $value->denomination;
-                    $data[$key]['nbr_feminin'] = $value->nbr_feminin;
-                    $data[$key]['nbr_total'] = $value->nbr_total;
                     $data[$key]['adresse'] = $value->adresse;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['ecole'] = $ecole;
@@ -101,8 +109,6 @@ class Feffi extends REST_Controller {
                 $data = array(
                     'identifiant' => $this->post('identifiant'),
                     'denomination' => $this->post('denomination'),
-                    'nbr_feminin' => $this->post('nbr_feminin'),
-                    'nbr_total' => $this->post('nbr_total'),
                     'adresse' => $this->post('adresse'),
                     'observation' => $this->post('observation'),
                     'id_ecole' => $this->post('id_ecole')
@@ -132,8 +138,6 @@ class Feffi extends REST_Controller {
                 $data = array(
                     'identifiant' => $this->post('identifiant'),
                     'denomination' => $this->post('denomination'),
-                    'nbr_feminin' => $this->post('nbr_feminin'),
-                    'nbr_total' => $this->post('nbr_total'),
                     'adresse' => $this->post('adresse'),
                     'observation' => $this->post('observation'),
                     'id_ecole' => $this->post('id_ecole')

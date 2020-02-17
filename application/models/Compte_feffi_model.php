@@ -76,6 +76,13 @@ class Compte_feffi_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
+    }
+    public function findByfeffiobjet($id_feffi)  {
+        $this->db->where('id_feffi',$id_feffi);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+    }
 
 }
