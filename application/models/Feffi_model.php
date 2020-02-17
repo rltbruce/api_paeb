@@ -27,8 +27,6 @@ class Feffi_model extends CI_Model {
         return array(
             'identifiant' => $feffi['identifiant'],
             'denomination' => $feffi['denomination'],
-            'nbr_feminin' => $feffi['nbr_feminin'],
-            'nbr_total' => $feffi['nbr_total'],
             'adresse' => $feffi['adresse'],
             'observation' => $feffi['observation'],
             'id_ecole'   =>      $feffi['id_ecole']                       
@@ -68,7 +66,7 @@ class Feffi_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where('id_commune',$id_commune)
-                        ->order_by('description')
+                        ->order_by('denomination')
                         ->get()
                         ->result();
         if($result)
@@ -77,6 +75,22 @@ class Feffi_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
+    }
+
+    public function findByecole($id_ecole)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_ecole',$id_ecole)
+                        ->order_by('denomination')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 }

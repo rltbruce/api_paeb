@@ -26,12 +26,9 @@ class Convention_cisco_feffi_detail_model extends CI_Model {
     public function _set($convention) {
         return array(
             'intitule' => $convention['intitule'],
-            'montant_total' =>    $convention['montant_total'],
-            'id_convention_entete'=> $convention['id_convention_entete'],
-            'avancement'=> $convention['avancement'],
+            'id_convention_entete'=> $convention['id_convention_entete'],            
             'date_signature' => $convention['date_signature'],
             'delai' => $convention['delai'],
-            'id_compte_feffi' => $convention['id_compte_feffi'],
             'observation' => $convention['observation'] );
                    
     }

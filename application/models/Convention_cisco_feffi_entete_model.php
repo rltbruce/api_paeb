@@ -32,8 +32,8 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             'id_cisco' => $convention['id_cisco'],
             'id_feffi' => $convention['id_feffi'],
             'ref_financement'    => $convention['ref_financement'],
-            //'date_signature' => $convention['date_signature'],
-            //'delai'   =>$convention['delai'],
+            'avancement'=> $convention['avancement'],            
+            'montant_total' =>    $convention['montant_total'],
             'validation'   =>$convention['validation'],
             'id_convention_ufpdaaf'   =>$convention['id_convention_ufpdaaf'],
             //'id_compte_feffi'   =>$convention['id_compte_feffi'],
@@ -118,6 +118,22 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                         ->from($this->table)
                         ->where("validation",1)
                         ->where("id_convention_ufpdaaf",$id_convention_ufpdaaf)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findAllValideByfeffi($id_feffi) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation",1)
+                        ->where("id_feffi",$id_feffi)
                         ->order_by('ref_convention')
                         ->get()
                         ->result();
