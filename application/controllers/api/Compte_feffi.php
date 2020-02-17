@@ -28,7 +28,7 @@ class Compte_feffi extends REST_Controller {
                 {
                     $feffi = array();
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $membre_feffi = $this->Membre_feffiManager->findById($value->id_feffi);
+                    $membre_feffi = $this->Membre_feffiManager->findById($value->id_membre_feffi);
                     $data[$key]['membre_feffi'] = $membre_feffi;
                     $data[$key]['id'] = $value->id;
                     $data[$key]['nom_banque'] = $value->nom_banque;
@@ -46,7 +46,7 @@ class Compte_feffi extends REST_Controller {
             $data = array();
             $compte_feffi = $this->Compte_feffiManager->findById($id);
             $feffi = $this->FeffiManager->findById($compte_feffi->id_feffi);
-            $membre_feffi = $this->Membre_feffiManager->findById($compte_feffi->id_feffi);
+            $membre_feffi = $this->Membre_feffiManager->findById($compte_feffi->id_membre_feffi);
             $data['membre_feffi'] = $membre_feffi;
             $data['id'] = $compte_feffi->id;
             $data['rib'] = $compte_feffi->rib;
@@ -65,7 +65,7 @@ class Compte_feffi extends REST_Controller {
                 {
                     $feffi = array();
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $membre_feffi = $this->Membre_feffiManager->findById($value->id_feffi);
+                    $membre_feffi = $this->Membre_feffiManager->findById($value->id_membre_feffi);
                     $data[$key]['membre_feffi'] = $membre_feffi;
                     $data[$key]['id'] = $value->id;
                     $data[$key]['rib'] = $value->rib;

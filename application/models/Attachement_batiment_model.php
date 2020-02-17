@@ -28,7 +28,7 @@ class Attachement_batiment_model extends CI_Model {
             'libelle'       =>      $attachement['libelle'],
             'description'   =>      $attachement['description'],
             'ponderation_batiment'   =>      $attachement['ponderation_batiment'],
-            'id_batiment_ouvrage'    => $attachement['id_batiment_ouvrage']                       
+            'id_type_batiment'    => $attachement['id_type_batiment']                       
         );
     }
     public function delete($id) {
