@@ -15,7 +15,7 @@ class Cout_divers_construction extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_convention_detail = $this->get('id_convention_detail');
+        $id_convention_entete = $this->get('id_convention_entete');
             
         if ($id)
         {
@@ -31,9 +31,9 @@ class Cout_divers_construction extends REST_Controller {
         } 
         
 
-        if ($id_convention_detail) 
+        if ($id_convention_entete) 
         {
-            $menu = $this->cout_divers_constructionManager->findAll_by_convention_detail($id_convention_detail);
+            $menu = $this->cout_divers_constructionManager->findAll_by_convention_detail($id_convention_entete);
             if ($menu) 
             {
             

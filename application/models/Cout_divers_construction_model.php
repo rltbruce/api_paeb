@@ -61,7 +61,7 @@ class Cout_divers_construction_model extends CI_Model {
             }                  
     }
 
-    public function findAll_by_convention_detail($id_convention_detail) 
+    public function findAll_by_convention_detail($id_convention_entete) 
     {               
         $this->db->select(" cout_divers_construction.id as id,
                             cout_divers_construction.cout as cout,
@@ -71,7 +71,7 @@ class Cout_divers_construction_model extends CI_Model {
         $q =  $this->db->from('cout_divers_construction')
 
                     ->join('type_cout_divers', 'type_cout_divers.id = cout_divers_construction.id_type_cout_divers')  
-                    ->where("id_convention_detail", $id_convention_detail)    
+                    ->where("id_convention_entete", $id_convention_entete)    
                     ->get()
                     ->result();
 
