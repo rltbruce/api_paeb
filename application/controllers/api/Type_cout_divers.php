@@ -5,11 +5,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Acces_zone extends REST_Controller {
+class Type_cout_divers extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('acces_zone_model', 'Acces_zoneManager');
+        $this->load->model('type_cout_divers_model', 'type_cout_diversManager');
     }
 
     public function index_get() 
@@ -19,25 +19,21 @@ class Acces_zone extends REST_Controller {
         if ($id)
         {
             $data = array();
-            $acces_zone= $this->Acces_zoneManager->findById($id);
-            $data['id'] = $acces_zone->id;
-            $data['libelle'] = $acces_zone->libelle;
-            $data['description'] = $acces_zone->description;
+            $type_cout_divers= $this->type_cout_diversManager->findById($id);
+            $data['id'] = $type_cout_divers->id;
+            $data['description'] = $type_cout_divers->description;;
         } 
         else 
         {
-            $menu = $this->Acces_zoneManager->findAll();
+            $menu = $this->type_cout_diversManager->findAll();
             if ($menu) 
             {
-                foreach ($menu as $key => $value) 
-                {
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                }
+                
+                $data = $menu;
+                
             } 
-                else
-                    $data = array();
+            else
+                $data = array();
         }
     
         
@@ -62,7 +58,6 @@ class Acces_zone extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
                     'description' => $this->post('description')
                 );
                 if (!$data) {
@@ -72,7 +67,7 @@ class Acces_zone extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Acces_zoneManager->add($data);
+                $dataId = $this->type_cout_diversManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -88,7 +83,6 @@ class Acces_zone extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
                     'description' => $this->post('description')
                 );
                 if (!$data || !$id) {
@@ -98,7 +92,7 @@ class Acces_zone extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Acces_zoneManager->update($id, $data);
+                $update = $this->type_cout_diversManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -120,7 +114,7 @@ class Acces_zone extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Acces_zoneManager->delete($id);         
+            $delete = $this->type_cout_diversManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

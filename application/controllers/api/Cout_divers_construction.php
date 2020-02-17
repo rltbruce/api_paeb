@@ -5,39 +5,43 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Acces_zone extends REST_Controller {
+class Cout_divers_construction extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('acces_zone_model', 'Acces_zoneManager');
+        $this->load->model('cout_divers_construction_model', 'cout_divers_constructionManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_convention_detail = $this->get('id_convention_detail');
             
         if ($id)
         {
-            $data = array();
-            $acces_zone= $this->Acces_zoneManager->findById($id);
-            $data['id'] = $acces_zone->id;
-            $data['libelle'] = $acces_zone->libelle;
-            $data['description'] = $acces_zone->description;
+
+            $cout_divers_construction = $this->cout_divers_constructionManager->findById($id);
+
+            if ($cout_divers_construction) 
+            {
+                $data = $cout_divers_construction;
+            }
+            else
+                $data = array();
         } 
-        else 
+        
+
+        if ($id_convention_detail) 
         {
-            $menu = $this->Acces_zoneManager->findAll();
+            $menu = $this->cout_divers_constructionManager->findAll_by_convention_detail($id_convention_detail);
             if ($menu) 
             {
-                foreach ($menu as $key => $value) 
-                {
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                }
-            } 
-                else
-                    $data = array();
+            
+                $data = $menu;
+              
+            }
+            else
+                $data = array();
         }
     
         
@@ -72,7 +76,7 @@ class Acces_zone extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Acces_zoneManager->add($data);
+                $dataId = $this->cout_divers_constructionManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -98,7 +102,7 @@ class Acces_zone extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Acces_zoneManager->update($id, $data);
+                $update = $this->cout_divers_constructionManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -120,7 +124,7 @@ class Acces_zone extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Acces_zoneManager->delete($id);         
+            $delete = $this->cout_divers_constructionManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,
