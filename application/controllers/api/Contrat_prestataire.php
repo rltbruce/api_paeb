@@ -40,6 +40,7 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
                     $data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
                     $data[$key]['delai_execution'] = $value->delai_execution;
+                    $data[$key]['paiement_recu'] = $value->paiement_recu;
 
                     $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['prestataire'] = $prestataire;
@@ -66,6 +67,7 @@ class Contrat_prestataire extends REST_Controller {
             $data['date_prev_deb_trav'] = $contrat_prestataire->date_prev_deb_trav;
             $data['date_reel_deb_trav'] = $contrat_prestataire->date_reel_deb_trav;
             $data['delai_execution'] = $contrat_prestataire->delai_execution;
+            $data['paiement'] = $contrat_prestataire->paiement;
 
             $data['convention_entete'] = $convention_entete;
             $data['prestataire'] = $prestataire;
@@ -90,6 +92,7 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
                     $data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
                     $data[$key]['delai_execution'] = $value->delai_execution;
+                    $data[$key]['paiement_recu'] = $value->paiement_recu;
 
                     $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['prestataire'] = $prestataire;
@@ -132,7 +135,8 @@ class Contrat_prestataire extends REST_Controller {
                     'date_reel_deb_trav' => $this->post('date_reel_deb_trav'),
                     'delai_execution' => $this->post('delai_execution'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'id_prestataire' => $this->post('id_prestataire')
+                    'id_prestataire' => $this->post('id_prestataire'),
+                    'paiement_recu' => $this->post('paiement_recu')
                 );
                 if (!$data) {
                     $this->response([
@@ -168,7 +172,8 @@ class Contrat_prestataire extends REST_Controller {
                     'date_reel_deb_trav' => $this->post('date_reel_deb_trav'),
                     'delai_execution' => $this->post('delai_execution'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'id_prestataire' => $this->post('id_prestataire')
+                    'id_prestataire' => $this->post('id_prestataire'),
+                    'paiement_recu' => $this->post('paiement_recu')
                 );
                 if (!$data || !$id) {
                     $this->response([
