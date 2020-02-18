@@ -15,7 +15,7 @@ class Cout_divers_construction extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_convention_detail = $this->get('id_convention_detail');
+        $id_convention_entete = $this->get('id_convention_entete');
             
         if ($id)
         {
@@ -31,9 +31,9 @@ class Cout_divers_construction extends REST_Controller {
         } 
         
 
-        if ($id_convention_detail) 
+        if ($id_convention_entete) 
         {
-            $menu = $this->cout_divers_constructionManager->findAll_by_convention_detail($id_convention_detail);
+            $menu = $this->cout_divers_constructionManager->findAll_by_convention_detail($id_convention_entete);
             if ($menu) 
             {
             
@@ -66,8 +66,9 @@ class Cout_divers_construction extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description')
+                    'id_type_cout_divers' => $this->post('id_type_cout_divers'),
+                    'cout' => $this->post('cout'),
+                    'id_convention_entete' => $this->post('id_convention_entete')
                 );
                 if (!$data) {
                     $this->response([
@@ -92,15 +93,16 @@ class Cout_divers_construction extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description')
+                    'id_type_cout_divers' => $this->post('id_type_cout_divers'),
+                    'cout' => $this->post('cout'),
+                    'id_convention_entete' => $this->post('id_convention_entete')
                 );
                 if (!$data || !$id) {
                     $this->response([
                         'status' => FALSE,
                         'response' => 0,
                         'message' => 'No request found'
-                    ], REST_Controller::HTTP_BAD_REQUEST);
+                    ], REST_Controller::HTTP_OK);
                 }
                 $update = $this->cout_divers_constructionManager->update($id, $data);
                 if(!is_null($update)) {
