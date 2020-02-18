@@ -26,8 +26,8 @@ class Cout_divers_construction_model extends CI_Model {
     public function _set($cout_divers_construction) {
         return array(
             'id_type_cout_divers'       =>      $cout_divers_construction['id_type_cout_divers'],
-            'id_convention_detail'      =>      $cout_divers_construction['id_convention_detail'],
-            'cout'               =>      $cout_divers_construction['cout']                       
+            'id_convention_entete'      =>      $cout_divers_construction['id_convention_entete'],
+            'cout'                      =>      $cout_divers_construction['cout']                       
         );
     }
     public function delete($id) {
