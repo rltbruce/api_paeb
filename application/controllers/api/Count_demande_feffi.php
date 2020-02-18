@@ -5,27 +5,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Count_demande_prestataire extends REST_Controller {
+class Count_demande_feffi extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('demande_payement_prestataire_model', 'Demande_payement_prestataireManager');
+        $this->load->model('demande_realimentation_feffi_model', 'Demande_realimentation_feffiManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $invalide = $this->get('invalide');
         if ($invalide==1)
         {
-           $demande_payement_prestataire = $this->Demande_payement_prestataireManager->countAllByInvalide(0);          
-            $data = $demande_payement_prestataire;
+           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByInvalide(0);          
+            $data = $demande_realimentation_feffi;
         }
         if ($invalide==2)
         {
-           $demande_payement_prestataire = $this->Demande_payement_prestataireManager->countAllByInvalide(1);          
-            $data = $demande_payement_prestataire;
+           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByInvalide(1);          
+            $data = $demande_realimentation_feffi;
+        }
+        if ($invalide==3)
+        {
+           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByInvalide(2);          
+            $data = $demande_realimentation_feffi;
         }
     
         

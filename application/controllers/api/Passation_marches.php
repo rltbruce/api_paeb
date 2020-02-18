@@ -19,8 +19,39 @@ class Passation_marches extends REST_Controller {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
         $menu = $this->get('menu');
+        $id_prestataire = $this->get('id_prestataire');
+         if ($menu=='getpassationByprestataire')
+         {
+            $menu = $this->Passation_marchesManager->findAllByPrestataire($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
-         if ($menu=='getpassationByconvention')
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_lancement'] = $value->date_lancement;
+                    $data[$key]['date_remise']   = $value->date_remise;
+                    $data[$key]['nbr_offre_recu']    = $value->nbr_offre_recu;
+                    $data[$key]['montant_moin_chere']   = $value->montant_moin_chere;
+                    $data[$key]['date_rapport_evaluation'] = $value->date_rapport_evaluation;
+                    $data[$key]['date_demande_ano_dpfi'] = $value->date_demande_ano_dpfi;
+                    $data[$key]['date_ano_dpfi'] = $value->date_ano_dpfi;
+                    $data[$key]['notification_intention']   = $value->notification_intention;
+                    $data[$key]['date_notification_attribution']    = $value->date_notification_attribution;
+                    $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
+                    $data[$key]['date_os'] = $value->date_os;
+                    $data[$key]['observation'] = $value->observation;
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['prestataire'] = $prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getpassationByconvention')
          {
             $menu = $this->Passation_marchesManager->findAllByConvention($id_convention_entete);
             if ($menu) 

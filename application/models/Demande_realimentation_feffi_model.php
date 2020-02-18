@@ -25,7 +25,6 @@ class Demande_realimentation_feffi_model extends CI_Model {
     }
     public function _set($demande_realimentation_feffi) {
         return array(
-            'id_compte_feffi' => $demande_realimentation_feffi['id_compte_feffi'],
             'id_tranche_deblocage_feffi' => $demande_realimentation_feffi['id_tranche_deblocage_feffi'],
             'prevu' => $demande_realimentation_feffi['prevu'],
             'anterieur' => $demande_realimentation_feffi['anterieur'],

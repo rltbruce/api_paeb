@@ -5,11 +5,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Tranche_deblocage_feffi extends REST_Controller {
+class Tranche_demande_mpe extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('tranche_deblocage_feffi_model', 'Tranche_deblocage_feffiManager');
+        $this->load->model('tranche_demande_mpe_model', 'Tranche_demande_mpeManager');
     }
 
     public function index_get() 
@@ -19,7 +19,7 @@ class Tranche_deblocage_feffi extends REST_Controller {
             
         if ($pourcentage) 
         {   $data = array();
-            $tmp = $this->Tranche_deblocage_feffiManager->findBydistrict($pourcentage);
+            $tmp = $this->Tranche_demande_mpeManager->findBydistrict($pourcentage);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -36,17 +36,17 @@ class Tranche_deblocage_feffi extends REST_Controller {
         elseif ($id)
         {
             $data = array();
-            $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($id);
-            $data['id'] = $tranche_deblocage_feffi->id;
-            $data['code'] = $tranche_deblocage_feffi->code;
-            $data['libelle'] = $tranche_deblocage_feffi->libelle;
-            $data['periode'] = $tranche_deblocage_feffi->periode;
-            $data['pourcentage'] = $tranche_deblocage_feffi->pourcentage;
-            $data['description'] = $tranche_deblocage_feffi->description;
+            $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($id);
+            $data['id'] = $tranche_demande_mpe->id;
+            $data['code'] = $tranche_demande_mpe->code;
+            $data['libelle'] = $tranche_demande_mpe->libelle;
+            $data['periode'] = $tranche_demande_mpe->periode;
+            $data['pourcentage'] = $tranche_demande_mpe->pourcentage;
+            $data['description'] = $tranche_demande_mpe->description;
         } 
         else 
         {
-            $menu = $this->Tranche_deblocage_feffiManager->findAll();
+            $menu = $this->Tranche_demande_mpeManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
@@ -98,7 +98,7 @@ class Tranche_deblocage_feffi extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Tranche_deblocage_feffiManager->add($data);
+                $dataId = $this->Tranche_demande_mpeManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -127,7 +127,7 @@ class Tranche_deblocage_feffi extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Tranche_deblocage_feffiManager->update($id, $data);
+                $update = $this->Tranche_demande_mpeManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -149,7 +149,7 @@ class Tranche_deblocage_feffi extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Tranche_deblocage_feffiManager->delete($id);         
+            $delete = $this->Tranche_demande_mpeManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

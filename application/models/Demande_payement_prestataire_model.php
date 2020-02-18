@@ -30,6 +30,10 @@ class Demande_payement_prestataire_model extends CI_Model {
             'description'   =>      $demande_payement_prestataire['description'],
             'ref_facture'   =>      $demande_payement_prestataire['ref_facture'],
             'montant'   =>      $demande_payement_prestataire['montant'],
+            'id_tranche_demande_mpe' => $demande_payement_prestataire['id_tranche_demande_mpe'],
+            'anterieur' => $demande_payement_prestataire['anterieur'],
+            'cumul' => $demande_payement_prestataire['cumul'],
+            'reste' => $demande_payement_prestataire['reste'],
             'date'          =>      $demande_payement_prestataire['date'],
             'id_contrat_prestataire'    =>  $demande_payement_prestataire['id_contrat_prestataire'],
             'validation'    =>  $demande_payement_prestataire['validation']                       

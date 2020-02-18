@@ -11,6 +11,7 @@ class Demande_payement_prestataire extends REST_Controller {
         parent::__construct();
         $this->load->model('demande_payement_prestataire_model', 'Demande_payement_prestataireManager');
         $this->load->model('contrat_prestataire_model', 'Contrat_prestataireManager');
+        $this->load->model('tranche_demande_mpe_model', 'Tranche_demande_mpeManager');
     }
 
     public function index_get() 
@@ -27,11 +28,16 @@ class Demande_payement_prestataire extends REST_Controller {
                 {
                     $contrat_prestataire= array();
                     $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['ref_facture'] = $value->ref_facture;
                     $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                    
@@ -49,11 +55,16 @@ class Demande_payement_prestataire extends REST_Controller {
                 {
                     $contrat_prestataire= array();
                     $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['ref_facture'] = $value->ref_facture;
                     $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                     $data[$key]['date_approbation'] = $value->date_approbation; 
@@ -72,11 +83,16 @@ class Demande_payement_prestataire extends REST_Controller {
                 {
                     $contrat_prestataire= array();
                     $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['ref_facture'] = $value->ref_facture;
                     $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
 
@@ -90,11 +106,16 @@ class Demande_payement_prestataire extends REST_Controller {
             $data = array();
             $demande_payement_prestataire = $this->Demande_payement_prestataireManager->findById($id);
             $contrat_prestataire = $this->Contrat_prestataireManager->findById($demande_payement_prestataire->id_contrat_prestataire);
+            $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($demande_payement_prestataire->id_tranche_demande_mpe);
             $data['id'] = $demande_payement_prestataire->id;
             $data['objet'] = $demande_payement_prestataire->objet;
             $data['description'] = $demande_payement_prestataire->description;
             $data['ref_facture'] = $demande_payement_prestataire->ref_facture;
             $data['montant'] = $demande_payement_prestataire->montant;
+            $data['tranche_demande_mpe'] = $tranche_demande_mpe;
+            $data['cumul'] = $demande_payement_prestataire->cumul;
+            $data['anterieur'] = $demande_payement_prestataire->anterieur;
+            $data['reste'] = $demande_payement_prestataire->reste;
             $data['date'] = $demande_payement_prestataire->date;
             $data['contrat_prestataire'] = $contrat_prestataire;
         } 
@@ -107,11 +128,16 @@ class Demande_payement_prestataire extends REST_Controller {
                 {
                     $contrat_prestataire= array();
                     $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['ref_facture'] = $value->ref_facture;
                     $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
 
@@ -148,6 +174,10 @@ class Demande_payement_prestataire extends REST_Controller {
                     'ref_facture' => $this->post('ref_facture'),
                     'date' => $this->post('date'),
                     'montant' => $this->post('montant'),
+                    'id_tranche_demande_mpe' => $this->post('id_tranche_demande_mpe'),
+                    'anterieur' => $this->post('anterieur'),
+                    'cumul' => $this->post('cumul'),
+                    'reste' => $this->post('reste'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
                     'validation' => $this->post('validation')
                 );
@@ -178,6 +208,10 @@ class Demande_payement_prestataire extends REST_Controller {
                     'description' => $this->post('description'),
                     'ref_facture' => $this->post('ref_facture'),
                     'montant' => $this->post('montant'),
+                    'id_tranche_demande_mpe' => $this->post('id_tranche_demande_mpe'),
+                    'anterieur' => $this->post('anterieur'),
+                    'cumul' => $this->post('cumul'),
+                    'reste' => $this->post('reste'),
                     'date' => $this->post('date'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
                     'validation' => $this->post('validation')
