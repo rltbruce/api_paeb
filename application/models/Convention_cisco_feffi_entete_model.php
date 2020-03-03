@@ -102,7 +102,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
     public function findAllValide() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("validation",1)
+                        ->where("validation",2)
                         ->order_by('ref_convention')
                         ->get()
                         ->result();
@@ -116,7 +116,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
     public function findAllByufpdaaf($id_convention_ufpdaaf) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("validation",1)
+                        ->where("validation",2)
                         ->where("id_convention_ufpdaaf",$id_convention_ufpdaaf)
                         ->order_by('ref_convention')
                         ->get()
@@ -132,8 +132,23 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
     public function findAllValideByfeffi($id_feffi) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("validation",1)
+                        ->where("validation",2)
                         ->where("id_feffi",$id_feffi)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+        public function findAllInvalidedaaf() {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation",1)
                         ->order_by('ref_convention')
                         ->get()
                         ->result();

@@ -93,4 +93,25 @@ class Feffi_model extends CI_Model {
         }                 
     }
 
+    public function findBycisco($id_cisco)
+    {               
+        $result =  $this->db->select('feffi.identifiant as identifiant, feffi.denomination as denomination, feffi.adresse as adresse, feffi.observation as observation, feffi.id as id, feffi.id_ecole as id_ecole')
+                        ->from($this->table)
+                        ->join('ecole','ecole.id=feffi.id_ecole')
+                        ->join('fokontany','fokontany.id=ecole.id_fokontany')
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->join('district','district.id=commune.id_district')
+                        ->join('cisco','cisco.id_district=district.id')
+                        ->where('cisco.id',$id_cisco)
+                        ->order_by('feffi.denomination')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

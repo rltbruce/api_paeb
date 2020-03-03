@@ -76,4 +76,6 @@ class Attachement_mobilier_model extends CI_Model {
         }                 
     }
 
+
+
 }

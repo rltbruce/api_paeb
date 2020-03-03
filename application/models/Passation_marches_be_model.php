@@ -43,7 +43,7 @@ class Passation_marches_be_model extends CI_Model {
             'statut' => $passation_marches_be['statut'],
 
             'id_convention_entete' => $passation_marches_be['id_convention_entete'],
-            'id_be' => $passation_marches_be['id_be']                       
+            //'id_bureau_etude' => $passation_marches_be['id_bureau_etude']                       
         );
     }
     public function delete($id) {
@@ -80,6 +80,24 @@ class Passation_marches_be_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+        public function findAllByContrat_be($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('
+            passation_marches_be.id as id, passation_marches_be.id_convention_entete as id_convention_entete, passation_marches_be.date_lancement as date_lancement, passation_marches_be.date_remise as date_remise, passation_marches_be.montant_moin_chere as montant_moin_chere, passation_marches_be.date_rapport_evaluation as date_rapport_evaluation, passation_marches_be.date_demande_ano_dpfi as date_demande_ano_dpfi, passation_marches_be.date_ano_dpfi as date_ano_dpfi, passation_marches_be.notification_intention as notification_intention, passation_marches_be.date_notification_attribution as date_notification_attribution, passation_marches_be.date_os as date_os,passation_marches_be.observation as observation')
+                        ->from($this->table)
+                        ->join('convention_ufp_daaf_entete','convention_ufp_daaf_entete.id=passation_marches_be.id_convention_entete')
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id_convention_entete=convention_ufp_daaf_entete.id')
+                        ->where("contrat_bureau_etude.id", $id_contrat_bureau_etude)
                         ->order_by('id')
                         ->get()
                         ->result();

@@ -16,40 +16,38 @@ class Transfert_ufp extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_demande_deblo_daaf = $this->get('id_demande_deblo_daaf');
+        $id_demande_deblocage_daaf = $this->get('id_demande_deblocage_daaf');
             
-        if ($id_demande_deblo_daaf)
-        {
-            $tmp = $this->Transfert_ufpManager->findAllBydemande_deblocage_daaf($id_demande_deblo_daaf);
+        if ($id_demande_deblocage_daaf) 
+        {   $data = array();
+            $tmp = $this->Transfert_ufpManager->findBydemande_deblocage_daaf($id_demande_deblocage_daaf);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $demande_deblocage_daaf= array();
-                    $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($value->id_demande_deblo_daaf);
+                    $demande_deblocage_daaf = array();
+                    $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($value->id_demande_deblocage_daaf);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['code'] = $value->code;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['montant'] = $value->montant;
-                    $data[$key]['num_facture'] = $value->num_facture;
+                    $data[$key]['montant_transfert'] = $value->montant_transfert;
+                    $data[$key]['frais_bancaire'] = $value->frais_bancaire;
+                    $data[$key]['montant_total'] = $value->montant_total;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['observation'] = $value->observation;
                     $data[$key]['demande_deblocage_daaf'] = $demande_deblocage_daaf;
                 }
-            } 
-                else
-                    $data = array();
+            }
         }
         elseif ($id)
         {
             $data = array();
             $transfert_ufp = $this->Transfert_ufpManager->findById($id);
-            $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($transfert_ufp->id_demande_deblo_daaf);
+            $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($transfert_ufp->id_demande_deblocage_daaf);
             $data['id'] = $transfert_ufp->id;
-            $data['code'] = $transfert_ufp->code;
-            $data['description'] = $transfert_ufp->description;
-            $data['montant'] = $transfert_ufp->montant;
-            $data['num_facture'] = $transfert_ufp->num_facture;
+            $data['montant_transfert'] = $transfert_ufp->montant_transfert;
+            $data['frais_bancaire'] = $transfert_ufp->frais_bancaire;
+            $data['montant_total'] = $transfert_ufp->montant_total;
             $data['date'] = $transfert_ufp->date;
+            $data['observation'] = $transfert_ufp->observation;
             $data['demande_deblocage_daaf'] = $demande_deblocage_daaf;
         } 
         else 
@@ -59,14 +57,13 @@ class Transfert_ufp extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $demande_deblocage_daaf= array();
-                    $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($value->id_demande_deblo_daaf);
+                    $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($value->id_demande_deblocage_daaf);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['code'] = $value->code;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['montant'] = $value->montant;
-                    $data[$key]['num_facture'] = $value->num_facture;
+                    $data[$key]['montant_transfert'] = $value->montant_transfert;
+                    $data[$key]['frais_bancaire'] = $value->frais_bancaire;
+                    $data[$key]['montant_total'] = $value->montant_total;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['observation'] = $value->observation;
                     $data[$key]['demande_deblocage_daaf'] = $demande_deblocage_daaf;
                 }
             } 
@@ -96,12 +93,12 @@ class Transfert_ufp extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'code' => $this->post('code'),
-                    'description' => $this->post('description'),
-                    'montant' => $this->post('montant'),
-                    'num_facture' => $this->post('num_facture'),
+                    'montant_transfert' => $this->post('montant_transfert'),
+                    'frais_bancaire' => $this->post('frais_bancaire'),
+                    'montant_total' => $this->post('montant_total'),
                     'date' => $this->post('date'),
-                    'id_demande_deblo_daaf' => $this->post('id_demande_deblo_daaf')
+                    'observation' => $this->post('observation'),
+                    'id_demande_deblocage_daaf' => $this->post('id_demande_deblocage_daaf')
                 );
                 if (!$data) {
                     $this->response([
@@ -126,12 +123,12 @@ class Transfert_ufp extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'code' => $this->post('code'),
-                    'description' => $this->post('description'),
-                    'montant' => $this->post('montant'),
-                    'num_facture' => $this->post('num_facture'),
+                    'montant_transfert' => $this->post('montant_transfert'),
+                    'frais_bancaire' => $this->post('frais_bancaire'),
+                    'montant_total' => $this->post('montant_total'),
                     'date' => $this->post('date'),
-                    'id_demande_deblo_daaf' => $this->post('id_demande_deblo_daaf')
+                    'observation' => $this->post('observation'),
+                    'id_demande_deblocage_daaf' => $this->post('id_demande_deblocage_daaf')
                 );
                 if (!$data || !$id) {
                     $this->response([

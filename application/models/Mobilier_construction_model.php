@@ -84,5 +84,21 @@ class Mobilier_construction_model extends CI_Model {
             return null;
         }  
     } */
-
+        public function findAllByContrat_bureau_etude($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('mobilier_construction.id as id, mobilier_construction.id_batiment_construction as id_batiment_construction, mobilier_construction.nbr_mobilier as nbr_mobilier,mobilier_construction.cout_unitaire,mobilier_construction.id_type_mobilier as id_type_mobilier')
+                        ->from($this->table)
+                        ->join("batiment_construction",'mobilier_construction.id_batiment_construction=batiment_construction.id')
+                        ->join("convention_cisco_feffi_entete",'convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
+                        ->join("contrat_bureau_etude",'contrat_bureau_etude.id_convention_entete=convention_cisco_feffi_entete.id')
+                        ->where("contrat_bureau_etude.id",$id_contrat_bureau_etude)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 }

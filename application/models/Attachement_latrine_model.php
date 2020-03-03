@@ -76,4 +76,5 @@ class Attachement_latrine_model extends CI_Model {
         }                 
     }
 
+
 }

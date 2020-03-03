@@ -76,19 +76,13 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                 {
                     $data = array();
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->$id_convention_entete);
-                    //$zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
-                    //$acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
                     $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_entete->id_compte_feffi);
-                    //$composant = $this->ComposantManager->findByAcceszone_zonesubvention($id_acces_zone, $id_zone_subvention);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['intitule'] = $value->intitule;
-                    $data[$key]['montant_total'] = $value->montant_total;
-                    $data[$key]['avancement'] = $value->avancement;                    
-                    //$data[$key]['zone_subvention'] = $zone_subvention;
-                    //$data[$key]['acces_zone'] = $acces_zone;
+                    //$data[$key]['montant_total'] = $value->montant_total;
+                   // $data[$key]['avancement'] = $value->avancement;
                     $data[$key]['convention_entete'] = $value->convention_entete;
-                    //$data[$key]['composant'] = $composant;
                     $data[$key]['date_signature'] = $value->date_signature;
                     $data[$key]['delai'] = $value->delai;
                     $data[$key]['observation'] = $value->observation;

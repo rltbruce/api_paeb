@@ -40,7 +40,8 @@ class Importer_fichier extends CI_Controller {
 			$name=$_FILES['file']['name'];
 			//$name1=str_replace($search,$replace,$name);
 			$file_ext = pathinfo($name,PATHINFO_EXTENSION);
-			$rapport['nomFile']=$name_fichier.'.'.$file_ext;
+			//$rapport['nomFile']=$name_fichier.'.'.$file_ext;
+			$rapport['nomFile']=$name_fichier;
 			$config['file_name']=$name_fichier;
 			//$rapport['repertoire']=$name_image;
 
@@ -65,6 +66,11 @@ class Importer_fichier extends CI_Controller {
 		} 
 		
 	}
-	  
-	
+
+	public function remove_upload_file()
+	{	
+		$chemin= $_POST['chemin'];
+		$directoryName = dirname(__FILE__)."/../../../../../../assets/".$chemin;
+	  	$delete = unlink($directoryName);
+	}
 } ?>	

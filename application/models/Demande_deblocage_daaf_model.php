@@ -25,10 +25,16 @@ class Demande_deblocage_daaf_model extends CI_Model {
     }
     public function _set($demande_deblocage_daaf) {
         return array(
-            'code'          =>      $demande_deblocage_daaf['code'],
-            'description'   =>      $demande_deblocage_daaf['description'],
-            'date'          =>      $demande_deblocage_daaf['date'],
-            'id_convention_ufpdaaf'    =>  $demande_deblocage_daaf['id_convention_ufpdaaf']                       
+            'objet'        =>$demande_deblocage_daaf['objet'],
+            'ref_demande'  =>$demande_deblocage_daaf['ref_demande'],
+            'prevu'   =>$demande_deblocage_daaf['prevu'],
+            'id_tranche_deblocage_daaf' =>$demande_deblocage_daaf['id_tranche_deblocage_daaf'],
+            'anterieur' =>$demande_deblocage_daaf['anterieur'],
+            'cumul' =>$demande_deblocage_daaf['cumul'],
+            'reste' =>$demande_deblocage_daaf['reste'],
+            'date'  =>$demande_deblocage_daaf['date'],
+            'id_convention_ufp_daaf_entete'    =>  $demande_deblocage_daaf['id_convention_ufp_daaf_entete'],
+            'validation'    =>  $demande_deblocage_daaf['validation']                         
         );
     }
     public function delete($id) {
@@ -64,7 +70,7 @@ class Demande_deblocage_daaf_model extends CI_Model {
     public function findAllByconvention_ufpdaaf($id_convention_ufpdaaf) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_convention_ufpdaaf", $id_convention_ufpdaaf)
+                        ->where("id_convention_ufp_daaf_entete", $id_convention_ufpdaaf)
                         ->order_by('objet')
                         ->get()
                         ->result();
@@ -74,6 +80,38 @@ class Demande_deblocage_daaf_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
+    }
+        public function getdemande_deblocage_daaf_invalide($validation) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation",$validation )
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function countAllByInvalide($invalide)
+    {
+        $result = $this->db->select('COUNT(*) as nombre')
+                        ->from($this->table)
+                        ->where("validation", $invalide)
+                        ->order_by('id', 'desc')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                  
+    }
+
+ 
 
 }

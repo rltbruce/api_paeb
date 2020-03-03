@@ -76,4 +76,6 @@ class Attachement_batiment_model extends CI_Model {
         }                 
     }
 
+
+
 }

@@ -25,12 +25,12 @@ class Transfert_ufp_model extends CI_Model {
     }
     public function _set($transfert_ufp) {
         return array(
-            'code'          =>      $transfert_ufp['code'],
-            'description'   =>      $transfert_ufp['description'],
-            'montant'       =>      $transfert_ufp['montant'],
-            'num_facture'   =>      $transfert_ufp['num_facture'],
-            'date'          =>      $transfert_ufp['date'],
-            'id_demande_deblo_daaf'    =>  $transfert_ufp['id_demande_deblo_daaf']                       
+            'montant_transfert'       =>      $transfert_ufp['montant_transfert'],
+            'frais_bancaire'       =>      $transfert_ufp['frais_bancaire'],
+            'montant_total'   =>      $transfert_ufp['montant_total'],
+            'date'       =>      $transfert_ufp['date'],
+            'observation'       =>      $transfert_ufp['observation'],
+            'id_demande_deblocage_daaf'    => $transfert_ufp['id_demande_deblocage_daaf']                       
         );
     }
     public function delete($id) {
@@ -45,7 +45,7 @@ class Transfert_ufp_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('description')
+                        ->order_by('id')
                         ->get()
                         ->result();
         if($result)
@@ -63,11 +63,11 @@ class Transfert_ufp_model extends CI_Model {
         }
     }
 
-    public function findAllBydemande_deblocage_daaf($id_demande_deblo_daaf) {               
+    public function findBydemande_deblocage_daaf($id_demande_deblocage_daaf) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_demande_deblo_daaf", $id_demande_deblo_daaf)
-                        ->order_by('description')
+                        ->where("id_demande_deblocage_daaf", $id_demande_deblocage_daaf)
+                        ->order_by('id')
                         ->get()
                         ->result();
         if($result)
@@ -76,6 +76,5 @@ class Transfert_ufp_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
-
+    }
 }

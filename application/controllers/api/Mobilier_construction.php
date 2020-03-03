@@ -21,7 +21,29 @@ class Mobilier_construction extends REST_Controller {
         $id = $this->get('id');
         $id_batiment_construction = $this->get('id_batiment_construction');
 
-        if ($id_batiment_construction)
+        $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
+
+        $menu = $this->get('menu');
+
+        if ($menu=='getmobilierByContrat_bureau_etude')
+        {
+            $mobilier_construction = $this->Mobilier_constructionManager->findAllByContrat_bureau_etude($id_contrat_bureau_etude );
+            if ($mobilier_construction) 
+            {
+                foreach ($mobilier_construction as $key => $value) 
+                {   
+                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['type_mobilier'] = $type_mobilier;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_mobilier'] = $value->nbr_mobilier;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($id_batiment_construction)
         {
             $mobilier_construction = $this->Mobilier_constructionManager->findAllByBatiment($id_batiment_construction );
             if ($mobilier_construction) 

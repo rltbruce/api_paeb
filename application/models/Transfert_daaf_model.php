@@ -25,12 +25,12 @@ class Transfert_daaf_model extends CI_Model {
     }
     public function _set($transfert_daaf) {
         return array(
-            'description'   =>      $transfert_daaf['description'],
-            'montant'       =>      $transfert_daaf['montant'],
-            'num_bordereau'   =>      $transfert_daaf['num_bordereau'],
-            'date'          =>      $transfert_daaf['date'],
-            'id_demande_rea_feffi'    =>  $transfert_daaf['id_demande_rea_feffi'],
-            'id_compte_feffi'    =>  $transfert_daaf['id_compte_feffi']                       
+            'montant_transfert'       =>      $transfert_daaf['montant_transfert'],
+            'frais_bancaire'       =>      $transfert_daaf['frais_bancaire'],
+            'montant_total'   =>      $transfert_daaf['montant_total'],
+            'date'       =>      $transfert_daaf['date'],
+            'observation'       =>      $transfert_daaf['observation'],
+            'id_demande_rea_feffi'    =>  $transfert_daaf['id_demande_rea_feffi']                       
         );
     }
     public function delete($id) {
@@ -45,7 +45,7 @@ class Transfert_daaf_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('description')
+                        ->order_by('date')
                         ->get()
                         ->result();
         if($result)
@@ -67,7 +67,7 @@ class Transfert_daaf_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_demande_rea_feffi", $id_demande_rea_feffi)
-                        ->order_by('description')
+                        ->order_by('date')
                         ->get()
                         ->result();
         if($result)

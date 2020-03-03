@@ -75,6 +75,24 @@ class Latrine_construction_model extends CI_Model {
         }                 
     }
 
+        public function findAllByContrat_bureau_etude($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('latrine_construction.id as id, latrine_construction.id_batiment_construction as id_batiment_construction, latrine_construction.nbr_latrine as nbr_latrine,latrine_construction.cout_unitaire,latrine_construction.id_type_latrine as id_type_latrine')
+                        ->from($this->table)
+                        ->join("batiment_construction",'latrine_construction.id_batiment_construction=batiment_construction.id')
+                        ->join("convention_cisco_feffi_entete",'convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
+                        ->join("contrat_bureau_etude",'contrat_bureau_etude.id_convention_entete=convention_cisco_feffi_entete.id')
+                        ->where("contrat_bureau_etude.id",$id_contrat_bureau_etude)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
   /*  public function supressionBydetail($id) {
         $this->db->where('id_convention_detail', (int) $id)->delete($this->table);
         if($this->db->affected_rows() === 1)

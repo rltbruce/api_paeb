@@ -78,5 +78,24 @@ class Avancement_latrine_model extends CI_Model {
             return null;
         }                 
     }
+  /*      public function getavancementByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('max(attachement_latrine.ponderation_latrine) as avancement')
+                        ->from('attachement_latrine')
+                        ->join('avancement_latrine','avancement_latrine.id_attachement_latrine=attachement_latrine.id')
+                        ->join('latrine_construction','latrine_construction.id=avancement_latrine.id_latrine_construction')
+                        ->join('batiment_construction','batiment_construction.id=latrine_construction.id_batiment_construction')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
+                        ->where('convention_cisco_feffi_entete.id',$id_convention_entete)
+                        
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }*/
 
 }

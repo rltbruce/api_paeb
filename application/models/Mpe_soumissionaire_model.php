@@ -71,6 +71,20 @@ class Mpe_soumissionaire_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
+    }
+    public function countAllBympe_soumissionnaire($id_passation_marches) {               
+        $result =  $this->db->select('count(id) as nbr')
+                        ->from($this->table)
+                        ->where("id_passation_marches",$id_passation_marches)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 }

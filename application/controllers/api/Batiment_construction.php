@@ -10,29 +10,85 @@ class Batiment_construction extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
-        $this->load->model('convention_cisco_feffi_detail_model', 'Convention_cisco_feffi_detailManager');
+        $this->load->model('convention_cisco_feffi_entete_model', 'Convention_cisco_feffi_enteteManager');
         $this->load->model('type_batiment_model', 'Type_batimentManager');
+        $this->load->model('contrat_prestataire_model', 'Contrat_prestataireManager');
+        $this->load->model('contrat_be_model', 'Contrat_beManager');
         //$this->load->model('attachement_batiment_model', 'Attachement_batimentManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_convention_detail = $this->get('id_convention_detail');
-
-        if ($id_convention_detail)
+        $id_convention_entete = $this->get('id_convention_entete');
+        $menu = $this->get('menu');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
+        if ($menu=='getnbrByContrat_bureau_etude')
         {
-            $batiment_construction = $this->Batiment_constructionManager->findAllByDetail($id_convention_detail );
+            $batiment_construction = $this->Batiment_constructionManager->getnombreconstructionBycontrat($id_contrat_bureau_etude );
+            if ($batiment_construction) 
+            {
+                $data = $batiment_construction;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getbatimentByContrat_bureau_etude')
+        {
+            $batiment_construction = $this->Batiment_constructionManager->findAllBycontratbureau_etude($id_contrat_bureau_etude );
+            if ($batiment_construction) 
+            {
+                foreach ($batiment_construction as $key => $value) 
+                {                    
+                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
+                    $contrat_be = $this->Contrat_beManager->findById($id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['type_batiment'] = $type_batiment;                    
+                    //$data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_batiment'] = $value->nbr_batiment;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getbatimentByContrat_prestataire')
+        {
+            $batiment_construction = $this->Batiment_constructionManager->findAllBycontratprestataire($id_contrat_prestataire );
             if ($batiment_construction) 
             {
                 foreach ($batiment_construction as $key => $value) 
                 {                     
-                    $convention_detail = $this->Convention_cisco_feffi_detailManager->findById($value->id_convention_detail);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($id_contrat_prestataire);
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['type_batiment'] = $type_batiment;                    
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_batiment'] = $value->nbr_batiment;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($id_convention_entete)
+        {
+            $batiment_construction = $this->Batiment_constructionManager->findAllByentete($id_convention_entete );
+            if ($batiment_construction) 
+            {
+                foreach ($batiment_construction as $key => $value) 
+                {                     
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
                     
                     $data[$key]['id'] = $value->id;
                     $data[$key]['type_batiment'] = $type_batiment;                    
-                    $data[$key]['convention_detail'] = $convention_detail;
+                    $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['cout_unitaire'] = $value->cout_unitaire;
                     $data[$key]['nbr_batiment'] = $value->nbr_batiment;
                 }
@@ -44,11 +100,11 @@ class Batiment_construction extends REST_Controller {
         {
             $data = array();
             $batiment_construction = $this->Batiment_constructionManager->findById($id);
-            $convention_detail = $this->Convention_cisco_feffi_detailManager->findById($batiment_construction->id_convention_detail);
+            $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($batiment_construction->id_convention_entete);
             $type_batiment = $this->Type_batimentManager->findById($batiment_construction->id_type_batiment);
 
             $data['id'] = $batiment_construction->id;
-            $data['convention_detail'] = $convention_detail;
+            $data['convention_entete'] = $convention_entete;
             $data['type_batiment'] = $type_batiment;
             $data['cout_unitaire'] = $batiment_construction->cout_unitaire;
             $data['nbr_batiment'] = $batiment_construction->nbr_batiment;
@@ -66,7 +122,7 @@ class Batiment_construction extends REST_Controller {
                     $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
 
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['convention_detail'] = $convention_detail;
+                    $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['type_batiment'] = $type_batiment;
                     $data[$key]['cout_unitaire'] = $value->cout_unitaire;
                     $data[$key]['nbr_batiment'] = $value->nbr_batiment;
@@ -97,12 +153,12 @@ class Batiment_construction extends REST_Controller {
         $id = $this->post('id') ;
         $supprimer = $this->post('supprimer') ;
         $menu = $this->post('menu') ;
-        //$id_convention_detail = $this->post('id_convention_detail');
+        //$id_convention_entete = $this->post('id_convention_entete');
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
                     'id_type_batiment' => $this->post('id_type_batiment'),
-                    'id_convention_detail' => $this->post('id_convention_detail'),
+                    'id_convention_entete' => $this->post('id_convention_entete'),
                     'cout_unitaire'=> $this->post('cout_unitaire'),
                     'nbr_batiment'=> $this->post('nbr_batiment')
                 );
@@ -130,7 +186,7 @@ class Batiment_construction extends REST_Controller {
             } else {
                 $data = array(
                     'id_type_batiment' => $this->post('id_type_batiment'),
-                    'id_convention_detail' => $this->post('id_convention_detail'),
+                    'id_convention_entete' => $this->post('id_convention_entete'),
                     'cout_unitaire'=> $this->post('cout_unitaire'),
                     'nbr_batiment'=> $this->post('nbr_batiment')
                 );

@@ -18,8 +18,34 @@ class Feffi extends REST_Controller {
     {
         $id = $this->get('id');
         $id_ecole = $this->get('id_ecole');
+        $id_cisco = $this->get('id_cisco');
+        $menus = $this->get('menus');
             
-        if ($id_ecole) 
+        if ($menus=='getfeffiBycisco') 
+        {   $data = array();
+            $tmp = $this->FeffiManager->findBycisco($id_cisco);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$ecole = array();
+                    $cisco = array();
+                   $ecole = $this->EcoleManager->findById($value->id_ecole);
+                   // $nbr_membre= $this->Membre_feffiManager->count_membrebyId($value->id);
+                   // $nbr_feminin= $this->Membre_feffiManager->count_femininbyId($value->id);
+                   // $data[$key]['nbr_membre'] = $nbr_membre->nbr_membre;
+                    //$data[$key]['nbr_feminin'] = $nbr_feminin->nbr_feminin;
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['identifiant'] = $value->identifiant;
+                    $data[$key]['denomination'] = $value->denomination;
+                    //$data[$key]['eco'] = $value->id_ecole;
+                    $data[$key]['adresse'] = $value->adresse;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['ecole'] = $ecole;
+                }
+            }
+        }
+        elseif ($id_ecole) 
         {   $data = array();
             $tmp = $this->FeffiManager->findByecole($id_ecole);
             if ($tmp) 

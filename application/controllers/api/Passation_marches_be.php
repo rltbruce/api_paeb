@@ -18,16 +18,17 @@ class Passation_marches_be extends REST_Controller {
     {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
+        $id_bureau_etude = $this->get('id_bureau_etude');
         $menu = $this->get('menu');
 
-         if ($menu=='getpassationByconvention')
+         if ($menu=='getpassationBybe')
          {
-            $menu = $this->Passation_marches_beManager->findAllByConvention($id_convention_entete);
+            $menu = $this->Passation_marches_beManager->findAllBybe($id_bureau_etude);
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $bureau_etude = $this->Bureau_etudeManager->findById($value->id_be);
+                    //$bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
                     $data[$key]['id'] = $value->id;
@@ -48,7 +49,7 @@ class Passation_marches_be extends REST_Controller {
                     $data[$key]['statut'] = $value->statut;
 
                     $data[$key]['convention_entete'] = $convention_entete;
-                    $data[$key]['be'] = $bureau_etude;
+                    $data[$key]['bato'] = 'ato';
                         }
             } 
                 else
@@ -59,7 +60,7 @@ class Passation_marches_be extends REST_Controller {
             $data = array();
             $passation_marches_be = $this->Passation_marches_beManager->findById($id);
 
-            $bureau_etude = $this->Bureau_etudeManager->findById($passation_marches_be->id_be);
+            //$bureau_etude = $this->Bureau_etudeManager->findById($passation_marches_be->id_bureau_etude);
             $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($passation_marches_be->id_convention_entete);
 
             $data['id'] = $passation_marches_be->id;
@@ -80,7 +81,7 @@ class Passation_marches_be extends REST_Controller {
             $data['statut'] = $passation_marches_be->statut;
 
             $data['convention_entete'] = $convention_entete;
-            $data['be'] = $bureau_etude;
+            //$data['be'] = $bureau_etude;
         } 
         else 
         {
@@ -89,7 +90,7 @@ class Passation_marches_be extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $bureau_etude = $this->Bureau_etudeManager->findById($value->id_be);
+                    //$bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
                     $data[$key]['id'] = $value->id;
@@ -110,7 +111,7 @@ class Passation_marches_be extends REST_Controller {
                     $data[$key]['statut'] = $value->statut;
 
                     $data[$key]['convention_entete'] = $convention_entete;
-                    $data[$key]['be'] = $bureau_etude;
+                    //$data[$key]['be'] = $bureau_etude;
                         }
             } 
                 else
@@ -157,7 +158,7 @@ class Passation_marches_be extends REST_Controller {
                     'statut' => $this->post('statut'),
 
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'id_be' => $this->post('id_be'),
+                    //'id_bureau_etude' => $this->post('id_bureau_etude'),
                 );
                 if (!$data) {
                     $this->response([
@@ -200,7 +201,7 @@ class Passation_marches_be extends REST_Controller {
                     'statut' => $this->post('statut'),
 
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'id_be' => $this->post('id_be'),
+                    //'id_bureau_etude' => $this->post('id_bureau_etude'),
                 );
                 if (!$data || !$id) {
                     $this->response([

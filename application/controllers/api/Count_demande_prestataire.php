@@ -9,7 +9,7 @@ class Count_demande_prestataire extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('demande_payement_prestataire_model', 'Demande_payement_prestataireManager');
+        $this->load->model('demande_batiment_prestataire_model', 'Demande_batiment_prestataireManager');
     }
 
     public function index_get() 
@@ -19,13 +19,19 @@ class Count_demande_prestataire extends REST_Controller {
         $invalide = $this->get('invalide');
         if ($invalide==1)
         {
-           $demande_payement_prestataire = $this->Demande_payement_prestataireManager->countAllByInvalide(0);          
-            $data = $demande_payement_prestataire;
+           $demande_batiment_prestataire = $this->Demande_batiment_prestataireManager->countAllByInvalide(0);          
+            $data = $demande_batiment_prestataire;
         }
         if ($invalide==2)
         {
-           $demande_payement_prestataire = $this->Demande_payement_prestataireManager->countAllByInvalide(1);          
-            $data = $demande_payement_prestataire;
+           $demande_batiment_prestataire = $this->Demande_batiment_prestataireManager->countAllByInvalide(1);          
+            $data = $demande_batiment_prestataire;
+        }
+
+        if ($invalide==3)
+        {
+           $demande_batiment_prestataire = $this->Demande_batiment_prestataireManager->countAllByInvalide(2);          
+            $data = $demande_batiment_prestataire;
         }
     
         

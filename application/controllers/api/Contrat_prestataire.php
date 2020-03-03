@@ -18,9 +18,51 @@ class Contrat_prestataire extends REST_Controller {
     {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
-        $menu = $this->get('menu');
-
-         if ($menu=='getpassationByconvention')
+        $menus = $this->get('menus');
+        $id_demande_batiment_pre = $this->get('id_demande_batiment_pre');
+        $id_demande_latrine_pre = $this->get('id_demande_latrine_pre');
+        $id_demande_mobilier_pre = $this->get('id_demande_mobilier_pre');
+         
+         if ($menus=='getcontratconvenBydemande_mobilier')
+         {
+            $menu = $this->Contrat_prestataireManager->findcontratconvenBydemande_mobilier($id_demande_mobilier_pre);
+            if ($menu) 
+            {
+                $data=$menu;
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menus=='getcontratconvenBydemande_latrine')
+         {
+            $menu = $this->Contrat_prestataireManager->findcontratconvenBydemande_latrine($id_demande_latrine_pre);
+            if ($menu) 
+            {
+                $data=$menu;
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menus=='getcontratconvenBydemande_batiment')
+         {
+            $menu = $this->Contrat_prestataireManager->findcontratconvenBydemande_batiment($id_demande_batiment_pre);
+            if ($menu) 
+            {
+                $data=$menu;
+            } 
+                else
+                    $data = array();
+        }elseif ($menus=='getcontratconvenBydemande_latrine')
+         {
+            $menu = $this->Contrat_prestataireManager->findcontratconvenBydemande_latrine($id_demande_latrine_pre);
+            if ($menu) 
+            {
+                $data=$menu;
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menus=='getpassationByconvention')
          {
             $menu = $this->Contrat_prestataireManager->findAllByConvention($id_convention_entete);
             if ($menu) 

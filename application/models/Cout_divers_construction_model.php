@@ -92,4 +92,22 @@ class Cout_divers_construction_model extends CI_Model {
         }
     }
 
+    public function getmontantByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('sum(cout) as montant')
+                        ->from($this->table)
+                        //->join('mobilier_construction','mobilier_construction.id=avancement_mobilier.id_mobilier_construction')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=cout_divers_construction.id_convention_entete')
+                        ->where('convention_cisco_feffi_entete.id',$id_convention_entete)
+                       
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

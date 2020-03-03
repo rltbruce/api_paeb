@@ -78,5 +78,24 @@ class Avancement_mobilier_model extends CI_Model {
             return null;
         }                 
     }
+   /*     public function getavancementByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('max(attachement_mobilier.ponderation_mobilier) as avancement')
+                        ->from('attachement_mobilier')
+                        ->join('avancement_mobilier','avancement_mobilier.id_attachement_mobilier=attachement_mobilier.id')
+                        ->join('mobilier_construction','mobilier_construction.id=avancement_mobilier.id_mobilier_construction')
+                        ->join('batiment_construction','batiment_construction.id=mobilier_construction.id_batiment_construction')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
+                        ->where('convention_cisco_feffi_entete.id',$id_convention_entete)
+                        
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }*/
 
 }

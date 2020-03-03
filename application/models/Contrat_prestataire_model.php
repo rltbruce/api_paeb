@@ -85,4 +85,69 @@ class Contrat_prestataire_model extends CI_Model {
         }                 
     }
 
+    public function findcontratconvenBydemande_batiment($id_demande_batiment_pre) {               
+        $result =  $this->db->select('convention_cisco_feffi_entete.ref_convention as ref_convention,contrat_prestataire.num_contrat as num_contrat, prestataire.nom as nom_prestataire,feffi.denomination as denomination_feffi, cisco.code as code_cisco')
+                        ->from('demande_batiment_presta')
+                        ->join('batiment_construction','batiment_construction.id=demande_batiment_presta.id_batiment_construction')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
+                        ->join('feffi','feffi.id=convention_cisco_feffi_entete.id_feffi')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->join('contrat_prestataire','contrat_prestataire.id_convention_entete=contrat_prestataire.id_convention_entete')
+                        ->join('prestataire','prestataire.id=contrat_prestataire.id_prestataire')
+
+                        ->where("demande_batiment_presta.id", $id_demande_batiment_pre)                       
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+        public function findcontratconvenBydemande_latrine($id_demande_latrine_pre) {               
+        $result =  $this->db->select('convention_cisco_feffi_entete.ref_convention as ref_convention,contrat_prestataire.num_contrat as num_contrat, prestataire.nom as nom_prestataire,feffi.denomination as denomination_feffi, cisco.code as code_cisco')
+                        ->from('demande_latrine_presta')
+                        ->join('latrine_construction','latrine_construction.id=demande_latrine_presta.id_latrine_construction')
+                        ->join('batiment_construction','latrine_construction.id_batiment_construction=batiment_construction.id')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
+                        ->join('feffi','feffi.id=convention_cisco_feffi_entete.id_feffi')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->join('contrat_prestataire','contrat_prestataire.id_convention_entete=contrat_prestataire.id_convention_entete')
+                        ->join('prestataire','prestataire.id=contrat_prestataire.id_prestataire')
+
+                        ->where("demande_latrine_presta.id", $id_demande_latrine_pre)                       
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+            public function findcontratconvenBydemande_mobilier($id_demande_mobilier_pre) {               
+        $result =  $this->db->select('convention_cisco_feffi_entete.ref_convention as ref_convention,contrat_prestataire.num_contrat as num_contrat, prestataire.nom as nom_prestataire,feffi.denomination as denomination_feffi, cisco.code as code_cisco')
+                        ->from('demande_mobilier_presta')
+                        ->join('mobilier_construction','mobilier_construction.id=demande_mobilier_presta.id_mobilier_construction')
+                        ->join('batiment_construction','mobilier_construction.id_batiment_construction=batiment_construction.id')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
+                        ->join('feffi','feffi.id=convention_cisco_feffi_entete.id_feffi')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->join('contrat_prestataire','contrat_prestataire.id_convention_entete=contrat_prestataire.id_convention_entete')
+                        ->join('prestataire','prestataire.id=contrat_prestataire.id_prestataire')
+
+                        ->where("demande_mobilier_presta.id", $id_demande_mobilier_pre)                       
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

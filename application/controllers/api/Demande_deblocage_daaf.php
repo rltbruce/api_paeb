@@ -10,27 +10,67 @@ class Demande_deblocage_daaf extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('demande_deblocage_daaf_model', 'Demande_deblocage_daafManager');
-        $this->load->model('convention_daff_ufp_model', 'Convention_daff_ufpManager');
+        $this->load->model('convention_ufp_daaf_entete_model', 'Convention_ufp_daaf_enteteManager');
+        $this->load->model('convention_ufp_daaf_detail_model', 'Convention_ufp_daaf_detailManager');
+        $this->load->model('tranche_deblocage_daaf_model', 'Tranche_deblocage_daafManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_convention_ufpdaaf = $this->get('id_convention_ufpdaaf');
-        if ($id_convention_ufpdaaf)
+        $id_convention_ufp_daaf_entete = $this->get('id_convention_ufp_daaf_entete');
+        $menu = $this->get('menu');
+        $validation = $this->get('validation');
+
+        if ($menu == 'getdemande_deblocage_daaf_invalide')
         {
-            $tmp = $this->Demande_deblocage_daafManager->findAllByconvention_ufpdaaf($id_convention_ufpdaaf);
+            $tmp = $this->Demande_deblocage_daafManager->getdemande_deblocage_daaf_invalide($validation);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
                     $convention_ufpdaaf= array();
-                    $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($value->id_convention_ufpdaaf);
+                    $convention_ufp_daaf_entete = $this->Convention_ufp_daaf_enteteManager->findById($value->id_convention_ufp_daaf_entete);
+                    $convention_ufp_daaf_detail = $this->Convention_ufp_daaf_detailManager->findByIdligne($value->id_convention_ufp_daaf_entete);
+                    $tranche_deblocage_daaf = $this->Tranche_deblocage_daafManager->findById($value->id_tranche_deblocage_daaf);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['objet'] = $value->bjet;
-                    $data[$key]['id_tranche'] = $value->id_tranche;
-                    $data[$key]['id_compte_daaf'] = $value->id_compte_daaf;
-                    $data[$key]['convention_daff_ufp'] = $convention_daff_ufp;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['ref_demande'] = $value->ref_demande;
+                    $data[$key]['prevu'] = $value->prevu;
+                    $data[$key]['tranche'] = $tranche_deblocage_daaf;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['convention_ufp_daaf_entete'] = $convention_ufp_daaf_entete;
+                    $data[$key]['convention_ufp_daaf_detail'] = $convention_ufp_daaf_detail;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($id_convention_ufp_daaf_entete)
+        {
+            $tmp = $this->Demande_deblocage_daafManager->findAllByconvention_ufpdaaf($id_convention_ufp_daaf_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $convention_ufpdaaf= array();
+                    $convention_ufp_daaf_entete = $this->Convention_ufp_daaf_enteteManager->findById($value->id_convention_ufp_daaf_entete);
+                    $tranche_deblocage_daaf = $this->Tranche_deblocage_daafManager->findById($value->id_tranche_deblocage_daaf);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['ref_demande'] = $value->ref_demande;
+                    $data[$key]['prevu'] = $value->prevu;
+                    $data[$key]['tranche'] = $tranche_deblocage_daaf;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['convention_ufp_daaf_entete'] = $convention_ufp_daaf_entete;
                 }
             } 
                 else
@@ -40,12 +80,19 @@ class Demande_deblocage_daaf extends REST_Controller {
         {
             $data = array();
             $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($id);
-            $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($demande_deblocage_daaf->id_convention_ufpdaaf);
+            $convention_ufp_daaf_entete = $this->Convention_ufp_daaf_enteteManager->findById($demande_deblocage_daaf->id_convention_ufp_daaf_entete);
+            $tranche_deblocage_daaf = $this->Tranche_deblocage_daafManager->findById($demande_deblocage_daaf->id_tranche_deblocage_daaf);
             $data['id'] = $demande_deblocage_daaf->id;
             $data['objet'] = $demande_deblocage_daaf->objet;
-            $data['id_tranche'] = $demande_deblocage_daaf->id_tranche;
-            $data['id_compte_daaf'] = $demande_deblocage_daaf->id_compte_daaf;
-            $data['convention_daff_ufp'] = $convention_daff_ufp;
+            $data['ref_demande'] = $demande_deblocage_daaf->ref_demande;
+            $data['prevu'] = $demande_deblocage_daaf->prevu;
+            $data['tranche_deblocage_daaf'] = $tranche_deblocage_daaf;
+            $data['cumul'] = $demande_deblocage_daaf->cumul;
+            $data['anterieur'] = $demande_deblocage_daaf->anterieur;
+            $data['reste'] = $demande_deblocage_daaf->reste;
+            $data['date'] = $demande_deblocage_daaf->date;
+            $data['validation'] = $demande_deblocage_daaf->validation;
+            $data['convention_ufp_daaf_entete'] = $convention_ufp_daaf_entete;
         } 
         else 
         {
@@ -54,13 +101,20 @@ class Demande_deblocage_daaf extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $convention_daff_ufp= array();
-                    $convention_daff_ufp = $this->Convention_daff_ufpManager->findById($value->id_convention_ufpdaaf);
+                    $convention_ufp_daaf_entete= array();
+                    $convention_ufp_daaf_entete = $this->Convention_ufp_daaf_enteteManager->findById($value->id_convention_ufp_daaf_entete);
+                    $tranche_deblocage_daaf = $this->Tranche_deblocage_daafManager->findById($value->id_tranche_deblocage_daaf);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['objet'] = $value->bjet;
-                    $data[$key]['id_tranche'] = $value->id_tranche;
-                    $data[$key]['id_compte_daaf'] = $value->id_compte_daaf;
-                    $data[$key]['convention_daff_ufp'] = $convention_daff_ufp;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['ref_demande'] = $value->ref_demande;
+                    $data[$key]['prevu'] = $value->prevu;
+                    $data[$key]['tranche'] = $tranche_deblocage_daaf;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['convention_ufp_daaf_entete'] = $convention_ufp_daaf_entete;
 
                 }
             } 
@@ -91,9 +145,15 @@ class Demande_deblocage_daaf extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'objet' => $this->post('objet'),
-                    'id_tranche' => $this->post('id_tranche'),
-                    'id_compte_daaf' => $this->post('id_compte_daaf'),
-                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf')
+                    'anterieur' => $this->post('anterieur'),
+                    'prevu' => $this->post('prevu'),
+                    'ref_demande' => $this->post('ref_demande'),
+                    'cumul' => $this->post('cumul'),
+                    'reste' => $this->post('reste'),
+                    'date' => $this->post('date'),
+                    'id_tranche_deblocage_daaf' => $this->post('id_tranche_deblocage_daaf'),                    
+                    'id_convention_ufp_daaf_entete' => $this->post('id_convention_ufp_daaf_entete'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data) {
                     $this->response([
@@ -119,9 +179,15 @@ class Demande_deblocage_daaf extends REST_Controller {
             } else {
                 $data = array(
                     'objet' => $this->post('objet'),
-                    'id_tranche' => $this->post('id_tranche'),
-                    'id_compte_daaf' => $this->post('id_compte_daaf'),
-                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf')
+                    'prevu' => $this->post('prevu'),
+                    'ref_demande' => $this->post('ref_demande'),
+                    'anterieur' => $this->post('anterieur'),
+                    'cumul' => $this->post('cumul'),
+                    'reste' => $this->post('reste'),
+                    'date' => $this->post('date'),
+                    'id_tranche_deblocage_daaf' => $this->post('id_tranche_deblocage_daaf'),                    
+                    'id_convention_ufp_daaf_entete' => $this->post('id_convention_ufp_daaf_entete'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {
                     $this->response([

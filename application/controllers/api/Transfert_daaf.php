@@ -11,7 +11,6 @@ class Transfert_daaf extends REST_Controller {
         parent::__construct();
         $this->load->model('transfert_daaf_model', 'Transfert_daafManager');
        $this->load->model('demande_realimentation_feffi_model', 'Demande_realimentation_feffiManager');
-       $this->load->model('compte_feffi_model', 'Compte_feffiManager');
     }
 
     public function index_get() 
@@ -30,15 +29,11 @@ class Transfert_daaf extends REST_Controller {
                     $demande_realimentation_feffi= array();                    
                     $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->findById($value->id_demande_rea_feffi);
 
-                    $compte_feffi= array();
-                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
-
-                    $data[$key]['compte_feffi'] = $compte_feffi;
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['montant'] = $value->montant;
-                    $data[$key]['num_bordereau'] = $value->num_bordereau;
+                    $data[$key]['montant_transfert'] = $value->montant_transfert;
+                    $data[$key]['frais_bancaire'] = $value->frais_bancaire;
+                    $data[$key]['montant_total'] = $value->montant_total;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['observation'] = $value->observation;
                     $data[$key]['demande_realimentation_feffi'] = $demande_realimentation_feffi;
 
                 }
@@ -52,15 +47,12 @@ class Transfert_daaf extends REST_Controller {
             $transfert_daaf = $this->Transfert_daafManager->findById($id);
             $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->findById($transfert_daaf->id_demande_rea_feffi);
 
-            $compte_feffi= array();
-            $compte_feffi = $this->Compte_feffiManager->findById($transfert_daaf->id_compte_feffi);
-                    
-            $data['compte_feffi'] = $compte_feffi;
             $data['id'] = $transfert_daaf->id;
-            $data['description'] = $transfert_daaf->description;
-            $data['montant'] = $transfert_daaf->montant;
-            $data['num_bordereau'] = $transfert_daaf->num_bordereau;
+            $data['montant_transfert'] = $transfert_daaf->montant_transfert;
+            $data['frais_bancaire'] = $transfert_daaf->frais_bancaire;
+            $data['montant_total'] = $transfert_daaf->montant_total;
             $data['date'] = $transfert_daaf->date;
+            $data['observation'] = $transfert_daaf->observation;
             $data['demande_realimentation_feffi'] = $demande_realimentation_feffi;
         } 
         else 
@@ -73,15 +65,12 @@ class Transfert_daaf extends REST_Controller {
                     $demande_realimentation_feffi= array();
                     $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->findById($value->id_demande_rea_feffi);
 
-                    $compte_feffi= array();
-                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
-                    
-                    $data[$key]['compte_feffi'] = $compte_feffi;
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['montant'] = $value->montant;
-                    $data[$key]['num_bordereau'] = $value->num_bordereau;
+                    $data[$key]['montant_transfert'] = $value->montant_transfert;
+                    $data[$key]['frais_bancaire'] = $value->frais_bancaire;
+                    $data[$key]['montant_total'] = $value->montant_total;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['observation'] = $value->observation;
                     $data[$key]['demande_realimentation_feffi'] = $demande_realimentation_feffi;
                 }
             } 
@@ -111,11 +100,11 @@ class Transfert_daaf extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'description' => $this->post('description'),
-                    'montant' => $this->post('montant'),
-                    'num_bordereau' => $this->post('num_bordereau'),
+                    'montant_transfert' => $this->post('montant_transfert'),
+                    'frais_bancaire' => $this->post('frais_bancaire'),
+                    'montant_total' => $this->post('montant_total'),
                     'date' => $this->post('date'),
-                    'id_compte_feffi' => $this->post('id_compte_feffi'),
+                    'observation' => $this->post('observation'),
                     'id_demande_rea_feffi' => $this->post('id_demande_rea_feffi')
                 );
                 if (!$data) {
@@ -141,11 +130,11 @@ class Transfert_daaf extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'description' => $this->post('description'),
-                    'id_compte_feffi' => $this->post('id_compte_feffi'),
-                    'montant' => $this->post('montant'),
-                    'num_bordereau' => $this->post('num_bordereau'),
+                    'montant_transfert' => $this->post('montant_transfert'),
+                    'frais_bancaire' => $this->post('frais_bancaire'),
+                    'montant_total' => $this->post('montant_total'),
                     'date' => $this->post('date'),
+                    'observation' => $this->post('observation'),
                     'id_demande_rea_feffi' => $this->post('id_demande_rea_feffi')
                 );
                 if (!$data || !$id) {
