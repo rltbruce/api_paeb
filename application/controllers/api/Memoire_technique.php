@@ -20,9 +20,30 @@ class Memoire_technique extends REST_Controller {
         $validation = $this->get('validation');
         $menu = $this->get('menu');
             
-        if ($menu == "getmemoireBycontrat")
+       /* if ($menu == "getmemoireBycontrat")
         {
             $tmp = $this->Memoire_techniqueManager->findAllBycontrat($id_contrat_bureau_etude,$validation);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }*/
+        if ($menu == "getmemoireByvalidation")
+        {
+            $tmp = $this->Memoire_techniqueManager->findAllByvalidation($validation);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 

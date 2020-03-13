@@ -41,6 +41,9 @@ class type_mobilier extends REST_Controller {
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['nbr_table_banc'] = $value->nbr_table_banc;
+                    $data[$key]['nbr_table_maitre'] = $value->nbr_table_maitre;
+                    $data[$key]['nbr_chaise_maitre'] = $value->nbr_chais_maitre;
                     
                 }
             }
@@ -57,9 +60,9 @@ class type_mobilier extends REST_Controller {
             $data['id'] = $type_mobilier->id;
             $data['libelle'] = $type_mobilier->libelle;
             $data['description'] = $type_mobilier->description;
-            /*$data['nbr_banc'] = $type_mobilier->nbr_banc;
+            $data['nbr_chaise_maitre'] = $type_mobilier->nbr_chaise_maitre;
             $data['nbr_table_maitre'] = $type_mobilier->nbr_table_maitre;
-            $data['nbr_table_maitre'] = $type_mobilier->nbr_table_maitre;*/
+            $data['nbr_table_banc'] = $type_mobilier->nbr_table_banc;
             $data['cout_mobilier'] = $type_mobilier->cout_mobilier;
             $data['acces_zone'] = $acces_zone;
             $data['zone_subvention'] = $zone_subvention;
@@ -83,9 +86,9 @@ class type_mobilier extends REST_Controller {
                     $data[$key]['code'] = $value->code;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    /*$data[$key]['nbr_banc'] = $value->nbr_banc;
+                    $data[$key]['nbr_table_banc'] = $value->nbr_table_banc;
                     $data[$key]['nbr_table_maitre'] = $value->nbr_table_maitre;
-                    $data[$key]['nbr_table_maitre'] = $value->nbr_table_maitre;*/
+                    $data[$key]['nbr_chaise_maitre'] = $value->nbr_chaise_maitre;
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
                     
                 }
@@ -119,10 +122,9 @@ class type_mobilier extends REST_Controller {
                     'code' => $this->post('code'),
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    /*'nbr_banc' => $this->post('nbr_banc'),
                     'nbr_table_maitre' => $this->post('nbr_table_maitre'),
-                    'nbr_banc' => $this->post('nbr_banc'),
-                    'nbr_chais_maitre' => $this->post('nbr_chais_maitre'),*/
+                    'nbr_table_banc' => $this->post('nbr_table_banc'),
+                    'nbr_chaise_maitre' => $this->post('nbr_chaise_maitre'),
                     'cout_mobilier' => $this->post('cout_mobilier'),
                     'id_zone_subvention' => $this->post('id_zone_subvention'),
                     'id_acces_zone' => $this->post('id_acces_zone')
@@ -152,11 +154,10 @@ class type_mobilier extends REST_Controller {
                 $data = array(
                     'code' => $this->post('code'),
                     'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description'),
-                    /*'nbr_banc' => $this->post('nbr_banc'),
+                    'description' => $this->post('description'),                    
                     'nbr_table_maitre' => $this->post('nbr_table_maitre'),
-                    'nbr_banc' => $this->post('nbr_banc'),
-                    'nbr_chais_maitre' => $this->post('nbr_chais_maitre'),*/
+                    'nbr_table_banc' => $this->post('nbr_table_banc'),
+                    'nbr_chaise_maitre' => $this->post('nbr_chaise_maitre'),
                     'cout_mobilier' => $this->post('cout_mobilier'),
                     'id_zone_subvention' => $this->post('id_zone_subvention'),
                     'id_acces_zone' => $this->post('id_acces_zone')

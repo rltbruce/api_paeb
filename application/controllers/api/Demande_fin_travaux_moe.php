@@ -20,7 +20,74 @@ class Demande_fin_travaux_moe extends REST_Controller {
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $menu = $this->get('menu');
       
-        if ($menu=="getdemandeByValide")
+        if ($menu=="summePourcentageCurrent")
+        {
+            $tmp = $this->Demande_fin_travaux_moeManager->summePourcentageCurrent($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {   
+                    $pourcentage_bat=0;
+                    $pourcentage_lat=0;
+                    $pourcentage_mob=0;
+                    $pourcentage_pourcentage_tranche_fin_travaux=0;
+
+                    if ($value->pourcentage_mob)
+                    {
+                        $pourcentage_mob = $value->pourcentage_mob;
+                    }
+                    if ($value->pourcentage_lat)
+                    {
+                        $pourcentage_lat = $value->pourcentage_lat;
+                    }
+                    if ($value->pourcentage_bat)
+                    {
+                        $pourcentage_bat = $value->pourcentage_bat;
+                    }
+                    if ($value->pourcentage_tranche_fin_travaux)
+                    {
+                        $pourcentage_tranche_fin_travaux = $value->pourcentage_tranche_fin_travaux;
+                    }
+
+                    $data[$key]['pourcentage_bat'] = $pourcentage_bat;
+                    $data[$key]['pourcentage_lat'] = $pourcentage_lat;
+                    $data[$key]['pourcentage_mob'] = $pourcentage_mob;
+                    $data[$key]['pourcentage_tranche_fin_travaux'] = $pourcentage_tranche_fin_travaux;
+
+                    $data[$key]['pourcentage_total'] = intval($pourcentage_tranche_fin_travaux) + intval($pourcentage_bat) + intval($pourcentage_lat) + intval($pourcentage_mob);
+
+                }
+            } 
+                else
+                    $data = array();
+        }elseif ($menu=="getalldemandeByContrat")
+        {
+            $tmp = $this->Demande_fin_travaux_moeManager->findAllBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_bureau_etude= array();
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_d_fin_travaux_moe = $this->Tranche_d_fin_travaux_moeManager->findById($value->id_tranche_d_fin_travaux_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_d_fin_travaux_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }elseif ($menu=="getdemandeByValide")
         {
             $tmp = $this->Demande_fin_travaux_moeManager->findAllValide();
             if ($tmp) 
@@ -40,6 +107,7 @@ class Demande_fin_travaux_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
                 }
@@ -66,6 +134,7 @@ class Demande_fin_travaux_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
                 }
@@ -92,6 +161,7 @@ class Demande_fin_travaux_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
                 }
@@ -118,6 +188,7 @@ class Demande_fin_travaux_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
                 }
@@ -144,6 +215,7 @@ class Demande_fin_travaux_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
                 }
@@ -167,6 +239,7 @@ class Demande_fin_travaux_moe extends REST_Controller {
             $data['anterieur'] = $demande_fin_travaux_moe->anterieur;
             $data['reste'] = $demande_fin_travaux_moe->reste;
             $data['date'] = $demande_fin_travaux_moe->date;
+            $data['validation'] = $demande_fin_travaux_moe->validation;
             $data['contrat_bureau_etude'] = $contrat_bureau_etude;
         } 
         else 
@@ -189,6 +262,7 @@ class Demande_fin_travaux_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
                 }

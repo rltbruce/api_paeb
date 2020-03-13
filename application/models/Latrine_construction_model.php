@@ -92,6 +92,41 @@ class Latrine_construction_model extends CI_Model {
             return null;
         }                 
     }
+            public function findAllByContrat_partenaire_relai($id_contrat_partenaire_relai) {               
+        $result =  $this->db->select('latrine_construction.id as id, latrine_construction.id_batiment_construction as id_batiment_construction, latrine_construction.nbr_latrine as nbr_latrine,latrine_construction.cout_unitaire,latrine_construction.id_type_latrine as id_type_latrine')
+                        ->from($this->table)
+                        ->join("batiment_construction",'latrine_construction.id_batiment_construction=batiment_construction.id')
+                        ->join("convention_cisco_feffi_entete",'convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
+                        ->join("contrat_partenaire_relai",'contrat_partenaire_relai.id_convention_entete=convention_cisco_feffi_entete.id')
+                        ->where("contrat_partenaire_relai.id",$id_contrat_partenaire_relai)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findAllByContrat_prestataire($id_contrat_prestataire) {               
+        $result =  $this->db->select('latrine_construction.id as id, latrine_construction.id_batiment_construction as id_batiment_construction, latrine_construction.nbr_latrine as nbr_latrine,latrine_construction.cout_unitaire,latrine_construction.id_type_latrine as id_type_latrine')
+                        ->from($this->table)
+                        ->join("batiment_construction",'latrine_construction.id_batiment_construction=batiment_construction.id')
+                        ->join("convention_cisco_feffi_entete",'convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
+                        ->join("contrat_prestataire",'contrat_prestataire.id_convention_entete=convention_cisco_feffi_entete.id')
+                        ->where("contrat_prestataire.id",$id_contrat_prestataire)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
   /*  public function supressionBydetail($id) {
         $this->db->where('id_convention_detail', (int) $id)->delete($this->table);

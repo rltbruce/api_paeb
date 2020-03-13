@@ -20,9 +20,29 @@ class Manuel_gestion extends REST_Controller {
         $validation = $this->get('validation');
         $menu = $this->get('menu');
             
-        if ($menu == "getmanuelBycontrat")
+       /* if ($menu == "getmanuelBycontrat")
         {
             $tmp = $this->Manuel_gestionManager->findAllBycontrat($id_contrat_bureau_etude,$validation);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }*/
+        if ($menu == "getmanuelByvalidation")
+        {
+            $tmp = $this->Manuel_gestionManager->findAllByvalidation($validation);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 

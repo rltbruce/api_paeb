@@ -63,7 +63,7 @@ class Avenant_partenaire_relai_model extends CI_Model {
         }
     }
 
-    public function findAllByContrat_be($id_contrat_partenaire_relai) {               
+    public function findAllByContrat_partenaire_relai($id_contrat_partenaire_relai) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_contrat_partenaire_relai", $id_contrat_partenaire_relai)

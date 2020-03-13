@@ -34,11 +34,11 @@ class Contrat_be extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['intitule'] = $value->intitule;
                     $data[$key]['ref_contrat']   = $value->ref_contrat;
-                    $data[$key]['montant_contrat']    = $value->montant_contrat;
+                    $data[$key]['montant_contrat'] = $value->montant_contrat;
                     $data[$key]['date_signature'] = $value->date_signature;
                     $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['bureau_etude'] = $bureau_etude;
-                        }
+                }
             } 
                 else
                     $data = array();

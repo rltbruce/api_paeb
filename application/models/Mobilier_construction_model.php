@@ -101,4 +101,40 @@ class Mobilier_construction_model extends CI_Model {
             return null;
         }                 
     }
+
+    public function findAllByContrat_partenaire_relai($id_contrat_partenaire_relai) {               
+        $result =  $this->db->select('mobilier_construction.id as id, mobilier_construction.id_batiment_construction as id_batiment_construction, mobilier_construction.nbr_mobilier as nbr_mobilier,mobilier_construction.cout_unitaire,mobilier_construction.id_type_mobilier as id_type_mobilier')
+                        ->from($this->table)
+                        ->join("batiment_construction",'mobilier_construction.id_batiment_construction=batiment_construction.id')
+                        ->join("convention_cisco_feffi_entete",'convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
+                        ->join("contrat_partenaire_relai",'contrat_partenaire_relai.id_convention_entete=convention_cisco_feffi_entete.id')
+                        ->where("contrat_partenaire_relai.id",$id_contrat_partenaire_relai)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findAllByContrat_prestataire($id_contrat_prestataire) {               
+        $result =  $this->db->select('mobilier_construction.id as id, mobilier_construction.id_batiment_construction as id_batiment_construction, mobilier_construction.nbr_mobilier as nbr_mobilier,mobilier_construction.cout_unitaire,mobilier_construction.id_type_mobilier as id_type_mobilier')
+                        ->from($this->table)
+                        ->join("batiment_construction",'mobilier_construction.id_batiment_construction=batiment_construction.id')
+                        ->join("convention_cisco_feffi_entete",'convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
+                        ->join("contrat_prestataire",'contrat_prestataire.id_convention_entete=convention_cisco_feffi_entete.id')
+                        ->where("contrat_prestataire.id",$id_contrat_prestataire)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

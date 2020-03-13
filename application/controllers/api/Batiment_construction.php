@@ -24,7 +24,29 @@ class Batiment_construction extends REST_Controller {
         $menu = $this->get('menu');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
-        if ($menu=='getnbrByContrat_bureau_etude')
+
+        $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
+        if ($menu=='getbatimentByContrat_partenaire_relai')
+        {
+            $batiment_construction = $this->Batiment_constructionManager->findAllBycontratpartenaire_relai($id_contrat_partenaire_relai );
+            if ($batiment_construction) 
+            {
+                foreach ($batiment_construction as $key => $value) 
+                {                    
+                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
+                    $contrat_be = $this->Contrat_beManager->findById($id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['type_batiment'] = $type_batiment;                    
+                    //$data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_batiment'] = $value->nbr_batiment;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getnbrByContrat_bureau_etude')
         {
             $batiment_construction = $this->Batiment_constructionManager->getnombreconstructionBycontrat($id_contrat_bureau_etude );
             if ($batiment_construction) 
@@ -117,7 +139,7 @@ class Batiment_construction extends REST_Controller {
                 foreach ($menu as $key => $value) 
                 {
                     $data = array();
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->$id_convention_entete);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                    
                     $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
 

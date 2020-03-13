@@ -21,10 +21,48 @@ class Latrine_construction extends REST_Controller {
         $id = $this->get('id');
         $id_batiment_construction = $this->get('id_batiment_construction');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
+        $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
 
         $menu = $this->get('menu');
 
-        if ($menu=='getlatrineByContrat_bureau_etude')
+        if ($menu=='getlatrineByContrat_prestataire')
+        {
+            $latrine_construction = $this->Latrine_constructionManager->findAllByContrat_prestataire($id_contrat_prestataire );
+            if ($latrine_construction) 
+            {
+                foreach ($latrine_construction as $key => $value) 
+                {   
+                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['type_latrine'] = $type_latrine;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_latrine'] = $value->nbr_latrine;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getlatrineByContrat_partenaire_relai')
+        {
+            $latrine_construction = $this->Latrine_constructionManager->findAllByContrat_partenaire_relai($id_contrat_partenaire_relai );
+            if ($latrine_construction) 
+            {
+                foreach ($latrine_construction as $key => $value) 
+                {   
+                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['type_latrine'] = $type_latrine;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_latrine'] = $value->nbr_latrine;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getlatrineByContrat_bureau_etude')
         {
             $latrine_construction = $this->Latrine_constructionManager->findAllByContrat_bureau_etude($id_contrat_bureau_etude );
             if ($latrine_construction) 

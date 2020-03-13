@@ -20,9 +20,29 @@ class Police_assurance extends REST_Controller {
         $validation = $this->get('validation');
         $menu = $this->get('menu');
             
-        if ($menu == "getpoliceBycontrat")
+       /* if ($menu == "getpoliceBycontrat")
         {
             $tmp = $this->Police_assuranceManager->findAllBycontrat($id_contrat_bureau_etude,$validation);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['date_expiration'] = $value->date_expiration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }*/
+        if ($menu == "getpoliceByvalidation")
+        {
+            $tmp = $this->Police_assuranceManager->findAllByvalidation($validation);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 

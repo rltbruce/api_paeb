@@ -129,4 +129,29 @@ class Contrat_partenaire_relai_model extends CI_Model {
         }
     }
 
+       public function findContratBySansdpp()  {
+        $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_dpp on contrat_partenaire_relai.id = module_dpp.id_contrat_partenaire_relai where module_dpp.id is null group by contrat_partenaire_relai.id";
+        return $this->db->query($sql)->result();
+    }
+    public function findContratBySansemies()  {
+        $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_emies on contrat_partenaire_relai.id = module_emies.id_contrat_partenaire_relai where module_emies.id is null group by contrat_partenaire_relai.id";
+        return $this->db->query($sql)->result();
+    }
+    public function findContratBySansgfpc()  {
+        $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_gfpc on contrat_partenaire_relai.id = module_gfpc.id_contrat_partenaire_relai where module_gfpc.id is null group by contrat_partenaire_relai.id";
+        return $this->db->query($sql)->result();
+    }
+    public function findContratBySansodc()  {
+        $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_odc on contrat_partenaire_relai.id = module_odc.id_contrat_partenaire_relai where module_odc.id is null group by contrat_partenaire_relai.id";
+        return $this->db->query($sql)->result();
+    }
+    public function findContratBySanspmc()  {
+        $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_pmc on contrat_partenaire_relai.id = module_pmc.id_contrat_partenaire_relai where module_pmc.id is null group by contrat_partenaire_relai.id";
+        return $this->db->query($sql)->result();
+    }
+    public function findContratBySanssep()  {
+        $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_sep on contrat_partenaire_relai.id = module_sep.id_contrat_partenaire_relai where module_sep.id is null group by contrat_partenaire_relai.id";
+        return $this->db->query($sql)->result();
+    }
+
 }

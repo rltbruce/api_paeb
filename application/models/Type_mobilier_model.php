@@ -28,9 +28,9 @@ class Type_mobilier_model extends CI_Model {
             'code'       =>      $type_mobilier['code'],
             'libelle'       =>      $type_mobilier['libelle'],
             'description'   =>      $type_mobilier['description'],
-            /*'nbr_banc'       =>      $type_mobilier['nbr_banc'],
+            'nbr_table_banc'       =>      $type_mobilier['nbr_table_banc'],
             'nbr_table_maitre'       =>      $type_mobilier['nbr_table_maitre'],
-            'nbr_chais_maitre'       =>      $type_mobilier['nbr_chais_maitre'],*/
+            'nbr_chaise_maitre'       =>      $type_mobilier['nbr_chaise_maitre'],
             'cout_mobilier'   =>      $type_mobilier['cout_mobilier'],
             'id_acces_zone' => $type_mobilier['id_acces_zone'],
             'id_zone_subvention' => $type_mobilier['id_zone_subvention']                        
@@ -49,6 +49,7 @@ class Type_mobilier_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->order_by('description')
+                        ->order_by('code')
                         ->get()
                         ->result();
         if($result)
@@ -72,6 +73,7 @@ class Type_mobilier_model extends CI_Model {
                         ->from($this->table)
                         ->where('id_zone_subvention',$id_zone_subvention)
                         ->where('id_acces_zone',$id_acces_zone)
+                        ->order_by('code')
                         ->get()
                         ->result();
         if($result)

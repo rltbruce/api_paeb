@@ -157,66 +157,20 @@ class Demande_batiment_moe_model extends CI_Model {
         }else{
             return null;
         }                  
+    }
+        public function findAllByBatiment($id_batiment_construction) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_batiment_construction", $id_batiment_construction)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     } 
-   /* public function findAllValidebcaf() {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("validation", 1)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-
-        public function findAllValide() {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("validation", 3)
-                        ->order_by('date_approbation')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-
-            public function findAllValidetechnique() {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("validation", 2)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-
-    public function countAllByInvalide($invalide)
-    {
-        $result = $this->db->select('COUNT(*) as nombre')
-                        ->from($this->table)
-                        ->where("validation", $invalide)
-                        ->order_by('id', 'desc')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                  
-    }*/ 
 
 }

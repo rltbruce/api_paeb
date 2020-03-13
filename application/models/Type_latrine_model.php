@@ -47,7 +47,7 @@ class Type_latrine_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('description')
+                        ->order_by('code')
                         ->get()
                         ->result();
         if($result)
@@ -71,6 +71,7 @@ class Type_latrine_model extends CI_Model {
                         ->from($this->table)
                         ->where('id_zone_subvention',$id_zone_subvention)
                         ->where('id_acces_zone',$id_acces_zone)
+                        ->order_by('code')
                         ->get()
                         ->result();
         if($result)

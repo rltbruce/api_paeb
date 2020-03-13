@@ -171,6 +171,24 @@ class Batiment_construction_model extends CI_Model {
             return null;
         }                 
     }
+        public function findAllBycontratpartenaire_relai($id_contrat_partenaire_relai)
+    {               
+        $result =  $this->db->select('batiment_construction.id_convention_entete as id_convention_entete, batiment_construction.id_type_batiment as id_type_batiment, batiment_construction.cout_unitaire as cout_unitaire, batiment_construction.nbr_batiment as nbr_batiment, batiment_construction.id as id')
+                        ->from('batiment_construction')
+                        //->join('mobilier_construction','mobilier_construction.id=avancement_mobilier.id_mobilier_construction')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
+                        ->join('contrat_partenaire_relai','contrat_partenaire_relai.id_convention_entete=convention_cisco_feffi_entete.id')
+                        ->where('contrat_partenaire_relai.id',$id_contrat_partenaire_relai)
+                       
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     //mbola ts mande
          public function getnombreconstructionBycontrat($id_contrat_bureau_etude)
     {               

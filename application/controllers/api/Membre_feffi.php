@@ -41,7 +41,7 @@ class Membre_feffi extends REST_Controller {
         {
             $data = array();
             $membre_feffi = $this->Membre_feffiManager->findById($id);
-            $feffi = $this->FeffiManager->findById($membre_feffi->id_ouvrage);
+            $feffi = $this->FeffiManager->findById($membre_feffi->id_feffi);
             
             $data['id'] = $membre_feffi->id;
             $data['nom'] = $membre_feffi->nom;
@@ -58,12 +58,14 @@ class Membre_feffi extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
+                    
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $data['id'] = $value->id;
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['cout_latrine'] = $value->cout_latrine;
+                    $data[$key]['nom'] = $value->nom;
+                    $data[$key]['prenom'] = $value->prenom;
+                    $data[$key]['age'] = $value->age;
+                    $data[$key]['sexe'] = $value->sexe;
+                    $data[$key]['occupation'] = $value->occupation;
                     $data[$key]['feffi'] = $feffi;
                 }
             } 

@@ -21,7 +21,38 @@ class Demande_mobilier_moe extends REST_Controller {
         $id_mobilier_construction = $this->get('id_mobilier_construction');
         $menu = $this->get('menu');
       
-        if ($menu=="getdemandeByValide")
+        if ($menu=="getalldemandeBylatrine")
+        {
+            $tmp = $this->Demande_mobilier_moeManager->findAllByMobilier($id_mobilier_construction);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $mobilier_construction= array();
+                    $mobilier_construction = $this->mobilier_constructionManager->findById($value->id_mobilier_construction);
+                    $tranche_demande_mobilier_moe = $this->Tranche_demande_mobilier_moeManager->findById($value->id_tranche_demande_mobilier_moe);
+                     $contrat_bureau_etude = $this->Contrat_beManager->findByMobilier($value->id_mobilier_construction);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mobilier_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['mobilier_construction'] = $mobilier_construction;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandeByValide")
         {
             $tmp = $this->Demande_mobilier_moeManager->findAllValide();
             if ($tmp) 
@@ -43,6 +74,7 @@ class Demande_mobilier_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['mobilier_construction'] = $mobilier_construction;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
@@ -73,6 +105,7 @@ class Demande_mobilier_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['mobilier_construction'] = $mobilier_construction;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
@@ -103,6 +136,7 @@ class Demande_mobilier_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['mobilier_construction'] = $mobilier_construction;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
@@ -133,6 +167,7 @@ class Demande_mobilier_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['mobilier_construction'] = $mobilier_construction;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
@@ -161,6 +196,7 @@ class Demande_mobilier_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['mobilier_construction'] = $mobilier_construction;
 
                 }
@@ -184,6 +220,7 @@ class Demande_mobilier_moe extends REST_Controller {
             $data['anterieur'] = $demande_mobilier_moe->anterieur;
             $data['reste'] = $demande_mobilier_moe->reste;
             $data['date'] = $demande_mobilier_moe->date;
+            $data['validation'] = $demande_mobilier_moe->validation;
             $data['mobilier_construction'] = $mobilier_construction;
         } 
         else 
@@ -206,6 +243,7 @@ class Demande_mobilier_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['mobilier_construction'] = $mobilier_construction;
 
                 }

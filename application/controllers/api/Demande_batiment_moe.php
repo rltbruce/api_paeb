@@ -21,7 +21,37 @@ class Demande_batiment_moe extends REST_Controller {
         $id_batiment_construction = $this->get('id_batiment_construction');
         $menu = $this->get('menu');
 
-        if ($menu=="getdemandeByValide")
+        if ($menu=="getalldemandeBybatiment")
+        {
+            $tmp = $this->Demande_batiment_moeManager->findAllByBatiment($id_batiment_construction);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $batiment_construction= array();
+                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
+                    $contrat_bureau_etude = $this->Contrat_beManager->findByBatiment($value->id_batiment_construction);
+                    $tranche_demande_batiment_moe = $this->Tranche_demande_batiment_moeManager->findById($value->id_tranche_demande_batiment_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_batiment_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandeByValide")
         {
             $tmp = $this->Demande_batiment_moeManager->findAllValide();
             if ($tmp) 
@@ -42,6 +72,7 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['batiment_construction'] = $batiment_construction;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
@@ -71,6 +102,7 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['batiment_construction'] = $batiment_construction;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
@@ -100,6 +132,7 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['batiment_construction'] = $batiment_construction;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
@@ -128,6 +161,7 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['batiment_construction'] = $batiment_construction;
 
                 }
@@ -151,6 +185,7 @@ class Demande_batiment_moe extends REST_Controller {
             $data['anterieur'] = $demande_batiment_moe->anterieur;
             $data['reste'] = $demande_batiment_moe->reste;
             $data['date'] = $demande_batiment_moe->date;
+            $data['validation'] = $demande_batiment_moe->validation;
             $data['batiment_construction'] = $batiment_construction;
         } 
         else 
@@ -173,6 +208,7 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['batiment_construction'] = $batiment_construction;
 
                 }

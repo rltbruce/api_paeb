@@ -64,7 +64,7 @@ class Memoire_technique_model extends CI_Model {
         }
     }
 
-    public function findAllBycontrat($id_contrat_bureau_etude,$validation) {               
+   /* public function findAllBycontrat($id_contrat_bureau_etude,$validation) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
@@ -78,6 +78,21 @@ class Memoire_technique_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
+    } */
+
+        public function findAllByvalidation($validation) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation", $validation)
+                        ->order_by('date_livraison')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 }

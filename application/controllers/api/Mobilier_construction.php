@@ -22,10 +22,48 @@ class Mobilier_construction extends REST_Controller {
         $id_batiment_construction = $this->get('id_batiment_construction');
 
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
+        $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
 
         $menu = $this->get('menu');
 
-        if ($menu=='getmobilierByContrat_bureau_etude')
+        if ($menu=='getmobilierByContrat_prestataire')
+        {
+            $mobilier_construction = $this->Mobilier_constructionManager->findAllByContrat_prestataire($id_contrat_prestataire );
+            if ($mobilier_construction) 
+            {
+                foreach ($mobilier_construction as $key => $value) 
+                {   
+                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['type_mobilier'] = $type_mobilier;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_mobilier'] = $value->nbr_mobilier;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getmobilierByContrat_partenaire_relai')
+        {
+            $mobilier_construction = $this->Mobilier_constructionManager->findAllByContrat_partenaire_relai($id_contrat_partenaire_relai );
+            if ($mobilier_construction) 
+            {
+                foreach ($mobilier_construction as $key => $value) 
+                {   
+                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['type_mobilier'] = $type_mobilier;
+                    $data[$key]['cout_unitaire'] = $value->cout_unitaire;
+                    $data[$key]['nbr_mobilier'] = $value->nbr_mobilier;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getmobilierByContrat_bureau_etude')
         {
             $mobilier_construction = $this->Mobilier_constructionManager->findAllByContrat_bureau_etude($id_contrat_bureau_etude );
             if ($mobilier_construction) 
