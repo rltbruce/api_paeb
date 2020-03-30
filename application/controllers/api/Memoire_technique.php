@@ -18,6 +18,7 @@ class Memoire_technique extends REST_Controller {
         $id = $this->get('id');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $validation = $this->get('validation');
+        $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
             
        /* if ($menu == "getmemoireBycontrat")
@@ -41,7 +42,7 @@ class Memoire_technique extends REST_Controller {
                 else
                     $data = array();
         }*/
-        if ($menu == "getmemoireByvalidation")
+       /* if ($menu == "getmemoireByvalidation")
         {
             $tmp = $this->Memoire_techniqueManager->findAllByvalidation($validation);
             if ($tmp) 
@@ -52,7 +53,28 @@ class Memoire_technique extends REST_Controller {
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
+                   // $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }*/
+        if ($menu == "getmemoirevalidationBycisco")
+        {
+            $tmp = $this->Memoire_techniqueManager->findAllvalidationBycisco($validation,$id_cisco);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                   // $data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_livraison'] = $value->date_livraison;
                     $data[$key]['date_approbation'] = $value->date_approbation;
                     $data[$key]['observation'] = $value->observation;
@@ -69,7 +91,7 @@ class Memoire_technique extends REST_Controller {
             $contrat_be = $this->Contrat_beManager->findById($memoire_technique->id_contrat_bureau_etude);
             $data['id'] = $memoire_technique->id;
             $data['description'] = $memoire_technique->description;
-            $data['fichier'] = $memoire_technique->fichier;
+           // $data['fichier'] = $memoire_technique->fichier;
             $data['date_livraison'] = $memoire_technique->date_livraison;
             $data['date_approbation'] = $memoire_technique->date_approbation;
             $data['observation'] = $memoire_technique->observation;
@@ -86,7 +108,7 @@ class Memoire_technique extends REST_Controller {
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
+                    //$data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_livraison'] = $value->date_livraison;
                     $data[$key]['date_approbation'] = $value->date_approbation;
                     $data[$key]['observation'] = $value->observation;
@@ -120,7 +142,7 @@ class Memoire_technique extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'description' => $this->post('description'),
-                    'fichier' => $this->post('fichier'),
+                    //'fichier' => $this->post('fichier'),
                     'date_livraison' => $this->post('date_livraison'),
                     'date_approbation' => $this->post('date_approbation'),
                     'observation' => $this->post('observation'),
@@ -151,7 +173,7 @@ class Memoire_technique extends REST_Controller {
             } else {
                 $data = array(
                     'description' => $this->post('description'),
-                    'fichier' => $this->post('fichier'),
+                    ///'fichier' => $this->post('fichier'),
                     'date_livraison' => $this->post('date_livraison'),
                     'date_approbation' => $this->post('date_approbation'),
                     'observation' => $this->post('observation'),

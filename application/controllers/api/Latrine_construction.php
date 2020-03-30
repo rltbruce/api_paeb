@@ -122,7 +122,7 @@ class Latrine_construction extends REST_Controller {
                 foreach ($menu as $key => $value) 
                 {
                     $data = array();
-                    $batiment_construction = $this->Convention_cisco_feffi_detailManager->findById($value->id_batiment_construction);
+                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
 
                     $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
 

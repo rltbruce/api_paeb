@@ -16,8 +16,17 @@ class Commune extends REST_Controller {
         $id = $this->get('id');
         $id_district = $this->get('id_district');
         $id_region = $this->get('id_region');
+        $id_cisco = $this->get('id_cisco');
 		$taiza="";
-        if ($id_district)
+        if ($id_cisco)
+        {
+            $data = array();
+            $tmp = $this->CommuneManager->findBycisco($id_cisco);
+            if ($tmp) 
+            {
+                $data = $tmp;
+            }
+        }elseif ($id_district)
         {
             $data = array();
             $tmp = $this->CommuneManager->findBydistrict($id_district);

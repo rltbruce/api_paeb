@@ -78,4 +78,19 @@ class Avenant_partenaire_relai_model extends CI_Model {
         }                 
     }
 
+    public function getavenantBycontrat($id_contrat_partenaire_relai) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_partenaire_relai", $id_contrat_partenaire_relai)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

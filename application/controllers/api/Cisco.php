@@ -11,14 +11,24 @@ class Cisco extends REST_Controller {
         parent::__construct();
         $this->load->model('cisco_model', 'CiscoManager');
         $this->load->model('district_model', 'DistrictManager');
+        $this->load->model('region_model', 'RegionManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
         $id_district = $this->get('id_district');
+        $id_region = $this->get('id_region');
             
-        if ($id_district) 
+        if ($id_region) 
+        {   $data = array();
+            $tmp = $this->CiscoManager->findByregion($id_region);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            }
+        }
+        elseif ($id_district) 
         {   $data = array();
             $tmp = $this->CiscoManager->findBydistrict($id_district);
             if ($tmp) 

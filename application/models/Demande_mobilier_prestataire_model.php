@@ -35,7 +35,7 @@ class Demande_mobilier_prestataire_model extends CI_Model {
             'cumul' => $demande_mobilier_prestataire['cumul'],
             'reste' => $demande_mobilier_prestataire['reste'],
             'date'          =>      $demande_mobilier_prestataire['date'],
-            'id_mobilier_construction'    =>  $demande_mobilier_prestataire['id_mobilier_construction'],
+            'id_contrat_prestataire'    =>  $demande_mobilier_prestataire['id_contrat_prestataire'],
             'validation'    =>  $demande_mobilier_prestataire['validation']                       
         );
     }
@@ -76,6 +76,43 @@ class Demande_mobilier_prestataire_model extends CI_Model {
                         ->order_by('id')
                         ->get()
                         ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findAllInvalideBycisco($id_cisco) {               
+        $result =  $this->db->select('demande_mobilier_presta.*')
+                        ->from($this->table)
+                        ->join('contrat_prestataire','contrat_prestataire.id = demande_mobilier_presta.id_contrat_prestataire')
+                        ->join('convention_cisco_feffi_entete','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->where("demande_mobilier_presta.validation", 0)
+                        ->where("convention_cisco_feffi_entete.id_cisco", $id_cisco)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+        public function findAllValideBycisco($id_cisco) {               
+        $result =  $this->db->select('demande_mobilier_presta.*, contrat_prestataire.id as id_contrat')
+                        ->from($this->table)
+                        ->join('contrat_prestataire','contrat_prestataire.id = demande_mobilier_presta.id_contrat_prestataire')
+                        ->join('convention_cisco_feffi_entete','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->where("demande_mobilier_presta.validation", 3)
+                        ->where("convention_cisco_feffi_entete.id_cisco", $id_cisco)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
         if($result)
         {
             return $result;

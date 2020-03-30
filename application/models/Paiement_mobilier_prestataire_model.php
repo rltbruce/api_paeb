@@ -77,4 +77,24 @@ class Paiement_mobilier_prestataire_model extends CI_Model {
             return null;
         }                 
     }
+    public function getpaiementmob_mpeBycontrat($id_contrat_prestataire)
+    {               
+        $result =  $this->db->select('demande_mobilier_presta.date_approbation as date_approbation,tranche_demande_mobilier_mpe.code as code,tranche_demande_mobilier_mpe.pourcentage as pourcentage,paiement_mobilier_prestataire.montant_paiement as montant_paiement')
+                        ->from($this->table)
+                        ->join('demande_mobilier_presta','demande_mobilier_presta.id=paiement_mobilier_prestataire.id_demande_mobilier_pre')
+                        ->join('tranche_demande_mobilier_mpe','tranche_demande_mobilier_mpe.id=demande_mobilier_presta.id_tranche_demande_mpe')
+                        ->join('contrat_prestataire','contrat_prestataire.id=demande_mobilier_presta.id_contrat_prestataire')
+                        
+                        ->where("contrat_prestataire.id",$id_contrat_prestataire )
+                        ->where("demande_mobilier_presta.validation",3 )
+                       //->order_by('code')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 }

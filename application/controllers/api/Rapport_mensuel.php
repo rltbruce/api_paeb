@@ -18,6 +18,7 @@ class Rapport_mensuel extends REST_Controller {
         $id = $this->get('id');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $validation = $this->get('validation');
+        $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
             
         /*if ($menu == "getrapportBycontrat")
@@ -40,7 +41,27 @@ class Rapport_mensuel extends REST_Controller {
                 else
                     $data = array();
         }*/
-        if ($menu == "getrapportByvalidation")
+        if ($menu == "getrapportvalidationBycisco")
+        {
+            $tmp = $this->Rapport_mensuelManager->findAllvalidationBycisco($validation,$id_cisco);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    //$data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getrapportByvalidation")
         {
             $tmp = $this->Rapport_mensuelManager->findAllByvalidation($validation);
             if ($tmp) 
@@ -51,7 +72,7 @@ class Rapport_mensuel extends REST_Controller {
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
+                    //$data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_livraison'] = $value->date_livraison;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['contrat_be'] = $contrat_be;
@@ -67,7 +88,7 @@ class Rapport_mensuel extends REST_Controller {
             $contrat_be = $this->Contrat_beManager->findById($rapport_mensuel->id_contrat_bureau_etude);
             $data['id'] = $rapport_mensuel->id;
             $data['description'] = $rapport_mensuel->description;
-            $data['fichier'] = $rapport_mensuel->fichier;
+            //$data['fichier'] = $rapport_mensuel->fichier;
             $data['date_livraison'] = $rapport_mensuel->date_livraison;
             $data['observation'] = $rapport_mensuel->observation;
             $data['contrat_be'] = $contrat_be;
@@ -83,7 +104,7 @@ class Rapport_mensuel extends REST_Controller {
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
+                    //$data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_livraison'] = $value->date_livraison;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['contrat_be'] = $contrat_be;
@@ -116,7 +137,7 @@ class Rapport_mensuel extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'description' => $this->post('description'),
-                    'fichier' => $this->post('fichier'),
+                    //'fichier' => $this->post('fichier'),
                     'date_livraison' => $this->post('date_livraison'),
                     'observation' => $this->post('observation'),
                     'id_contrat_bureau_etude' => $this->post('id_contrat_bureau_etude'),
@@ -146,7 +167,7 @@ class Rapport_mensuel extends REST_Controller {
             } else {
                 $data = array(
                     'description' => $this->post('description'),
-                    'fichier' => $this->post('fichier'),
+                    //'fichier' => $this->post('fichier'),
                     'date_livraison' => $this->post('date_livraison'),
                     'observation' => $this->post('observation'),
                     'id_contrat_bureau_etude' => $this->post('id_contrat_bureau_etude'),

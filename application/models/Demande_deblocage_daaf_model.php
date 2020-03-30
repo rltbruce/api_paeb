@@ -112,6 +112,14 @@ class Demande_deblocage_daaf_model extends CI_Model {
         }                  
     }
 
+    public function getmax_demande_daafbyconvention($id_convention_ufp_daaf_entete)
+    {
+        $sql = "select *
+                        from demande_deblocage_daaf
+                        where id=(select max(id) from demande_deblocage_daaf) and id_convention_ufp_daaf_entete =".$id_convention_ufp_daaf_entete."";
+        return $this->db->query($sql)->result();                  
+    }
+
  
 
 }

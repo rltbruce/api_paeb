@@ -77,5 +77,19 @@ class Avenant_be_model extends CI_Model {
             return null;
         }                 
     }
+    public function getavenantBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 }

@@ -26,7 +26,7 @@ class Rapport_mensuel_model extends CI_Model {
     public function _set($rapport_mensuel) {
         return array(
             'description'   =>      $rapport_mensuel['description'],
-            'fichier'   =>      $rapport_mensuel['fichier'],
+            //'fichier'   =>      $rapport_mensuel['fichier'],
             'date_livraison'    =>  $rapport_mensuel['date_livraison'],
             'observation'   =>      $rapport_mensuel['observation'],
             'id_contrat_bureau_etude'    =>  $rapport_mensuel['id_contrat_bureau_etude'],
@@ -78,11 +78,46 @@ class Rapport_mensuel_model extends CI_Model {
             return null;
         }                 
     } */
-        public function findAllByvalidation($validation) {               
+    public function findAllByvalidation($validation)
+    {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("validation", $validation)
                         ->order_by('date_livraison')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findAllvalidationBycisco($validation,$id_cisco)
+    {               
+        $result =  $this->db->select('rapport_mensuel.*')
+                        ->from($this->table)
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id= rapport_mensuel.id_contrat_bureau_etude')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id = contrat_bureau_etude.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("rapport_mensuel.validation", $validation)
+                        ->order_by('date_livraison')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+        public function getrapport_mensuelBycontrat($id_contrat_bureau_etude,$validation) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", $validation)
                         ->get()
                         ->result();
         if($result)

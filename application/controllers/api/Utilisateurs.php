@@ -12,6 +12,8 @@ class Utilisateurs extends REST_Controller {
         $this->load->model('utilisateurs_model', 'UserManager');
 
         $this->load->model('region_model', 'RegionManager');
+        $this->load->model('district_model', 'DistrictManager');
+        $this->load->model('cisco_model', 'CiscoManager');
     }
 
     public function index_get() 
@@ -42,7 +44,16 @@ class Utilisateurs extends REST_Controller {
         {
             $user = $this->UserManager->findById($id);
             if ($user) 
-            {
+            {   
+                $region = array();
+                    $region = $this->RegionManager->findById($user->id_region);
+
+                    $district = array();
+                    $district = $this->DistrictManager->findById($user->id_district);
+
+                    $cisco = array();
+                    $cisco = $this->CiscoManager->findById($user->id_cisco);
+
                 $data['id'] = $user->id;
                 $data['nom'] = $user->nom;
                 $data['prenom'] = $user->prenom;
@@ -50,6 +61,10 @@ class Utilisateurs extends REST_Controller {
                 $data['token'] = $user->token;
                 $data['email'] = $user->email;
                 $data['enabled'] = $user->enabled;
+
+                $data['cisco'] = $cisco;
+                $data['region'] = $region;
+                $data['district'] = $district;
       
                 $data['roles'] = unserialize($user->roles);
             }
@@ -76,6 +91,15 @@ class Utilisateurs extends REST_Controller {
             {
                 foreach ($usr as $key => $value) 
                 {
+                    $region = array();
+                    $region = $this->RegionManager->findById($value->id_region);
+
+                    $district = array();
+                    $district = $this->DistrictManager->findById($value->id_district);
+
+                    $cisco = array();
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+
                     $data[$key]['id'] = $value->id;
                     $data[$key]['nom'] = $value->nom;
                     $data[$key]['prenom'] = $value->prenom;
@@ -83,6 +107,10 @@ class Utilisateurs extends REST_Controller {
                     $data[$key]['token'] = $value->token;
                     $data[$key]['email'] = $value->email;
                     $data[$key]['enabled'] = $value->enabled;
+
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['region'] = $region;
+                    $data[$key]['district'] = $district;
               
            
                     $data[$key]['roles'] = unserialize($value->roles);
@@ -190,7 +218,10 @@ class Utilisateurs extends REST_Controller {
                  //   'sigle' => $this->post('sigle'),
                     'email' => $this->post('email'),                 
                     'enabled' => $this->post('enabled'),
-                    'roles' => serialize($getrole)
+                    'roles' => serialize($getrole),                 
+                    'id_region' => $this->post('id_region'),                 
+                    'id_district' => $this->post('id_district'),                 
+                    'id_cisco' => $this->post('id_cisco')
                   
                 );
 
@@ -235,7 +266,10 @@ class Utilisateurs extends REST_Controller {
                     'prenom' => $this->post('prenom'),
                     //'cin' => $this->post('cin'),
                     'email' => $this->post('email'),
-                    'password' => sha1($this->post('password'))
+                    'password' => sha1($this->post('password')),                 
+                    'id_region' => $this->post('id_region'),                 
+                    'id_district' => $this->post('id_district'),                 
+                    'id_cisco' => $this->post('id_cisco')
           
                 );
 
@@ -270,6 +304,7 @@ class Utilisateurs extends REST_Controller {
                     'email' => $this->post('email'),
                     'id_region' => $this->post('id_region'),
                     'id_district' => $this->post('id_district'),
+                    'id_cisco' => $this->post('id_cisco'),
                     'password' => sha1($this->post('password')),
                     'enabled' => 0,
                     'token' => bin2hex(openssl_random_pseudo_bytes(32)),

@@ -10,14 +10,16 @@ class Demande_mobilier_prestataire extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('demande_mobilier_prestataire_model', 'Demande_mobilier_prestataireManager');
-        $this->load->model('mobilier_construction_model', 'mobilier_constructionManager');
         $this->load->model('tranche_demande_mobilier_mpe_model', 'Tranche_demande_mobilier_mpeManager');
+        $this->load->model('contrat_prestataire_model', 'Contrat_prestataireManager');
+        $this->load->model('type_mobilier_model', 'Type_mobilierManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_mobilier_construction = $this->get('id_mobilier_construction');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
         if ($menu=="getdemandeValidetechnique")
         {
@@ -25,9 +27,8 @@ class Demande_mobilier_prestataire extends REST_Controller {
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
-                {
-                    $mobilier_construction= array();
-                    $mobilier_construction = $this->mobilier_constructionManager->findById($value->id_mobilier_construction);
+                {                    
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
                     $tranche_demande_mobilier_mpe = $this->Tranche_demande_mobilier_mpeManager->findById($value->id_tranche_demande_mpe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
@@ -39,22 +40,22 @@ class Demande_mobilier_prestataire extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
-                    $data[$key]['mobilier_construction'] = $mobilier_construction;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                    
                 }
             } 
                 else
                     $data = array();
         }
-        elseif ($menu=="getdemandeValide")
+        elseif ($menu=="getdemandeValideBycisco")
         {
-            $tmp = $this->Demande_mobilier_prestataireManager->findAllValide();
+            $tmp = $this->Demande_mobilier_prestataireManager->findAllValideBycisco($id_cisco);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $mobilier_construction= array();
-                    $mobilier_construction = $this->mobilier_constructionManager->findById($value->id_mobilier_construction);
+                    $contrat_prestataire= array();
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
                     $tranche_demande_mobilier_mpe = $this->Tranche_demande_mobilier_mpeManager->findById($value->id_tranche_demande_mpe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
@@ -66,7 +67,7 @@ class Demande_mobilier_prestataire extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
-                    $data[$key]['mobilier_construction'] = $mobilier_construction;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                     $data[$key]['date_approbation'] = $value->date_approbation; 
                    
                 }
@@ -81,8 +82,8 @@ class Demande_mobilier_prestataire extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $mobilier_construction= array();
-                    $mobilier_construction = $this->mobilier_constructionManager->findById($value->id_mobilier_construction);
+                    $contrat_prestataire= array();
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
                     $tranche_demande_mobilier_mpe = $this->Tranche_demande_mobilier_mpeManager->findById($value->id_tranche_demande_mpe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
@@ -94,22 +95,22 @@ class Demande_mobilier_prestataire extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
-                    $data[$key]['mobilier_construction'] = $mobilier_construction;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
 
                 }
             } 
                 else
                     $data = array();
         }
-        elseif ($menu=="getdemandeInvalide")
+        elseif ($menu=="getdemandeInvalideBycisco")
         {
-            $tmp = $this->Demande_mobilier_prestataireManager->findAllInvalide();
+            $tmp = $this->Demande_mobilier_prestataireManager->findAllInvalideBycisco($id_cisco);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $mobilier_construction= array();
-                    $mobilier_construction = $this->mobilier_constructionManager->findById($value->id_mobilier_construction);
+                    $contrat_prestataire= array();
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
                     $tranche_demande_mobilier_mpe = $this->Tranche_demande_mobilier_mpeManager->findById($value->id_tranche_demande_mpe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
@@ -121,7 +122,7 @@ class Demande_mobilier_prestataire extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
-                    $data[$key]['mobilier_construction'] = $mobilier_construction;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
 
                 }
             } 
@@ -132,7 +133,7 @@ class Demande_mobilier_prestataire extends REST_Controller {
         {
             $data = array();
             $demande_mobilier_prestataire = $this->Demande_mobilier_prestataireManager->findById($id);
-            $mobilier_construction = $this->mobilier_constructionManager->findById($demande_mobilier_prestataire->id_mobilier_construction);
+            $contrat_prestataire = $this->Contrat_prestataireManager->findById($demande_mobilier_prestataire->id_contrat_prestataire);
             $tranche_demande_mobilier_mpe = $this->Tranche_demande_mobilier_mpeManager->findById($demande_mobilier_prestataire->id_tranche_demande_mpe);
             $data['id'] = $demande_mobilier_prestataire->id;
             $data['objet'] = $demande_mobilier_prestataire->objet;
@@ -144,7 +145,7 @@ class Demande_mobilier_prestataire extends REST_Controller {
             $data['anterieur'] = $demande_mobilier_prestataire->anterieur;
             $data['reste'] = $demande_mobilier_prestataire->reste;
             $data['date'] = $demande_mobilier_prestataire->date;
-            $data['mobilier_construction'] = $mobilier_construction;
+            $data['contrat_prestataire'] = $contrat_prestataire;
         } 
         else 
         {
@@ -153,8 +154,8 @@ class Demande_mobilier_prestataire extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $mobilier_construction= array();
-                    $mobilier_construction = $this->mobilier_constructionManager->findById($value->id_mobilier_construction);
+                    $contrat_prestataire= array();
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
                     $tranche_demande_mobilier_mpe = $this->Tranche_demande_mobilier_mpeManager->findById($value->id_tranche_demande_mpe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
@@ -166,7 +167,7 @@ class Demande_mobilier_prestataire extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
-                    $data[$key]['mobilier_construction'] = $mobilier_construction;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
 
                 }
             } 
@@ -205,7 +206,7 @@ class Demande_mobilier_prestataire extends REST_Controller {
                     'anterieur' => $this->post('anterieur'),
                     'cumul' => $this->post('cumul'),
                     'reste' => $this->post('reste'),
-                    'id_mobilier_construction' => $this->post('id_mobilier_construction'),
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data) {
@@ -240,7 +241,7 @@ class Demande_mobilier_prestataire extends REST_Controller {
                     'cumul' => $this->post('cumul'),
                     'reste' => $this->post('reste'),
                     'date' => $this->post('date'),
-                    'id_mobilier_construction' => $this->post('id_mobilier_construction'),
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {

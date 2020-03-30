@@ -76,6 +76,26 @@ class Transfert_daaf_model extends CI_Model {
         }else{
             return null;
         }                 
+    }
+
+    public function getpaiementByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('demande_realimentation_feffi.date_approbation as date_approbation,tranche_deblocage_feffi.code as code,tranche_deblocage_feffi.pourcentage as pourcentage,transfert_daaf.montant_transfert as montant_transfert')
+                        ->from($this->table)
+                        ->join('demande_realimentation_feffi','demande_realimentation_feffi.id=transfert_daaf.id_demande_rea_feffi')
+                        ->join('convention_cisco_feffi_entete','demande_realimentation_feffi.id_convention_cife_entete=convention_cisco_feffi_entete.id')
+                        ->join('tranche_deblocage_feffi','tranche_deblocage_feffi.id=demande_realimentation_feffi.id_tranche_deblocage_feffi')
+                        ->where("convention_cisco_feffi_entete.id",$id_convention_entete )
+                        ->where("demande_realimentation_feffi.validation",3 )
+                       //->order_by('code')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     } 
 
 }

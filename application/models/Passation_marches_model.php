@@ -102,4 +102,19 @@ class Passation_marches_model extends CI_Model {
         }                 
     }
 
+        public function getpassationByconvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

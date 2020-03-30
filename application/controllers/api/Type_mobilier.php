@@ -43,7 +43,7 @@ class type_mobilier extends REST_Controller {
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
                     $data[$key]['nbr_table_banc'] = $value->nbr_table_banc;
                     $data[$key]['nbr_table_maitre'] = $value->nbr_table_maitre;
-                    $data[$key]['nbr_chaise_maitre'] = $value->nbr_chais_maitre;
+                    $data[$key]['nbr_chaise_maitre'] = $value->nbr_chaise_maitre;
                     
                 }
             }

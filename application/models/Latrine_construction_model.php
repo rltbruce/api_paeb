@@ -60,6 +60,16 @@ class Latrine_construction_model extends CI_Model {
         }
     }
 
+     /*  public function findByIdWithType_latrine($id)  {
+        $this->db->select('latrine_construction.*,type_latrine.libelle as libelle_type')
+        ->join('type_latrine','type_latrine.id = latrine_construction.id_type_latrine')
+        ->where("latrine_construction.id", $id);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+    }*/
+
     public function findAllByBatiment($id_batiment_construction) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

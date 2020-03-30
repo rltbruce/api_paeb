@@ -94,5 +94,49 @@ class Document_feffi_scan_model extends CI_Model {
             return null;
         }                 
     }
+        public function findAllinvalideBycisco($id_cisco) {               
+        $result =  $this->db->select('document_feffi_scan.*')
+                        ->from($this->table)
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=document_feffi_scan.id_convention_entete')
+                        ->join('feffi','feffi.id=convention_cisco_feffi_entete.id_feffi')
+                        ->join('ecole','ecole.id=feffi.id_ecole')
+                        ->join('fokontany','fokontany.id=ecole.id_fokontany')
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->join('district','district.id=commune.id_district')
+                        ->join('cisco','district.id=cisco.id_district')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("document_feffi_scan.validation", 0)
+                        ->order_by('date_elaboration')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findAllvalideBycisco($id_cisco) {               
+        $result =  $this->db->select('document_feffi_scan.*')
+                        ->from($this->table)
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=document_feffi_scan.id_convention_entete')
+                        ->join('feffi','feffi.id=convention_cisco_feffi_entete.id_feffi')
+                        ->join('ecole','ecole.id=feffi.id_ecole')
+                        ->join('fokontany','fokontany.id=ecole.id_fokontany')
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->join('district','district.id=commune.id_district')
+                        ->join('cisco','district.id=cisco.id_district')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("document_feffi_scan.validation", 1)
+                        ->order_by('date_elaboration')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 }

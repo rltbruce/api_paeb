@@ -17,13 +17,29 @@ class Convention_ufp_daaf_entete extends REST_Controller {
         $id = $this->get('id');       
         $menu = $this->get('menu');
         $validation = $this->get('validation');
+        $id_convention_ufp_daaf_entete = $this->get('id_convention_ufp_daaf_entete');
 
+        if ($menu=="getDetailcoutByConvention")
+        {
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findDetailcoutByConvention($id_convention_ufp_daaf_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $data[$key]['montant_trav_mob'] = $value->cout_batiment + $value->cout_latrine + $value->cout_mobilier;
+                    $data[$key]['montant_divers'] = $value->cout_divers;
+                    
+                }
+            } 
+                else
+                    $data = array();
+        }
         if ($menu=="getconvention_ufp_daaf_validation")
         {
-            $menu = $this->Convention_ufp_daaf_enteteManager->findConvention_ufp_daafByValidation($validation);
-            if ($menu) 
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findConvention_ufp_daafByValidation($validation);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['ref_convention'] = $value->ref_convention;
@@ -41,10 +57,10 @@ class Convention_ufp_daaf_entete extends REST_Controller {
         elseif ($id)
         {
             $data = array();
-            $convention = $this->Convention_ufp_daaf_enteteManager->findByIdObjet($id);
-            if ($menu) 
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findByIdObjet($id);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['ref_convention'] = $value->ref_convention;
@@ -61,10 +77,10 @@ class Convention_ufp_daaf_entete extends REST_Controller {
         } 
         else 
         {
-            $menu = $this->Convention_ufp_daaf_enteteManager->findAll();
-            if ($menu) 
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['ref_convention'] = $value->ref_convention;

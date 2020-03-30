@@ -30,7 +30,8 @@ class Prestation_mpe_model extends CI_Model {
             'date_reel_debu_trav'   => $prestation_mpe['date_reel_debu_trav'],
             'delai_execution'    => $prestation_mpe['delai_execution'],
             'date_expiration_assurance_mpe'   => $prestation_mpe['date_expiration_assurance_mpe'],
-            'id_contrat_prestataire' => $prestation_mpe['id_contrat_prestataire']                    
+            'id_contrat_prestataire' => $prestation_mpe['id_contrat_prestataire'],
+            'validation' => $prestation_mpe['validation']                     
         );
     }
     public function delete($id) {
@@ -76,6 +77,58 @@ class Prestation_mpe_model extends CI_Model {
         }else{
             return null;
         }                 
+    }
+
+    public function findprestationinvalideBycisco($id_cisco) {               
+        $result =  $this->db->select('prestation_mpe.*')
+                        ->from($this->table)
+                        ->join('contrat_prestataire','contrat_prestataire.id=prestation_mpe.id_contrat_prestataire')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=contrat_prestataire.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("prestation_mpe.validation", 0)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+     public function findprestationBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('prestation_mpe.*')
+                        ->from($this->table)
+                        ->join('contrat_prestataire','contrat_prestataire.id=prestation_mpe.id_contrat_prestataire')
+                        ->where("contrat_prestataire.id", $id_contrat_prestataire)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    
+    public function getprestation_mpeBycontrat($id_contrat_prestataire) {               
+        $result = " 
+        select 
+                prestation_mpe.date_pre_debu_trav as date_pre_debu_trav, 
+                prestation_mpe.date_reel_debu_trav as date_reel_debu_trav,
+                prestation_mpe.delai_execution as delai_execution, 
+                prestation_mpe.date_expiration_assurance_mpe as date_expiration_assurance_mpe,
+                phase_sous_projets.libelle as libelle
+
+            from prestation_mpe
+                inner join contrat_prestataire on contrat_prestataire.id=prestation_mpe.id_contrat_prestataire
+                inner join phase_sous_projet_construction on phase_sous_projet_construction.id_contrat_prestataire = contrat_prestataire.id
+                inner join phase_sous_projets on phase_sous_projets.id = phase_sous_projet_construction.id_phase_sous_projet
+
+                where contrat_prestataire.id=".$id_contrat_prestataire." 
+                and prestation_mpe.validation=1 and phase_sous_projet_construction.validation=1 and phase_sous_projet_construction.id=(select max(id) from phase_sous_projet_construction)";
+        return $this->db->query($result)->result();                
     }
 
 }

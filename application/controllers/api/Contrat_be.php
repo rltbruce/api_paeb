@@ -19,9 +19,32 @@ class Contrat_be extends REST_Controller {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
         $id_bureau_etude = $this->get('id_bureau_etude');
+        $id_cisco = $this->get('id_cisco');
         $menus = $this->get('menus');
          
-         if ($menus=='getcontratBybe')
+         if ($menus=='getcontratBycisco')
+         {
+            $menu = $this->Contrat_beManager->findAllBycisco($id_cisco);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['ref_contrat']   = $value->ref_contrat;
+                    $data[$key]['montant_contrat'] = $value->montant_contrat;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['bureau_etude'] = $bureau_etude;
+                }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menus=='getcontratBybe')
          {
             $menu = $this->Contrat_beManager->findAllBybe($id_bureau_etude);
             if ($menu) 

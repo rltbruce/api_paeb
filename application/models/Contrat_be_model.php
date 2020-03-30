@@ -129,4 +129,37 @@ class Contrat_be_model extends CI_Model {
         }
     }
 
+       public function findAllBycisco($id_cisco) {               
+        $result =  $this->db->select('contrat_bureau_etude.*')
+                        ->from($this->table)
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id = contrat_bureau_etude.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function getcontratByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

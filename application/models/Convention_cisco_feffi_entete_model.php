@@ -158,6 +158,73 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         }else{
             return null;
         }                 
+    }
+
+       public function findAllInvalideByid_cisco($id_cisco) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation",0)
+                        ->where("id_cisco",$id_cisco)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    
+    public function findAllValideByid_cisco($id_cisco) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation !=",0)
+                        ->where("id_cisco",$id_cisco)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    } 
+
+        public function findAllValideufpByid_cisco($id_cisco) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation",2)
+                        ->where("id_cisco",$id_cisco)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findconventionByid_ecole($id_ecole)
+    {               
+        $result =  $this->db->select('convention_cisco_feffi_entete.*')
+                        ->from($this->table)
+                        ->join('feffi','feffi.id=convention_cisco_feffi_entete.id_feffi')
+                        ->join('ecole','ecole.id=feffi.id_ecole')
+                        ->where("validation",2)
+                        ->where("ecole.id",$id_ecole)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     } 
 
 }

@@ -79,11 +79,50 @@ class Document_moe_scan_model extends CI_Model {
         }                 
     } */
 
-        public function findAllByvalidation($validation) {               
+    public function findAllByvalidation($validation)
+    {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("validation", $validation)
                         ->order_by('date_elaboration')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function finddocumentinvalideBycisco($id_cisco)
+    {               
+        $result =  $this->db->select('document_moe_scan.*')
+                        ->from($this->table)                        
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id= document_moe_scan.id_contrat_bureau_etude')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id = contrat_bureau_etude.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("document_moe_scan.validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function finddocumentvalideBycisco($id_cisco)
+    {               
+        $result =  $this->db->select('document_moe_scan.*')
+                        ->from($this->table)                        
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id= document_moe_scan.id_contrat_bureau_etude')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id = contrat_bureau_etude.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("document_moe_scan.validation", 1)
+                        ->order_by('id')
                         ->get()
                         ->result();
         if($result)

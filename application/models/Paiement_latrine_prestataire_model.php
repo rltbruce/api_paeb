@@ -77,4 +77,24 @@ class Paiement_latrine_prestataire_model extends CI_Model {
             return null;
         }                 
     }
+    public function getpaiementlat_mpeBycontrat($id_contrat_prestataire)
+    {               
+        $result =  $this->db->select('demande_latrine_presta.date_approbation as date_approbation,tranche_demande_latrine_mpe.code as code,tranche_demande_latrine_mpe.pourcentage as pourcentage,paiement_latrine_prestataire.montant_paiement as montant_paiement')
+                        ->from($this->table)
+                        ->join('demande_latrine_presta','demande_latrine_presta.id=paiement_latrine_prestataire.id_demande_latrine_pre')
+                        ->join('tranche_demande_latrine_mpe','tranche_demande_latrine_mpe.id=demande_latrine_presta.id_tranche_demande_mpe')
+                        ->join('contrat_prestataire','contrat_prestataire.id=demande_latrine_presta.id_contrat_prestataire')
+                        
+                        ->where("contrat_prestataire.id",$id_contrat_prestataire )
+                        ->where("demande_latrine_presta.validation",3 )
+                       //->order_by('code')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 }

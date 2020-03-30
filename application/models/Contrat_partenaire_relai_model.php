@@ -31,7 +31,8 @@ class Contrat_partenaire_relai_model extends CI_Model {
             'montant_contrat'    => $contrat_partenaire_relai['montant_contrat'],
             'date_signature' => $contrat_partenaire_relai['date_signature'],
             'id_convention_entete' => $contrat_partenaire_relai['id_convention_entete'],
-            'id_partenaire_relai' => $contrat_partenaire_relai['id_partenaire_relai']                      
+            'id_partenaire_relai' => $contrat_partenaire_relai['id_partenaire_relai'],
+            'validation' => $contrat_partenaire_relai['validation']                      
         );
     }
     public function delete($id) {
@@ -68,6 +69,21 @@ class Contrat_partenaire_relai_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findcontratByvalidation($validation) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation", $validation)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -152,6 +168,22 @@ class Contrat_partenaire_relai_model extends CI_Model {
     public function findContratBySanssep()  {
         $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_sep on contrat_partenaire_relai.id = module_sep.id_contrat_partenaire_relai where module_sep.id is null group by contrat_partenaire_relai.id";
         return $this->db->query($sql)->result();
+    }
+
+    public function getcontratByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     }
 
 }

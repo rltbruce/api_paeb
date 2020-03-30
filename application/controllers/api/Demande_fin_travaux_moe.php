@@ -18,9 +18,66 @@ class Demande_fin_travaux_moe extends REST_Controller {
     {
         $id = $this->get('id');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
+        $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
-      
-        if ($menu=="summePourcentageCurrent")
+        
+        if ($menu=="getalldemandevalideBycisco")
+        {
+            $tmp = $this->Demande_fin_travaux_moeManager->findAllValideBycisco($id_cisco);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_bureau_etude= array();
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_d_fin_travaux_moe = $this->Tranche_d_fin_travaux_moeManager->findById($value->id_tranche_d_fin_travaux_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_d_fin_travaux_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getalldemandeinvalideBycisco")
+        {
+            $tmp = $this->Demande_fin_travaux_moeManager->findAllInvalideBycisco($id_cisco);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_bureau_etude= array();
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_d_fin_travaux_moe = $this->Tranche_d_fin_travaux_moeManager->findById($value->id_tranche_d_fin_travaux_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_d_fin_travaux_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="summePourcentageCurrent")
         {
             $tmp = $this->Demande_fin_travaux_moeManager->summePourcentageCurrent($id_contrat_bureau_etude);
             if ($tmp) 
@@ -30,8 +87,13 @@ class Demande_fin_travaux_moe extends REST_Controller {
                     $pourcentage_bat=0;
                     $pourcentage_lat=0;
                     $pourcentage_mob=0;
-                    $pourcentage_pourcentage_tranche_fin_travaux=0;
+                    $pourcentage_debut_travaux=0;
+                    $ourcentage_tranche_fin_travaux=0;
 
+                    if ($value->pourcentage_debut_travaux)
+                    {
+                        $pourcentage_debut_travaux = $value->pourcentage_debut_travaux;
+                    }
                     if ($value->pourcentage_mob)
                     {
                         $pourcentage_mob = $value->pourcentage_mob;
@@ -49,12 +111,13 @@ class Demande_fin_travaux_moe extends REST_Controller {
                         $pourcentage_tranche_fin_travaux = $value->pourcentage_tranche_fin_travaux;
                     }
 
+                    $data[$key]['pourcentage_debut_travaux'] = $pourcentage_debut_travaux;
                     $data[$key]['pourcentage_bat'] = $pourcentage_bat;
                     $data[$key]['pourcentage_lat'] = $pourcentage_lat;
                     $data[$key]['pourcentage_mob'] = $pourcentage_mob;
                     $data[$key]['pourcentage_tranche_fin_travaux'] = $pourcentage_tranche_fin_travaux;
 
-                    $data[$key]['pourcentage_total'] = intval($pourcentage_tranche_fin_travaux) + intval($pourcentage_bat) + intval($pourcentage_lat) + intval($pourcentage_mob);
+                    $data[$key]['pourcentage_total'] = intval($pourcentage_debut_travaux) +intval($pourcentage_tranche_fin_travaux) + intval($pourcentage_bat) + intval($pourcentage_lat) + intval($pourcentage_mob);
 
                 }
             } 

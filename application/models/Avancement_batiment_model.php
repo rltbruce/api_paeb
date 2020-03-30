@@ -31,7 +31,7 @@ class Avancement_batiment_model extends CI_Model {
             'observation'    => $avancement_batiment['observation'],
             'date'   => $avancement_batiment['date'],
             'id_attachement_batiment' => $avancement_batiment['id_attachement_batiment'],
-            'id_batiment_construction' => $avancement_batiment['id_batiment_construction']                      
+            'id_contrat_prestataire' => $avancement_batiment['id_contrat_prestataire']                      
         );
     }
     public function delete($id) {
@@ -78,8 +78,7 @@ class Avancement_batiment_model extends CI_Model {
             return null;
         }                 
     }
-
-        public function getavancementByconvention($id_convention_entete)
+            public function getavancementByconvention($id_convention_entete)
     {               
         $sql=" select 
                        detail.id_conv as id_conv,
@@ -152,7 +151,7 @@ class Avancement_batiment_model extends CI_Model {
                         bat_const.id as id_bat_const,
                         0 as nbr_batiment,
                         0 as avancement_bat,
-                        sum(atta_lat.ponderation_latrine) as avancement_lat,
+                        max(atta_lat.ponderation_latrine) as avancement_lat,
                         0 as nbr_latrine,
                         0 as avancement_mob,
                         0 as nbr_mobilier
@@ -243,6 +242,80 @@ class Avancement_batiment_model extends CI_Model {
             ";
             return $this->db->query($sql)->result();             
     }
+
+  /*      public function getavancementByconvention($id_convention_entete)
+    {               
+        $sql=" select 
+                       detail.id_conv as id_conv,
+                       detail.avancement_bat avancement_batiment,
+                        detail.avancement_lat as avancement_latrine,
+                       detail.avancement_mob as avancement_mobilier
+               from (
+               
+                (
+                    select 
+                        conv.id as id_conv,
+                         max(atta_bat.ponderation_batiment) as avancement_bat,
+                         0 as avancement_lat,
+                         0 as avancement_mob
+
+                        from attachement_batiment as atta_bat
+
+                            inner join avancement_batiment as avanc on avanc.id_attachement_batiment = atta_bat.id
+                            inner join contrat_prestataire as cont_prest on cont_prest.id=avanc.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
+
+                        where 
+                            conv.id= '".$id_convention_entete."'
+
+                            group by conv.id
+                )
+                UNION
+                (
+                    select 
+                        conv.id as id_conv,
+                        0 as avancement_bat,
+                        max(atta_lat.ponderation_latrine) as avancement_lat,
+                        0 as avancement_mob
+
+                        from attachement_latrine as atta_lat
+
+                            inner join avancement_latrine as avanc_lat on avanc_lat.id_attachement_latrine = atta_lat.id
+                            inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_lat.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
+
+                        where 
+                            conv.id= '".$id_convention_entete."'
+
+                            group by conv.id
+                )
+                UNION
+                (
+                    select 
+                        conv.id as id_conv,,
+                        0 as avancement_bat,
+                        0 as avancement_lat,
+                        max(atta_mob.ponderation_mobilier) as avancement_mob
+
+                        from attachement_mobilier as atta_mob
+
+                            inner join avancement_mobilier as avanc_mob on avanc_mob.id_attachement_mobilier = atta_mob.id
+                            inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_mob.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
+
+                        where 
+                            conv.id= '".$id_convention_entete."'
+
+                            group by conv.id
+                ) 
+
+                )detail
+
+                group by id_conv
+
+            ";
+            return $this->db->query($sql)->result();             
+    }*/
    /*     public function getavancementByconvention($id_convention_entete)
     {               
         $result =  $this->db->select('max(attachement_batiment.ponderation_batiment) as avancement')

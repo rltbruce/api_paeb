@@ -16,11 +16,15 @@ class Importer_fichier extends CI_Controller {
 		$erreur="aucun";
 		$replace=array('e','e','e','a','o','c','_');
 		$search= array('é','è','ê','à','ö','ç',' ');
+
+		$replacename=array('_','_','_');
+		$searchname= array('/','"\"',' ');
+
 		$repertoire= $_POST['repertoire'];
 		$name_fichier=$_POST['name_fichier'];
 
 		$repertoire=str_replace($search,$replace,$repertoire);
-		$name_fichier=str_replace($search,$replace,$name_fichier);
+		$name_fichier=str_replace($searchname,$replacename,$name_fichier);
 		//The name of the directory that we need to create.
 		$directoryName = dirname(__FILE__) ."/../../../../../../assets/" .$repertoire;
 		//Check if the directory already exists.

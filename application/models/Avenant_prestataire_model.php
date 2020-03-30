@@ -79,4 +79,19 @@ class Avenant_prestataire_model extends CI_Model {
         }                 
     }
 
+    public function getavenantBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

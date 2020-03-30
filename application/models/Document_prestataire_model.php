@@ -59,22 +59,7 @@ class Document_prestataire_model extends CI_Model {
         }
     }
 
-    public function findAllByContrat($id_contrat_prestataire) {               
-       /* $result =  $this->db->select('document_prestataire.id as id, document_prestataire.code as code, document_prestataire.intitule as intitule, document_prestataire_scan.id as id_document_prestataire_scan, document_prestataire_scan.fichier as fichier, document_prestataire_scan.date_elaboration as date_elaboration, document_prestataire_scan.observation as observation, document_prestataire_scan.id_contrat_prestataire as id_contrat_prestataire')
-                        ->from($this->table)
-                        ->join('document_prestataire_scan','document_prestataire_scan.id_document_prestataire=document_prestataire.id','left')
-                        //->order_by('document_prestataire.code')
-                        ->where('document_prestataire_scan.id_contrat_prestataire',$id_contrat_prestataire)
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        } */
-       /* $sql=" select document_prestataire.id as id, document_prestataire.code as code, document_prestataire.intitule as intitule, document_prestataire_scan.id as id_document_prestataire_scan, document_prestataire_scan.fichier as fichier, document_prestataire_scan.date_elaboration as date_elaboration, document_prestataire_scan.observation as observation, document_prestataire_scan.id_contrat_prestataire as id_contrat_prestataire from document_prestataire left join document_prestataire_scan on document_prestataire_scan.id_document_prestataire = document_prestataire.id group by document_prestataire.id ";
-        return $this->db->query($sql)->result();  */
+    public function findAllByContrat($id_contrat_prestataire) {
         $sql=" 
 
                 select detail.id as id, 
@@ -171,5 +156,7 @@ class Document_prestataire_model extends CI_Model {
                 group by detail.id  ";
         return $this->db->query($sql)->result();                
     }
+    
+
 
 }

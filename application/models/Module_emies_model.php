@@ -107,5 +107,20 @@ class Module_emies_model extends CI_Model {
         $sql=" select module_emies.* from module_emies where DATE_FORMAT(module_emies.date_debut_previ_form,'%Y') = DATE_FORMAT(now(),'%Y') and validation = 1 group by module_emies.id";
         return $this->db->query($sql)->result();                 
     }
+    public function getmoduleBycontrat($id_contrat_partenaire_relai)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_contrat_partenaire_relai',$id_contrat_partenaire_relai)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 }

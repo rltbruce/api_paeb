@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Phase_sous_projet_model extends CI_Model {
-    protected $table = 'phase_sous_projet';
+class Cout_maitrise_construction_model extends CI_Model {
+    protected $table = 'cout_maitrise_construction';
 
-    public function add($phase_sous_projet) {
-        $this->db->set($this->_set($phase_sous_projet))
+    public function add($cout_maitrise_construction) {
+        $this->db->set($this->_set($cout_maitrise_construction))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Phase_sous_projet_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $phase_sous_projet) {
-        $this->db->set($this->_set($phase_sous_projet))
+    public function update($id, $cout_maitrise_construction) {
+        $this->db->set($this->_set($cout_maitrise_construction))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,16 +23,11 @@ class Phase_sous_projet_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($phase_sous_projet) {
+    public function _set($cout_maitrise_construction) {
         return array(
-
-            'id_infrastructure' => $phase_sous_projet['id_infrastructure'],
-            'id_designation_infrastructure'   => $phase_sous_projet['id_designation_infrastructure'],
-            'id_element_a_verifier'    => $phase_sous_projet['id_element_a_verifier'],
-            'date_verification'   => $phase_sous_projet['date_verification'],
-            'conformite' => $phase_sous_projet['conformite'],
-            'observation' => $phase_sous_projet['observation'],
-            'id_prestation_mpe' => $phase_sous_projet['id_prestation_mpe']                      
+            'description'       =>      $cout_maitrise_construction['description'],
+            'id_convention_entete'      =>      $cout_maitrise_construction['id_convention_entete'],
+            'cout'                      =>      $cout_maitrise_construction['cout']                       
         );
     }
     public function delete($id) {
@@ -44,10 +39,10 @@ class Phase_sous_projet_model extends CI_Model {
             return null;
         }  
     }
-    public function findAll() {               
+public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('id_infrastructure')
+                        ->order_by('id')
                         ->get()
                         ->result();
         if($result)
@@ -57,6 +52,25 @@ class Phase_sous_projet_model extends CI_Model {
             return null;
         }                 
     }
+
+    public function findAll_by_convention_detail($id_convention_entete) 
+    {               
+        $this->db->select("*");
+                        
+        $q =  $this->db->from($this->table)  
+                    ->where("id_convention_entete", $id_convention_entete)    
+                    ->get()
+                    ->result();
+
+            if($q)
+            {
+                return $q;
+            }
+            else
+            {
+                return null;
+            }                  
+    }
     public function findById($id)  {
         $this->db->where("id", $id);
         $q = $this->db->get($this->table);
@@ -65,11 +79,12 @@ class Phase_sous_projet_model extends CI_Model {
         }
     }
 
-    public function findAllByPrestation_mpe($id_prestation_mpe) {               
-        $result =  $this->db->select('*')
+    public function getmontantByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('sum(cout) as montant')
                         ->from($this->table)
-                        ->where("id_prestation_mpe", $id_prestation_mpe)
-                        ->order_by('id')
+                        ->where('id_convention_entete',$id_convention_entete)
+                       
                         ->get()
                         ->result();
         if($result)

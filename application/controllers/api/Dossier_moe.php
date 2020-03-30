@@ -22,7 +22,7 @@ class Dossier_moe extends REST_Controller {
         $validation = $this->get('validation');
         $menu = $this->get('menu');
 
-        if ($menu ="getdocument_scanByConvention")
+        if ($menu =="getdocument_scanByConvention")
         {
             $menu = $this->Document_moeManager->findAllByConvention($id_convention_entete);
             if ($menu) 
@@ -50,7 +50,7 @@ class Dossier_moe extends REST_Controller {
                 else
                     $data = array();
         } 
-        elseif ($menu ="getdocument_scanByContrat")
+        elseif ($menu =="getdocument_scanByContrat")
         {
             $menu = $this->Document_moeManager->findAllByContrat($id_contrat_bureau_etude);
             if ($menu) 

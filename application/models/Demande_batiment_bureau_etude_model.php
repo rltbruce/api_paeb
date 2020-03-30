@@ -35,7 +35,7 @@ class Demande_batiment_bureau_etude_model extends CI_Model {
             'cumul' => $demande_batiment_bureau_etude['cumul'],
             'reste' => $demande_batiment_bureau_etude['reste'],
             'date'          =>      $demande_batiment_bureau_etude['date'],
-            'id_batiment_construction'    =>  $demande_batiment_bureau_etude['id_batiment_construction'],
+            'id_contrat_bureau_etude'    =>  $demande_batiment_bureau_etude['id_contrat_bureau_etude'],
             'validation'    =>  $demande_batiment_bureau_etude['validation']                       
         );
     }
@@ -84,7 +84,7 @@ class Demande_batiment_bureau_etude_model extends CI_Model {
         }                 
     }
 
-        public function findAllInvalideBybatiment($id_batiment_construction) {               
+     /*  public function findAllInvalideBybatiment($id_batiment_construction) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("validation", 0)
@@ -98,7 +98,7 @@ class Demande_batiment_bureau_etude_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
     public function findAllValidebcaf() {               
         $result =  $this->db->select('*')

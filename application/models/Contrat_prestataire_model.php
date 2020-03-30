@@ -150,4 +150,37 @@ class Contrat_prestataire_model extends CI_Model {
         }                 
     }
 
+    public function findcontrat_prestataireBycisco($id_cisco)
+    {               
+        $result =  $this->db->select('convention_cisco_feffi_entete.ref_convention as ref_convention,contrat_prestataire.*')
+                        ->from($this->table)                       
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=contrat_prestataire.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)                       
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function getcontratByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

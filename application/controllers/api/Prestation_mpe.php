@@ -16,14 +16,16 @@ class Prestation_mpe extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
-        $cle_etrangere = $this->get('cle_etrangere');
+        $id_cisco = $this->get('id_cisco');
+        $menu = $this->get('menu');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
 
-         if ($cle_etrangere)
+         if ($menu=='getprestationBycontrat')
          {
-            $menu = $this->Prestation_mpeManager->findAllByContrat($cle_etrangere);
-            if ($menu) 
+            $tmp = $this->Prestation_mpeManager->findprestationBycontrat($id_contrat_prestataire);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $contrat_prestataire = $this->Contrat_prestatireManager->findById($value->id_contrat_prestataire);
                     
@@ -32,32 +34,55 @@ class Prestation_mpe extends REST_Controller {
                     $data[$key]['date_reel_debu_trav']= $value->date_reel_debu_trav;
                     $data[$key]['delai_execution']    = $value->delai_execution;
                     $data[$key]['date_expiration_assurance_mpe']   = $value->date_expiration_assurance_mpe;
+                    $data[$key]['validation']   = $value->validation;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                         }
             } 
                 else
                     $data = array();
-        }   
+        }  
+        elseif ($menu=='getprestationinvalideBycisco')
+         {
+            $tmp = $this->Prestation_mpeManager->findprestationinvalideBycisco($id_cisco);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_prestataire = $this->Contrat_prestatireManager->findById($value->id_contrat_prestataire);
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_pre_debu_trav'] = $value->date_pre_debu_trav;
+                    $data[$key]['date_reel_debu_trav']= $value->date_reel_debu_trav;
+                    $data[$key]['delai_execution']    = $value->delai_execution;
+                    $data[$key]['date_expiration_assurance_mpe']   = $value->date_expiration_assurance_mpe;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }  
         elseif ($id)
         {
             $data = array();
-            $passation_marches = $this->Prestation_mpeManager->findById($id);
+            $prestation_mpe = $this->Prestation_mpeManager->findById($id);
 
-            $contrat_prestataire = $this->Contrat_prestatireManager->findById($passation_marches->id_contrat_prestataire);
+            $contrat_prestataire = $this->Contrat_prestatireManager->findById($prestation_mpe->id_contrat_prestataire);
 
-            $data['id'] = $passation_marches->id;
-            $data['date_pre_debu_trav'] = $passation_marches->date_pre_debu_trav;
-            $data['date_reel_debu_trav']   = $passation_marches->date_reel_debu_trav;
-            $data['delai_execution']    = $passation_marches->delai_execution;
-            $data['date_expiration_assurance_mpe']   = $passation_marches->date_expiration_assurance_mpe;
+            $data['id'] = $prestation_mpe->id;
+            $data['date_pre_debu_trav'] = $prestation_mpe->date_pre_debu_trav;
+            $data['date_reel_debu_trav']   = $prestation_mpe->date_reel_debu_trav;
+            $data['delai_execution']    = $prestation_mpe->delai_execution;
+            $data['date_expiration_assurance_mpe']   = $prestation_mpe->date_expiration_assurance_mpe;
+            $data['validation']   = $prestation_mpe->validation;
             $data['contrat_prestataire'] = $contrat_prestataire;
         } 
         else 
         {
-            $menu = $this->Prestation_mpeManager->findAll();
-            if ($menu) 
+            $tmp = $this->Prestation_mpeManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $contrat_prestataire = $this->Contrat_prestatireManager->findById($value->id_contrat_prestataire);
                     
@@ -66,6 +91,7 @@ class Prestation_mpe extends REST_Controller {
                     $data[$key]['date_reel_debu_trav']   = $value->date_reel_debu_trav;
                     $data[$key]['delai_execution']    = $value->delai_execution;
                     $data[$key]['date_expiration_assurance_mpe']   = $value->date_expiration_assurance_mpe;
+                    $data[$key]['validation']   = $value->validation;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                         }
             } 
@@ -101,6 +127,7 @@ class Prestation_mpe extends REST_Controller {
                     'delai_execution'    => $this->post('delai_execution'),
                     'date_expiration_assurance_mpe'   => $this->post('date_expiration_assurance_mpe'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
+                    'validation' => $this->post('validation'),
                 );
                 if (!$data) {
                     $this->response([
@@ -130,7 +157,8 @@ class Prestation_mpe extends REST_Controller {
                     'date_reel_debu_trav'   => $this->post('date_reel_debu_trav'),
                     'delai_execution'    => $this->post('delai_execution'),
                     'date_expiration_assurance_mpe'   => $this->post('date_expiration_assurance_mpe'),
-                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire')
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {
                     $this->response([

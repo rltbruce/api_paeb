@@ -22,8 +22,35 @@ class Contrat_prestataire extends REST_Controller {
         $id_demande_batiment_pre = $this->get('id_demande_batiment_pre');
         $id_demande_latrine_pre = $this->get('id_demande_latrine_pre');
         $id_demande_mobilier_pre = $this->get('id_demande_mobilier_pre');
+        $id_cisco = $this->get('id_cisco');
          
-         if ($menus=='getcontratconvenBydemande_mobilier')
+         if ($menus=='getcontrat_prestataireBycisco')
+         {
+            $menu = $this->Contrat_prestataireManager->findcontrat_prestataireBycisco($id_cisco);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['num_contrat']   = $value->num_contrat;
+                    $data[$key]['cout_batiment']    = $value->cout_batiment;
+                    $data[$key]['cout_latrine']   = $value->cout_latrine;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
+                    $data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
+                    $data[$key]['delai_execution'] = $value->delai_execution;
+                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                    $data[$key]['prestataire'] = $prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menus=='getcontratconvenBydemande_mobilier')
          {
             $menu = $this->Contrat_prestataireManager->findcontratconvenBydemande_mobilier($id_demande_mobilier_pre);
             if ($menu) 

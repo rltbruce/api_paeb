@@ -171,7 +171,46 @@ class Demande_debut_travaux_moe_model extends CI_Model {
         }else{
             return null;
         }                  
-    } 
+    }
+
+    public function findAllInvalideBycisco($id_cisco)
+    {               
+        $result =  $this->db->select('demande_debut_travaux_moe.*')
+                        ->from($this->table)
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id= demande_debut_travaux_moe.id_contrat_bureau_etude')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id = contrat_bureau_etude.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("demande_debut_travaux_moe.validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findAllValideBycisco($id_cisco)
+    {               
+        $result =  $this->db->select('demande_debut_travaux_moe.*')
+                        ->from($this->table)
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id= demande_debut_travaux_moe.id_contrat_bureau_etude')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id = contrat_bureau_etude.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("demande_debut_travaux_moe.validation", 3)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }  
 
    /* public function findAllInvalide() {               
         $result =  $this->db->select('*')

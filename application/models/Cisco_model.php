@@ -73,6 +73,23 @@ class Cisco_model extends CI_Model {
         }else{
             return null;
         }                 
+    }
+
+    public function findByregion($id_region) {               
+        $result =  $this->db->select('cisco.*')
+                        ->from($this->table)
+                        ->join('district','district.id=cisco.id_district')
+                        ->join('region','region.id=district.id_region')
+                        ->where('region.id',$id_region)
+                        ->order_by('cisco.description')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     } 
 
 }

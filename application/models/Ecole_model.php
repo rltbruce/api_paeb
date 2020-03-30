@@ -67,10 +67,12 @@ class Ecole_model extends CI_Model {
     }
 
     public function findBycommune($id_commune) {               
-        $result =  $this->db->select('*')
+        $result =  $this->db->select('ecole.*')
                         ->from($this->table)
-                        ->where('id_commune',$id_commune)
-                        ->order_by('description')
+                        ->join('fokontany','fokontany.id=ecole.id_fokontany')
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->where('commune.id',$id_commune)
+                        ->order_by('ecole.description')
                         ->get()
                         ->result();
         if($result)
@@ -90,5 +92,25 @@ class Ecole_model extends CI_Model {
             return $q->row();
         }
     } 
+
+    public function findBycisco($id_cisco)
+    {               
+        $result =  $this->db->select('ecole.code as code, ecole.description as description, ecole.lieu as lieu, ecole.latitude as latitude, ecole.id as id, ecole.longitude as longitude, ecole.altitude as altitude, ecole.id_fokontany as id_fokontany, ecole.id_zone_subvention as id_zone_subvention, ecole.id_acces_zone as id_acces_zone')
+                        ->from($this->table)
+                        ->join('fokontany','fokontany.id=ecole.id_fokontany')
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->join('district','district.id=commune.id_district')
+                        ->join('cisco','cisco.id_district=district.id')
+                        ->where('cisco.id',$id_cisco)
+                        ->order_by('ecole.code')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 }

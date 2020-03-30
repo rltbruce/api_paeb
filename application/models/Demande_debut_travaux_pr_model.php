@@ -146,7 +146,7 @@ class Demande_debut_travaux_pr_model extends CI_Model {
     public function findAllValide() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("validation", 3)
+                        ->where("validation", 2)
                         ->order_by('id')
                         ->get()
                         ->result();

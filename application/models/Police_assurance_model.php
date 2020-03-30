@@ -92,4 +92,38 @@ class Police_assurance_model extends CI_Model {
             return null;
         }                 
     }
+        public function findAllvalidationBycisco($validation,$id_cisco)
+    {               
+        $result =  $this->db->select('police_assurance.*')
+                        ->from($this->table)
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id= police_assurance.id_contrat_bureau_etude')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id = contrat_bureau_etude.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("police_assurance.validation", $validation)
+                        ->order_by('date_expiration')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+        public function getpolice_assuranceBycontrat($id_contrat_bureau_etude,$validation) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", $validation)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 }

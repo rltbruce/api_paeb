@@ -85,6 +85,22 @@ class Commune_model extends CI_Model {
         }else{
             return null;
         }                 
+    }
+    public function findBycisco($id_cisco) {               
+        $result =  $this->db->select('commune.*')
+                        ->from($this->table)
+                        ->join('district','district.id=commune.id_district')
+                        ->join('cisco','cisco.id_district=district.id')
+                        ->where('cisco.id',$id_cisco)
+                        ->order_by('commune.nom')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     }	
     
 }

@@ -26,7 +26,7 @@ class Manuel_gestion_model extends CI_Model {
     public function _set($manuel_gestion) {
         return array(
             'description'   =>      $manuel_gestion['description'],
-            'fichier'   =>      $manuel_gestion['fichier'],
+            //'fichier'   =>      $manuel_gestion['fichier'],
             'date_livraison'    =>  $manuel_gestion['date_livraison'],
             'observation'   =>      $manuel_gestion['observation'],
             'id_contrat_bureau_etude'    =>  $manuel_gestion['id_contrat_bureau_etude'],
@@ -83,6 +83,41 @@ class Manuel_gestion_model extends CI_Model {
                         ->from($this->table)
                         ->where("validation", $validation)
                         ->order_by('date_livraison')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    
+    public function findAllvalidationBycisco($validation,$id_cisco)
+    {               
+        $result =  $this->db->select('manuel_gestion.*')
+                        ->from($this->table)
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id= manuel_gestion.id_contrat_bureau_etude')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id = contrat_bureau_etude.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("manuel_gestion.validation", $validation)
+                        ->order_by('date_livraison')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function getmanuel_gestionBycontrat($id_contrat_bureau_etude,$validation) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", $validation)
                         ->get()
                         ->result();
         if($result)

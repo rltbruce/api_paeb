@@ -19,18 +19,19 @@ class Demande_batiment_moe extends REST_Controller {
     {
         $id = $this->get('id');
         $id_batiment_construction = $this->get('id_batiment_construction');
+        $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
 
-        if ($menu=="getalldemandeBybatiment")
+        if ($menu=="getalldemandevalideBycisco")
         {
-            $tmp = $this->Demande_batiment_moeManager->findAllByBatiment($id_batiment_construction);
+            $tmp = $this->Demande_batiment_moeManager->findAlldemandevalideBycisco($id_cisco);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $batiment_construction= array();
-                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
-                    $contrat_bureau_etude = $this->Contrat_beManager->findByBatiment($value->id_batiment_construction);
+                    /*$batiment_construction= array();
+                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);*/
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $tranche_demande_batiment_moe = $this->Tranche_demande_batiment_moeManager->findById($value->id_tranche_demande_batiment_moe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
@@ -43,7 +44,7 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
-                    $data[$key]['batiment_construction'] = $batiment_construction;
+                    //$data[$key]['batiment_construction'] = $batiment_construction;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
                 }
@@ -51,16 +52,16 @@ class Demande_batiment_moe extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($menu=="getdemandeByValide")
+        elseif ($menu=="getalldemandeinvalideBycisco")
         {
-            $tmp = $this->Demande_batiment_moeManager->findAllValide();
+            $tmp = $this->Demande_batiment_moeManager->findAlldemandeinvalideBycisco($id_cisco);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $batiment_construction= array();
-                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
-                    $contrat_bureau_etude = $this->Contrat_beManager->findByBatiment($value->id_batiment_construction);
+                    /*$batiment_construction= array();
+                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);*/
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $tranche_demande_batiment_moe = $this->Tranche_demande_batiment_moeManager->findById($value->id_tranche_demande_batiment_moe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
@@ -73,7 +74,67 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
-                    $data[$key]['batiment_construction'] = $batiment_construction;
+                    //$data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        /*elseif ($menu=="getalldemandeBybatiment")
+        {
+            $tmp = $this->Demande_batiment_moeManager->findAllByBatiment($id_batiment_construction);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                   /* $batiment_construction= array();
+                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);*/
+                   /* $contrat_bureau_etude = $this->Contrat_beManager->findByBatiment($value->id_contrat_bureau_etude);
+                    $tranche_demande_batiment_moe = $this->Tranche_demande_batiment_moeManager->findById($value->id_tranche_demande_batiment_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_batiment_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                   // $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }*/
+        elseif ($menu=="getdemandeByValide")
+        {
+            $tmp = $this->Demande_batiment_moeManager->findAllValide();
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    /*$batiment_construction= array();
+                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);*/
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_demande_batiment_moe = $this->Tranche_demande_batiment_moeManager->findById($value->id_tranche_demande_batiment_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_batiment_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    //$data[$key]['batiment_construction'] = $batiment_construction;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
                 }
@@ -88,9 +149,9 @@ class Demande_batiment_moe extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $batiment_construction= array();
-                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
-                    $contrat_bureau_etude = $this->Contrat_beManager->findByBatiment($value->id_batiment_construction);
+                   /* $batiment_construction= array();
+                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);*/
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $tranche_demande_batiment_moe = $this->Tranche_demande_batiment_moeManager->findById($value->id_tranche_demande_batiment_moe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
@@ -103,7 +164,7 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
-                    $data[$key]['batiment_construction'] = $batiment_construction;
+                    //$data[$key]['batiment_construction'] = $batiment_construction;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
                 }
@@ -118,9 +179,9 @@ class Demande_batiment_moe extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $batiment_construction= array();
-                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
-                    $contrat_bureau_etude = $this->Contrat_beManager->findByBatiment($value->id_batiment_construction);
+                    /*$batiment_construction= array();
+                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);*/
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $tranche_demande_batiment_moe = $this->Tranche_demande_batiment_moeManager->findById($value->id_tranche_demande_batiment_moe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
@@ -133,7 +194,7 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
-                    $data[$key]['batiment_construction'] = $batiment_construction;
+                    //$data[$key]['batiment_construction'] = $batiment_construction;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
                 }
@@ -141,15 +202,16 @@ class Demande_batiment_moe extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($menu=="getdemandeInvalideBybatiment")
+       /* elseif ($menu=="getdemandeInvalideBybatiment")
         {
             $tmp = $this->Demande_batiment_moeManager->findAllInvalideBybatiment($id_batiment_construction);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $batiment_construction= array();
-                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
+                    /*$batiment_construction= array();
+                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);*/
+                   /* $contrat_bureau_etude = $this->Contrat_beManager->findByBatiment($value->id_contrat_bureau_etude);
                     $tranche_demande_batiment_moe = $this->Tranche_demande_batiment_moeManager->findById($value->id_tranche_demande_batiment_moe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
@@ -162,19 +224,21 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
-                    $data[$key]['batiment_construction'] = $batiment_construction;
+                    //$data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
                 }
             } 
                 else
                     $data = array();
-        }
+        }*/
         elseif ($id)
         {
             $data = array();
             $demande_batiment_moe = $this->Demande_batiment_moeManager->findById($id);
-            $batiment_construction = $this->Batiment_constructionManager->findById($demande_batiment_moe->id_batiment_construction);
+            /*$batiment_construction = $this->Batiment_constructionManager->findById($demande_batiment_moe->id_batiment_construction);*/
             $tranche_demande_batiment_moe = $this->Tranche_demande_batiment_moeManager->findById($demande_batiment_moe->id_tranche_demande_batiment_moe);
+            $contrat_bureau_etude = $this->Contrat_beManager->findById($demande_batiment_moe->id_contrat_bureau_etude);
             $data['id'] = $demande_batiment_moe->id;
             $data['objet'] = $demande_batiment_moe->objet;
             $data['description'] = $demande_batiment_moe->description;
@@ -186,7 +250,8 @@ class Demande_batiment_moe extends REST_Controller {
             $data['reste'] = $demande_batiment_moe->reste;
             $data['date'] = $demande_batiment_moe->date;
             $data['validation'] = $demande_batiment_moe->validation;
-            $data['batiment_construction'] = $batiment_construction;
+            //$data['batiment_construction'] = $batiment_construction;
+            $data['contrat_bureau_etude'] = $contrat_bureau_etude;
         } 
         else 
         {
@@ -195,9 +260,10 @@ class Demande_batiment_moe extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $batiment_construction= array();
-                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
+                    /*$batiment_construction= array();
+                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);*/
                     $tranche_demande_batiment_moe = $this->Tranche_demande_batiment_moeManager->findById($value->id_tranche_demande_batiment_moe);
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['description'] = $value->description;
@@ -209,7 +275,8 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
-                    $data[$key]['batiment_construction'] = $batiment_construction;
+                    //$data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
                 }
             } 
@@ -248,7 +315,7 @@ class Demande_batiment_moe extends REST_Controller {
                     'anterieur' => $this->post('anterieur'),
                     'cumul' => $this->post('cumul'),
                     'reste' => $this->post('reste'),
-                    'id_batiment_construction' => $this->post('id_batiment_construction'),
+                    'id_contrat_bureau_etude' => $this->post('id_contrat_bureau_etude'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data) {
@@ -283,7 +350,7 @@ class Demande_batiment_moe extends REST_Controller {
                     'cumul' => $this->post('cumul'),
                     'reste' => $this->post('reste'),
                     'date' => $this->post('date'),
-                    'id_batiment_construction' => $this->post('id_batiment_construction'),
+                    'id_contrat_bureau_etude' => $this->post('id_contrat_bureau_etude'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {

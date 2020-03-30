@@ -22,35 +22,7 @@ class Dossier_prestataire extends REST_Controller {
         $validation = $this->get('validation');
         $menu = $this->get('menu');
 
-        if ($menu ="getdocument_scanByConvention")
-        {
-            $menu = $this->Document_prestataireManager->findAllByConvention($id_convention_entete);
-            if ($menu) 
-            {
-                foreach ($menu as $key => $value) 
-                {
-                    $contrat_prestataire= array();
-                    $existance = false;
-                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['code'] = $value->code;
-                    $data[$key]['intitule'] = $value->intitule;
-                    $data[$key]['fichier'] = $value->fichier;
-                    $data[$key]['id_document_prestataire_scan'] = $value->id_document_prestataire_scan;
-                    $data[$key]['date_elaboration'] = $value->date_elaboration;
-                    $data[$key]['observation'] = $value->observation;
-                    
-                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
-                    if ($value->id_document_prestataire_scan) {
-                        $existance = true;
-                    }
-                    $data[$key]['existance'] = $existance;
-                }
-            } 
-                else
-                    $data = array();
-        } 
-        elseif ($menu ="getdocument_scanByContrat")
+        if ($menu =="getdocument_scanByContrat")
         {
             $menu = $this->Document_prestataireManager->findAllByContrat($id_contrat_prestataire);
             if ($menu) 
@@ -78,6 +50,34 @@ class Dossier_prestataire extends REST_Controller {
                 else
                     $data = array();
         } 
+        elseif ($menu =="getdocument_scanByConvention")
+        {
+            $menu = $this->Document_prestataireManager->findAllByConvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $contrat_prestataire= array();
+                    $existance = false;
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_prestataire_scan'] = $value->id_document_prestataire_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    if ($value->id_document_prestataire_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        }          
         elseif ($id)
         {
             $data = array();

@@ -106,4 +106,20 @@ class Module_dpp_model extends CI_Model {
         return $this->db->query($sql)->result();                 
     }
 
+    public function getmoduleBycontrat($id_contrat_partenaire_relai)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_contrat_partenaire_relai',$id_contrat_partenaire_relai)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

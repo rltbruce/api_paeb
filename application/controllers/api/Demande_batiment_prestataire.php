@@ -12,14 +12,51 @@ class Demande_batiment_prestataire extends REST_Controller {
         $this->load->model('demande_batiment_prestataire_model', 'Demande_batiment_prestataireManager');
         $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
         $this->load->model('tranche_demande_mpe_model', 'Tranche_demande_mpeManager');
+        $this->load->model('contrat_prestataire_model', 'Contrat_prestataireManager');
+        $this->load->model('type_batiment_model', 'Type_batimentManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
         $id_batiment_construction = $this->get('id_batiment_construction');
+        $id_cisco = $this->get('id_cisco');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $menu = $this->get('menu');
-        if ($menu=="getdemandeValidetechnique")
+        if ($menu=="getalldemandeBycontrat")
+        {
+            $tmp = $this->Demande_batiment_prestataireManager->findAlldemandeBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$batiment_construction= array();
+                    //$batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
+                    $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
+                    //$type_batiment = $this->Type_batimentManager->findById($batiment_construction->id_type_batiment);
+                    //$batiment_construction->type_batiment=$type_batiment;
+
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    //$data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandeValidetechnique")
         {
             $tmp = $this->Demande_batiment_prestataireManager->findAllValidetechnique();
             if ($tmp) 
@@ -46,9 +83,9 @@ class Demande_batiment_prestataire extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($menu=="getdemandeValide")
+        elseif ($menu=="getdemandeValideBycisco")
         {
-            $tmp = $this->Demande_batiment_prestataireManager->findAllValide();
+            $tmp = $this->Demande_batiment_prestataireManager->findAllValideBycisco($id_cisco);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -101,16 +138,20 @@ class Demande_batiment_prestataire extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($menu=="getdemandeInvalide")
+        elseif ($menu=="getdemandeInvalideBycisco")
         {
-            $tmp = $this->Demande_batiment_prestataireManager->findAllInvalide();
+            $tmp = $this->Demande_batiment_prestataireManager->findAllInvalideBycisco($id_cisco);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $batiment_construction= array();
-                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
+                    //$batiment_construction= array();
+                   // $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
                     $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
+                    //$type_batiment = $this->Type_batimentManager->findById($batiment_construction->id_type_batiment);
+                    //$batiment_construction->type_batiment=$type_batiment;
+
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['description'] = $value->description;
@@ -121,7 +162,9 @@ class Demande_batiment_prestataire extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
-                    $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['validation'] = $value->validation;
+                    ///$data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
 
                 }
             } 
@@ -205,7 +248,7 @@ class Demande_batiment_prestataire extends REST_Controller {
                     'anterieur' => $this->post('anterieur'),
                     'cumul' => $this->post('cumul'),
                     'reste' => $this->post('reste'),
-                    'id_batiment_construction' => $this->post('id_batiment_construction'),
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data) {
@@ -240,7 +283,7 @@ class Demande_batiment_prestataire extends REST_Controller {
                     'cumul' => $this->post('cumul'),
                     'reste' => $this->post('reste'),
                     'date' => $this->post('date'),
-                    'id_batiment_construction' => $this->post('id_batiment_construction'),
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {

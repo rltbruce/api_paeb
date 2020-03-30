@@ -141,6 +141,25 @@ class Demande_realimentation_feffi_model extends CI_Model {
             return null;
         }                 
     }
+    
+    public function finddemande_invalideBycisco($id_cisco)
+    {               
+        $result =  $this->db->select('demande_realimentation_feffi.*')
+                        ->from($this->table)
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=demande_realimentation_feffi.id_convention_cife_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id",$id_cisco )
+                        ->where("demande_realimentation_feffi.validation",0 )
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
    /* public function findByIdTechniquementInvalide() {               
         $result =  $this->db->select('*')

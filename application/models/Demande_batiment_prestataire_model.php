@@ -35,7 +35,7 @@ class Demande_batiment_prestataire_model extends CI_Model {
             'cumul' => $demande_batiment_prestataire['cumul'],
             'reste' => $demande_batiment_prestataire['reste'],
             'date'          =>      $demande_batiment_prestataire['date'],
-            'id_batiment_construction'    =>  $demande_batiment_prestataire['id_batiment_construction'],
+            'id_contrat_prestataire'    =>  $demande_batiment_prestataire['id_contrat_prestataire'],
             'validation'    =>  $demande_batiment_prestataire['validation']                       
         );
     }
@@ -69,10 +69,33 @@ class Demande_batiment_prestataire_model extends CI_Model {
         }
     }
 
-    public function findAllInvalide() {               
-        $result =  $this->db->select('*')
+    public function findAllInvalideBycisco($id_cisco) {               
+        $result =  $this->db->select('demande_batiment_presta.*')
                         ->from($this->table)
-                        ->where("validation", 0)
+                        ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_presta.id_contrat_prestataire')
+                        ->join('convention_cisco_feffi_entete','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
+                        
+                        ->where("demande_batiment_presta.validation", 0)
+                        ->where("convention_cisco_feffi_entete.id_cisco", $id_cisco)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+        public function findAllValideBycisco($id_cisco) {               
+        $result =  $this->db->select('demande_batiment_presta.*, contrat_prestataire.id as id_contrat')
+                        ->from($this->table)
+                        ->join('batiment_construction','batiment_construction.id = demande_batiment_presta.id_batiment_construction')
+                        ->join('convention_cisco_feffi_entete','batiment_construction.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->join('contrat_prestataire','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->where("demande_batiment_presta.validation", 3)
+                        ->where("convention_cisco_feffi_entete.id_cisco", $id_cisco)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -143,6 +166,22 @@ class Demande_batiment_prestataire_model extends CI_Model {
         }else{
             return null;
         }                  
-    } 
+    }
+    public function findAlldemandeBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('demande_batiment_presta.*')
+                        ->from($this->table)
+                        ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_presta.id_contrat_prestataire')
+                        ->where("contrat_prestataire.id", $id_contrat_prestataire)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+     
 
 }

@@ -62,7 +62,43 @@ class Document_prestataire_scan_model extends CI_Model {
             return $q->row();
         }
     }
+        public function finddocument_invalideBycisco($id_cisco) {               
+        $result =  $this->db->select('document_prestataire_scan.*')
+                        ->from($this->table)
+                        ->join('contrat_prestataire','contrat_prestataire.id=document_prestataire_scan.id_contrat_prestataire')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=contrat_prestataire.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("document_prestataire_scan.validation", 0)
+                        ->order_by('date_elaboration')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
+        public function finddocument_valideBycisco($id_cisco) {               
+        $result =  $this->db->select('document_prestataire_scan.*')
+                        ->from($this->table)
+                        ->join('contrat_prestataire','contrat_prestataire.id=document_prestataire_scan.id_contrat_prestataire')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=contrat_prestataire.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("document_prestataire_scan.validation", 1)
+                        ->order_by('date_elaboration')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
    /* public function findAllBycontrat($id_contrat_prestataire,$validation) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

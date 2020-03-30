@@ -24,10 +24,10 @@ class Passation_marches extends REST_Controller {
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
          if ($menu=='getpassationBycontrat_prestataire')
          {
-            $menu = $this->Passation_marchesManager->findAllByContrat_prestataire($id_contrat_prestataire);
-            if ($menu) 
+            $tmp = $this->Passation_marchesManager->findAllByContrat_prestataire($id_contrat_prestataire);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     //$prestataire = $this->PrestataireManager->findById($value->id_prestataire);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -56,10 +56,10 @@ class Passation_marches extends REST_Controller {
         }   
         elseif ($menu=='getpassationByconvention')
          {
-            $menu = $this->Passation_marchesManager->findAllByConvention($id_convention_entete);
-            if ($menu) 
+            $tmp = $this->Passation_marchesManager->findAllByConvention($id_convention_entete);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     //$prestataire = $this->PrestataireManager->findById($value->id_prestataire);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -114,10 +114,10 @@ class Passation_marches extends REST_Controller {
         } 
         else 
         {
-            $menu = $this->Passation_marchesManager->findAll();
-            if ($menu) 
+            $tmp = $this->Passation_marchesManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     //$prestataire = $this->PrestataireManager->findById($value->id_prestataire);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);

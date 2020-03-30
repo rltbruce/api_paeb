@@ -78,6 +78,16 @@ class Batiment_construction_model extends CI_Model {
         }
     }
 
+   /* public function findByIdWithType_batiment($id)  {
+        $this->db->select('batiment_construction.*,type_batiment.libelle as libelle_type')
+        ->join('type_batiment','type_batiment.id = batiment_construction.id_type_batiment')
+        ->where("batiment_construction.id", $id);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+    }*/
+
     public function findAllByentete($id_convention_entete)
     {               
         $result =  $this->db->select('*')
@@ -109,9 +119,13 @@ class Batiment_construction_model extends CI_Model {
             inner join batiment_construction on batiment_construction.id =mobilier_construction.id_batiment_construction
             where batiment_construction.id_convention_entete = id_conv ) as montant_mob ",FALSE);
 
-         $this->db ->select("(select sum(cout_divers_construction.cout) from cout_divers_construction
-            where batiment_construction.id_convention_entete = id_conv ) as montant_divers",FALSE);
+         /*$this->db ->select("(select sum(cout_divers_construction.cout) from cout_divers_construction
+            where batiment_construction.id_convention_entete = id_conv ) as montant_divers",FALSE);*/
+        $this->db ->select("(select sum(cout_maitrise_construction.cout) from cout_maitrise_construction
+            where batiment_construction.id_convention_entete = id_conv ) as montant_maitrise",FALSE);
         
+        $this->db ->select("(select sum(cout_sousprojet_construction.cout) from cout_sousprojet_construction
+            where batiment_construction.id_convention_entete = id_conv ) as montant_sousprojet",FALSE);
         
 
         $result =  $this->db->from('convention_cisco_feffi_entete,batiment_construction,latrine_construction')
@@ -129,7 +143,7 @@ class Batiment_construction_model extends CI_Model {
         }
         else
         {
-            return null;
+            return $data=array();
         }               
     
     }

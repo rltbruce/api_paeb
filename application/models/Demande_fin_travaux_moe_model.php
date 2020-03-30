@@ -173,7 +173,91 @@ class Demande_fin_travaux_moe_model extends CI_Model {
             return null;
         }                 
     } 
-     public function summePourcentageCurrent($id_contrat_bureau_etude)
+    public function summePourcentageCurrent($id_contrat_bureau_etude)
+    {               
+        $this->db->select("contrat_bureau_etude.id as id_contr");
+        
+        $this->db ->select("(select sum(tranche_demande_batiment_moe.pourcentage) from tranche_demande_batiment_moe
+            inner join demande_batiment_moe on demande_batiment_moe.id_tranche_demande_batiment_moe = tranche_demande_batiment_moe.id
+            inner join contrat_bureau_etude on contrat_bureau_etude.id = demande_batiment_moe.id_contrat_bureau_etude
+            where contrat_bureau_etude.id = id_contr and demande_batiment_moe.validation=3 ) as pourcentage_bat",FALSE);
+        
+        $this->db ->select("(select sum(tranche_demande_latrine_moe.pourcentage) from tranche_demande_latrine_moe
+            inner join demande_latrine_moe on demande_latrine_moe.id_tranche_demande_latrine_moe = tranche_demande_latrine_moe.id
+            inner join contrat_bureau_etude on contrat_bureau_etude.id = demande_latrine_moe.id_contrat_bureau_etude
+            where contrat_bureau_etude.id = id_contr and demande_latrine_moe.validation=3 ) as pourcentage_lat",FALSE);
+
+        $this->db ->select("(select sum(tranche_demande_mobilier_moe.pourcentage) from tranche_demande_mobilier_moe
+            inner join demande_mobilier_moe on demande_mobilier_moe.id_tranche_demande_mobilier_moe = tranche_demande_mobilier_moe.id            
+            inner join contrat_bureau_etude on contrat_bureau_etude.id = demande_mobilier_moe.id
+            where contrat_bureau_etude.id = id_contr and demande_mobilier_moe.validation=3) as pourcentage_mob",FALSE);
+        $this->db ->select("(select sum(tranche_d_debut_travaux_moe.pourcentage) from tranche_d_debut_travaux_moe
+            inner join demande_debut_travaux_moe on demande_debut_travaux_moe.id_tranche_d_debut_travaux_moe = tranche_d_debut_travaux_moe.id            
+            inner join contrat_bureau_etude on contrat_bureau_etude.id = demande_debut_travaux_moe.id_contrat_bureau_etude
+            where contrat_bureau_etude.id = id_contr and demande_debut_travaux_moe.validation=3) as pourcentage_debut_travaux",FALSE);
+
+        $this->db ->select("(select sum(tranche_d_fin_travaux_moe.pourcentage) from tranche_d_fin_travaux_moe) as pourcentage_tranche_fin_travaux",FALSE); 
+
+        
+
+        $result =  $this->db->from('contrat_bureau_etude')
+                    
+                    ->where('contrat_bureau_etude.id',$id_contrat_bureau_etude)
+                    ->group_by('id_contr')
+                                       
+                    ->get()
+                    ->result();
+
+
+        if($result)
+        {   
+            return $result;
+        }
+        else
+        {
+            return null;
+        }               
+    
+    }
+    public function findAllInvalideBycisco($id_cisco)
+    {               
+        $result =  $this->db->select('demande_fin_travaux_moe.*')
+                        ->from($this->table)
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id= demande_fin_travaux_moe.id_contrat_bureau_etude')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id = contrat_bureau_etude.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("demande_fin_travaux_moe.validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findAllValideBycisco($id_cisco)
+    {               
+        $result =  $this->db->select('demande_fin_travaux_moe.*')
+                        ->from($this->table)
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id= demande_fin_travaux_moe.id_contrat_bureau_etude')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id = contrat_bureau_etude.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("demande_fin_travaux_moe.validation", 3)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+   /*  public function summePourcentageCurrent($id_contrat_bureau_etude)
     {               
         $this->db->select("contrat_bureau_etude.id as id_contr");
         
@@ -222,7 +306,7 @@ class Demande_fin_travaux_moe_model extends CI_Model {
             return null;
         }               
     
-    }
+    }*/
  
 
 

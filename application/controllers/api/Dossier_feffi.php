@@ -21,7 +21,7 @@ class Dossier_feffi extends REST_Controller {
         $validation = $this->get('validation');
         $menu = $this->get('menu');
 
-        if ($menu ="getdocument_scanByContrat")
+        if ($menu =="getdocument_scanByConvention")
         {
             $menu = $this->Document_feffiManager->findAllByConvention($id_convention_entete,$validation);
             if ($menu) 

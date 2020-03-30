@@ -99,8 +99,9 @@ class Utilisateurs_model extends CI_Model
     /*        'sigle'                =>      $utilisateurs['sigle'],*/
             'email'                 =>      $utilisateurs['email'],
             'password'              =>      $utilisateurs['password'],
-            'id_region'              =>      $utilisateurs['id_region'],
-            'id_district'              =>      $utilisateurs['id_district'],
+            'id_region'             =>      $utilisateurs['id_region'],
+            'id_district'           =>      $utilisateurs['id_district'],
+            'id_cisco'              =>      $utilisateurs['id_cisco'],
             'enabled'               =>      $utilisateurs['enabled'],
             'token'                 =>      $utilisateurs['token'],
             'roles'                 =>      $utilisateurs['roles'],
@@ -119,6 +120,9 @@ class Utilisateurs_model extends CI_Model
             'email'                 =>      $utilisateurs['email'],
             'enabled'               =>      $utilisateurs['enabled'],
             'roles'                 =>      $utilisateurs['roles'],
+            'id_region'             =>      $utilisateurs['id_region'],
+            'id_district'           =>      $utilisateurs['id_district'],
+            'id_cisco'              =>      $utilisateurs['id_cisco'],
         );
     }
 

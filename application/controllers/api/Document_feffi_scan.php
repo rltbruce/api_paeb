@@ -20,9 +20,62 @@ class Document_feffi_scan extends REST_Controller {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
         $validation = $this->get('validation');
+        $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
             
-        if ($menu == "getdocumentByvalidation")
+        if ($menu == "getdocument_valideBycisco")
+        {
+            $tmp = $this->Document_feffi_scanManager->findAllvalideBycisco($id_cisco);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $convention_entete= array();
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
+                    $document_feffi = $this->Document_feffiManager->findById($value->id_document_feffi);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['document_feffi'] = $document_feffi;
+                    $data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
+                    $data[$key]['feffi'] = $feffi;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getdocument_invalideBycisco")
+        {
+            $tmp = $this->Document_feffi_scanManager->findAllinvalideBycisco($id_cisco);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $convention_entete= array();
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
+                    $document_feffi = $this->Document_feffiManager->findById($value->id_document_feffi);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['document_feffi'] = $document_feffi;
+                    $data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
+                    $data[$key]['feffi'] = $feffi;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getdocumentByvalidation")
         {
             $tmp = $this->Document_feffi_scanManager->findAllByvalidation($validation);
             if ($tmp) 

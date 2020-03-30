@@ -35,7 +35,7 @@ class Demande_batiment_moe_model extends CI_Model {
             'cumul' => $demande_batiment_moe['cumul'],
             'reste' => $demande_batiment_moe['reste'],
             'date'          =>      $demande_batiment_moe['date'],
-            'id_batiment_construction'    =>  $demande_batiment_moe['id_batiment_construction'],
+            'id_contrat_bureau_etude'    =>  $demande_batiment_moe['id_contrat_bureau_etude'],
             'validation'    =>  $demande_batiment_moe['validation']                       
         );
     }
@@ -171,6 +171,45 @@ class Demande_batiment_moe_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
+    }
+
+    public function findAlldemandeinvalideBycisco($id_cisco)
+    {               
+        $result =  $this->db->select('demande_batiment_moe.*')
+                        ->from($this->table)                        
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id= demande_batiment_moe.id_contrat_bureau_etude')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id = contrat_bureau_etude.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("demande_batiment_moe.validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+        public function findAlldemandevalideBycisco($id_cisco)
+    {               
+        $result =  $this->db->select('demande_batiment_moe.*')
+                        ->from($this->table)                        
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id= demande_batiment_moe.id_contrat_bureau_etude')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id = contrat_bureau_etude.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)
+                        ->where("demande_batiment_moe.validation", 3)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }   
 
 }

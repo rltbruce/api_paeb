@@ -17,10 +17,32 @@ class Appel_offre extends REST_Controller {
     {
         $id = $this->get('id');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
+        $id_cisco = $this->get('id_cisco');
         $validation = $this->get('validation');
         $menu = $this->get('menu');
             
-        if ($menu == "getappelByvalidation")
+        if ($menu == "getappelvalidationBycisco")
+        {
+            $tmp = $this->Appel_offreManager->findAllvalidationBycisco($validation,$id_cisco);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    //$data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getappelByvalidation")
         {
             $tmp = $this->Appel_offreManager->findAllByvalidation($validation);
             if ($tmp) 
@@ -31,7 +53,7 @@ class Appel_offre extends REST_Controller {
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
+                    //$data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_livraison'] = $value->date_livraison;
                     $data[$key]['date_approbation'] = $value->date_approbation;
                     $data[$key]['observation'] = $value->observation;
@@ -69,7 +91,7 @@ class Appel_offre extends REST_Controller {
             $contrat_be = $this->Contrat_beManager->findById($appel_offre->id_contrat_bureau_etude);
             $data['id'] = $appel_offre->id;
             $data['description'] = $appel_offre->description;
-            $data['fichier'] = $appel_offre->fichier;
+            //$data['fichier'] = $appel_offre->fichier;
             $data['date_livraison'] = $appel_offre->date_livraison;
             $data['date_approbation'] = $appel_offre->date_approbation;
             $data['observation'] = $appel_offre->observation;
@@ -86,7 +108,7 @@ class Appel_offre extends REST_Controller {
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
+                    //$data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_livraison'] = $value->date_livraison;
                     $data[$key]['date_approbation'] = $value->date_approbation;
                     $data[$key]['observation'] = $value->observation;
@@ -120,7 +142,7 @@ class Appel_offre extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'description' => $this->post('description'),
-                    'fichier' => $this->post('fichier'),
+                    //'fichier' => $this->post('fichier'),
                     'date_livraison' => $this->post('date_livraison'),
                     'date_approbation' => $this->post('date_approbation'),
                     'observation' => $this->post('observation'),
@@ -151,7 +173,7 @@ class Appel_offre extends REST_Controller {
             } else {
                 $data = array(
                     'description' => $this->post('description'),
-                    'fichier' => $this->post('fichier'),
+                    //'fichier' => $this->post('fichier'),
                     'date_livraison' => $this->post('date_livraison'),
                     'date_approbation' => $this->post('date_approbation'),
                     'observation' => $this->post('observation'),

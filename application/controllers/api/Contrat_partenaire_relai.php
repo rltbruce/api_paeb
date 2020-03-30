@@ -21,9 +21,32 @@ class Contrat_partenaire_relai extends REST_Controller {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
         $id_partenaire_relai = $this->get('id_partenaire_relai');
+        $validation = $this->get('validation');
         $menus = $this->get('menus');
          
-         if ($menus=='getcontratBySanssep')
+         if ($menus=='getcontratByvalidation')
+         {
+            $menu = $this->Contrat_partenaire_relaiManager->findcontratByvalidation($validation);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
+                   $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['ref_contrat']   = $value->ref_contrat;
+                    $data[$key]['montant_contrat']    = $value->montant_contrat;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['partenaire_relai'] = $partenaire_relai;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menus=='getcontratBySanssep')
          {
             $menu = $this->Contrat_partenaire_relaiManager->findContratBySanssep();
             if ($menu) 
@@ -150,6 +173,7 @@ class Contrat_partenaire_relai extends REST_Controller {
                     $data[$key]['date_signature'] = $value->date_signature;
                     $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['partenaire_relai'] = $partenaire_relai;
+                    $data[$key]['validation'] = $value->validation;
                         }
             } 
                 else
@@ -172,6 +196,7 @@ class Contrat_partenaire_relai extends REST_Controller {
                     $data[$key]['date_signature'] = $value->date_signature;
                     $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['partenaire_relai'] = $partenaire_relai;
+                    $data[$key]['validation'] = $value->validation;
                         }
             } 
                 else
@@ -194,6 +219,7 @@ class Contrat_partenaire_relai extends REST_Controller {
                     $data[$key]['date_signature'] = $value->date_signature;
                     $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['partenaire_relai'] = $partenaire_relai;
+                    $data[$key]['validation'] = $value->validation;
                         }
             } 
                 else
@@ -214,6 +240,7 @@ class Contrat_partenaire_relai extends REST_Controller {
             $data['date_signature'] = $contrat_partenaire_relai->date_signature;
             $data['convention_entete'] = $convention_entete;
             $data['partenaire_relai'] = $partenaire_relai;
+            $data['validation'] = $contrat_partenaire_relai->validation;
         } 
         else 
         {
@@ -232,6 +259,7 @@ class Contrat_partenaire_relai extends REST_Controller {
                     $data[$key]['date_signature'] = $value->date_signature;
                     $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['partenaire_relai'] = $partenaire_relai;
+                    $data[$key]['validation'] = $value->validation;
                         }
             } 
                 else
@@ -266,7 +294,8 @@ class Contrat_partenaire_relai extends REST_Controller {
                     'montant_contrat'    => $this->post('montant_contrat'),
                     'date_signature' => $this->post('date_signature'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'id_partenaire_relai' => $this->post('id_partenaire_relai')
+                    'id_partenaire_relai' => $this->post('id_partenaire_relai'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data) {
                     $this->response([
@@ -297,7 +326,8 @@ class Contrat_partenaire_relai extends REST_Controller {
                     'montant_contrat'    => $this->post('montant_contrat'),
                     'date_signature' => $this->post('date_signature'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'id_partenaire_relai' => $this->post('id_partenaire_relai')
+                    'id_partenaire_relai' => $this->post('id_partenaire_relai'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {
                     $this->response([

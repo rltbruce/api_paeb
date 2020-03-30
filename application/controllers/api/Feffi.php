@@ -19,9 +19,35 @@ class Feffi extends REST_Controller {
         $id = $this->get('id');
         $id_ecole = $this->get('id_ecole');
         $id_cisco = $this->get('id_cisco');
+        $id_district = $this->get('id_district');
+        $id_region = $this->get('id_region');
         $menus = $this->get('menus');
             
-        if ($menus=='getfeffiBycisco') 
+        if ($menus=='getfeffiByfiltre') 
+        {   $data = array();
+            $tmp = $this->FeffiManager->findByfiltre($this->generer_requete($id_region,$id_district,$id_cisco));
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$ecole = array();
+                    $cisco = array();
+                   $ecole = $this->EcoleManager->findById($value->id_ecole);
+                   $nbr_membre= $this->Membre_feffiManager->count_membrebyId($value->id);
+                   $nbr_feminin= $this->Membre_feffiManager->count_femininbyId($value->id);
+                   $data[$key]['nbr_membre'] = $nbr_membre->nbr_membre;
+                    $data[$key]['nbr_feminin'] = $nbr_feminin->nbr_feminin;
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['identifiant'] = $value->identifiant;
+                    $data[$key]['denomination'] = $value->denomination;
+                    //$data[$key]['eco'] = $value->id_ecole;
+                    $data[$key]['adresse'] = $value->adresse;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['ecole'] = $ecole;
+                }
+            }
+        }
+        elseif ($menus=='getfeffiBycisco') 
         {   $data = array();
             $tmp = $this->FeffiManager->findBycisco($id_cisco);
             if ($tmp) 
@@ -31,10 +57,10 @@ class Feffi extends REST_Controller {
                     //$ecole = array();
                     $cisco = array();
                    $ecole = $this->EcoleManager->findById($value->id_ecole);
-                   // $nbr_membre= $this->Membre_feffiManager->count_membrebyId($value->id);
-                   // $nbr_feminin= $this->Membre_feffiManager->count_femininbyId($value->id);
-                   // $data[$key]['nbr_membre'] = $nbr_membre->nbr_membre;
-                    //$data[$key]['nbr_feminin'] = $nbr_feminin->nbr_feminin;
+                   $nbr_membre= $this->Membre_feffiManager->count_membrebyId($value->id);
+                   $nbr_feminin= $this->Membre_feffiManager->count_femininbyId($value->id);
+                   $data[$key]['nbr_membre'] = $nbr_membre->nbr_membre;
+                    $data[$key]['nbr_feminin'] = $nbr_feminin->nbr_feminin;
                     $data[$key]['id'] = $value->id;
                     $data[$key]['identifiant'] = $value->identifiant;
                     $data[$key]['denomination'] = $value->denomination;
@@ -212,6 +238,25 @@ class Feffi extends REST_Controller {
                         ], REST_Controller::HTTP_OK);
             }
         }        
+    }
+
+    public function generer_requete($id_region,$id_district,$id_cisco)
+    {
+        
+
+            $requete = "region.id= '".$id_region."' " ;
+        
+            if (($id_district!='*')&&($id_district!='undefined')) 
+            {
+                $requete = $requete." AND district.id='".$id_district."'" ;
+            }
+
+            if (($id_cisco!='*')&&($id_cisco!='undefined')) 
+            {
+                $requete = $requete." AND cisco.id='".$id_cisco."'" ;
+            }
+            
+        return $requete ;
     }
 }
 /* End of file controllername.php */

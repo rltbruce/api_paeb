@@ -20,6 +20,7 @@ class Document_prestataire_scan extends REST_Controller {
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $validation = $this->get('validation');
         $menu = $this->get('menu');
+        $id_cisco = $this->get('id_cisco');
             
        /* if ($menu == "getmemoireBycontrat")
         {
@@ -62,9 +63,50 @@ class Document_prestataire_scan extends REST_Controller {
             } 
                 else
                     $data = array();
+        }*/
+        if ($menu == "getdocument_valideBycisco")
+        {
+            $menu = $this->Document_prestataire_scanManager->finddocument_valideBycisco($id_cisco);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $contrat_prestataire= array();
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $document_prestataire = $this->Document_prestataireManager->findById($value->id_document_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    $data[$key]['document_prestataire'] = $document_prestataire;
+                }
+            } 
+                else
+                    $data = array();
         }
-        else*/
-            if ($id)
+        elseif ($menu == "getdocument_invalideBycisco")
+        {
+            $menu = $this->Document_prestataire_scanManager->finddocument_invalideBycisco($id_cisco);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $contrat_prestataire= array();
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $document_prestataire = $this->Document_prestataireManager->findById($value->id_document_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    $data[$key]['document_prestataire'] = $document_prestataire;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($id)
         {
             $data = array();
             $document_prestataire_scan = $this->Document_prestataire_scanManager->findById($id);

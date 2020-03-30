@@ -13,14 +13,63 @@ class Ecole extends REST_Controller {
         $this->load->model('fokontany_model', 'FokontanyManager');
         $this->load->model('zone_subvention_model', 'Zone_subventionManager');
         $this->load->model('acces_zone_model', 'Acces_zoneManager');
+        $this->load->model('cisco_model', 'CiscoManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
         $id_fokontany = $this->get('id_fokontany');
+        $menus = $this->get('menus');
+        $id_cisco = $this->get('id_cisco');
+        $id_commune = $this->get('id_commune');
             
-        if ($id_fokontany) 
+        if ($menus=='getecoleBycommune') 
+        {   $data = array();
+            $tmp = $this->EcoleManager->findBycommune($id_commune);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
+                    $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['lieu'] = $value->lieu;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['latitude'] = $value->latitude;
+                    $data[$key]['longitude'] = $value->longitude;
+                    $data[$key]['altitude'] = $value->altitude;
+                    $data[$key]['zone_subvention'] = $zone_subvention;
+                    $data[$key]['acces_zone'] = $acces_zone;
+                }
+            }
+        }
+        elseif ($menus=='getecoleBycisco') 
+        {   $data = array();
+            $tmp = $this->EcoleManager->findBycisco($id_cisco);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $fokontany = array();
+                    $fokontany = $this->FokontanyManager->findById($value->id_fokontany);
+                    $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
+                    $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['lieu'] = $value->lieu;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['latitude'] = $value->latitude;
+                    $data[$key]['longitude'] = $value->longitude;
+                    $data[$key]['altitude'] = $value->altitude;
+                    $data[$key]['zone_subvention'] = $zone_subvention;
+                    $data[$key]['acces_zone'] = $acces_zone;
+                    $data[$key]['fokontany'] = $fokontany;
+                }
+            }
+        }
+        elseif ($id_fokontany) 
         {   $data = array();
             $tmp = $this->EcoleManager->findByfokontany($id_fokontany);
             if ($tmp) 
