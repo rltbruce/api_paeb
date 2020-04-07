@@ -77,8 +77,221 @@ class Paiement_batiment_prestataire_model extends CI_Model {
             return null;
         }                 
     }
-
          public function getpaiementByconvention($id_convention_entete)
+    {               
+        $sql="       
+                
+            select 
+                    detail.id_conv as id_conv,
+                    sum(detail.montant_bat_mpe) as montant_bat_mpe,
+                    sum(detail.montant_lat_mpe) as montant_lat_mpe,
+                    sum(detail.montant_mob_mpe) as montant_mob_mpe,
+                    sum(detail.montant_d_moe) as montant_d_moe,
+                    sum(detail.montant_bat_moe) as montant_bat_moe,
+                    sum(detail.montant_lat_moe) as montant_lat_moe,
+                    sum(detail.montant_f_moe) as montant_f_moe,
+                    (sum(detail.montant_bat_mpe)+sum(detail.montant_lat_mpe)+sum(detail.montant_mob_mpe)+sum(detail.montant_d_moe)+sum(detail.montant_bat_moe)+sum(detail.montant_lat_moe)+sum(detail.montant_f_moe)) as montant_total,
+                    sum(detail.montant_fonct_feffi) as montant_fonct_feffi,
+                    sum(detail.montant_pr) as montant_pr
+
+            from(
+
+                (select 
+                        conv.id as id_conv,
+                        sum(p_bat_presta.montant_paiement) as montant_bat_mpe,
+                        0 as montant_lat_mpe,
+                        0 as montant_mob_mpe,
+                        0 as montant_d_moe,
+                        0 as montant_bat_moe,
+                        0 as montant_lat_moe,
+                        0 as montant_f_moe,
+                        0 as montant_fonct_feffi,
+                        0 as montant_pr 
+                        
+                        from paiement_batiment_prestataire as p_bat_presta
+                    
+                            inner join demande_batiment_presta as d_bat_presta on d_bat_presta.id = p_bat_presta.id_demande_batiment_pre 
+                            inner join contrat_prestataire as contrat_presta on contrat_presta.id = d_bat_presta.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = contrat_presta.id_convention_entete
+                            
+                        where conv.id = '".$id_convention_entete."' )
+                UNION
+            
+                (select 
+                        conv.id as id_conv,
+                        0 as montant_bat_mpe,
+                        sum(p_lat_presta.montant_paiement) as montant_lat_mpe,
+                        0 as montant_mob_mpe,
+                        0 as montant_d_moe,
+                        0 as montant_bat_moe,
+                        0 as montant_lat_moe,
+                        0 as montant_f_moe,
+                        0 as montant_fonct_feffi,
+                        0 as montant_pr
+
+                        from paiement_latrine_prestataire as p_lat_presta
+
+                            inner join demande_latrine_presta as d_lat_presta on d_lat_presta.id = p_lat_presta.id_demande_latrine_pre 
+                            inner join contrat_prestataire as contrat_presta on contrat_presta.id = d_lat_presta.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = contrat_presta.id_convention_entete
+                        
+                        where conv.id = '".$id_convention_entete."' )
+
+                UNION
+
+                (select 
+                        conv.id as id_conv,
+                        0 as montant_bat_mpe,
+                        0 as montant_lat_mpe,
+                        sum(p_mob_presta.montant_paiement) as montant_mob_mpe,
+                        0 as montant_d_moe,
+                        0 as montant_bat_moe,
+                        0 as montant_lat_moe,
+                        0 as montant_f_moe,
+                        0 as montant_fonct_feffi,
+                        0 as montant_pr
+
+                        from paiement_mobilier_prestataire as p_mob_presta
+                            
+                            inner join demande_mobilier_presta as d_mob_presta on d_mob_presta.id = p_mob_presta.id_demande_mobilier_pre 
+                            inner join contrat_prestataire as contrat_presta on contrat_presta.id = d_mob_presta.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = contrat_presta.id_convention_entete
+                        
+                        where conv.id = '".$id_convention_entete."' )
+
+                UNION
+
+                (select 
+                        conv.id as id_conv,
+                        0 as montant_bat_mpe,
+                        0 as montant_lat_mpe,
+                        0 as montant_mob_mpe,
+                        sum(p_d_tra_moe.montant_paiement) as montant_d_moe,
+                        0 as montant_bat_moe,
+                        0 as montant_lat_moe,
+                        0 as montant_f_moe,
+                        0 as montant_fonct_feffi,
+                        0 as montant_pr
+
+                        from paiement_debut_travaux_moe as p_d_tra_moe
+
+                            inner join demande_debut_travaux_moe as d_deb_trav_moe on d_deb_trav_moe.id = p_d_tra_moe.id_demande_debut_travaux 
+                            inner join contrat_bureau_etude as contrat_moe on contrat_moe.id = d_deb_trav_moe.id_contrat_bureau_etude
+                            inner join convention_cisco_feffi_entete as conv on conv.id = contrat_moe.id_convention_entete
+                        
+                        where conv.id = '".$id_convention_entete."' )
+                UNION
+                
+                (select 
+                        conv.id as id_conv,
+                        0 as montant_bat_mpe,
+                        0 as montant_lat_mpe,
+                        0 as montant_mob_mpe,
+                        0 as montant_d_moe,
+                        sum(p_bat_moe.montant_paiement) as montant_bat_moe,
+                        0 as montant_lat_moe,
+                        0 as montant_f_moe,
+                        0 as montant_fonct_feffi,
+                        0 as montant_pr 
+
+                        from paiement_batiment_moe as p_bat_moe
+                            
+                            inner join demande_batiment_moe as d_bat_moe on d_bat_moe.id = p_bat_moe.id_demande_batiment_moe 
+                            inner join contrat_bureau_etude contrat_moe on contrat_moe.id = d_bat_moe.id_contrat_bureau_etude
+                            inner join convention_cisco_feffi_entete as conv on conv.id = contrat_moe.id_convention_entete
+                        
+                        where conv.id = '".$id_convention_entete."' )
+                UNION
+
+               (select 
+                        conv.id as id_conv,
+                        0 as montant_bat_mpe,
+                        0 as montant_lat_mpe,
+                        0 as montant_mob_mpe,
+                        0 as montant_d_moe,
+                        0 as montant_bat_moe,
+                        sum(p_lat_moe.montant_paiement) as montant_lat_moe,
+                        0 as montant_f_moe,
+                        0 as montant_fonct_feffi,
+                        0 as montant_pr
+
+                        from paiement_latrine_moe as p_lat_moe
+                            
+                            inner join demande_latrine_moe as d_lat_moe on d_lat_moe.id = p_lat_moe.id_demande_latrine_moe 
+                            inner join contrat_bureau_etude as contrat_moe on contrat_moe.id = d_lat_moe.id_contrat_bureau_etude
+                            inner join convention_cisco_feffi_entete as conv on conv.id = contrat_moe.id_convention_entete
+                            
+                        where conv.id = '".$id_convention_entete."' )
+
+                UNION
+                (select 
+                        conv.id as id_conv,
+                        0 as montant_bat_mpe,
+                        0 as montant_lat_mpe,
+                        0 as montant_mob_mpe,
+                        0 as montant_d_moe,
+                        0 as montant_bat_moe,
+                        0 as montant_lat_moe,
+                        sum(p_f_trava_moe.montant_paiement) as montant_f_moe,
+                        0 as montant_fonct_feffi,
+                        0 as montant_pr
+                        
+                        from paiement_fin_travaux_moe as p_f_trava_moe
+                        
+                            inner join demande_fin_travaux_moe as d_f_trava_moe on d_f_trava_moe.id = p_f_trava_moe.id_demande_fin_travaux 
+                            inner join contrat_bureau_etude as contrat_moe on contrat_moe.id = d_f_trava_moe.id_contrat_bureau_etude
+                            inner join convention_cisco_feffi_entete as conv on conv.id = contrat_moe.id_convention_entete
+                            
+                        where conv.id = '".$id_convention_entete."' )
+                UNION
+                (select 
+                        conv.id as id_conv,
+                        0 as montant_bat_mpe,
+                        0 as montant_lat_mpe,
+                        0 as montant_mob_mpe,
+                        0 as montant_d_moe,
+                        0 as montant_bat_moe,
+                        0 as montant_lat_moe,
+                        0 as montant_f_moe,
+                        sum(sum_decai_feffi.montant) as montant_fonct_feffi,
+                        0 as montant_pr
+                        
+                        from decaiss_fonct_feffi as sum_decai_feffi
+                        
+                            inner join convention_cisco_feffi_entete as conv on conv.id = sum_decai_feffi.id_convention_entete
+                            
+                        where conv.id = '".$id_convention_entete."' )
+                UNION
+                (select 
+                        conv.id as id_conv,
+                        0 as montant_bat_mpe,
+                        0 as montant_lat_mpe,
+                        0 as montant_mob_mpe,
+                        0 as montant_d_moe,
+                        0 as montant_bat_moe,
+                        0 as montant_lat_moe,
+                        0 as montant_f_moe,
+                        0 as montant_fonct_feffi,
+                        sum(p_d_trava_pr.montant_paiement) as montant_pr
+
+                        from paiement_debut_travaux_pr as p_d_trava_pr
+                            
+                            inner join demande_debut_travaux_pr as d_d_trava_pr on d_d_trava_pr.id = p_d_trava_pr.id_demande_debut_travaux 
+                            inner join contrat_partenaire_relai as contrat_pr on contrat_pr.id = d_d_trava_pr.id_contrat_partenaire_relai
+                            inner join convention_cisco_feffi_entete as conv on conv.id = contrat_pr.id_convention_entete
+                        
+                        where conv.id = '".$id_convention_entete."')
+
+            )detail
+
+                group by id_conv";
+        
+
+        return $this->db->query($sql)->result();               
+    
+    }
+
+     /*    public function getpaiementByconvention($id_convention_entete)
     {               
         $this->db->select("convention_cisco_feffi_entete.id as id_conv");
         
@@ -220,7 +433,7 @@ class Paiement_batiment_prestataire_model extends CI_Model {
             return $data=array();
         }               
     
-    }
+    }*/
 
     public function getpaiementbat_mpeBycontrat($id_contrat_prestataire)
     {               

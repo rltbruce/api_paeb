@@ -89,5 +89,15 @@ class Region_model extends CI_Model
         {
             return null;
         }                 
+    }
+    public function findByIdcisco($id_cisco){
+        $this->db->select('region.*')
+        ->join('district','district.id_region=region.id')
+                    ->join('cisco','cisco.id_district=district.id')
+                    ->where('cisco.id',$id_cisco);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
     }    
 }

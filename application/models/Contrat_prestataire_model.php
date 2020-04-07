@@ -169,8 +169,9 @@ class Contrat_prestataire_model extends CI_Model {
 
     public function getcontratByconvention($id_convention_entete)
     {               
-        $result =  $this->db->select('*')
+        $result =  $this->db->select('contrat_prestataire.*,prestataire.nom')
                         ->from($this->table)
+                        ->join('prestataire','prestataire.id=contrat_prestataire.id_prestataire')
                         ->where("id_convention_entete", $id_convention_entete)
                         ->order_by('id')
                         ->get()

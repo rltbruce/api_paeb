@@ -148,8 +148,9 @@ class Contrat_be_model extends CI_Model {
 
     public function getcontratByconvention($id_convention_entete)
     {               
-        $result =  $this->db->select('*')
+        $result =  $this->db->select('contrat_bureau_etude.*,bureau_etude.nom')
                         ->from($this->table)
+                        ->join('bureau_etude','bureau_etude.id=contrat_bureau_etude.id_bureau_etude')
                         ->where("id_convention_entete", $id_convention_entete)
                         ->order_by('id')
                         ->get()

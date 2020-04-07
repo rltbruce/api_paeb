@@ -94,4 +94,12 @@ class Phase_sous_projet_construction_model extends CI_Model {
         }                 
     }
 
+   /* public function getmax_phaseBycontrat($id_contrat_prestataire)
+    {
+        $sql = "select *
+                        from phase_sous_projet_construction
+                        where id=(select max(id) from phase_sous_projet_construction) and id_contrat_prestataire =".$id_contrat_prestataire."";
+        return $this->db->query($sql)->result();                  
+    }*/
+
 }

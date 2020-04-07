@@ -52,7 +52,7 @@ class Police_assurance extends REST_Controller {
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
+                    //$data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_expiration'] = $value->date_expiration;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['contrat_be'] = $contrat_be;
@@ -72,7 +72,7 @@ class Police_assurance extends REST_Controller {
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
+                    //$data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_expiration'] = $value->date_expiration;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['contrat_be'] = $contrat_be;
@@ -88,7 +88,7 @@ class Police_assurance extends REST_Controller {
             $contrat_be = $this->Contrat_beManager->findById($police_assurance->id_contrat_bureau_etude);
             $data['id'] = $police_assurance->id;
             $data['description'] = $police_assurance->description;
-            $data['fichier'] = $police_assurance->fichier;
+            //$data['fichier'] = $police_assurance->fichier;
             $data['date_expiration'] = $police_assurance->date_expiration;
             $data['observation'] = $police_assurance->observation;
             $data['contrat_be'] = $contrat_be;
@@ -104,7 +104,7 @@ class Police_assurance extends REST_Controller {
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
+                    //$data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_expiration'] = $value->date_expiration;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['contrat_be'] = $contrat_be;
@@ -137,7 +137,7 @@ class Police_assurance extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'description' => $this->post('description'),
-                    'fichier' => $this->post('fichier'),
+                    //'fichier' => $this->post('fichier'),
                     'date_expiration' => $this->post('date_expiration'),
                     'observation' => $this->post('observation'),
                     'id_contrat_bureau_etude' => $this->post('id_contrat_bureau_etude'),
@@ -167,7 +167,7 @@ class Police_assurance extends REST_Controller {
             } else {
                 $data = array(
                     'description' => $this->post('description'),
-                    'fichier' => $this->post('fichier'),
+                    //'fichier' => $this->post('fichier'),
                     'date_expiration' => $this->post('date_expiration'),
                     'observation' => $this->post('observation'),
                     'id_contrat_bureau_etude' => $this->post('id_contrat_bureau_etude'),

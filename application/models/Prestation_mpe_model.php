@@ -127,7 +127,7 @@ class Prestation_mpe_model extends CI_Model {
                 inner join phase_sous_projets on phase_sous_projets.id = phase_sous_projet_construction.id_phase_sous_projet
 
                 where contrat_prestataire.id=".$id_contrat_prestataire." 
-                and prestation_mpe.validation=1 and phase_sous_projet_construction.validation=1 and phase_sous_projet_construction.id=(select max(id) from phase_sous_projet_construction)";
+                and prestation_mpe.validation=1 and phase_sous_projet_construction.validation=1 and phase_sous_projet_construction.id=(select max(id) from phase_sous_projet_construction as phase where phase.validation=1)";
         return $this->db->query($result)->result();                
     }
 

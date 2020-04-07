@@ -19,7 +19,25 @@ class Convention_ufp_daaf_entete extends REST_Controller {
         $validation = $this->get('validation');
         $id_convention_ufp_daaf_entete = $this->get('id_convention_ufp_daaf_entete');
 
-        if ($menu=="getDetailcoutByConvention")
+        if ($menu=="getindicateurByconvention")
+        {
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findindicateurByconvention($id_convention_ufp_daaf_entete);
+            if ($tmp) 
+            {
+                $data = $tmp;
+                /*foreach ($tmp as $key => $value) 
+                {
+                    $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
+                    $data[$key]['nbr_beneficiaire_prevu'] = $value->nbr_beneficiaire_prevu;
+                    $data[$key]['nbr_ecole_construite'] = $value->nbr_ecole_construite;
+
+                    
+                }*/
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getDetailcoutByConvention")
         {
             $tmp = $this->Convention_ufp_daaf_enteteManager->findDetailcoutByConvention($id_convention_ufp_daaf_entete);
             if ($tmp) 
@@ -34,7 +52,7 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                 else
                     $data = array();
         }
-        if ($menu=="getconvention_ufp_daaf_validation")
+        elseif ($menu=="getconvention_ufp_daaf_validation")
         {
             $tmp = $this->Convention_ufp_daaf_enteteManager->findConvention_ufp_daafByValidation($validation);
             if ($tmp) 
@@ -48,6 +66,8 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                     $data[$key]['montant_convention'] = $value->montant_convention;                    
                     $data[$key]['montant_trans_comm'] = $value->montant_trans_comm;
                     $data[$key]['frais_bancaire'] = $value->frais_bancaire;
+                    $data[$key]['num_vague'] = $value->num_vague;
+                    $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
                     
                 }
             } 
@@ -69,6 +89,8 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                     $data[$key]['montant_convention'] = $value->montant_convention;                    
                     $data[$key]['montant_trans_comm'] = $value->montant_trans_comm;
                     $data[$key]['frais_bancaire'] = $value->frais_bancaire;
+                    $data[$key]['num_vague'] = $value->num_vague;
+                    $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
                     
                 }
             } 
@@ -89,6 +111,8 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                     $data[$key]['montant_convention'] = $value->montant_convention;                    
                     $data[$key]['montant_trans_comm'] = $value->montant_trans_comm;
                     $data[$key]['frais_bancaire'] = $value->frais_bancaire;
+                    $data[$key]['num_vague'] = $value->num_vague;
+                    $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
                     
                 }
             } 
@@ -124,6 +148,8 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                     'ref_financement' => $this->post('ref_financement'),
                     'montant_trans_comm' => $this->post('montant_trans_comm'),
                     'frais_bancaire' => $this->post('frais_bancaire'),
+                    'num_vague' => $this->post('num_vague'),
+                    'nbr_beneficiaire' => $this->post('nbr_beneficiaire'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data) {
@@ -155,6 +181,8 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                     'ref_financement' => $this->post('ref_financement'),
                     'montant_trans_comm' => $this->post('montant_trans_comm'),
                     'frais_bancaire' => $this->post('frais_bancaire'),
+                    'num_vague' => $this->post('num_vague'),
+                    'nbr_beneficiaire' => $this->post('nbr_beneficiaire'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {

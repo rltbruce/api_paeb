@@ -172,8 +172,9 @@ class Contrat_partenaire_relai_model extends CI_Model {
 
     public function getcontratByconvention($id_convention_entete)
     {               
-        $result =  $this->db->select('*')
+        $result =  $this->db->select('contrat_partenaire_relai.*, partenaire_relai.nom')
                         ->from($this->table)
+                        ->join('partenaire_relai','partenaire_relai.id=contrat_partenaire_relai.id_partenaire_relai')
                         ->where("id_convention_entete", $id_convention_entete)
                         ->order_by('id')
                         ->get()

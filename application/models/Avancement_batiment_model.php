@@ -31,7 +31,7 @@ class Avancement_batiment_model extends CI_Model {
             'observation'    => $avancement_batiment['observation'],
             'date'   => $avancement_batiment['date'],
             'id_attachement_batiment' => $avancement_batiment['id_attachement_batiment'],
-            'id_contrat_prestataire' => $avancement_batiment['id_contrat_prestataire']                      
+            'id_batiment_construction' => $avancement_batiment['id_batiment_construction']                      
         );
     }
     public function delete($id) {

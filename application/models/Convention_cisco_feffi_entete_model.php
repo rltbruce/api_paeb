@@ -31,6 +31,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             'objet' =>    $convention['objet'],
             'id_cisco' => $convention['id_cisco'],
             'id_feffi' => $convention['id_feffi'],
+            'id_site' => $convention['id_site'],
             'ref_financement'    => $convention['ref_financement'],
             'avancement'=> $convention['avancement'],            
             'montant_total' =>    $convention['montant_total'],

@@ -42,6 +42,7 @@ class transfert_reliquat extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['montant'] = $value->montant;
                     $data[$key]['date_transfert'] = $value->date_transfert;
+                    $data[$key]['objet_utilisation'] = $value->objet_utilisation;
                     $data[$key]['intitule_compte'] = $value->intitule_compte;
                     $data[$key]['rib'] = $value->rib;                    
                     $data[$key]['convention_entete'] = $convention_entete;
@@ -62,6 +63,7 @@ class transfert_reliquat extends REST_Controller {
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['montant'] = $value->montant;
+                    $data[$key]['objet_utilisation'] = $value->objet_utilisation;
                     $data[$key]['date_transfert'] = $value->date_transfert;
                     $data[$key]['intitule_compte'] = $value->intitule_compte;
                     $data[$key]['rib'] = $value->rib;                    
@@ -82,6 +84,7 @@ class transfert_reliquat extends REST_Controller {
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['montant'] = $value->montant;
+                    $data[$key]['objet_utilisation'] = $value->objet_utilisation;
                     $data[$key]['date_transfert'] = $value->date_transfert;
                     $data[$key]['intitule_compte'] = $value->intitule_compte;
                     $data[$key]['rib'] = $value->rib;                    
@@ -117,6 +120,7 @@ class transfert_reliquat extends REST_Controller {
                 $data = array(
                     'montant' => $this->post('montant'),
                     'date_transfert' => $this->post('date_transfert'),
+                    'objet_utilisation' => $this->post('objet_utilisation'),
                     'rib' => $this->post('rib'),
                     'intitule_compte' => $this->post('intitule_compte'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
@@ -147,6 +151,7 @@ class transfert_reliquat extends REST_Controller {
                 $data = array(
                     'montant' => $this->post('montant'),
                     'date_transfert' => $this->post('date_transfert'),
+                    'objet_utilisation' => $this->post('objet_utilisation'),
                     'rib' => $this->post('rib'),
                     'intitule_compte' => $this->post('intitule_compte'),
                     'id_convention_entete' => $this->post('id_convention_entete'),

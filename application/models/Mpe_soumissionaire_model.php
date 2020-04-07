@@ -86,5 +86,20 @@ class Mpe_soumissionaire_model extends CI_Model {
             return null;
         }                 
     }
+    public function getmpe_soumissionnairebypass($id_passation_marches) {               
+        $result =  $this->db->select('prestataire.*')
+                        ->from($this->table)
+                        ->join('prestataire','prestataire.id=mpe_soumissionaire.id_prestataire')
+                        ->where("id_passation_marches",$id_passation_marches)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 }

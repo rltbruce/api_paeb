@@ -30,6 +30,7 @@ class transfert_reliquat_model extends CI_Model {
             'rib' => $transfert_reliquat['rib'],
             'intitule_compte' => $transfert_reliquat['intitule_compte'],
             'id_convention_entete' => $transfert_reliquat['id_convention_entete'],
+            'objet_utilisation' => $transfert_reliquat['objet_utilisation'] ,
             'validation' => $transfert_reliquat['validation']                     
         );
     }
@@ -108,5 +109,20 @@ class transfert_reliquat_model extends CI_Model {
             return null;
         }                 
     } 
+    public function findtransfertvalideByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 }

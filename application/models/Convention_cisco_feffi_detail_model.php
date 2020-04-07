@@ -61,6 +61,14 @@ class Convention_cisco_feffi_detail_model extends CI_Model {
             return $q->row();
         }
     }
+    public function getconvention_detailBytete($id_convention_entete) {               
+        $this->db->select('*')
+                        ->where("id_convention_entete",$id_convention_entete);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }                
+    }
 
     public function findAllByEntete($id_convention_entete) {               
         $result =  $this->db->select('*')

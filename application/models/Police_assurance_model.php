@@ -26,7 +26,7 @@ class Police_assurance_model extends CI_Model {
     public function _set($police_assurance) {
         return array(
             'description'   =>      $police_assurance['description'],
-            'fichier'   =>      $police_assurance['fichier'],
+            //'fichier'   =>      $police_assurance['fichier'],
             'date_expiration'    =>  $police_assurance['date_expiration'],
             'observation'   =>      $police_assurance['observation'],
             'id_contrat_bureau_etude'    =>  $police_assurance['id_contrat_bureau_etude'],

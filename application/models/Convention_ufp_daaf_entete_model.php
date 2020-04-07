@@ -31,6 +31,8 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
             'montant_convention' => $convention_ufp_daaf_entete['montant_convention'],
             'montant_trans_comm' => $convention_ufp_daaf_entete['montant_trans_comm'],
             'frais_bancaire' => $convention_ufp_daaf_entete['frais_bancaire'],
+            'num_vague' => $convention_ufp_daaf_entete['num_vague'],
+            'nbr_beneficiaire' => $convention_ufp_daaf_entete['nbr_beneficiaire'],
             'validation' => $convention_ufp_daaf_entete['validation']                      
         );
     }
@@ -440,6 +442,313 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                 group by detail.id_conv_ufp,detail.id_conv) niveau1
 
                 group by niveau1.id_conv_ufp
+            ";
+            return $this->db->query($sql)->result();             
+    }
+
+    public function findindicateurByconvention($id_convention_ufp_daaf_entete)
+    {               
+        $sql="
+               select 
+                        detail.id_conv_ufp as id_conv_ufp,
+                        sum(detail.nbr_beneficiaire_prevu) as nbr_beneficiaire_prevu,
+                        sum(detail.nbr_beneficiaire) as nbr_beneficiaire,
+                        sum(detail.nbr_ecole_construite) as nbr_ecole_construite,
+                        sum(nbr_salle_prevu) as nbr_salle_prevu,
+                        sum(nbr_box_latrine_prevu) as nbr_box_latrine_prevu,
+                        sum(nbr_point_eau_prevu) as nbr_point_eau_prevu,
+                        sum(nbr_table_banc_prevu) as nbr_table_banc_prevu,
+                        sum(nbr_table_maitre_prevu) as nbr_table_maitre_prevu,
+                        sum(nbr_chaise_maitre_prevu) as nbr_chaise_maitre_prevu,
+                        sum(nbr_salle_construite) as nbr_salle_construite,
+                        sum(nbr_box_latrine_construite) as nbr_box_latrine_construite,
+                        sum(nbr_point_eau_construite) as nbr_point_eau_construite,
+                        sum(nbr_table_banc_construite) as nbr_table_banc_construite,
+                        sum(nbr_table_maitre_construite) as nbr_table_maitre_construite,
+                        sum(nbr_chaise_maitre_construite) as nbr_chaise_maitre_construite
+               from (
+
+               (
+                select 
+                        conv_ufp.id as id_conv_ufp,
+                        sum(conv_ufp.nbr_beneficiaire) as nbr_beneficiaire_prevu,
+                        0 as nbr_beneficiaire,
+                        0 as nbr_ecole_construite,
+                        0 as nbr_salle_prevu,
+                        0 as nbr_box_latrine_prevu,
+                        0 as nbr_point_eau_prevu,
+                        0 as nbr_table_banc_prevu,
+                        0 as nbr_table_maitre_prevu,
+                        0 as nbr_chaise_maitre_prevu,
+                        0 as nbr_salle_construite,
+                        0 as nbr_box_latrine_construite,
+                        0 as nbr_point_eau_construite,
+                        0 as nbr_table_banc_construite,
+                        0 as nbr_table_maitre_construite,
+                        0 as nbr_chaise_maitre_construite
+
+                        from convention_ufp_daaf_entete as conv_ufp                    
+                        where conv_ufp.id = '".$id_convention_ufp_daaf_entete."'
+                            group by conv_ufp.id
+                )
+                UNION
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        0 as nbr_beneficiaire_prevu,
+                        count(conv.id) as nbr_beneficiaire,
+                        0 as nbr_ecole_construite,
+                        0 as nbr_salle_prevu,
+                        0 as nbr_box_latrine_prevu,
+                        0 as nbr_point_eau_prevu,
+                        0 as nbr_table_banc_prevu,
+                        0 as nbr_table_maitre_prevu,
+                        0 as nbr_chaise_maitre_prevu,
+                        0 as nbr_salle_construite,
+                        0 as nbr_box_latrine_construite,
+                        0 as nbr_point_eau_construite,
+                        0 as nbr_table_banc_construite,
+                        0 as nbr_table_maitre_construite,
+                        0 as nbr_chaise_maitre_construite
+
+                        from convention_ufp_daaf_entete as conv_ufp
+                            inner join convention_cisco_feffi_entete as conv on conv.id_convention_ufpdaaf=conv_ufp.id                     
+                             where conv_ufp.id = '".$id_convention_ufp_daaf_entete."' 
+                       
+                            group by conv_ufp.id
+                ) 
+                UNION
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        0 as nbr_beneficiaire_prevu,
+                        0 as nbr_beneficiaire,
+                        count(conv.id) as nbr_ecole_construite,
+                        0 as nbr_salle_prevu,
+                        0 as nbr_box_latrine_prevu,
+                        0 as nbr_point_eau_prevu,
+                        0 as nbr_table_banc_prevu,
+                        0 as nbr_table_maitre_prevu,
+                        0 as nbr_chaise_maitre_prevu,
+                        0 as nbr_salle_construite,
+                        0 as nbr_box_latrine_construite,
+                        0 as nbr_point_eau_construite,
+                        0 as nbr_table_banc_construite,
+                        0 as nbr_table_maitre_construite,
+                        0 as nbr_chaise_maitre_construite
+
+                        from convention_ufp_daaf_entete as conv_ufp
+                            inner join convention_cisco_feffi_entete as conv on conv.id_convention_ufpdaaf=conv_ufp.id 
+                            inner join batiment_construction as bat_const on bat_const.id_convention_entete = conv.id
+                            inner join avancement_batiment as avance_bat on avance_bat.id_batiment_construction = bat_const.id
+                            inner join attachement_batiment as atta_bat on atta_bat.id = avance_bat.id_attachement_batiment
+                            
+                            inner join latrine_construction as lat_const on lat_const.id_batiment_construction = bat_const.id
+                            inner join avancement_latrine as avance_lat on avance_lat.id_latrine_construction = lat_const.id
+                            inner join attachement_latrine as atta_lat on atta_lat.id = avance_lat.id_attachement_latrine
+
+                            inner join mobilier_construction as mob_const on mob_const.id_batiment_construction = bat_const.id
+                            inner join avancement_mobilier as avance_mob on avance_mob.id_mobilier_construction = mob_const.id
+                            inner join attachement_mobilier as atta_mob on atta_mob.id = avance_mob.id_attachement_mobilier                   
+                             
+                             where atta_bat.ponderation_batiment=100 
+                                    and atta_lat.ponderation_latrine=100
+                                    and atta_mob.ponderation_mobilier=100 
+                                    and conv_ufp.id = '".$id_convention_ufp_daaf_entete."' 
+                       
+                            group by conv_ufp.id
+                )
+                UNION
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        0 as nbr_beneficiaire_prevu,
+                        0 as nbr_beneficiaire,
+                        0 as nbr_ecole_construite,
+                        sum(type_bat.nbr_salle) as nbr_salle_prevu,
+                        0 as nbr_box_latrine_prevu,
+                        0 as nbr_point_eau_prevu,
+                        0 as nbr_table_banc_prevu,
+                        0 as nbr_table_maitre_prevu,
+                        0 as nbr_chaise_maitre_prevu,
+                        0 as nbr_salle_construite,
+                        0 as nbr_box_latrine_construite,
+                        0 as nbr_point_eau_construite,
+                        0 as nbr_table_banc_construite,
+                        0 as nbr_table_maitre_construite,
+                        0 as nbr_chaise_maitre_construite
+
+                        from convention_ufp_daaf_entete as conv_ufp
+                            inner join convention_cisco_feffi_entete as conv on conv.id_convention_ufpdaaf=conv_ufp.id 
+                            inner join batiment_construction as bat_const on bat_const.id_convention_entete = conv.id
+                            inner join type_batiment as type_bat on type_bat.id = bat_const.id_type_batiment                  
+                             
+                             where conv_ufp.id = '".$id_convention_ufp_daaf_entete."' 
+                       
+                            group by conv_ufp.id
+                )
+                UNION
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        0 as nbr_beneficiaire_prevu,
+                        0 as nbr_beneficiaire,
+                        0 as nbr_ecole_construite,
+                        0 as nbr_salle_prevu,
+                        sum(type_lat.nbr_box_latrine) as nbr_box_latrine_prevu,
+                        sum(type_lat.nbr_point_eau) as nbr_point_eau_prevu,
+                        0 as nbr_table_banc_prevu,
+                        0 as nbr_table_maitre_prevu,
+                        0 as nbr_chaise_maitre_prevu,
+                        0 as nbr_salle_construite,
+                        0 as nbr_box_latrine_construite,
+                        0 as nbr_point_eau_construite,
+                        0 as nbr_table_banc_construite,
+                        0 as nbr_table_maitre_construite,
+                        0 as nbr_chaise_maitre_construite
+
+                        from convention_ufp_daaf_entete as conv_ufp
+                            inner join convention_cisco_feffi_entete as conv on conv.id_convention_ufpdaaf=conv_ufp.id 
+                            inner join batiment_construction as bat_const on bat_const.id_convention_entete = conv.id
+                            inner join latrine_construction as lat_const on lat_const.id_batiment_construction = bat_const.id 
+                            inner join type_latrine as type_lat on type_lat.id = lat_const.id_type_latrine                  
+                             
+                             where conv_ufp.id = '".$id_convention_ufp_daaf_entete."' 
+                       
+                            group by conv_ufp.id
+                )
+                UNION
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        0 as nbr_beneficiaire_prevu,
+                        0 as nbr_beneficiaire,
+                        0 as nbr_ecole_construite,
+                        0 as nbr_salle_prevu,
+                        0 as nbr_box_latrine_prevu,
+                        0 as nbr_point_eau_prevu,
+                        sum(type_mob.nbr_table_banc) as nbr_table_banc_prevu,
+                        sum(type_mob.nbr_table_maitre) as nbr_table_maitre_prevu,
+                        sum(type_mob.nbr_chaise_maitre) as nbr_chaise_maitre_prevu,
+                        0 as nbr_salle_construite,
+                        0 as nbr_box_latrine_construite,
+                        0 as nbr_point_eau_construite,
+                        0 as nbr_table_banc_construite,
+                        0 as nbr_table_maitre_construite,
+                        0 as nbr_chaise_maitre_construite
+
+                        from convention_ufp_daaf_entete as conv_ufp
+                            inner join convention_cisco_feffi_entete as conv on conv.id_convention_ufpdaaf=conv_ufp.id 
+                            inner join batiment_construction as bat_const on bat_const.id_convention_entete = conv.id
+                            inner join mobilier_construction as mob_const on mob_const.id_batiment_construction = bat_const.id 
+                            inner join type_mobilier as type_mob on type_mob.id = mob_const.id_type_mobilier                  
+                             
+                             where conv_ufp.id = '".$id_convention_ufp_daaf_entete."' 
+                       
+                            group by conv_ufp.id
+                )
+                UNION
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        0 as nbr_beneficiaire_prevu,
+                        0 as nbr_beneficiaire,
+                        0 as nbr_ecole_construite,
+                        0 as nbr_salle_prevu,
+                        0 as nbr_box_latrine_prevu,
+                        0 as nbr_point_eau_prevu,
+                        0 as nbr_table_banc_prevu,
+                        0 as nbr_table_maitre_prevu,
+                        0 as nbr_chaise_maitre_prevu,
+                        sum(type_bat.nbr_salle) as nbr_salle_construite,
+                        0 as nbr_box_latrine_construite,
+                        0 as nbr_point_eau_construite,
+                        0 as nbr_table_banc_construite,
+                        0 as nbr_table_maitre_construite,
+                        0 as nbr_chaise_maitre_construite
+
+                        from convention_ufp_daaf_entete as conv_ufp
+                            inner join convention_cisco_feffi_entete as conv on conv.id_convention_ufpdaaf=conv_ufp.id 
+                            inner join batiment_construction as bat_const on bat_const.id_convention_entete = conv.id
+                            inner join type_batiment as type_bat on type_bat.id = bat_const.id_type_batiment
+                            inner join avancement_batiment as avance_bat on avance_bat.id_batiment_construction = bat_const.id
+                            inner join attachement_batiment as atta_bat on atta_bat.id = avance_bat.id_attachement_batiment                  
+                             
+                             where atta_bat.ponderation_batiment=100 
+                                    and conv_ufp.id = '".$id_convention_ufp_daaf_entete."' 
+                       
+                            group by conv_ufp.id
+                )
+                UNION
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        0 as nbr_beneficiaire_prevu,
+                        0 as nbr_beneficiaire,
+                        0 as nbr_ecole_construite,
+                        0 as nbr_salle_prevu,
+                        0 as nbr_box_latrine_prevu,
+                        0 as nbr_point_eau_prevu,
+                        0 as nbr_table_banc_prevu,
+                        0 as nbr_table_maitre_prevu,
+                        0 as nbr_chaise_maitre_prevu,
+                        0 as nbr_salle_construite,
+                        sum(type_lat.nbr_box_latrine) as nbr_box_latrine_construite,
+                        sum(type_lat.nbr_point_eau) as nbr_point_eau_construite,
+                        0 as nbr_table_banc_construite,
+                        0 as nbr_table_maitre_construite,
+                        0 as nbr_chaise_maitre_construite
+
+                        from convention_ufp_daaf_entete as conv_ufp
+                            inner join convention_cisco_feffi_entete as conv on conv.id_convention_ufpdaaf=conv_ufp.id 
+                            inner join batiment_construction as bat_const on bat_const.id_convention_entete = conv.id
+                            inner join latrine_construction as lat_const on lat_const.id_batiment_construction = bat_const.id 
+                            inner join type_latrine as type_lat on type_lat.id = lat_const.id_type_latrine
+                            inner join avancement_latrine as avance_lat on avance_lat.id_latrine_construction = lat_const.id
+                            inner join attachement_latrine as atta_lat on atta_lat.id = avance_lat.id_attachement_latrine                  
+                             
+                             where atta_lat.ponderation_latrine=100
+                                    and conv_ufp.id = '".$id_convention_ufp_daaf_entete."' 
+                       
+                            group by conv_ufp.id
+                )
+                UNION
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        0 as nbr_beneficiaire_prevu,
+                        0 as nbr_beneficiaire,
+                        0 as nbr_ecole_construite,
+                        0 as nbr_salle_prevu,
+                        0 as nbr_box_latrine_prevu,
+                        0 as nbr_point_eau_prevu,
+                        0 as nbr_table_banc_prevu,
+                        0 as nbr_table_maitre_prevu,
+                        0 as nbr_chaise_maitre_prevu,
+                        0 as nbr_salle_construite,
+                        0 as nbr_box_latrine_construite,
+                        0 as nbr_point_eau_construite,                        
+                        sum(type_mob.nbr_table_banc) as nbr_table_banc_construite,
+                        sum(type_mob.nbr_table_maitre) as nbr_table_maitre_construite,
+                        sum(type_mob.nbr_chaise_maitre) as nbr_chaise_maitre_construite
+
+                        from convention_ufp_daaf_entete as conv_ufp
+                            inner join convention_cisco_feffi_entete as conv on conv.id_convention_ufpdaaf=conv_ufp.id 
+                            inner join batiment_construction as bat_const on bat_const.id_convention_entete = conv.id
+                            inner join mobilier_construction as mob_const on mob_const.id_batiment_construction = bat_const.id 
+                            inner join type_mobilier as type_mob on type_mob.id = mob_const.id_type_mobilier
+                            inner join avancement_mobilier as avance_mob on avance_mob.id_mobilier_construction = mob_const.id
+                            inner join attachement_mobilier as atta_mob on atta_mob.id = avance_mob.id_attachement_mobilier                  
+                             
+                             where atta_mob.ponderation_mobilier=100 
+                                    and conv_ufp.id = '".$id_convention_ufp_daaf_entete."' 
+                       
+                            group by conv_ufp.id
+                )
+
+                )detail
+
+                group by detail.id_conv_ufp
             ";
             return $this->db->query($sql)->result();             
     } 
