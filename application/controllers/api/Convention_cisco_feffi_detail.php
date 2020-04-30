@@ -38,9 +38,11 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['intitule'] = $value->intitule;
                     
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['id_convention_entete'] = $value->id_convention_entete;
                     
                     $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['prev_beneficiaire'] = $value->prev_beneficiaire;
+                    $data[$key]['prev_nbr_ecole'] = $value->prev_nbr_ecole;
                     $data[$key]['delai'] = $value->delai;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['compte_feffi'] = $compte_feffi;
@@ -53,37 +55,41 @@ class Convention_cisco_feffi_detail extends REST_Controller {
         {
             $data = array();
             $convention_detail = $this->Convention_cisco_feffi_detailManager->findById($id);
-            $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($convention_detail->$id_convention_entete);
+            //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($convention_detail->$id_convention_entete);
             $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_entete->id_feffi);
 
             $data['id'] = $convention_detail->id;
             $data['intitule'] = $convention_detail->intitule;                    
             //$data['zone_subvention'] = $zone_subvention;
             //$data['acces_zone'] = $acces_zone;
-            $data['convention_entete'] = $convention_detail->convention_entete;
+            $data['id_convention_entete'] = $convention_detail->id_convention_entete;
             //$data['composant'] = $composant;
             $data['date_signature'] = $convention_detail->date_signature;
+            $data['prev_beneficiaire'] = $convention_detail->prev_beneficiaire;
+            $data['prev_nbr_ecole'] = $convention_detail->prev_nbr_ecole;
             $data['delai'] = $convention_detail->delai;
             $data['observation'] = $convention_detail->observation;
             $data['compte_feffi'] = $compte_feffi;
         } 
         else 
         {
-            $menu = $this->Convention_cisco_feffi_enteteManager->findAll();
-            if ($menu) 
+            $tmp = $this->Convention_cisco_feffi_detailManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $data = array();
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->$id_convention_entete);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_entete->id_compte_feffi);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_entete->id_feffi);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['intitule'] = $value->intitule;
                     //$data[$key]['montant_total'] = $value->montant_total;
                    // $data[$key]['avancement'] = $value->avancement;
-                    $data[$key]['convention_entete'] = $value->convention_entete;
+                    $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['prev_beneficiaire'] = $value->prev_beneficiaire;
+                    $data[$key]['prev_nbr_ecole'] = $value->prev_nbr_ecole;
                     $data[$key]['delai'] = $value->delai;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['compte_feffi'] = $compte_feffi;
@@ -124,7 +130,11 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Convention_cisco_feffi_detailManager->supressionBytete($id_convention_entete);         
+            $delete = $this->Convention_cisco_feffi_detailManager->supressionBytete($id_convention_entete); 
+           /* $deletebat = $this->Batiment_constructionManager->supressionBytete($id_convention_entete); 
+            $deletelat = $this->Latrine_constructionManager->supressionBytete($id_convention_entete);  
+            $deletemait = $this->Cout_maitrise_constructionManager->supressionBytete($id_convention_entete);  
+            $deletecout = $this->Cout_sousprojet_constructionManager->supressionBytete($id_convention_entete); */        
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,
@@ -138,15 +148,16 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_OK);
             }
-        }
-        if ($supprimer == 0) {
+        }elseif ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
                     'intitule' => $this->post('intitule'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
                     'date_signature' => $this->post('date_signature'),
                     'delai' => $this->post('delai'),
-                    'observation' => $this->post('observation')
+                    'observation' => $this->post('observation'),
+                    'prev_beneficiaire' => $this->post('prev_beneficiaire'),
+                    'prev_nbr_ecole' => $this->post('prev_nbr_ecole')
                 );
                 if (!$data) {
                     $this->response([
@@ -175,7 +186,9 @@ class Convention_cisco_feffi_detail extends REST_Controller {
                     'id_convention_entete' => $this->post('id_convention_entete'),
                     'date_signature' => $this->post('date_signature'),
                     'delai' => $this->post('delai'),
-                    'observation' => $this->post('observation')
+                    'observation' => $this->post('observation'),
+                    'prev_beneficiaire' => $this->post('prev_beneficiaire'),
+                    'prev_nbr_ecole' => $this->post('prev_nbr_ecole')
                 );
                 if (!$data || !$id) {
                     $this->response([

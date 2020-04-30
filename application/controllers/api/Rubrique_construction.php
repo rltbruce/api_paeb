@@ -21,8 +21,8 @@ class Rubrique_construction extends REST_Controller {
          if ($menu == 'getrubriqueByphase_construction')
          {
             $tmp = $this->Rubrique_constructionManager->findAllByphase_construction($id_phase_construction);
-            if ($tmp) 
-            {
+           // if ($tmp) 
+           // {
                 $data=$tmp;
 
                 /*foreach ($menu as $key => $value) 
@@ -36,9 +36,9 @@ class Rubrique_construction extends REST_Controller {
                    
                     $data[$key]['phase_sous_projet_construction'] = $phase_sous_projet_construction;
                 }*/
-            } 
-                else
-                    $data = array();
+           // } 
+               // else
+                //    $data = array();
         }   
         elseif ($id)
         {

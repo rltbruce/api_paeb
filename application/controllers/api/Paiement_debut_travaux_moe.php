@@ -17,10 +17,11 @@ class Paiement_debut_travaux_moe extends REST_Controller {
     {
         $id = $this->get('id');
         $id_demande_debut_travaux = $this->get('id_demande_debut_travaux');
+        $menu = $this->get('menu');
             
-        if ($id_demande_debut_travaux) 
+        if ($menu=='getpaiementinvalideBydemande') 
         {   $data = array();
-            $tmp = $this->Paiement_debut_travaux_moeManager->findBydemande_debut_travaux_moe($id_demande_debut_travaux);
+            $tmp = $this->Paiement_debut_travaux_moeManager->findpaiementinvalideBydemande($id_demande_debut_travaux);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -31,6 +32,43 @@ class Paiement_debut_travaux_moe extends REST_Controller {
                     $data[$key]['montant_paiement'] = $value->montant_paiement;
                     $data[$key]['date_paiement'] = $value->date_paiement;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['demande_debut_travaux_moe'] = $demande_debut_travaux_moe;
+                }
+            }
+        }
+        elseif ($menu=='getpaiementvalideBydemande') 
+        {   $data = array();
+            $tmp = $this->Paiement_debut_travaux_moeManager->findpaiementvalideBydemand($id_demande_debut_travaux);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_debut_travaux_moe = array();
+                    $demande_debut_travaux_moe = $this->Demande_debut_travaux_moeManager->findById($value->id_demande_debut_travaux);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant_paiement'] = $value->montant_paiement;
+                    $data[$key]['date_paiement'] = $value->date_paiement;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['demande_debut_travaux_moe'] = $demande_debut_travaux_moe;
+                }
+            }
+        }
+        elseif ($menu=='getpaiementBydemande') 
+        {   $data = array();
+            $tmp = $this->Paiement_debut_travaux_moeManager->findpaiementBydemande($id_demande_debut_travaux);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_debut_travaux_moe = array();
+                    $demande_debut_travaux_moe = $this->Demande_debut_travaux_moeManager->findById($value->id_demande_debut_travaux);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant_paiement'] = $value->montant_paiement;
+                    $data[$key]['date_paiement'] = $value->date_paiement;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['demande_debut_travaux_moe'] = $demande_debut_travaux_moe;
                 }
             }
@@ -44,20 +82,22 @@ class Paiement_debut_travaux_moe extends REST_Controller {
             $data['montant_paiement'] = $paiement_debut_travaux_moe->montant_paiement;
             $data['date_paiement'] = $paiement_debut_travaux_moe->date_paiement;
             $data['observation'] = $paiement_debut_travaux_moe->observation;
+            $data['validation'] = $paiement_debut_travaux_moe->validation;
             $data['demande_debut_travaux_moe'] = $demande_debut_travaux_moe;
         } 
         else 
         {
-            $menu = $this->Paiement_debut_travaux_moeManager->findAll();
-            if ($menu) 
+            $tmp = $this->Paiement_debut_travaux_moeManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $demande_debut_travaux_moe = $this->Demande_debut_travaux_moeManager->findById($value->id_demande_debut_travaux);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['montant_paiement'] = $value->montant_paiement;
                     $data[$key]['date_paiement'] = $value->date_paiement;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['demande_debut_travaux_moe'] = $demande_debut_travaux_moe;
                 }
             } 
@@ -89,7 +129,7 @@ class Paiement_debut_travaux_moe extends REST_Controller {
                 $data = array(
                     'montant_paiement' => $this->post('montant_paiement'),
                     //'cumul' => $this->post('cumul'),
-                    //'pourcentage_paiement' => $this->post('pourcentage_paiement'),
+                    'validation' => $this->post('validation'),
                     'date_paiement' => $this->post('date_paiement'),
                     'observation' => $this->post('observation'),
                     'id_demande_debut_travaux' => $this->post('id_demande_debut_travaux')
@@ -122,6 +162,7 @@ class Paiement_debut_travaux_moe extends REST_Controller {
                     //'pourcentage_paiement' => $this->post('pourcentage_paiement'),
                     'date_paiement' => $this->post('date_paiement'),
                     'observation' => $this->post('observation'),
+                    'validation' => $this->post('validation'),
                     'id_demande_debut_travaux' => $this->post('id_demande_debut_travaux')
                 );
                 if (!$data || !$id) {

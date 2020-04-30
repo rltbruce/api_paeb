@@ -123,6 +123,21 @@ class transfert_reliquat_model extends CI_Model {
         }else{
             return null;
         }                 
+    } 
+    public function findtransfertinvalideByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 0)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     }
 
 }

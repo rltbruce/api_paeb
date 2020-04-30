@@ -31,6 +31,26 @@ class transfert_reliquat extends REST_Controller {
                 else
                     $data = array();
         }
+        elseif ($menu=="gettransfertvalideByconvention")
+        {
+            $tmp = $this->Transfert_reliquatManager->findtransfertvalideByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="gettransfertinvalideByconvention")
+        {
+            $tmp = $this->Transfert_reliquatManager->findtransfertinvalideByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
         elseif ($menu=="gettransfertinvalideBycisco")
         {
             $tmp = $this->Transfert_reliquatManager->findtransfertinvalideByCisco($id_cisco);

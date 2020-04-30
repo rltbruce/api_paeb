@@ -3,7 +3,8 @@
 class Mobilier_construction_model extends CI_Model {
     protected $table = 'mobilier_construction';
 
-    public function add($mobilier_construction) {
+    public function add($mobilier_construction)
+    {
         $this->db->set($this->_set($mobilier_construction))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
@@ -12,7 +13,8 @@ class Mobilier_construction_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $mobilier_construction) {
+    public function update($id, $mobilier_construction)
+    {
         $this->db->set($this->_set($mobilier_construction))
                             ->where('id', (int) $id)
                             ->update($this->table);
@@ -23,14 +25,16 @@ class Mobilier_construction_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($mobilier_construction) {
+    public function _set($mobilier_construction)
+    {
         return array(
             'id_type_mobilier' => $mobilier_construction['id_type_mobilier'],
-            'id_batiment_construction'=> $mobilier_construction['id_batiment_construction'],
-            'cout_unitaire'=> $mobilier_construction['cout_unitaire'],
-            'nbr_mobilier'=> $mobilier_construction['nbr_mobilier']);
+            'id_convention_entete'=> $mobilier_construction['id_convention_entete'],
+            'cout_unitaire'=> $mobilier_construction['cout_unitaire']
+        );
     }
-    public function delete($id) {
+    public function delete($id)
+    {
         $this->db->where('id', (int) $id)->delete($this->table);
         if($this->db->affected_rows() === 1)
         {
@@ -39,7 +43,8 @@ class Mobilier_construction_model extends CI_Model {
             return null;
         }  
     }
-    public function findAll() {               
+    public function findAll()
+    {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->order_by('id')
@@ -52,7 +57,8 @@ class Mobilier_construction_model extends CI_Model {
             return null;
         }                 
     }
-    public function findById($id)  {
+    public function findById($id)
+    {
         $this->db->where("id", $id);
         $q = $this->db->get($this->table);
         if ($q->num_rows() > 0) {
@@ -60,7 +66,23 @@ class Mobilier_construction_model extends CI_Model {
         }
     }
 
-    public function findAllByBatiment($id_batiment_construction) {               
+    public function findMobilierByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete",$id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+  /*  public function findAllByBatiment($id_batiment_construction) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_batiment_construction",$id_batiment_construction)
@@ -73,7 +95,7 @@ class Mobilier_construction_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
   /*  public function supressionBydetail($id) {
         $this->db->where('id_convention_detail', (int) $id)->delete($this->table);
@@ -84,7 +106,7 @@ class Mobilier_construction_model extends CI_Model {
             return null;
         }  
     } */
-        public function findAllByContrat_bureau_etude($id_contrat_bureau_etude) {               
+    /*    public function findAllByContrat_bureau_etude($id_contrat_bureau_etude) {               
         $result =  $this->db->select('mobilier_construction.id as id, mobilier_construction.id_batiment_construction as id_batiment_construction, mobilier_construction.nbr_mobilier as nbr_mobilier,mobilier_construction.cout_unitaire,mobilier_construction.id_type_mobilier as id_type_mobilier')
                         ->from($this->table)
                         ->join("batiment_construction",'mobilier_construction.id_batiment_construction=batiment_construction.id')
@@ -135,6 +157,6 @@ class Mobilier_construction_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
 }

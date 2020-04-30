@@ -68,8 +68,82 @@ class Demande_batiment_prestataire_model extends CI_Model {
             return $q->row();
         }
     }
+    public function finddemandeBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+     public function finddemandeinvalideBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+     public function finddemandevalidebcafBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function finddemandevalideBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("validation", 2)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+     public function countAllByInvalide($invalide)
+    {
+        $result = $this->db->select('COUNT(*) as nombre')
+                        ->from($this->table)
+                        ->where("validation", $invalide)
+                        ->order_by('id', 'desc')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                  
+    }
 
-    public function findAllInvalideBycisco($id_cisco) {               
+   /* public function findAllInvalideBycisco($id_cisco) {               
         $result =  $this->db->select('demande_batiment_presta.*')
                         ->from($this->table)
                         ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_presta.id_contrat_prestataire')
@@ -94,6 +168,24 @@ class Demande_batiment_prestataire_model extends CI_Model {
                         ->join('batiment_construction','batiment_construction.id = demande_batiment_presta.id_batiment_construction')
                         ->join('convention_cisco_feffi_entete','batiment_construction.id_convention_entete = convention_cisco_feffi_entete.id')
                         ->join('contrat_prestataire','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->where("demande_batiment_presta.validation", 3)
+                        ->where("convention_cisco_feffi_entete.id_cisco", $id_cisco)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+            public function findValideBycisco($id_cisco) {               
+        $result =  $this->db->select('demande_batiment_presta.*, contrat_prestataire.id as id_contrat')
+                        ->from($this->table)
+                        ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_presta.id_contrat_prestataire')
+                        ->join('convention_cisco_feffi_entete','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
+                        
                         ->where("demande_batiment_presta.validation", 3)
                         ->where("convention_cisco_feffi_entete.id_cisco", $id_cisco)
                         ->order_by('id')
@@ -150,24 +242,10 @@ class Demande_batiment_prestataire_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
-    public function countAllByInvalide($invalide)
-    {
-        $result = $this->db->select('COUNT(*) as nombre')
-                        ->from($this->table)
-                        ->where("validation", $invalide)
-                        ->order_by('id', 'desc')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                  
-    }
-    public function findAlldemandeBycontrat($id_contrat_prestataire) {               
+   
+    /*public function findAlldemandeBycontrat($id_contrat_prestataire) {               
         $result =  $this->db->select('demande_batiment_presta.*')
                         ->from($this->table)
                         ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_presta.id_contrat_prestataire')
@@ -182,6 +260,23 @@ class Demande_batiment_prestataire_model extends CI_Model {
             return null;
         }                 
     }
+
+    public function finddemandedisponibleBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('demande_batiment_presta.*')
+                        ->from($this->table)
+                        ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_presta.id_contrat_prestataire')
+                        ->where("contrat_prestataire.id", $id_contrat_prestataire)
+                        ->where("demande_batiment_presta.validation >", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }*/
      
 
 }

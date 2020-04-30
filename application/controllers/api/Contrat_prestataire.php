@@ -23,8 +23,116 @@ class Contrat_prestataire extends REST_Controller {
         $id_demande_latrine_pre = $this->get('id_demande_latrine_pre');
         $id_demande_mobilier_pre = $this->get('id_demande_mobilier_pre');
         $id_cisco = $this->get('id_cisco');
+        $id_ecole = $this->get('id_ecole');
          
-         if ($menus=='getcontrat_prestataireBycisco')
+         if ($menus=='getcontratinvalideByconvention')
+         {
+            $menu = $this->Contrat_prestataireManager->findinvalideByConvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['num_contrat']   = $value->num_contrat;
+                    $data[$key]['cout_batiment']    = $value->cout_batiment;
+                    $data[$key]['cout_latrine']   = $value->cout_latrine;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    //$data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
+                    //$data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
+                    $data[$key]['delai_execution'] = $value->delai_execution;
+                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['prestataire'] = $prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menus=='getcontratvalideByconvention')
+         {
+            $menu = $this->Contrat_prestataireManager->findvalideByConvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['num_contrat']   = $value->num_contrat;
+                    $data[$key]['cout_batiment']    = $value->cout_batiment;
+                    $data[$key]['cout_latrine']   = $value->cout_latrine;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    //$data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
+                    //$data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
+                    $data[$key]['delai_execution'] = $value->delai_execution;
+                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['prestataire'] = $prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menus=='getcontratByconvention')
+         {
+            $menu = $this->Contrat_prestataireManager->findcontratByConvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['num_contrat']   = $value->num_contrat;
+                    $data[$key]['cout_batiment']    = $value->cout_batiment;
+                    $data[$key]['cout_latrine']   = $value->cout_latrine;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    //$data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
+                    //$data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
+                    $data[$key]['delai_execution'] = $value->delai_execution;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                    $data[$key]['prestataire'] = $prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+       /* elseif ($menus=='getcontrat_prestataireByecole')
+         {
+            $menu = $this->Contrat_prestataireManager->findcontrat_prestataireByecole($id_ecole);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['num_contrat']   = $value->num_contrat;
+                    $data[$key]['cout_batiment']    = $value->cout_batiment;
+                    $data[$key]['cout_latrine']   = $value->cout_latrine;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
+                    $data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
+                    $data[$key]['delai_execution'] = $value->delai_execution;
+                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                    $data[$key]['prestataire'] = $prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menus=='getcontrat_prestataireBycisco')
          {
             $menu = $this->Contrat_prestataireManager->findcontrat_prestataireBycisco($id_cisco);
             if ($menu) 
@@ -59,8 +167,18 @@ class Contrat_prestataire extends REST_Controller {
             } 
                 else
                     $data = array();
+        }
+        elseif ($menus=='getcontratdemande_latrine')//nisy azy teo alo justifi latrine de esorina ra ts miasa
+         {
+            $menu = $this->Contrat_prestataireManager->findcontratBydemande_latrine($id_demande_latrine_pre);
+            if ($menu) 
+            {
+                $data=$menu;
+            } 
+                else
+                    $data = array();
         }   
-        elseif ($menus=='getcontratconvenBydemande_latrine')
+        elseif ($menus=='getcontratconvenBydemande_latrine')//nisy azy teo alo justifi latrine de esorina ra ts miasa
          {
             $menu = $this->Contrat_prestataireManager->findcontratconvenBydemande_latrine($id_demande_latrine_pre);
             if ($menu) 
@@ -73,15 +191,6 @@ class Contrat_prestataire extends REST_Controller {
         elseif ($menus=='getcontratconvenBydemande_batiment')
          {
             $menu = $this->Contrat_prestataireManager->findcontratconvenBydemande_batiment($id_demande_batiment_pre);
-            if ($menu) 
-            {
-                $data=$menu;
-            } 
-                else
-                    $data = array();
-        }elseif ($menus=='getcontratconvenBydemande_latrine')
-         {
-            $menu = $this->Contrat_prestataireManager->findcontratconvenBydemande_latrine($id_demande_latrine_pre);
             if ($menu) 
             {
                 $data=$menu;
@@ -117,7 +226,7 @@ class Contrat_prestataire extends REST_Controller {
             } 
                 else
                     $data = array();
-        }   
+        } */  
         elseif ($id)
         {
             $data = array();
@@ -133,8 +242,8 @@ class Contrat_prestataire extends REST_Controller {
             $data['cout_latrine']   = $contrat_prestataire->cout_latrine;
             $data['cout_mobilier'] = $contrat_prestataire->cout_mobilier;
             $data['date_signature'] = $contrat_prestataire->date_signature;
-            $data['date_prev_deb_trav'] = $contrat_prestataire->date_prev_deb_trav;
-            $data['date_reel_deb_trav'] = $contrat_prestataire->date_reel_deb_trav;
+            //$data['date_prev_deb_trav'] = $contrat_prestataire->date_prev_deb_trav;
+            //$data['date_reel_deb_trav'] = $contrat_prestataire->date_reel_deb_trav;
             $data['delai_execution'] = $contrat_prestataire->delai_execution;
             $data['paiement'] = $contrat_prestataire->paiement;
 
@@ -158,8 +267,8 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['cout_latrine']   = $value->cout_latrine;
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
                     $data[$key]['date_signature'] = $value->date_signature;
-                    $data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
-                    $data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
+                    //$data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
+                    //$data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
                     $data[$key]['delai_execution'] = $value->delai_execution;
                     $data[$key]['paiement_recu'] = $value->paiement_recu;
 
@@ -200,12 +309,13 @@ class Contrat_prestataire extends REST_Controller {
                     'cout_latrine'   => $this->post('cout_latrine'),
                     'cout_mobilier' => $this->post('cout_mobilier'),
                     'date_signature' => $this->post('date_signature'),
-                    'date_prev_deb_trav' => $this->post('date_prev_deb_trav'),
-                    'date_reel_deb_trav' => $this->post('date_reel_deb_trav'),
+                    //'date_prev_deb_trav' => $this->post('date_prev_deb_trav'),
+                    //'date_reel_deb_trav' => $this->post('date_reel_deb_trav'),
                     'delai_execution' => $this->post('delai_execution'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
                     'id_prestataire' => $this->post('id_prestataire'),
-                    'paiement_recu' => $this->post('paiement_recu')
+                    'paiement_recu' => $this->post('paiement_recu'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data) {
                     $this->response([
@@ -237,12 +347,13 @@ class Contrat_prestataire extends REST_Controller {
                     'cout_latrine'   => $this->post('cout_latrine'),
                     'cout_mobilier' => $this->post('cout_mobilier'),
                     'date_signature' => $this->post('date_signature'),
-                    'date_prev_deb_trav' => $this->post('date_prev_deb_trav'),
-                    'date_reel_deb_trav' => $this->post('date_reel_deb_trav'),
+                    //'date_prev_deb_trav' => $this->post('date_prev_deb_trav'),
+                    //'date_reel_deb_trav' => $this->post('date_reel_deb_trav'),
                     'delai_execution' => $this->post('delai_execution'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
                     'id_prestataire' => $this->post('id_prestataire'),
-                    'paiement_recu' => $this->post('paiement_recu')
+                    'paiement_recu' => $this->post('paiement_recu'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {
                     $this->response([

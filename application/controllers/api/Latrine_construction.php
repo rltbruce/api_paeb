@@ -11,7 +11,7 @@ class Latrine_construction extends REST_Controller {
         parent::__construct();
         
         $this->load->model('latrine_construction_model', 'Latrine_constructionManager');
-        $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
+        $this->load->model('convention_cisco_feffi_entete_model', 'Convention_cisco_feffi_enteteManager');
         $this->load->model('type_latrine_model', 'Type_latrineManager');
         //$this->load->model('attachement_latrine_model', 'Attachement_latrineManager');
     }
@@ -19,14 +19,14 @@ class Latrine_construction extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_batiment_construction = $this->get('id_batiment_construction');
+        $id_convention_entete = $this->get('id_convention_entete');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
 
         $menu = $this->get('menu');
 
-        if ($menu=='getlatrineByContrat_prestataire')
+      /*  if ($menu=='getlatrineByContrat_prestataire')
         {
             $latrine_construction = $this->Latrine_constructionManager->findAllByContrat_prestataire($id_contrat_prestataire );
             if ($latrine_construction) 
@@ -79,22 +79,26 @@ class Latrine_construction extends REST_Controller {
             } 
                 else
                     $data = array();
-        }
-        elseif ($id_batiment_construction)
+        }else*/
+        
+        if ($id_convention_entete)
         {
-            $latrine_construction = $this->Latrine_constructionManager->findAllByBatiment($id_batiment_construction );
-            if ($latrine_construction) 
+            $tmp = $this->Latrine_constructionManager->findLatrineByconvention($id_convention_entete );
+            if ($tmp) 
             {
-                foreach ($latrine_construction as $key => $value) 
-                {                     
-                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
+                foreach ($tmp as $key => $value) 
+                {
+                    $data = array();
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
                     $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['type_latrine'] = $type_latrine;
-                    $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['cout_unitaire'] = $value->cout_unitaire;
-                    $data[$key]['nbr_latrine'] = $value->nbr_latrine;
+                    //$data[$key]['nbr_latrine'] = $value->nbr_latrine;
+                    
                 }
             } 
                 else
@@ -105,32 +109,32 @@ class Latrine_construction extends REST_Controller {
             $data = array();
             $latrine_construction = $this->Latrine_constructionManager->findById($id);
 
-            $batiment_construction = $this->Batiment_constructionManager->findById($latrine_construction->id_batiment_construction);
+            $convention_entete = $this->convention_cisco_feffi_enteteManager->findById($latrine_construction->id_convention_entete);
             $type_latrine = $this->Type_latrineManager->findById($latrine_construction->id_type_latrine);
 
-            $data['id'] = $batiment_construction->id;
-            $data['batiment_construction'] = $batiment_construction;
+            $data['id'] = $latrine_construction->id;
+            $data['convention_entete'] = $convention_entete;
             $data['type_latrine'] = $type_latrine;
             $data['cout_unitaire'] = $latrine_construction->cout_unitaire;
-            $data['nbr_latrine'] = $latrine_construction->nbr_latrine;
+            //$data['nbr_latrine'] = $latrine_construction->nbr_latrine;
         } 
         else 
         {
-            $menu = $this->Latrine_constructionManager->findAll();
-            if ($menu) 
+            $tmp = $this->Latrine_constructionManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $data = array();
-                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
+                    $convention_entete = $this->convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
                     $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['type_latrine'] = $type_latrine;
-                    $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['cout_unitaire'] = $value->cout_unitaire;
-                    $data[$key]['nbr_latrine'] = $value->nbr_latrine;
+                    //$data[$key]['nbr_latrine'] = $value->nbr_latrine;
                     
                 }
             } 
@@ -188,8 +192,7 @@ class Latrine_construction extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'id_type_latrine' => $this->post('id_type_latrine'),
-                    'id_batiment_construction' => $this->post('id_batiment_construction'),
-                    'nbr_latrine' => $this->post('nbr_latrine'),
+                    'id_convention_entete' => $this->post('id_convention_entete'),
                     'cout_unitaire' => $this->post('cout_unitaire')
                 );
                 if (!$data) {
@@ -216,8 +219,7 @@ class Latrine_construction extends REST_Controller {
             } else {
                 $data = array(
                     'id_type_latrine' => $this->post('id_type_latrine'),
-                    'id_batiment_construction' => $this->post('id_batiment_construction'),
-                    'nbr_latrine' => $this->post('nbr_latrine'),
+                    'id_convention_entete' => $this->post('id_convention_entete'),
                     'cout_unitaire' => $this->post('cout_unitaire')
                 );
                 if (!$data || !$id) {

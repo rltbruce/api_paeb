@@ -45,8 +45,77 @@ class Contrat_partenaire_relai extends REST_Controller {
             } 
                 else
                     $data = array();
+        }
+        elseif ($menus=='getcontratvalideByconvention')
+        {
+            $menu = $this->Contrat_partenaire_relaiManager->findvalideByConvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['ref_contrat']   = $value->ref_contrat;
+                    $data[$key]['montant_contrat']    = $value->montant_contrat;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['partenaire_relai'] = $partenaire_relai;
+                    $data[$key]['validation'] = $value->validation;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menus=='getcontratByconvention')
+        {
+            $menu = $this->Contrat_partenaire_relaiManager->findcontratByConvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['ref_contrat']   = $value->ref_contrat;
+                    $data[$key]['montant_contrat']    = $value->montant_contrat;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['partenaire_relai'] = $partenaire_relai;
+                    $data[$key]['validation'] = $value->validation;
+                        }
+            } 
+                else
+                    $data = array();
         }   
-        elseif ($menus=='getcontratBySanssep')
+        elseif ($menus=='getcontratinvalideByconvention')
+         {
+            $menu = $this->Contrat_partenaire_relaiManager->findinvalideByConvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['ref_contrat']   = $value->ref_contrat;
+                    $data[$key]['montant_contrat']    = $value->montant_contrat;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['partenaire_relai'] = $partenaire_relai;
+                    $data[$key]['validation'] = $value->validation;
+                        }
+            } 
+                else
+                    $data = array();
+        } 
+       /* elseif ($menus=='getcontratBySanssep')
          {
             $menu = $this->Contrat_partenaire_relaiManager->findContratBySanssep();
             if ($menu) 
@@ -201,30 +270,7 @@ class Contrat_partenaire_relai extends REST_Controller {
             } 
                 else
                     $data = array();
-        }   
-        elseif ($menus=='getcontratByconvention')
-         {
-            $menu = $this->Contrat_partenaire_relaiManager->findAllByConvention($id_convention_entete);
-            if ($menu) 
-            {
-                foreach ($menu as $key => $value) 
-                {
-                    $partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
-
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['intitule'] = $value->intitule;
-                    $data[$key]['ref_contrat']   = $value->ref_contrat;
-                    $data[$key]['montant_contrat']    = $value->montant_contrat;
-                    $data[$key]['date_signature'] = $value->date_signature;
-                    $data[$key]['convention_entete'] = $convention_entete;
-                    $data[$key]['partenaire_relai'] = $partenaire_relai;
-                    $data[$key]['validation'] = $value->validation;
-                        }
-            } 
-                else
-                    $data = array();
-        }   
+        }*/   
         elseif ($id)
         {
             $data = array();

@@ -84,10 +84,25 @@ class Demande_debut_travaux_pr_model extends CI_Model {
             return null;
         }                 
     }
-        public function findAllBycontrat($id_contrat_partenaire_relai) {               
+    public function findAllBycontrat($id_contrat_partenaire_relai) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_contrat_partenaire_relai", $id_contrat_partenaire_relai)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+     public function finddemandedisponibleBycontrat($id_contrat_partenaire_relai) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_partenaire_relai", $id_contrat_partenaire_relai)
+                        ->where("validation >", 0)
                         ->order_by('id')
                         ->get()
                         ->result();

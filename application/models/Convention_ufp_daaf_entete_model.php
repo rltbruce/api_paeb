@@ -5,6 +5,7 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
 
     public function add($convention_ufp_daaf_entete) {
         $this->db->set($this->_set($convention_ufp_daaf_entete))
+                            ->set('date_creation', 'NOW()', false)
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -81,10 +82,25 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
             return $q->row();
         }
     }
-        public function findByIdObjet($id) {               
+    public function findByIdObjet($id) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id", $id)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findconventionmaxBydate($date_today)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id=(select max(id) from convention_ufp_daaf_entete)")
+                        ->where("date_creation",$date_today)
                         ->get()
                         ->result();
         if($result)
@@ -365,7 +381,7 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                         sum(detail.cout_batiment) as cout_batiment,
                         sum(detail.cout_latrine) as cout_latrine,
                         sum(detail.cout_mobilier) as cout_mobilier,
-                        sum(detail.cout_divers) as cout_divers
+                        (sum(detail.cout_maitrise)+sum(detail.cout_sous)) as cout_divers
                from (
 
                (
@@ -375,7 +391,8 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                         sum(bat_const.cout_unitaire) as cout_batiment,
                         0 as cout_latrine,
                         0 as cout_mobilier,
-                        0 as cout_divers
+                        0 as cout_maitrise,
+                        0 as cout_sous
 
                         from batiment_construction as bat_const
                             inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete 
@@ -391,7 +408,8 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                         0 as cout_batiment,
                         sum(lat_const.cout_unitaire) as cout_latrine,
                         0 as cout_mobilier,
-                        0 as cout_divers
+                        0 as cout_maitrise,
+                        0 as cout_sous
 
                         from latrine_construction as lat_const
                             inner join batiment_construction as bat_const on bat_const.id=lat_const.id_batiment_construction
@@ -409,7 +427,8 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                         0 as cout_batiment,
                         0 as cout_latrine,
                         sum(mob_const.cout_unitaire) as cout_mobilier,
-                        0 as cout_divers
+                        0 as cout_maitrise,
+                        0 as cout_sous
 
                         from mobilier_construction as mob_const
                             inner join batiment_construction as bat_const on bat_const.id=mob_const.id_batiment_construction
@@ -427,10 +446,29 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                         0 as cout_batiment,
                         0 as cout_latrine,
                         0 as cout_mobilier,
-                        sum(cout_di_const.cout) as cout_divers
+                        sum(cout_di_const.cout) as cout_maitrise,
+                        0 as cout_sous
 
-                        from cout_divers_construction as cout_di_const
+                        from cout_maitrise_construction as cout_di_const
                             inner join convention_cisco_feffi_entete as conv on conv.id = cout_di_const.id_convention_entete
+                            inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf 
+
+                            where conv_ufp.id = '".$id_convention_ufp_daaf_entete."'
+                            group by conv_ufp.id, conv.id
+                )
+                UNION
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        conv.id as id_conv,
+                        0 as cout_batiment,
+                        0 as cout_latrine,
+                        0 as cout_mobilier,
+                        0 as cout_divers,
+                        sum(cout_sou_const.cout) as cout_sous
+
+                        from cout_sousprojet_construction as cout_sou_const
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cout_sou_const.id_convention_entete
                             inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf 
 
                             where conv_ufp.id = '".$id_convention_ufp_daaf_entete."'

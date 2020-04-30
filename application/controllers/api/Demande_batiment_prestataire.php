@@ -23,7 +23,153 @@ class Demande_batiment_prestataire extends REST_Controller {
         $id_cisco = $this->get('id_cisco');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $menu = $this->get('menu');
-        if ($menu=="getalldemandeBycontrat")
+
+        if ($menu=="getdemandeBycontrat")
+        {
+            $tmp = $this->Demande_batiment_prestataireManager->finddemandeBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
+
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandevalidebcafBycontrat")
+        {
+            $tmp = $this->Demande_batiment_prestataireManager->finddemandevalidebcafBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
+
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandevalideBycontrat")
+        {
+            $tmp = $this->Demande_batiment_prestataireManager->finddemandevalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
+
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandeinvalideBycontrat")
+        {
+            $tmp = $this->Demande_batiment_prestataireManager->finddemandeinvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
+
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+       /* if ($menu=="getdemandedisponibleBycontrat")
+        {
+            $tmp = $this->Demande_batiment_prestataireManager->finddemandedisponibleBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
+
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getalldemandeBycontrat")
         {
             $tmp = $this->Demande_batiment_prestataireManager->findAlldemandeBycontrat($id_contrat_prestataire);
             if ($tmp) 
@@ -66,6 +212,7 @@ class Demande_batiment_prestataire extends REST_Controller {
                     $batiment_construction= array();
                     $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
                     $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['description'] = $value->description;
@@ -77,6 +224,7 @@ class Demande_batiment_prestataire extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                    
                 }
             } 
@@ -85,7 +233,7 @@ class Demande_batiment_prestataire extends REST_Controller {
         }
         elseif ($menu=="getdemandeValideBycisco")
         {
-            $tmp = $this->Demande_batiment_prestataireManager->findAllValideBycisco($id_cisco);
+            $tmp = $this->Demande_batiment_prestataireManager->findValideBycisco($id_cisco);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -93,6 +241,7 @@ class Demande_batiment_prestataire extends REST_Controller {
                     $batiment_construction= array();
                     $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
                     $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['description'] = $value->description;
@@ -105,6 +254,7 @@ class Demande_batiment_prestataire extends REST_Controller {
                     $data[$key]['date'] = $value->date;
                     $data[$key]['batiment_construction'] = $batiment_construction;
                     $data[$key]['date_approbation'] = $value->date_approbation; 
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                    
                 }
             } 
@@ -121,6 +271,7 @@ class Demande_batiment_prestataire extends REST_Controller {
                     $batiment_construction= array();
                     $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
                     $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['objet'] = $value->objet;
                     $data[$key]['description'] = $value->description;
@@ -132,6 +283,7 @@ class Demande_batiment_prestataire extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
 
                 }
             } 
@@ -170,7 +322,7 @@ class Demande_batiment_prestataire extends REST_Controller {
             } 
                 else
                     $data = array();
-        }
+        }*/
         elseif ($id)
         {
             $data = array();

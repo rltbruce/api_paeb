@@ -32,7 +32,7 @@ class Document_pr_scan extends REST_Controller {
                 {
                     $contrat_partenaire_relai= array();
                     $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
-                    $convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $document_pr = $this->Document_prManager->findById($value->id_document_pr);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['fichier'] = $value->fichier;
@@ -40,7 +40,7 @@ class Document_pr_scan extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
                     $data[$key]['document_pr'] = $document_pr;
-                    $data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
+                    //$data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
 
                 }
             } 
@@ -73,7 +73,7 @@ class Document_pr_scan extends REST_Controller {
             $data = array();
             $document_pr_scan = $this->Document_pr_scanManager->findById($id);
             $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($document_pr_scan->id_contrat_partenaire_relai);
-            $convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($document_pr_scan->id_convention_entete);
+            //$convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($document_pr_scan->id_convention_entete);
             $document_pr = $this->Document_prManager->findById($document_pr_scan->id_document_pr);
             $data['id'] = $document_pr_scan->id;
             $data['fichier'] = $document_pr_scan->fichier;
@@ -81,7 +81,7 @@ class Document_pr_scan extends REST_Controller {
             $data['observation'] = $document_pr_scan->observation;
             $data['contrat_partenaire_relai'] = $contrat_partenaire_relai;
             $data['document_pr'] = $document_pr;
-            $data['convention_entete'] = $convention_cisco_feffi_entete;
+            //$data['convention_entete'] = $convention_cisco_feffi_entete;
         } 
         else 
         {
@@ -135,7 +135,7 @@ class Document_pr_scan extends REST_Controller {
                     'id_contrat_partenaire_relai' => $this->post('id_contrat_partenaire_relai'),
                     'id_document_pr' => $this->post('id_document_pr'),
                     'validation' => $this->post('validation'),
-                    'id_convention_entete' => $this->post('id_convention_entete'),
+                    //'id_convention_entete' => $this->post('id_convention_entete'),
                 );
                 if (!$data) {
                     $this->response([
@@ -166,7 +166,7 @@ class Document_pr_scan extends REST_Controller {
                     'id_contrat_partenaire_relai' => $this->post('id_contrat_partenaire_relai'),
                     'id_document_pr' => $this->post('id_document_pr'),
                     'validation' => $this->post('validation'),
-                    'id_convention_entete' => $this->post('id_convention_entete')
+                    //'id_convention_entete' => $this->post('id_convention_entete')
                 );
                 if (!$data || !$id) {
                     $this->response([

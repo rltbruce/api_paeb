@@ -25,10 +25,9 @@ class Compte_daaf_model extends CI_Model {
     }
     public function _set($compte_daaf) {
         return array(
-            'rib'          =>      $compte_daaf['rib'],
-            'nom_banque'          =>      $compte_daaf['nom_banque'],
-            'numero_compte'           =>      $compte_daaf['numero_compte'],
-            'adresse_banque'          =>      $compte_daaf['adresse_banque']                       
+            'intitule'          =>      $compte_daaf['intitule'],
+            'agence'          =>      $compte_daaf['agence'],
+            'compte'           =>      $compte_daaf['compte']                       
         );
     }
     public function delete($id) {
@@ -43,7 +42,7 @@ class Compte_daaf_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('nom_banque')
+                        ->order_by('agence')
                         ->get()
                         ->result();
         if($result)

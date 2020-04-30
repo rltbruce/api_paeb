@@ -63,6 +63,47 @@ class Appel_offre_model extends CI_Model {
             return $q->row();
         }
     }
+    function findappelBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    function findappelvalideBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    function findappelinvalideBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", 0)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
    /* public function findAllBycontrat($id_contrat_bureau_etude,$validation) {               
         $result =  $this->db->select('*')
@@ -80,7 +121,7 @@ class Appel_offre_model extends CI_Model {
         }                 
     }*/
 
-        public function findAllByvalidation($validation) {               
+    /*    public function findAllByvalidation($validation) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("validation", $validation)
@@ -126,6 +167,6 @@ class Appel_offre_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
 }

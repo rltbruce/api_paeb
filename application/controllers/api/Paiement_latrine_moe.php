@@ -17,10 +17,11 @@ class Paiement_latrine_moe extends REST_Controller {
     {
         $id = $this->get('id');
         $id_demande_latrine_moe = $this->get('id_demande_latrine_moe');
+        $menu = $this->get('menu');
             
-        if ($id_demande_latrine_moe) 
+        if ($menu=='getpaiementinvalideBydemande') 
         {   $data = array();
-            $tmp = $this->Paiement_latrine_moeManager->findBydemande_latrine_moe($id_demande_latrine_moe);
+            $tmp = $this->Paiement_latrine_moeManager->findpaiementinvalideBydemande($id_demande_latrine_moe);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -31,6 +32,43 @@ class Paiement_latrine_moe extends REST_Controller {
                     $data[$key]['montant_paiement'] = $value->montant_paiement;
                     $data[$key]['date_paiement'] = $value->date_paiement;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['demande_latrine_moe'] = $demande_latrine_moe;
+                }
+            }
+        }
+        elseif ($menu=='getpaiementvalideBydemande') 
+        {   $data = array();
+            $tmp = $this->Paiement_latrine_moeManager->findpaiementvalideBydemand($id_demande_latrine_moe);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_latrine_moe = array();
+                    $demande_latrine_moe = $this->Demande_latrine_moeManager->findById($value->id_demande_latrine_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant_paiement'] = $value->montant_paiement;
+                    $data[$key]['date_paiement'] = $value->date_paiement;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['demande_latrine_moe'] = $demande_latrine_moe;
+                }
+            }
+        }
+        elseif ($menu=='getpaiementBydemande') 
+        {   $data = array();
+            $tmp = $this->Paiement_latrine_moeManager->findpaiementBydemande($id_demande_latrine_moe);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_latrine_moe = array();
+                    $demande_latrine_moe = $this->Demande_latrine_moeManager->findById($value->id_demande_latrine_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant_paiement'] = $value->montant_paiement;
+                    $data[$key]['date_paiement'] = $value->date_paiement;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['demande_latrine_moe'] = $demande_latrine_moe;
                 }
             }
@@ -89,7 +127,7 @@ class Paiement_latrine_moe extends REST_Controller {
                 $data = array(
                     'montant_paiement' => $this->post('montant_paiement'),
                     //'cumul' => $this->post('cumul'),
-                    //'pourcentage_paiement' => $this->post('pourcentage_paiement'),
+                    'validation' => $this->post('validation'),
                     'date_paiement' => $this->post('date_paiement'),
                     'observation' => $this->post('observation'),
                     'id_demande_latrine_moe' => $this->post('id_demande_latrine_moe')
@@ -120,6 +158,7 @@ class Paiement_latrine_moe extends REST_Controller {
                     'montant_paiement' => $this->post('montant_paiement'),
                     //'cumul' => $this->post('cumul'),
                     //'pourcentage_paiement' => $this->post('pourcentage_paiement'),
+                    'validation' => $this->post('validation'),
                     'date_paiement' => $this->post('date_paiement'),
                     'observation' => $this->post('observation'),
                     'id_demande_latrine_moe' => $this->post('id_demande_latrine_moe')

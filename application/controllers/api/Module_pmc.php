@@ -20,7 +20,103 @@ class Module_pmc extends REST_Controller {
         $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
         $menu = $this->get('menu');
 
-         if ($menu=='getmodule_pmcByinvalide')
+        if ($menu=='getmoduleBycontrat')
+         {
+            $tmp = $this->Module_pmcManager->findmoduleBycontrat($id_contrat_partenaire_relai);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+
+                    $nbr_parti= $this->Participant_pmcManager->count_participantbyId($value->id);
+                    $nbr_feminin= $this->Participant_pmcManager->count_femininbyId($value->id);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_debut_previ_form'] = $value->date_debut_previ_form;
+                    $data[$key]['date_fin_previ_form']   = $value->date_fin_previ_form;
+                    $data[$key]['date_previ_resti']    = $value->date_previ_resti;
+                    $data[$key]['date_debut_reel_form'] = $value->date_debut_reel_form;
+                    $data[$key]['date_fin_reel_form'] = $value->date_fin_reel_form;
+                    $data[$key]['date_reel_resti'] = $value->date_reel_resti;
+                    $data[$key]['nbr_previ_parti']   = $value->nbr_previ_parti;
+                    $data[$key]['nbr_parti']    = $nbr_parti->nbr_participant;
+                    $data[$key]['nbr_previ_fem_parti']   = $value->nbr_previ_fem_parti;
+                    $data[$key]['nbr_reel_fem_parti'] = $nbr_feminin->nbr_feminin;
+                    $data[$key]['lieu_formation'] = $value->lieu_formation;
+                    $data[$key]['observation']   = $value->observation;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getmodulevalideBycontrat')
+         {
+            $tmp = $this->Module_pmcManager->findvalideBycontrat($id_contrat_partenaire_relai);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+
+                    $nbr_parti= $this->Participant_pmcManager->count_participantbyId($value->id);
+                    $nbr_feminin= $this->Participant_pmcManager->count_femininbyId($value->id);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_debut_previ_form'] = $value->date_debut_previ_form;
+                    $data[$key]['date_fin_previ_form']   = $value->date_fin_previ_form;
+                    $data[$key]['date_previ_resti']    = $value->date_previ_resti;
+                    $data[$key]['date_debut_reel_form'] = $value->date_debut_reel_form;
+                    $data[$key]['date_fin_reel_form'] = $value->date_fin_reel_form;
+                    $data[$key]['date_reel_resti'] = $value->date_reel_resti;
+                    $data[$key]['nbr_previ_parti']   = $value->nbr_previ_parti;
+                    $data[$key]['nbr_parti']    = $nbr_parti->nbr_participant;
+                    $data[$key]['nbr_previ_fem_parti']   = $value->nbr_previ_fem_parti;
+                    $data[$key]['nbr_reel_fem_parti'] = $nbr_feminin->nbr_feminin;
+                    $data[$key]['lieu_formation'] = $value->lieu_formation;
+                    $data[$key]['observation']   = $value->observation;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getmoduleinvalideBycontrat')
+         {
+            $tmp = $this->Module_pmcManager->findinvalideBycontrat($id_contrat_partenaire_relai);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+
+                    $nbr_parti= $this->Participant_pmcManager->count_participantbyId($value->id);
+                    $nbr_feminin= $this->Participant_pmcManager->count_femininbyId($value->id);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_debut_previ_form'] = $value->date_debut_previ_form;
+                    $data[$key]['date_fin_previ_form']   = $value->date_fin_previ_form;
+                    $data[$key]['date_previ_resti']    = $value->date_previ_resti;
+                    $data[$key]['date_debut_reel_form'] = $value->date_debut_reel_form;
+                    $data[$key]['date_fin_reel_form'] = $value->date_fin_reel_form;
+                    $data[$key]['date_reel_resti'] = $value->date_reel_resti;
+                    $data[$key]['nbr_previ_parti']   = $value->nbr_previ_parti;
+                    $data[$key]['nbr_parti']    = $nbr_parti->nbr_participant;
+                    $data[$key]['nbr_previ_fem_parti']   = $value->nbr_previ_fem_parti;
+                    $data[$key]['nbr_reel_fem_parti'] = $nbr_feminin->nbr_feminin;
+                    $data[$key]['lieu_formation'] = $value->lieu_formation;
+                    $data[$key]['observation']   = $value->observation;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        /* if ($menu=='getmodule_pmcByinvalide')
          {
             $menu = $this->Module_pmcManager->findAllByinvalide();
             if ($menu) 
@@ -115,7 +211,7 @@ class Module_pmc extends REST_Controller {
             } 
                 else
                     $data = array();
-        }   
+        } */  
         elseif ($id)
         {
             $data = array();

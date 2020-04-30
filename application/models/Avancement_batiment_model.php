@@ -82,56 +82,17 @@ class Avancement_batiment_model extends CI_Model {
     {               
         $sql=" select 
                        detail.id_conv as id_conv,
-                        CASE  WHEN 
-                                sum(detail.nbr_batiment) =0 THEN 0
-                             ELSE 
-                            (sum(detail.avancement_bat)/sum(detail.nbr_batiment))
-                        END as avancement_batiment,
-
-                        CASE  WHEN 
-                                sum(detail.nbr_latrine) =0 THEN 0
-                             ELSE 
-                            (sum(detail.avancement_lat)/sum(detail.nbr_latrine))
-                        END as avancement_latrine,
-
-                        CASE  WHEN 
-                                sum(detail.nbr_mobilier) =0 THEN 0
-                             ELSE 
-                            (sum(detail.avancement_mob)/sum(detail.nbr_mobilier))
-                        END as avancement_mobilier
+                        detail.avancement_bat as avancement_batiment,
+                        detail.avancement_lat as avancement_latrine,
+                        detail.avancement_mob as avancement_mobilier
                from (
-
-               (
-                select 
-                        conv.id as id_conv,
-                        bat_const.id as id_bat_const,
-                        count(bat_const.id) as nbr_batiment,
-                        0 as avancement_bat,
-                        0 as avancement_lat,
-                        0 as nbr_latrine,
-                        0 as avancement_mob,
-                        0 as nbr_mobilier
-
-
-                        from batiment_construction as bat_const
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete
-
-                        where                             
-                            conv.id= '".$id_convention_entete."'
-
-                            group by conv.id, bat_const.id
-                )
-                UNION
+               
                 (
                     select 
                         conv.id as id_conv,
-                        bat_const.id as id_bat_const,
-                        0 as nbr_batiment,
                          max(atta_bat.ponderation_batiment) as avancement_bat,
                          0 as avancement_lat,
-                         0 as nbr_latrine,
-                         0 as avancement_mob,
-                         0 as nbr_mobilier
+                         0 as avancement_mob
 
                         from attachement_batiment as atta_bat
 
@@ -142,97 +103,45 @@ class Avancement_batiment_model extends CI_Model {
                         where 
                             conv.id= '".$id_convention_entete."'
 
-                            group by conv.id, bat_const.id
+                            group by conv.id
                 )
                 UNION
                 (
                     select 
                         conv.id as id_conv,
-                        bat_const.id as id_bat_const,
-                        0 as nbr_batiment,
                         0 as avancement_bat,
                         max(atta_lat.ponderation_latrine) as avancement_lat,
-                        0 as nbr_latrine,
-                        0 as avancement_mob,
-                        0 as nbr_mobilier
+                        0 as avancement_mob
 
                         from attachement_latrine as atta_lat
 
                             inner join avancement_latrine as avanc_lat on avanc_lat.id_attachement_latrine = atta_lat.id
                             inner join latrine_construction as lat_const on lat_const.id=avanc_lat.id_latrine_construction
-                            inner join batiment_construction as bat_const on bat_const.id=lat_const.id_batiment_construction
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete
+                            inner join convention_cisco_feffi_entete as conv on conv.id = lat_const.id_convention_entete
 
                         where 
                             conv.id= '".$id_convention_entete."'
 
-                            group by conv.id, bat_const.id,lat_const.id
+                            group by conv.id
                 )
                 UNION
                 (
                     select 
                         conv.id as id_conv,
-                        bat_const.id as id_bat_const,
-                        0 as nbr_batiment,
                         0 as avancement_bat,
                         0 as avancement_lat,
-                        count(lat_const.id) as nbr_latrine,
-                        0 as avancement_mob,
-                        0 as nbr_mobilier
-
-                        from latrine_construction as lat_const
-                            inner join batiment_construction as bat_const on bat_const.id=lat_const.id_batiment_construction
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete
-
-                        where 
-                            conv.id= '".$id_convention_entete."'
-
-                            group by conv.id, bat_const.id
-                )
-                UNION
-                (
-                    select 
-                        conv.id as id_conv,
-                        bat_const.id as id_bat_const,
-                        0 as nbr_batiment,
-                        0 as avancement_bat,
-                        0 as avancement_lat,
-                        0 as nbr_latrine,
-                        max(atta_mob.ponderation_mobilier) as avancement_mob,
-                        0 as nbr_mobilier
+                        max(atta_mob.ponderation_mobilier) as avancement_mob
 
                         from attachement_mobilier as atta_mob
 
                             inner join avancement_mobilier as avanc_mob on avanc_mob.id_attachement_mobilier = atta_mob.id
                             inner join mobilier_construction as mob_const on mob_const.id=avanc_mob.id_mobilier_construction
-                            inner join batiment_construction as bat_const on bat_const.id=mob_const.id_batiment_construction
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete
+                            inner join convention_cisco_feffi_entete as conv on conv.id = mob_const.id_convention_entete
 
                         where 
                             conv.id= '".$id_convention_entete."'
 
-                            group by conv.id, bat_const.id,mob_const.id
-                )
-                UNION
-                (
-                    select 
-                        conv.id as id_conv,
-                        bat_const.id as id_bat_const,
-                        0 as nbr_batiment,
-                        0 as avancement_bat,
-                        0 as avancement_lat,
-                        0 as nbr_latrine,
-                        0 as avancement_mob,
-                        count(mob_const.id) as nbr_mobilier
-
-                        from mobilier_construction as mob_const
-                            inner join batiment_construction as bat_const on bat_const.id=mob_const.id_batiment_construction
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete
-
-                        where 
-                            conv.id= '".$id_convention_entete."'
-
-                            group by conv.id, bat_const.id
+                            group by conv.id
                 ) 
 
                 )detail

@@ -22,7 +22,33 @@ class Demande_deblocage_daaf extends REST_Controller {
         $menu = $this->get('menu');
         $validation = $this->get('validation');
 
-        if ($menu == 'getdemande_deblocage_daaf_invalide')
+        if ($menu=="getdemandedisponible")
+        {
+            $tmp = $this->Demande_deblocage_daafManager->findDisponibleByconvention_ufpdaaf($id_convention_ufp_daaf_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $convention_ufpdaaf= array();
+                    $convention_ufp_daaf_entete = $this->Convention_ufp_daaf_enteteManager->findById($value->id_convention_ufp_daaf_entete);
+                    $tranche_deblocage_daaf = $this->Tranche_deblocage_daafManager->findById($value->id_tranche_deblocage_daaf);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['ref_demande'] = $value->ref_demande;
+                    $data[$key]['prevu'] = $value->prevu;
+                    $data[$key]['tranche'] = $tranche_deblocage_daaf;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['convention_ufp_daaf_entete'] = $convention_ufp_daaf_entete;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == 'getdemande_deblocage_daaf_invalide')
         {
             $tmp = $this->Demande_deblocage_daafManager->getdemande_deblocage_daaf_invalide($validation);
             if ($tmp) 

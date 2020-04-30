@@ -21,7 +21,70 @@ class Memoire_technique extends REST_Controller {
         $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
             
-       /* if ($menu == "getmemoireBycontrat")
+       if ($menu == "getmemoireBycontrat")
+        {
+            $tmp = $this->Memoire_techniqueManager->findmemoireBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getmemoirevalideBycontrat")
+        {
+            $tmp = $this->Memoire_techniqueManager->findmemoirevalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getmemoireinvalideBycontrat")
+        {
+            $tmp = $this->Memoire_techniqueManager->findmemoireinvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        /* if ($menu == "getmemoireBycontrat")
         {
             $tmp = $this->Memoire_techniqueManager->findAllBycontrat($id_contrat_bureau_etude,$validation);
             if ($tmp) 
@@ -63,7 +126,7 @@ class Memoire_technique extends REST_Controller {
                 else
                     $data = array();
         }*/
-        if ($menu == "getmemoirevalidationBycisco")
+        elseif ($menu == "getmemoirevalidationBycisco")
         {
             $tmp = $this->Memoire_techniqueManager->findAllvalidationBycisco($validation,$id_cisco);
             if ($tmp) 

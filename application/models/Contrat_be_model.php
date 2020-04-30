@@ -31,7 +31,8 @@ class Contrat_be_model extends CI_Model {
             'montant_contrat'    => $contrat_be['montant_contrat'],
             'date_signature' => $contrat_be['date_signature'],
             'id_convention_entete' => $contrat_be['id_convention_entete'],
-            'id_bureau_etude' => $contrat_be['id_bureau_etude']                      
+            'id_bureau_etude' => $contrat_be['id_bureau_etude'],
+            'validation' => $contrat_be['validation']                       
         );
     }
     public function delete($id) {
@@ -68,6 +69,36 @@ class Contrat_be_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findcontratvalideByConvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findcontratinvalideByConvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation", 0)
                         ->order_by('id')
                         ->get()
                         ->result();

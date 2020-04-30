@@ -19,9 +19,32 @@ class Transfert_daaf extends REST_Controller {
         $id_demande_rea_feffi = $this->get('id_demande_rea_feffi');
         $menu = $this->get('menu');
             
-        if ($id_demande_rea_feffi)
+        if ($menu='gettransferBydemande')
         {
-            $tmp = $this->Transfert_daafManager->findAllByprogramme($id_demande_rea_feffi);
+            $tmp = $this->Transfert_daafManager->findtransfertBydemande($id_demande_rea_feffi);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_realimentation_feffi= array();                    
+                    $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->findById($value->id_demande_rea_feffi);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant_transfert'] = $value->montant_transfert;
+                    $data[$key]['frais_bancaire'] = $value->frais_bancaire;
+                    $data[$key]['montant_total'] = $value->montant_total;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['demande_realimentation_feffi'] = $demande_realimentation_feffi;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu='gettransferinvalideBydemande')
+        {
+            $tmp = $this->Transfert_daafManager->findinvalideBydemande($id_demande_rea_feffi);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -29,11 +52,39 @@ class Transfert_daaf extends REST_Controller {
                     $demande_realimentation_feffi= array();                    
                     $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->findById($value->id_demande_rea_feffi);
 
+                    
+                    $data[$key]['id'] = $value->id;
                     $data[$key]['montant_transfert'] = $value->montant_transfert;
                     $data[$key]['frais_bancaire'] = $value->frais_bancaire;
                     $data[$key]['montant_total'] = $value->montant_total;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['demande_realimentation_feffi'] = $demande_realimentation_feffi;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu='gettransfervalideBydemande')
+        {
+            $tmp = $this->Transfert_daafManager->findvalideBydemande($id_demande_rea_feffi);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_realimentation_feffi= array();                    
+                    $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->findById($value->id_demande_rea_feffi);
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant_transfert'] = $value->montant_transfert;
+                    $data[$key]['frais_bancaire'] = $value->frais_bancaire;
+                    $data[$key]['montant_total'] = $value->montant_total;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['demande_realimentation_feffi'] = $demande_realimentation_feffi;
 
                 }
@@ -53,6 +104,7 @@ class Transfert_daaf extends REST_Controller {
             $data['montant_total'] = $transfert_daaf->montant_total;
             $data['date'] = $transfert_daaf->date;
             $data['observation'] = $transfert_daaf->observation;
+            $data['validation'] = $transfert_daaf->validation;
             $data['demande_realimentation_feffi'] = $demande_realimentation_feffi;
         } 
         else 
@@ -71,6 +123,7 @@ class Transfert_daaf extends REST_Controller {
                     $data[$key]['montant_total'] = $value->montant_total;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['demande_realimentation_feffi'] = $demande_realimentation_feffi;
                 }
             } 
@@ -105,6 +158,7 @@ class Transfert_daaf extends REST_Controller {
                     'montant_total' => $this->post('montant_total'),
                     'date' => $this->post('date'),
                     'observation' => $this->post('observation'),
+                    'validation' => $this->post('validation'),
                     'id_demande_rea_feffi' => $this->post('id_demande_rea_feffi')
                 );
                 if (!$data) {
@@ -135,6 +189,7 @@ class Transfert_daaf extends REST_Controller {
                     'montant_total' => $this->post('montant_total'),
                     'date' => $this->post('date'),
                     'observation' => $this->post('observation'),
+                    'validation' => $this->post('validation'),
                     'id_demande_rea_feffi' => $this->post('id_demande_rea_feffi')
                 );
                 if (!$data || !$id) {

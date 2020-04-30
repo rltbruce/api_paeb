@@ -28,10 +28,11 @@ class Batiment_construction_model extends CI_Model {
             'id_type_batiment' => $batiment_construction['id_type_batiment'],
             'id_convention_entete'=> $batiment_construction['id_convention_entete'],
             'cout_unitaire'=> $batiment_construction['cout_unitaire'],
-            'nbr_batiment'=> $batiment_construction['nbr_batiment']);
+            //'nbr_batiment'=> $batiment_construction['nbr_batiment']
+        );
             
     }
-   /* public function delete($id) {
+   public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);
         if($this->db->affected_rows() === 1)
         {
@@ -39,9 +40,9 @@ class Batiment_construction_model extends CI_Model {
         }else{
             return null;
         }  
-    }*/
+    }
 
-    public function delete($id)
+   /* public function delete($id)
     {
         $this->db->from($this->table)
                 ->join('latrine_construction', 'latrine_construction.id_batiment_construction = batiment_construction.id')
@@ -55,7 +56,7 @@ class Batiment_construction_model extends CI_Model {
         }else{
             return null;
         }       
-    }
+    }*/
     public function findAll()
     {               
         $result =  $this->db->select('*')
@@ -88,7 +89,7 @@ class Batiment_construction_model extends CI_Model {
         }
     }*/
 
-    public function findAllByentete($id_convention_entete)
+    public function findBatimentByconvention($id_convention_entete)
     {               
         $result =  $this->db->select('*')
                         ->from($this->table)
@@ -108,24 +109,21 @@ class Batiment_construction_model extends CI_Model {
     {               
         $this->db->select("convention_cisco_feffi_entete.id as id_conv");
         
-        $this->db ->select("(select sum(batiment_construction.cout_unitaire * batiment_construction.nbr_batiment) from batiment_construction
+        $this->db ->select("(select sum(batiment_construction.cout_unitaire) from batiment_construction
             where batiment_construction.id_convention_entete = id_conv ) as montant_bat",FALSE);
         
-        $this->db ->select("(select sum(latrine_construction.cout_unitaire * latrine_construction.nbr_latrine) from latrine_construction
-            inner join batiment_construction on batiment_construction.id =latrine_construction.id_batiment_construction
-            where batiment_construction.id_convention_entete = id_conv ) as montant_lat ",FALSE);
+        $this->db ->select("(select sum(latrine_construction.cout_unitaire) from latrine_construction
+            where latrine_construction.id_convention_entete = id_conv ) as montant_lat ",FALSE);
 
-         $this->db ->select("(select sum(mobilier_construction.cout_unitaire * mobilier_construction.nbr_mobilier) from mobilier_construction
-            inner join batiment_construction on batiment_construction.id =mobilier_construction.id_batiment_construction
-            where batiment_construction.id_convention_entete = id_conv ) as montant_mob ",FALSE);
+         $this->db ->select("(select sum(mobilier_construction.cout_unitaire) from mobilier_construction
+            where mobilier_construction.id_convention_entete = id_conv ) as montant_mob ",FALSE);
 
-         /*$this->db ->select("(select sum(cout_divers_construction.cout) from cout_divers_construction
-            where batiment_construction.id_convention_entete = id_conv ) as montant_divers",FALSE);*/
         $this->db ->select("(select sum(cout_maitrise_construction.cout) from cout_maitrise_construction
-            where batiment_construction.id_convention_entete = id_conv ) as montant_maitrise",FALSE);
+
+            where id_convention_entete = id_conv ) as montant_maitrise",FALSE);
         
         $this->db ->select("(select sum(cout_sousprojet_construction.cout) from cout_sousprojet_construction
-            where batiment_construction.id_convention_entete = id_conv ) as montant_sousprojet",FALSE);
+            where id_convention_entete = id_conv ) as montant_sousprojet",FALSE);
         
 
         $result =  $this->db->from('convention_cisco_feffi_entete,batiment_construction,latrine_construction')
@@ -147,7 +145,7 @@ class Batiment_construction_model extends CI_Model {
         }               
     
     }
- 
+/* 
  public function findAllBycontratprestataire($id_contrat_prestataire)
     {               
         $result =  $this->db->select('batiment_construction.id_convention_entete as id_convention_entete, batiment_construction.id_type_batiment as id_type_batiment, batiment_construction.cout_unitaire as cout_unitaire, batiment_construction.nbr_batiment as nbr_batiment, batiment_construction.id as id')
@@ -246,6 +244,6 @@ class Batiment_construction_model extends CI_Model {
             return null;
         }               
     
-    }
+    }*/
 
 }

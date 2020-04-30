@@ -21,7 +21,119 @@ class Demande_debut_travaux_moe extends REST_Controller {
         $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
 
-        if ($menu=="getalldemandevalideBycisco")
+       if ($menu=="getdemandeBycontrat")
+        {
+            $tmp = $this->Demande_debut_travaux_moeManager->finddemandeBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_bureau_etude= array();
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_d_debut_travaux_moe = $this->Tranche_d_debut_travaux_moeManager->findById($value->id_tranche_d_debut_travaux_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_d_debut_travaux_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandeinvalideBycontrat")
+        {
+            $tmp = $this->Demande_debut_travaux_moeManager->finddemandeinvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_bureau_etude= array();
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_d_debut_travaux_moe = $this->Tranche_d_debut_travaux_moeManager->findById($value->id_tranche_d_debut_travaux_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_d_debut_travaux_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            }
+                else
+                    $data = array();
+        } 
+        elseif ($menu=="getdemandevalidebcafBycontrat")
+        {
+            $tmp = $this->Demande_debut_travaux_moeManager->finddemandevalidebcafBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_bureau_etude= array();
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_d_debut_travaux_moe = $this->Tranche_d_debut_travaux_moeManager->findById($value->id_tranche_d_debut_travaux_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_d_debut_travaux_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            }
+                else
+                    $data = array();
+        }
+       /* if ($menu=="getdemandedisponibleBycontrat")
+        {
+            $tmp = $this->Demande_debut_travaux_moeManager->finddemandedisponibleBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_bureau_etude= array();
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_d_debut_travaux_moe = $this->Tranche_d_debut_travaux_moeManager->findById($value->id_tranche_d_debut_travaux_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_d_debut_travaux_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getalldemandevalideBycisco")
         {
             $tmp = $this->Demande_debut_travaux_moeManager->findAllValideBycisco($id_cisco);
             if ($tmp) 
@@ -240,7 +352,7 @@ class Demande_debut_travaux_moe extends REST_Controller {
             } 
                 else
                     $data = array();
-        }
+        }*/
         elseif ($id)
         {
             $data = array();

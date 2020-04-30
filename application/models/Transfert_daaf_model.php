@@ -30,6 +30,7 @@ class Transfert_daaf_model extends CI_Model {
             'montant_total'   =>      $transfert_daaf['montant_total'],
             'date'       =>      $transfert_daaf['date'],
             'observation'       =>      $transfert_daaf['observation'],
+            'validation'       =>      $transfert_daaf['validation'],
             'id_demande_rea_feffi'    =>  $transfert_daaf['id_demande_rea_feffi']                       
         );
     }
@@ -67,6 +68,51 @@ class Transfert_daaf_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_demande_rea_feffi", $id_demande_rea_feffi)
+                        ->order_by('date')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findtransfertBydemande($id_demande_rea_feffi) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_rea_feffi", $id_demande_rea_feffi)
+                        ->order_by('date')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findinvalideBydemande($id_demande_rea_feffi) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_rea_feffi", $id_demande_rea_feffi)
+                        ->where("validation",0)
+                        ->order_by('date')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findvalideBydemande($id_demande_rea_feffi) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_rea_feffi", $id_demande_rea_feffi)
+                        ->where("validation",1)
                         ->order_by('date')
                         ->get()
                         ->result();

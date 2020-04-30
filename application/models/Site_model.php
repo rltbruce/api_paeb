@@ -32,7 +32,8 @@ class Site_model extends CI_Model {
             'agence_acc' =>      $site['agence_acc'],
             'statu_convention' =>      $site['statu_convention'],
             'observation' =>      $site['observation'],
-            'id_ecole' =>      $site['id_ecole'],                      
+            'id_ecole' =>      $site['id_ecole'],
+            'id_classification_site' =>      $site['id_classification_site']                      
         );
     }
     public function delete($id) {

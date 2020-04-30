@@ -19,14 +19,117 @@ class Passation_marches_be extends REST_Controller {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
         $id_bureau_etude = $this->get('id_bureau_etude');
+        $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $menu = $this->get('menu');
 
-         if ($menu=='getpassationBybe')
+        if ($menu=='getpassationByconvention')
          {
-            $menu = $this->Passation_marches_beManager->findAllBybe($id_bureau_etude);
-            if ($menu) 
+            $tmp = $this->Passation_marches_beManager->getpassationByconvention($id_convention_entete);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
+                {
+                    //$bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_lancement_dp'] = $value->date_lancement_dp;
+                    $data[$key]['date_remise']   = $value->date_remise;
+                    $data[$key]['nbr_offre_recu']    = $value->nbr_offre_recu;
+                    $data[$key]['date_rapport_evaluation'] = $value->date_rapport_evaluation;
+                    $data[$key]['date_demande_ano_dpfi'] = $value->date_demande_ano_dpfi;
+                    $data[$key]['date_ano_dpfi'] = $value->date_ano_dpfi;
+                    $data[$key]['notification_intention']   = $value->notification_intention;
+                    $data[$key]['date_notification_attribution']    = $value->date_notification_attribution;
+                    $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
+                    $data[$key]['date_os'] = $value->date_os;
+                    $data[$key]['observation'] = $value->observation;
+
+                    $data[$key]['date_manifestation']   = $value->date_manifestation;
+                    $data[$key]['date_shortlist'] = $value->date_shortlist;
+                    $data[$key]['statut'] = $value->statut;
+                    $data[$key]['validation'] = $value->validation;
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getpassationvalidationByconvention')
+         {
+            $tmp = $this->Passation_marches_beManager->getpassationvalidationByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_lancement_dp'] = $value->date_lancement_dp;
+                    $data[$key]['date_remise']   = $value->date_remise;
+                    $data[$key]['nbr_offre_recu']    = $value->nbr_offre_recu;
+                    $data[$key]['date_rapport_evaluation'] = $value->date_rapport_evaluation;
+                    $data[$key]['date_demande_ano_dpfi'] = $value->date_demande_ano_dpfi;
+                    $data[$key]['date_ano_dpfi'] = $value->date_ano_dpfi;
+                    $data[$key]['notification_intention']   = $value->notification_intention;
+                    $data[$key]['date_notification_attribution']    = $value->date_notification_attribution;
+                    $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
+                    $data[$key]['date_os'] = $value->date_os;
+                    $data[$key]['observation'] = $value->observation;
+
+                    $data[$key]['date_manifestation']   = $value->date_manifestation;
+                    $data[$key]['date_shortlist'] = $value->date_shortlist;
+                    $data[$key]['statut'] = $value->statut;
+                    $data[$key]['validation'] = $value->validation;
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getpassationinvalidationByconvention')
+         {
+            $tmp = $this->Passation_marches_beManager->getpassationinvalidationByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_lancement_dp'] = $value->date_lancement_dp;
+                    $data[$key]['date_remise']   = $value->date_remise;
+                    $data[$key]['nbr_offre_recu']    = $value->nbr_offre_recu;
+                    $data[$key]['date_rapport_evaluation'] = $value->date_rapport_evaluation;
+                    $data[$key]['date_demande_ano_dpfi'] = $value->date_demande_ano_dpfi;
+                    $data[$key]['date_ano_dpfi'] = $value->date_ano_dpfi;
+                    $data[$key]['notification_intention']   = $value->notification_intention;
+                    $data[$key]['date_notification_attribution']    = $value->date_notification_attribution;
+                    $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
+                    $data[$key]['date_os'] = $value->date_os;
+                    $data[$key]['observation'] = $value->observation;
+
+                    $data[$key]['date_manifestation']   = $value->date_manifestation;
+                    $data[$key]['date_shortlist'] = $value->date_shortlist;
+                    $data[$key]['statut'] = $value->statut;
+                    $data[$key]['validation'] = $value->validation;
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        /* if ($menu=='getpassationBycontrat_be')
+         {
+            $tmp = $this->Passation_marches_beManager->findpassationBycontrat_be($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
                 {
                     //$bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -54,7 +157,40 @@ class Passation_marches_be extends REST_Controller {
             } 
                 else
                     $data = array();
-        }   
+        } elseif ($menu=='getpassationBybe')
+         {
+            $tmp= $this->Passation_marches_beManager->findAllBybe($id_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_lancement_dp'] = $value->date_lancement_dp;
+                    $data[$key]['date_remise']   = $value->date_remise;
+                    $data[$key]['nbr_offre_recu']    = $value->nbr_offre_recu;
+                    $data[$key]['date_rapport_evaluation'] = $value->date_rapport_evaluation;
+                    $data[$key]['date_demande_ano_dpfi'] = $value->date_demande_ano_dpfi;
+                    $data[$key]['date_ano_dpfi'] = $value->date_ano_dpfi;
+                    $data[$key]['notification_intention']   = $value->notification_intention;
+                    $data[$key]['date_notification_attribution']    = $value->date_notification_attribution;
+                    $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
+                    $data[$key]['date_os'] = $value->date_os;
+                    $data[$key]['observation'] = $value->observation;
+
+                    $data[$key]['date_manifestation']   = $value->date_manifestation;
+                    $data[$key]['date_shortlist'] = $value->date_shortlist;
+                    $data[$key]['statut'] = $value->statut;
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['bato'] = 'ato';
+                        }
+            } 
+                else
+                    $data = array();
+        }*/   
         elseif ($id)
         {
             $data = array();
@@ -85,10 +221,10 @@ class Passation_marches_be extends REST_Controller {
         } 
         else 
         {
-            $menu = $this->Passation_marches_beManager->findAll();
-            if ($menu) 
+            $tmp= $this->Passation_marches_beManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     //$bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -158,7 +294,7 @@ class Passation_marches_be extends REST_Controller {
                     'statut' => $this->post('statut'),
 
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    //'id_bureau_etude' => $this->post('id_bureau_etude'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data) {
                     $this->response([
@@ -201,6 +337,7 @@ class Passation_marches_be extends REST_Controller {
                     'statut' => $this->post('statut'),
 
                     'id_convention_entete' => $this->post('id_convention_entete'),
+                    'validation' => $this->post('validation')
                     //'id_bureau_etude' => $this->post('id_bureau_etude'),
                 );
                 if (!$data || !$id) {

@@ -5,7 +5,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
     public function add($convention) {
         $this->db->set($this->_set($convention))
-                            ->set('date_modification', 'NOW()', false)
+                            ->set('date_creation', 'NOW()', false)
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -15,7 +15,6 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
     }
     public function update($id, $convention) {
         $this->db->set($this->_set($convention))
-                            ->set('date_modification', 'NOW()', false)
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -37,8 +36,8 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             'montant_total' =>    $convention['montant_total'],
             'validation'   =>$convention['validation'],
             'id_convention_ufpdaaf'   =>$convention['id_convention_ufpdaaf'],
-            //'id_compte_feffi'   =>$convention['id_compte_feffi'],
-            //'observation'   =>$convention['observation']                  
+            'type_convention'   =>$convention['type_convention'],
+            'id_user'   =>$convention['id_user']                  
         );
     }
     public function delete($id) {
@@ -84,7 +83,99 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         }                 
     }
 
-    public function findAllInvalide() {               
+    public function findAllInvalideByid_cisco($id_cisco) {             //mande  
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation",0)
+                        ->where("id_cisco",$id_cisco)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findAllByufpdaaf($id_convention_ufpdaaf) {       //mande        
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation",2)
+                        ->where("id_convention_ufpdaaf",$id_convention_ufpdaaf)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    
+    public function findAllValidedaaf() {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation",1)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findAllValideufpByid_cisco($id_cisco) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation",2)
+                        ->where("id_cisco",$id_cisco)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findconventionvalideufpBydatenowwithcount($date_signature) {               
+        $result =  $this->db->select('convention_cisco_feffi_entete.*')
+                        ->from($this->table)
+                        ->where("validation",2)
+                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->where("DATE_FORMAT(convention_cisco_feffi_detail.date_signature,'%Y')",$date_signature)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+   /* public function findAllValideByid_cisco($id_cisco) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("validation !=",0)
+                        ->where("id_cisco",$id_cisco)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }*/
+
+  /* public function findAllInvalide() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("validation",0)
@@ -114,21 +205,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             return null;
         }                 
     }
-    public function findAllByufpdaaf($id_convention_ufpdaaf) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("validation",2)
-                        ->where("id_convention_ufpdaaf",$id_convention_ufpdaaf)
-                        ->order_by('ref_convention')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
+    
 
     public function findAllValideByfeffi($id_feffi) {               
         $result =  $this->db->select('*')
@@ -146,52 +223,11 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         }                 
     }
 
-        public function findAllInvalidedaaf() {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("validation",1)
-                        ->order_by('ref_convention')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
+ 
 
-       public function findAllInvalideByid_cisco($id_cisco) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("validation",0)
-                        ->where("id_cisco",$id_cisco)
-                        ->order_by('ref_convention')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
+
     
-    public function findAllValideByid_cisco($id_cisco) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("validation !=",0)
-                        ->where("id_cisco",$id_cisco)
-                        ->order_by('ref_convention')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    } 
+     
 
         public function findAllValideufpByid_cisco($id_cisco) {               
         $result =  $this->db->select('*')
@@ -226,6 +262,30 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
+    }*/
+/*public function findconventionmaxBydate($date_today) // id=(select max(id) from convention_cisco_feffi_entete) and
+    {
+        $sql = "select *
+                        from convention_cisco_feffi_entete
+                        where date_creation = ".$date_today."";
+        return $this->db->query($sql)->result();                  
+    }*/
+
+  
+   public function findconventionmaxBydate($date_today)  //mande
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id=(select max(id) from convention_cisco_feffi_entete)")
+                        ->where("date_creation",$date_today)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 }

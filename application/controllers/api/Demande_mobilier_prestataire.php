@@ -21,7 +21,180 @@ class Demande_mobilier_prestataire extends REST_Controller {
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
-        if ($menu=="getdemandeValidetechnique")
+        if ($menu=="getdemandeBycontrat")
+        {
+            $tmp = $this->Demande_mobilier_prestataireManager->finddemandeBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $tranche_demande_mobilier_mpe = $this->Tranche_demande_mobilier_mpeManager->findById($value->id_tranche_demande_mpe);
+
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mobilier_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandevalideBycontrat")
+        {
+            $tmp = $this->Demande_mobilier_prestataireManager->finddemandevalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $tranche_demande_mobilier_mpe = $this->Tranche_demande_mobilier_mpeManager->findById($value->id_tranche_demande_mpe);
+
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mobilier_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandeinvalideBycontrat")
+        {
+            $tmp = $this->Demande_mobilier_prestataireManager->finddemandeinvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $tranche_demande_mobilier_mpe = $this->Tranche_demande_mobilier_mpeManager->findById($value->id_tranche_demande_mpe);
+
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mobilier_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandevalidebcafBycontrat")
+        {
+            $tmp = $this->Demande_mobilier_prestataireManager->finddemandevalidebcafBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $tranche_demande_mobilier_mpe = $this->Tranche_demande_mobilier_mpeManager->findById($value->id_tranche_demande_mpe);
+
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mobilier_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+       /* if ($menu=="getdemandedisponibleBycontrat")
+        {
+            $tmp = $this->Demande_mobilier_prestataireManager->finddemandedisponibleBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    
+                    $tranche_demande_mobilier_mpe = $this->Tranche_demande_mobilier_mpeManager->findById($value->id_tranche_demande_mpe);
+
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mobilier_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getalldemandeBycontrat")
+        {
+            $tmp = $this->Demande_mobilier_prestataireManager->finddemandeBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {                    
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $tranche_demande_mobilier_mpe = $this->Tranche_demande_mobilier_mpeManager->findById($value->id_tranche_demande_mpe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_mobilier_mpe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    $data[$key]['validation'] = $value->validation;
+                   
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandeValidetechnique")
         {
             $tmp = $this->Demande_mobilier_prestataireManager->findAllValidetechnique();
             if ($tmp) 
@@ -41,6 +214,7 @@ class Demande_mobilier_prestataire extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    $data[$key]['validation'] = $value->validation;
                    
                 }
             } 
@@ -68,7 +242,8 @@ class Demande_mobilier_prestataire extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
-                    $data[$key]['date_approbation'] = $value->date_approbation; 
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['validation'] = $value->validation; 
                    
                 }
             } 
@@ -96,6 +271,7 @@ class Demande_mobilier_prestataire extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    $data[$key]['validation'] = $value->validation;
 
                 }
             } 
@@ -123,12 +299,13 @@ class Demande_mobilier_prestataire extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    $data[$key]['validation'] = $value->validation;
 
                 }
             } 
                 else
                     $data = array();
-        }
+        }*/
         elseif ($id)
         {
             $data = array();
@@ -146,6 +323,7 @@ class Demande_mobilier_prestataire extends REST_Controller {
             $data['reste'] = $demande_mobilier_prestataire->reste;
             $data['date'] = $demande_mobilier_prestataire->date;
             $data['contrat_prestataire'] = $contrat_prestataire;
+            $data['validation'] = $demande_mobilier_prestataire->validation;
         } 
         else 
         {
@@ -168,6 +346,7 @@ class Demande_mobilier_prestataire extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    $data[$key]['validation'] = $value->validation;
 
                 }
             } 

@@ -17,10 +17,11 @@ class Paiement_fin_travaux_moe extends REST_Controller {
     {
         $id = $this->get('id');
         $id_demande_fin_travaux = $this->get('id_demande_fin_travaux');
+         $menu = $this->get('menu');
             
-        if ($id_demande_fin_travaux) 
+        if ($menu=='getpaiementinvalideBydemande') 
         {   $data = array();
-            $tmp = $this->Paiement_fin_travaux_moeManager->findBydemande_fin_travaux_moe($id_demande_fin_travaux);
+            $tmp = $this->Paiement_fin_travaux_moeManager->findpaiementinvalideBydemande($id_demande_fin_travaux);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -31,6 +32,43 @@ class Paiement_fin_travaux_moe extends REST_Controller {
                     $data[$key]['montant_paiement'] = $value->montant_paiement;
                     $data[$key]['date_paiement'] = $value->date_paiement;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['demande_fin_travaux_moe'] = $demande_fin_travaux_moe;
+                }
+            }
+        }
+        elseif ($menu=='getpaiementvalideBydemande') 
+        {   $data = array();
+            $tmp = $this->Paiement_fin_travaux_moeManager->findpaiementvalideBydemand($id_demande_fin_travaux);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_fin_travaux_moe = array();
+                    $demande_fin_travaux_moe = $this->Demande_fin_travaux_moeManager->findById($value->id_demande_fin_travaux);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant_paiement'] = $value->montant_paiement;
+                    $data[$key]['date_paiement'] = $value->date_paiement;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['demande_fin_travaux_moe'] = $demande_fin_travaux_moe;
+                }
+            }
+        }
+        elseif ($menu=='getpaiementBydemande') 
+        {   $data = array();
+            $tmp = $this->Paiement_fin_travaux_moeManager->findpaiementBydemande($id_demande_fin_travaux);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_fin_travaux_moe = array();
+                    $demande_fin_travaux_moe = $this->Demande_fin_travaux_moeManager->findById($value->id_demande_fin_travaux);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant_paiement'] = $value->montant_paiement;
+                    $data[$key]['date_paiement'] = $value->date_paiement;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['demande_fin_travaux_moe'] = $demande_fin_travaux_moe;
                 }
             }

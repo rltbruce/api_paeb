@@ -25,8 +25,8 @@ class Cout_maitrise_construction_model extends CI_Model {
     }
     public function _set($cout_maitrise_construction) {
         return array(
-            'description'       =>      $cout_maitrise_construction['description'],
             'id_convention_entete'      =>      $cout_maitrise_construction['id_convention_entete'],
+            'id_type_cout_maitrise'      =>      $cout_maitrise_construction['id_type_cout_maitrise'],
             'cout'                      =>      $cout_maitrise_construction['cout']                       
         );
     }

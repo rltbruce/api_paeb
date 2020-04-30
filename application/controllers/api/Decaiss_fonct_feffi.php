@@ -18,11 +18,11 @@ class Decaiss_fonct_feffi extends REST_Controller {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
         $menu = $this->get('menu');        
-        $id_convention = $this->get('id_convention');
+        $id_cisco = $this->get('id_cisco');
             
-        if ($id_convention_entete) 
+        if ($menu=='getdecaissByconvention') 
         {   $data = array();
-            $tmp = $this->Decaiss_fonct_feffiManager->findvalideByconvention_entete($id_convention);
+            $tmp = $this->Decaiss_fonct_feffiManager->findallByconvention($id_convention_entete);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -33,13 +33,14 @@ class Decaiss_fonct_feffi extends REST_Controller {
                     $data[$key]['montant'] = $value->montant;
                     $data[$key]['date_decaissement'] = $value->date_decaissement;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['convention_entete'] = $convention_entete;
                 }
             }
         }
-        elseif ($id_convention_entete) 
+        elseif ($menu=='getdecaiss_invalideByconvention') 
         {   $data = array();
-            $tmp = $this->Decaiss_fonct_feffiManager->findByconvention_entete($id_convention_entete);
+            $tmp = $this->Decaiss_fonct_feffiManager->findinvalideByconvention($id_convention_entete);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -50,6 +51,25 @@ class Decaiss_fonct_feffi extends REST_Controller {
                     $data[$key]['montant'] = $value->montant;
                     $data[$key]['date_decaissement'] = $value->date_decaissement;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['convention_entete'] = $convention_entete;
+                }
+            }
+        }
+        elseif ($menu=='getdecaiss_invalideBycisco') 
+        {   $data = array();
+            $tmp = $this->Decaiss_fonct_feffiManager->findinvalideBycisco($id_cisco);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $convention_entete = array();
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['date_decaissement'] = $value->date_decaissement;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['convention_entete'] = $convention_entete;
                 }
             }
@@ -57,26 +77,28 @@ class Decaiss_fonct_feffi extends REST_Controller {
         elseif ($id)
         {
             $data = array();
-            $paiement_batiment_moe = $this->Decaiss_fonct_feffiManager->findById($id);
-            $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($paiement_batiment_moe->id_convention_entete);
-            $data['id'] = $paiement_batiment_moe->id;
-            $data['montant'] = $paiement_batiment_moe->montant;
-            $data['date_decaissement'] = $paiement_batiment_moe->date_decaissement;
-            $data['observation'] = $paiement_batiment_moe->observation;
+            $decais = $this->Decaiss_fonct_feffiManager->findById($id);
+            $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($decais->id_convention_entete);
+            $data['id'] = $decais->id;
+            $data['montant'] = $decais->montant;
+            $data['date_decaissement'] = $decais->date_decaissement;
+            $data['observation'] = $decais->observation;
+            $data['validation'] = $decais->validation;
             $data['convention_entete'] = $convention_entete;
         } 
         else 
         {
-            $menu = $this->Decaiss_fonct_feffiManager->findAll();
-            if ($menu) 
+            $tmp = $this->Decaiss_fonct_feffiManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['montant'] = $value->montant;
                     $data[$key]['date_decaissement'] = $value->date_decaissement;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['convention_entete'] = $convention_entete;
                 }
             } 

@@ -68,8 +68,67 @@ class Demande_latrine_moe_model extends CI_Model {
             return $q->row();
         }
     }
+            public function finddemandeBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+     public function finddemandeinvalideBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+     public function finddemandevalidebcafBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function countAllByInvalide($invalide)
+    {
+        $result = $this->db->select('COUNT(*) as nombre')
+                        ->from($this->table)
+                        ->where("validation", $invalide)
+                        ->order_by('id', 'desc')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                  
+    }
 
-    public function findAllInvalideBylatrine($id_latrine_construction) {               
+   /* public function findAllInvalideBylatrine($id_latrine_construction) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("validation", 0)
@@ -209,5 +268,20 @@ class Demande_latrine_moe_model extends CI_Model {
             return null;
         }                 
     }
+        public function finddemandedisponibleBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation >", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }*/
 
 }

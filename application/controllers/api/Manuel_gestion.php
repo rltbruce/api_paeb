@@ -21,6 +21,66 @@ class Manuel_gestion extends REST_Controller {
         $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
             
+      if ($menu == "getmanuelBycontrat")
+        {
+            $tmp = $this->Manuel_gestionManager->findmanuelBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getmanuelvalideBycontrat")
+        {
+            $tmp = $this->Manuel_gestionManager->findmanuelvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getmanuelinvalideBycontrat")
+        {
+            $tmp = $this->Manuel_gestionManager->findmanuelinvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
        /* if ($menu == "getmanuelBycontrat")
         {
             $tmp = $this->Manuel_gestionManager->findAllBycontrat($id_contrat_bureau_etude,$validation);
@@ -62,7 +122,7 @@ class Manuel_gestion extends REST_Controller {
                     $data = array();
         }
         else*/
-            if ($menu == "getmanuelvalidationBycisco")
+        /*    if ($menu == "getmanuelvalidationBycisco")
         {
             $tmp = $this->Manuel_gestionManager->findAllvalidationBycisco($validation,$id_cisco);
             if ($tmp) 
@@ -81,7 +141,7 @@ class Manuel_gestion extends REST_Controller {
             } 
                 else
                     $data = array();
-        }
+        }*/
         elseif ($id)
         {
             $data = array();

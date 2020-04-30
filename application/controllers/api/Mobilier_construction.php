@@ -11,7 +11,7 @@ class Mobilier_construction extends REST_Controller {
         parent::__construct();
         
         $this->load->model('mobilier_construction_model', 'Mobilier_constructionManager');
-        $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
+        $this->load->model('convention_cisco_feffi_entete_model', 'Convention_cisco_feffi_enteteManager');
         $this->load->model('type_mobilier_model', 'Type_mobilierManager');
         //$this->load->model('attachement_mobilier_model', 'Attachement_mobilierManager');
     }
@@ -19,7 +19,7 @@ class Mobilier_construction extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_batiment_construction = $this->get('id_batiment_construction');
+        $id_convention_entete = $this->get('id_convention_entete');
 
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
@@ -27,7 +27,7 @@ class Mobilier_construction extends REST_Controller {
 
         $menu = $this->get('menu');
 
-        if ($menu=='getmobilierByContrat_prestataire')
+       /* if ($menu=='getmobilierByContrat_prestataire')
         {
             $mobilier_construction = $this->Mobilier_constructionManager->findAllByContrat_prestataire($id_contrat_prestataire );
             if ($mobilier_construction) 
@@ -81,21 +81,22 @@ class Mobilier_construction extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($id_batiment_construction)
+        else*/
+        if ($id_convention_entete)
         {
-            $mobilier_construction = $this->Mobilier_constructionManager->findAllByBatiment($id_batiment_construction );
-            if ($mobilier_construction) 
+            $tmp = $this->Mobilier_constructionManager->findMobilierByconvention($id_convention_entete );
+            if ($tmp) 
             {
-                foreach ($mobilier_construction as $key => $value) 
-                {                     
-                    $batiment_construction = $this->Batiment_constructionManager->findById($value->id_batiment_construction);
+                foreach ($tmp as $key => $value) 
+                {   
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['type_mobilier'] = $type_mobilier;
-                    $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['cout_unitaire'] = $value->cout_unitaire;
-                    $data[$key]['nbr_mobilier'] = $value->nbr_mobilier;
+                    //$data[$key]['nbr_mobilier'] = $value->nbr_mobilier;
                 }
             } 
                 else
@@ -106,14 +107,13 @@ class Mobilier_construction extends REST_Controller {
             $data = array();
             $mobilier_construction = $this->Mobilier_constructionManager->findById($id);
 
-            $batiment_construction = $this->Batiment_constructionManager->findById($mobilier_construction->id_batiment_construction);
+            $convention_entete = $this->convention_cisco_feffi_enteteManager->findById($mobilier_construction->id_convention_entete);
             $type_mobilier = $this->Type_mobilierManager->findById($mobilier_construction->id_type_mobilier);
 
-            $data['id'] = $batiment_construction->id;
-            $data['mobilier_construction'] = $mobilier_construction;
-            $data['batiment_construction'] = $batiment_construction;
+            $data['id'] = $mobilier_construction->id;
+            $data['convention_entete'] = $convention_entete;
             $data['cout_unitaire'] = $mobilier_construction->cout_unitaire;
-            $data['nbr_mobilier'] = $mobilier_construction->nbr_mobilier;
+            //$data['nbr_mobilier'] = $mobilier_construction->nbr_mobilier;
         } 
         else 
         {
@@ -122,16 +122,13 @@ class Mobilier_construction extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $data = array();
-                    $batiment_construction = $this->Convention_cisco_feffi_detailManager->findById($value->id_batiment_construction);
-
+                    $convention_entete = $this->convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['type_mobilier'] = $type_mobilier;
-                    $data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['cout_unitaire'] = $value->cout_unitaire;
-                    $data[$key]['nbr_mobilier'] = $value->nbr_mobilier;
                     
                 }
             } 
@@ -188,8 +185,7 @@ class Mobilier_construction extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'id_type_mobilier' => $this->post('id_type_mobilier'),
-                    'id_batiment_construction' => $this->post('id_batiment_construction'),
-                    'nbr_mobilier' => $this->post('nbr_mobilier'),
+                    'id_convention_entete' => $this->post('id_convention_entete'),
                     'cout_unitaire' => $this->post('cout_unitaire')
                 );
                 if (!$data) {
@@ -216,8 +212,7 @@ class Mobilier_construction extends REST_Controller {
             } else {
                 $data = array(
                     'id_type_mobilier' => $this->post('id_type_mobilier'),
-                    'id_batiment_construction' => $this->post('id_batiment_construction'),
-                    'nbr_mobilier' => $this->post('nbr_mobilier'),
+                    'id_convention_entete' => $this->post('id_convention_entete'),
                     'cout_unitaire' => $this->post('cout_unitaire')
                 );
                 if (!$data || !$id) {

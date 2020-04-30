@@ -97,10 +97,101 @@ class Demande_realimentation_feffi_model extends CI_Model {
         }
                     
     }*/
-   public function findByIdconvention_cife_entete($id_convention_cife_entete) {               
+    public function finddemandevalidedaafByIdconvention_cife_entete($id_convention_cife_entete) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_cife_entete", $id_convention_cife_entete)                        
+                        ->where("validation",7)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function finddemandeemidaafByIdconvention_cife_entete($id_convention_cife_entete) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_cife_entete", $id_convention_cife_entete)                        
+                        ->where("validation IN(4,5,7)")
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function finddemandeemidpfiByIdconvention_cife_entete($id_convention_cife_entete) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_cife_entete", $id_convention_cife_entete)                        
+                        ->where("validation IN(1,2,7)")
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+   public function findallByIdconvention_cife_entete($id_convention_cife_entete) {           //mande    
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_cife_entete", $id_convention_cife_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findcreerByIdconvention_cife_entete($id_convention_cife_entete) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_cife_entete", $id_convention_cife_entete)                        
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function countdemandeByconvention($id_convention_cife_entete,$validation) {           //mande    
+        $result =  $this->db->select('count(demande_realimentation_feffi.id) as nbr_demande_feffi')
+                        ->from($this->table)
+                        ->where("id_convention_cife_entete", $id_convention_cife_entete)                        
+                        ->where("validation", $validation)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+  /*  public function finddemandedisponibleByconvention($id_convention_cife_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_cife_entete", $id_convention_cife_entete)
+                        ->where("validation >", 0)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -159,7 +250,7 @@ class Demande_realimentation_feffi_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
    /* public function findByIdTechniquementInvalide() {               
         $result =  $this->db->select('*')

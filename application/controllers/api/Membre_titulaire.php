@@ -5,42 +5,67 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Cout_divers_construction extends REST_Controller {
+class Membre_titulaire extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('cout_divers_construction_model', 'cout_divers_constructionManager');
+        $this->load->model('membre_titulaire_model', 'Membre_titulaireManager');
+        $this->load->model('membre_feffi_model', 'Membre_feffiManager');
+        $this->load->model('compte_feffi_model', 'Compte_feffiManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_convention_entete = $this->get('id_convention_entete');
+        $id_compte = $this->get('id_compte');
+        $id_membre = $this->get('id_membre');
             
-        if ($id)
-        {
-
-            $cout_divers_construction = $this->cout_divers_constructionManager->findById($id);
-
-            if ($cout_divers_construction) 
+        if ($id_compte) 
+        {   
+            $tmp = $this->Membre_titulaireManager->findBycompte($id_compte);
+            if ($tmp) 
             {
-                $data = $cout_divers_construction;
-            }
-            else
+                foreach ($tmp as $key => $value) 
+                {
+                    $compte = array();
+                    $membre = array();
+                    $compte = $this->Compte_feffiManager->findById($value->id_compte);
+                    $membre = $this->Membre_feffiManager->findById($value->id_membre);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['membre'] = $membre;
+                    $data[$key]['compte'] = $compte;
+                }
+            }else
                 $data = array();
-        } 
-        
-
-        if ($id_convention_entete) 
+        }
+        elseif ($id)
         {
-            $menu = $this->cout_divers_constructionManager->findAll_by_convention_detail($id_convention_entete);
-            if ($menu) 
+            $data = array();
+            $compte = array();
+            $membre = array();
+            $tmp = $this->Membre_titulaireManager->findBycompte($id);
+            $compte = $this->Compte_feffiManager->findById($tmp->id_compte);
+            $membre = $this->Membre_feffiManager->findById($tmp->id_membre);
+            $data['id'] = $tmp->id;
+            $data['membre'] = $membre;
+            $data['compte'] = $compte;
+        } 
+        else 
+        {
+            $tmp = $this->Membre_titulaireManager->findAll();
+            if ($tmp) 
             {
-            
-                $data = $menu;
-              
-            }
-            else
+                foreach ($tmp as $key => $value) 
+                {
+                    $compte = array();
+                    $membre = array();
+                    $compte = $this->Compte_feffiManager->findById($value->id_compte);
+                    $membre = $this->Membre_feffiManager->findById($value->id_membre);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['membre'] = $membre;
+                    $data[$key]['compte'] = $compte;
+                }
+            }else
                 $data = array();
         }
     
@@ -66,9 +91,8 @@ class Cout_divers_construction extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'id_type_cout_divers' => $this->post('id_type_cout_divers'),
-                    'cout' => $this->post('cout'),
-                    'id_convention_entete' => $this->post('id_convention_entete')
+                    'id_compte' => $this->post('id_compte'),
+                    'id_membre' => $this->post('id_membre')
                 );
                 if (!$data) {
                     $this->response([
@@ -77,7 +101,7 @@ class Cout_divers_construction extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->cout_divers_constructionManager->add($data);
+                $dataId = $this->Membre_titulaireManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -93,18 +117,17 @@ class Cout_divers_construction extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'id_type_cout_divers' => $this->post('id_type_cout_divers'),
-                    'cout' => $this->post('cout'),
-                    'id_convention_entete' => $this->post('id_convention_entete')
+                    'id_compte' => $this->post('id_compte'),
+                    'id_membre' => $this->post('id_membre')
                 );
                 if (!$data || !$id) {
                     $this->response([
                         'status' => FALSE,
                         'response' => 0,
                         'message' => 'No request found'
-                    ], REST_Controller::HTTP_OK);
+                    ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->cout_divers_constructionManager->update($id, $data);
+                $update = $this->Membre_titulaireManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -126,7 +149,7 @@ class Cout_divers_construction extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->cout_divers_constructionManager->delete($id);         
+            $delete = $this->Membre_titulaireManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

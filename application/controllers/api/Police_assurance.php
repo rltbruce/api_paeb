@@ -21,6 +21,66 @@ class Police_assurance extends REST_Controller {
         $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
             
+       if ($menu == "getpoliceBycontrat")
+        {
+            $tmp = $this->Police_assuranceManager->findpoliceBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_expiration'] = $value->date_expiration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getpolicevalideBycontrat")
+        {
+            $tmp = $this->Police_assuranceManager->findpolicevalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_expiration'] = $value->date_expiration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getpoliceinvalideBycontrat")
+        {
+            $tmp = $this->Police_assuranceManager->findpoliceinvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_expiration'] = $value->date_expiration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
        /* if ($menu == "getpoliceBycontrat")
         {
             $tmp = $this->Police_assuranceManager->findAllBycontrat($id_contrat_bureau_etude,$validation);
@@ -41,7 +101,7 @@ class Police_assurance extends REST_Controller {
                 else
                     $data = array();
         }*/
-        if ($menu == "getpolicevalidationBycisco")
+        /*if ($menu == "getpolicevalidationBycisco")
         {
             $tmp = $this->Police_assuranceManager->findAllvalidationBycisco($validation,$id_cisco);
             if ($tmp) 
@@ -80,7 +140,7 @@ class Police_assurance extends REST_Controller {
             } 
                 else
                     $data = array();
-        }
+        }*/
         elseif ($id)
         {
             $data = array();

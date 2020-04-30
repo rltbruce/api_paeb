@@ -21,6 +21,67 @@ class Rapport_mensuel extends REST_Controller {
         $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
             
+        if ($menu == "getrapportBycontrat")
+        {
+            $tmp = $this->Rapport_mensuelManager->findrapportBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu == "getrapportvalideBycontrat")
+        {
+            $tmp = $this->Rapport_mensuelManager->findrapportvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getrapportinvalideBycontrat")
+        {
+            $tmp = $this->Rapport_mensuelManager->findrapportinvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
         /*if ($menu == "getrapportBycontrat")
         {
             $tmp = $this->Rapport_mensuelManager->findAllBycontrat($id_contrat_bureau_etude,$validation);
@@ -41,7 +102,7 @@ class Rapport_mensuel extends REST_Controller {
                 else
                     $data = array();
         }*/
-        if ($menu == "getrapportvalidationBycisco")
+       /* if ($menu == "getrapportvalidationBycisco")
         {
             $tmp = $this->Rapport_mensuelManager->findAllvalidationBycisco($validation,$id_cisco);
             if ($tmp) 
@@ -80,7 +141,7 @@ class Rapport_mensuel extends REST_Controller {
             } 
                 else
                     $data = array();
-        }
+        }*/
         elseif ($id)
         {
             $data = array();

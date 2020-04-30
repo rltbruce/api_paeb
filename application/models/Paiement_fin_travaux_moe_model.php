@@ -61,10 +61,40 @@ class Paiement_fin_travaux_moe_model extends CI_Model {
         }
     }
 
-    public function findBydemande_fin_travaux_moe($id_demande_fin_travaux) {               
+       public function findpaiementBydemande($id_demande_fin_travaux) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_demande_fin_travaux", $id_demande_fin_travaux)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpaiementvalideBydemande($id_demande_fin_travaux) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_fin_travaux", $id_demande_fin_travaux)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpaiementinvalideBydemande($id_demande_fin_travaux) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_fin_travaux", $id_demande_fin_travaux)
+                        ->where("validation", 0)
                         ->order_by('id')
                         ->get()
                         ->result();

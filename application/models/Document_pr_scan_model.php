@@ -31,7 +31,7 @@ class Document_pr_scan_model extends CI_Model {
             'id_contrat_partenaire_relai'    =>  $document_pr_scan['id_contrat_partenaire_relai'],
             'id_document_pr'    =>  $document_pr_scan['id_document_pr'],
             'validation'    =>  $document_pr_scan['validation'],
-            'id_convention_entete'    =>  $document_pr_scan['id_convention_entete'],                       
+            //'id_convention_entete'    =>  $document_pr_scan['id_convention_entete'],                       
         );
     }
     public function delete($id) {

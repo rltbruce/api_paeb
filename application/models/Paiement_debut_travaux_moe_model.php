@@ -28,6 +28,7 @@ class Paiement_debut_travaux_moe_model extends CI_Model {
             'montant_paiement'       =>      $paiement_debut_travaux_moe['montant_paiement'],
             'date_paiement'       =>      $paiement_debut_travaux_moe['date_paiement'],
             'observation'       =>      $paiement_debut_travaux_moe['observation'],
+            'validation'       =>      $paiement_debut_travaux_moe['validation'],
             'id_demande_debut_travaux'    => $paiement_debut_travaux_moe['id_demande_debut_travaux']                       
         );
     }
@@ -61,10 +62,40 @@ class Paiement_debut_travaux_moe_model extends CI_Model {
         }
     }
 
-    public function findBydemande_debut_travaux_moe($id_demande_debut_travaux) {               
+    public function findpaiementBydemande($id_demande_debut_travaux) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_demande_debut_travaux", $id_demande_debut_travaux)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpaiementvalideBydemande($id_demande_debut_travaux) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_debut_travaux", $id_demande_debut_travaux)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpaiementinvalideBydemande($id_demande_debut_travaux) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_debut_travaux", $id_demande_debut_travaux)
+                        ->where("validation", 0)
                         ->order_by('id')
                         ->get()
                         ->result();

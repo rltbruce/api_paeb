@@ -22,7 +22,106 @@ class Passation_marches extends REST_Controller {
         $id_convention_entete = $this->get('id_convention_entete');
         $menu = $this->get('menu');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
-         if ($menu=='getpassationBycontrat_prestataire')
+        
+        if ($menu=='getpassationvalideByconvention')
+         {
+            $tmp = $this->Passation_marchesManager->findpassationvalideByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $countmpe_soumissionaire = $this->Mpe_soumissionaireManager->countAllBympe_soumissionnaire($value->id);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_lancement'] = $value->date_lancement;
+                    $data[$key]['date_remise']   = $value->date_remise;
+                    $data[$key]['nbr_offre_recu']    = $countmpe_soumissionaire[0]->nbr;
+                    $data[$key]['montant_moin_chere']   = $value->montant_moin_chere;
+                    $data[$key]['date_rapport_evaluation'] = $value->date_rapport_evaluation;
+                    $data[$key]['date_demande_ano_dpfi'] = $value->date_demande_ano_dpfi;
+                    $data[$key]['date_ano_dpfi'] = $value->date_ano_dpfi;
+                    $data[$key]['notification_intention']   = $value->notification_intention;
+                    $data[$key]['date_notification_attribution']    = $value->date_notification_attribution;
+                   // $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
+                    $data[$key]['date_os'] = $value->date_os;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation']   = $value->validation;
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['prestataire'] = $prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getpassationinvalideByconvention')
+         {
+            $tmp = $this->Passation_marchesManager->findpassationinvalideByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $countmpe_soumissionaire = $this->Mpe_soumissionaireManager->countAllBympe_soumissionnaire($value->id);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_lancement'] = $value->date_lancement;
+                    $data[$key]['date_remise']   = $value->date_remise;
+                    $data[$key]['nbr_offre_recu']    = $countmpe_soumissionaire[0]->nbr;
+                    $data[$key]['montant_moin_chere']   = $value->montant_moin_chere;
+                    $data[$key]['date_rapport_evaluation'] = $value->date_rapport_evaluation;
+                    $data[$key]['date_demande_ano_dpfi'] = $value->date_demande_ano_dpfi;
+                    $data[$key]['date_ano_dpfi'] = $value->date_ano_dpfi;
+                    $data[$key]['notification_intention']   = $value->notification_intention;
+                    $data[$key]['date_notification_attribution']    = $value->date_notification_attribution;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['date_os'] = $value->date_os;
+                    $data[$key]['observation'] = $value->observation;
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['prestataire'] = $prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getpassationByconvention')
+         {
+            $tmp = $this->Passation_marchesManager->findpassationByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $countmpe_soumissionaire = $this->Mpe_soumissionaireManager->countAllBympe_soumissionnaire($value->id);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_lancement'] = $value->date_lancement;
+                    $data[$key]['date_remise']   = $value->date_remise;
+                    $data[$key]['nbr_offre_recu']    = $countmpe_soumissionaire[0]->nbr;
+                    $data[$key]['montant_moin_chere']   = $value->montant_moin_chere;
+                    $data[$key]['date_rapport_evaluation'] = $value->date_rapport_evaluation;
+                    $data[$key]['date_demande_ano_dpfi'] = $value->date_demande_ano_dpfi;
+                    $data[$key]['date_ano_dpfi'] = $value->date_ano_dpfi;
+                    $data[$key]['notification_intention']   = $value->notification_intention;
+                    $data[$key]['date_notification_attribution']    = $value->date_notification_attribution;
+                   // $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
+                    $data[$key]['date_os'] = $value->date_os;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation']   = $value->validation;
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['prestataire'] = $prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        /*if ($menu=='getpassationBycontrat_prestataire')
          {
             $tmp = $this->Passation_marchesManager->findAllByContrat_prestataire($id_contrat_prestataire);
             if ($tmp) 
@@ -85,7 +184,7 @@ class Passation_marches extends REST_Controller {
             } 
                 else
                     $data = array();
-        }   
+        }*/   
         elseif ($id)
         {
             $data = array();
@@ -181,8 +280,7 @@ class Passation_marches extends REST_Controller {
                     'date_os' => $this->post('date_os'),
                     'observation' => $this->post('observation'),
                     'validation' => $this->post('validation'),
-                    'id_convention_entete' => $this->post('id_convention_entete'),
-                    //'id_prestataire' => $this->post('id_prestataire'),
+                    'id_convention_entete' => $this->post('id_convention_entete')
                 );
                 if (!$data) {
                     $this->response([
@@ -221,7 +319,7 @@ class Passation_marches extends REST_Controller {
                     'date_os' => $this->post('date_os'),
                     'observation' => $this->post('observation'),
                     'validation' => $this->post('validation'),
-                    'id_convention_entete' => $this->post('id_convention_entete'),
+                    'id_convention_entete' => $this->post('id_convention_entete')
                     //'id_prestataire' => $this->post('id_prestataire')
                 );
                 if (!$data || !$id) {

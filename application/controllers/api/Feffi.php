@@ -47,7 +47,7 @@ class Feffi extends REST_Controller {
                 }
             }
         }
-        elseif ($menus=='getfeffiBycisco') 
+        elseif ($menus=='getfeffiBycisco')
         {   $data = array();
             $tmp = $this->FeffiManager->findBycisco($id_cisco);
             if ($tmp) 

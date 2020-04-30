@@ -43,7 +43,7 @@ class Passation_marches_be_model extends CI_Model {
             'statut' => $passation_marches_be['statut'],
 
             'id_convention_entete' => $passation_marches_be['id_convention_entete'],
-            //'id_bureau_etude' => $passation_marches_be['id_bureau_etude']                       
+            'validation' => $passation_marches_be['validation']                       
         );
     }
     public function delete($id) {
@@ -75,11 +75,76 @@ class Passation_marches_be_model extends CI_Model {
             return $q->row();
         }
     }
-
-    public function findAllByConvention($id_convention_entete) {               
+    
+    public function getpassationByconvention($id_convention_entete)
+    {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getpassationvalideByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getpassationinvalideByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+ /*   public function findAllByConvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpassationBycontrat_be($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('
+            passation_marches_be.*')
+                        ->from($this->table)
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=passation_marches_be.id_convention_entete')
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id_convention_entete=convention_cisco_feffi_entete.id')
+                        ->where("contrat_bureau_etude.id", $id_contrat_bureau_etude)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -107,20 +172,7 @@ class Passation_marches_be_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
-        public function getpassationByconvention($id_convention_entete) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("id_convention_entete", $id_convention_entete)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
+    }*/
+
 
 }

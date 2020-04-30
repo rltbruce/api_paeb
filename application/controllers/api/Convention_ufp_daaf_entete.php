@@ -17,9 +17,21 @@ class Convention_ufp_daaf_entete extends REST_Controller {
         $id = $this->get('id');       
         $menu = $this->get('menu');
         $validation = $this->get('validation');
-        $id_convention_ufp_daaf_entete = $this->get('id_convention_ufp_daaf_entete');
+        $id_convention_ufp_daaf_entete = $this->get('id_convention_ufp_daaf_entete');       
+        $date_today = $this->get('date_today');
 
-        if ($menu=="getindicateurByconvention")
+        if ($menu=='conventionmaxBydate')
+        {
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findconventionmaxBydate($date_today);
+            if ($tmp) 
+            {
+                $data = $tmp;
+
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu=="getindicateurByconvention")
         {
             $tmp = $this->Convention_ufp_daaf_enteteManager->findindicateurByconvention($id_convention_ufp_daaf_entete);
             if ($tmp) 

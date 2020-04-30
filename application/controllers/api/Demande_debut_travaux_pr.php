@@ -20,7 +20,35 @@ class Demande_debut_travaux_pr extends REST_Controller {
         $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
         $menu = $this->get('menu');
 
-        if ($menu=="getalldemandeByContrat")
+        if ($menu=="getdemandedisponibleBycontrat")
+        {
+            $tmp = $this->Demande_debut_travaux_prManager->finddemandedisponibleBycontrat($id_contrat_partenaire_relai);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_partenaire_relai= array();
+                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+                    $tranche_d_debut_travaux_pr = $this->Tranche_d_debut_travaux_prManager->findById($value->id_tranche_d_debut_travaux_pr);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_d_debut_travaux_pr;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getalldemandeByContrat")
         {
             $tmp = $this->Demande_debut_travaux_prManager->findAllBycontrat($id_contrat_partenaire_relai);
             if ($tmp) 

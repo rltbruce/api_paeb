@@ -22,10 +22,9 @@ class Compte_daaf extends REST_Controller {
             $compte_daaf = $this->Compte_daafManager->findById($id);
             
             $data['id'] = $compte_daaf->id;
-            $data['rib'] = $compte_daaf->rib;
-            $data['nom_banque'] = $compte_daaf->nom_banque;
-            $data['numero_compte'] = $compte_daaf->numero_compte;
-            $data['adresse_banque'] = $compte_daaf->adresse_banque;
+            $data['intitule'] = $compte_daaf->intitule;
+            $data['agence'] = $compte_daaf->agence;
+            $data['compte'] = $compte_daaf->compte;
         } 
         else 
         {
@@ -36,10 +35,9 @@ class Compte_daaf extends REST_Controller {
                 {
                   
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['rib'] = $value->rib;
-                    $data[$key]['nom_banque'] = $value->nom_banque;
-                    $data[$key]['numero_compte'] = $value->numero_compte;
-                    $data[$key]['adresse_banque'] = $value->adresse_banque;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['agence'] = $value->agence;
+                    $data[$key]['compte'] = $value->compte;
                 }
             } 
                 else
@@ -68,10 +66,9 @@ class Compte_daaf extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'rib' => $this->post('rib'),
-                    'nom_banque' => $this->post('nom_banque'),
-                    'adresse_banque' => $this->post('adresse_banque'),
-                    'numero_compte' => $this->post('numero_compte')
+                    'intitule' => $this->post('intitule'),
+                    'agence' => $this->post('agence'),
+                    'compte' => $this->post('compte')
                 );
                 if (!$data) {
                     $this->response([
@@ -96,10 +93,9 @@ class Compte_daaf extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'rib' => $this->post('rib'),
-                    'nom_banque' => $this->post('nom_banque'),
-                    'adresse_banque' => $this->post('adresse_banque'),
-                    'numero_compte' => $this->post('numero_compte')
+                    'intitule' => $this->post('intitule'),
+                    'agence' => $this->post('agence'),
+                    'compte' => $this->post('compte')
                 );
                 if (!$data || !$id) {
                     $this->response([

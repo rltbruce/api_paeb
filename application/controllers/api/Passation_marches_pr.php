@@ -19,14 +19,127 @@ class Passation_marches_pr extends REST_Controller {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
         $id_partenaire_relai = $this->get('id_partenaire_relai');
+        $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
         $menu = $this->get('menu');
 
-         if ($menu=='getpassationBypartenaire_relai')
+         if ($menu=='getpassationByconvention')
          {
-            $menu = $this->Passation_marches_prManager->findAllBypartenaire_relai($id_partenaire_relai);
-            if ($menu) 
+            $tmp = $this->Passation_marches_prManager->getpassationByconvention($id_convention_entete);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
+                {
+                    //$partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_lancement_dp'] = $value->date_lancement_dp;
+                    $data[$key]['date_remise']   = $value->date_remise;
+                    $data[$key]['nbr_offre_recu']    = $value->nbr_offre_recu;
+                   
+                    $data[$key]['date_os'] = $value->date_os;
+                    $data[$key]['validation'] = $value->validation;
+
+                    $data[$key]['date_manifestation']   = $value->date_manifestation;
+                   
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                   
+                        }
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getpassationvalideByconvention')
+         {
+            $tmp = $this->Passation_marches_prManager->getpassationvalideByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_lancement_dp'] = $value->date_lancement_dp;
+                    $data[$key]['date_remise']   = $value->date_remise;
+                    $data[$key]['nbr_offre_recu']    = $value->nbr_offre_recu;
+                   
+                    $data[$key]['date_os'] = $value->date_os;
+                    $data[$key]['validation'] = $value->validation;
+
+                    $data[$key]['date_manifestation']   = $value->date_manifestation;
+                   
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                   
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getpassationinvalideByconvention')
+         {
+            $tmp = $this->Passation_marches_prManager->getpassationinvalideByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_lancement_dp'] = $value->date_lancement_dp;
+                    $data[$key]['date_remise']   = $value->date_remise;
+                    $data[$key]['nbr_offre_recu']    = $value->nbr_offre_recu;
+                   
+                    $data[$key]['date_os'] = $value->date_os;
+                    $data[$key]['validation'] = $value->validation;
+
+                    $data[$key]['date_manifestation']   = $value->date_manifestation;
+                   
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                   
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getpassationBycontrat_partenaire_relai')
+         {
+            $tmp = $this->Passation_marches_prManager->findpassationBycontrat_partenaire_relai($id_contrat_partenaire_relai);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_lancement_dp'] = $value->date_lancement_dp;
+                    $data[$key]['date_remise']   = $value->date_remise;
+                    $data[$key]['nbr_offre_recu']    = $value->nbr_offre_recu;
+                   
+                    $data[$key]['date_os'] = $value->date_os;
+                    //$data[$key]['observation'] = $value->observation;
+
+                    $data[$key]['date_manifestation']   = $value->date_manifestation;
+                   
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                   
+                        }
+            } 
+                else
+                    $data = array();
+        }elseif ($menu=='getpassationBypartenaire_relai')
+         {
+            $tmp = $this->Passation_marches_prManager->findAllBypartenaire_relai($id_partenaire_relai);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
                 {
                     //$partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -71,10 +184,10 @@ class Passation_marches_pr extends REST_Controller {
         } 
         else 
         {
-            $menu = $this->Passation_marches_prManager->findAll();
-            if ($menu) 
+            $tmp = $this->Passation_marches_prManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     //$partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -127,7 +240,7 @@ class Passation_marches_pr extends REST_Controller {
                     'date_manifestation' => $this->post('date_manifestation'),                    
 
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    //'id_partenaire_relai' => $this->post('id_partenaire_relai'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data) {
                     $this->response([
@@ -159,6 +272,7 @@ class Passation_marches_pr extends REST_Controller {
                     'date_os' => $this->post('date_os'),
                     'date_manifestation' => $this->post('date_manifestation'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {
                     $this->response([

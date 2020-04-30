@@ -20,9 +20,127 @@ class Demande_latrine_moe extends REST_Controller {
         $id = $this->get('id');
         $id_latrine_construction = $this->get('id_latrine_construction');
         $id_cisco = $this->get('id_cisco');
+        $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $menu = $this->get('menu');
        
-        if ($menu=="getalldemandevalideBycisco")
+        if ($menu=="getdemandeBycontrat")
+        {
+            $tmp = $this->Demande_latrine_moeManager->finddemandeBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_latrine_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    //$data[$key]['latrine_construction'] = $latrine_construction;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandevalideBycontrat")
+        {
+            $tmp = $this->Demande_latrine_moeManager->finddemandevalidebcafBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_latrine_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    //$data[$key]['latrine_construction'] = $latrine_construction;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandeinvalideBycontrat")
+        {
+            $tmp = $this->Demande_latrine_moeManager->finddemandeinvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_latrine_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    //$data[$key]['latrine_construction'] = $latrine_construction;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        /*if ($menu=="getdemandedisponibleBycontrat")
+        {
+            $tmp = $this->Demande_latrine_moeManager->finddemandedisponibleBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                   
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_latrine_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                   // $data[$key]['latrine_construction'] = $latrine_construction;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getalldemandevalideBycisco")
         {
             $tmp = $this->Demande_latrine_moeManager->findAlldemandevalideBycisco($id_cisco);
             if ($tmp) 
@@ -59,8 +177,6 @@ class Demande_latrine_moe extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    /*$latrine_construction= array();
-                    $latrine_construction = $this->latrine_constructionManager->findById($value->id_latrine_construction);*/
                      $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
                     $data[$key]['id'] = $value->id;
@@ -83,37 +199,6 @@ class Demande_latrine_moe extends REST_Controller {
                 else
                     $data = array();
         }
-        /*if ($menu=="getalldemandeBylatrine")
-        {
-            $tmp = $this->Demande_latrine_moeManager->findAllByLatrine($id_latrine_construction);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $latrine_construction= array();
-                    $latrine_construction = $this->latrine_constructionManager->findById($value->id_latrine_construction);
-                     $contrat_bureau_etude = $this->Contrat_beManager->findByLatrine($value->id_latrine_construction);
-                    $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['objet'] = $value->objet;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ref_facture'] = $value->ref_facture;
-                    $data[$key]['montant'] = $value->montant;
-                    $data[$key]['tranche'] = $tranche_demande_latrine_moe;
-                    $data[$key]['cumul'] = $value->cumul;
-                    $data[$key]['anterieur'] = $value->anterieur;
-                    $data[$key]['reste'] = $value->reste;
-                    $data[$key]['date'] = $value->date;
-                    $data[$key]['validation'] = $value->validation;
-                    $data[$key]['latrine_construction'] = $latrine_construction;
-                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
-
-
-                }
-            } 
-                else
-                    $data = array();
-        }*/
         elseif ($menu=="getdemandeByValide")
         {
             $tmp = $this->Demande_latrine_moeManager->findAllValide();
@@ -121,8 +206,6 @@ class Demande_latrine_moe extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    /*$latrine_construction= array();
-                    $latrine_construction = $this->latrine_constructionManager->findById($value->id_latrine_construction);*/
                      $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
                     $data[$key]['id'] = $value->id;
@@ -152,8 +235,6 @@ class Demande_latrine_moe extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    /*$latrine_construction= array();
-                    $latrine_construction = $this->latrine_constructionManager->findById($value->id_latrine_construction);*/
                      $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
                     $data[$key]['id'] = $value->id;
@@ -183,8 +264,6 @@ class Demande_latrine_moe extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    /*$latrine_construction= array();
-                    $latrine_construction = $this->latrine_constructionManager->findById($value->id_latrine_construction);*/
                      $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
                     $data[$key]['id'] = $value->id;
@@ -214,8 +293,6 @@ class Demande_latrine_moe extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    /*$latrine_construction= array();
-                    $latrine_construction = $this->latrine_constructionManager->findById($value->id_latrine_construction);*/
                      $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
                     $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
                     $data[$key]['id'] = $value->id;
@@ -237,7 +314,7 @@ class Demande_latrine_moe extends REST_Controller {
             } 
                 else
                     $data = array();
-        }
+        }*/
        /* elseif ($menu=="getdemandeInvalideBylatrine")
         {
             $tmp = $this->Demande_latrine_moeManager->findAllInvalideBylatrine($id_latrine_construction);

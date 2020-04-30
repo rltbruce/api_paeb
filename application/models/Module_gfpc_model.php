@@ -70,8 +70,52 @@ class Module_gfpc_model extends CI_Model {
             return $q->row();
         }
     }
+       public function findinvalideBycontrat($id_contrat_partenaire_relai)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_contrat_partenaire_relai',$id_contrat_partenaire_relai)
+                        ->where('validation',0)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findvalideBycontrat($id_contrat_partenaire_relai)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_contrat_partenaire_relai',$id_contrat_partenaire_relai)
+                        ->where('validation',1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findmoduleBycontrat($id_contrat_partenaire_relai)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_contrat_partenaire_relai',$id_contrat_partenaire_relai)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
-        public function findAllBycontrat($id_contrat_partenaire_relai) {               
+    /*    public function findAllBycontrat($id_contrat_partenaire_relai) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where('id_contrat_partenaire_relai',$id_contrat_partenaire_relai)
@@ -122,6 +166,6 @@ class Module_gfpc_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
 }

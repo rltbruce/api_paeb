@@ -32,12 +32,13 @@ class Contrat_prestataire_model extends CI_Model {
             'cout_latrine'   => $contrat_prestataire['cout_latrine'],
             'cout_mobilier' => $contrat_prestataire['cout_mobilier'],
             'date_signature' => $contrat_prestataire['date_signature'],
-            'date_prev_deb_trav' => $contrat_prestataire['date_prev_deb_trav'],
-            'date_reel_deb_trav' => $contrat_prestataire['date_reel_deb_trav'],
+            //'date_prev_deb_trav' => $contrat_prestataire['date_prev_deb_trav'],
+            //'date_reel_deb_trav' => $contrat_prestataire['date_reel_deb_trav'],
             'delai_execution' => $contrat_prestataire['delai_execution'],
             'id_convention_entete' => $contrat_prestataire['id_convention_entete'],
             'id_prestataire' => $contrat_prestataire['id_prestataire'],
-            'paiement_recu' => $contrat_prestataire['paiement_recu']                      
+            'paiement_recu' => $contrat_prestataire['paiement_recu'],
+            'validation' => $contrat_prestataire['validation']                      
         );
     }
     public function delete($id) {
@@ -69,8 +70,66 @@ class Contrat_prestataire_model extends CI_Model {
             return $q->row();
         }
     }
+    public function findinvalideByConvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findvalideByConvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findcontratByConvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
-    public function findAllByConvention($id_convention_entete) {               
+  /*  public function findAllByConvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findcontratByconvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
@@ -96,6 +155,49 @@ class Contrat_prestataire_model extends CI_Model {
                         ->join('prestataire','prestataire.id=contrat_prestataire.id_prestataire')
 
                         ->where("demande_batiment_presta.id", $id_demande_batiment_pre)                       
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findcontratBydemande_batiment($id_demande_batiment_pre) {               
+        $result =  $this->db->select('contrat_prestataire.*')
+                        ->from('demande_batiment_presta')
+                        ->join('contrat_prestataire','contrat_prestataire.id=demande_batiment_presta.id_contrat_prestataire')
+                        ->where("demande_batiment_presta.id", $id_demande_batiment_pre)                       
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findcontratBydemande_latrine($id_demande_latrine_pre) {               
+        $result =  $this->db->select('contrat_prestataire.*')
+                        ->from('demande_latrine_presta')
+                        ->join('contrat_prestataire','contrat_prestataire.id=demande_latrine_presta.id_contrat_prestataire')
+                        ->where("demande_latrine_presta.id", $id_demande_latrine_pre)                       
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findcontratBydemande_mobilier($id_demande_mobilier_pre) {               
+        $result =  $this->db->select('contrat_prestataire.*')
+                        ->from('demande_mobilier_presta')
+                        ->join('contrat_prestataire','contrat_prestataire.id=demande_mobilier_presta.id_contrat_prestataire')
+                        ->where("demande_mobilier_presta.id", $id_demande_mobilier_pre)                       
                         ->get()
                         ->result();
         if($result)
@@ -167,6 +269,23 @@ class Contrat_prestataire_model extends CI_Model {
         }                 
     }
 
+    public function findcontrat_prestataireByecole($id_ecole)
+    {               
+        $result =  $this->db->select('contrat_prestataire.*')
+                        ->from($this->table)                       
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=contrat_prestataire.id_convention_entete')
+                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
+                        ->where("cisco.id", $id_cisco)                       
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
     public function getcontratByconvention($id_convention_entete)
     {               
         $result =  $this->db->select('contrat_prestataire.*,prestataire.nom')
@@ -182,6 +301,6 @@ class Contrat_prestataire_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
 }

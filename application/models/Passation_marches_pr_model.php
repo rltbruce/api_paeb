@@ -32,7 +32,7 @@ class Passation_marches_pr_model extends CI_Model {
             'date_os' => $passation_marches_pr['date_os'],
             'date_manifestation' => $passation_marches_pr['date_manifestation'],
             'id_convention_entete' => $passation_marches_pr['id_convention_entete'],
-            //'id_partenaire_relai' => $passation_marches_pr['id_partenaire_relai']                       
+            'validation' => $passation_marches_pr['validation']                       
         );
     }
     public function delete($id) {
@@ -97,11 +97,58 @@ class Passation_marches_pr_model extends CI_Model {
             return null;
         }                 
     }
-
+        public function findpassationBycontrat_partenaire_relai($id_contrat_partenaire_relai) {               
+        $result =  $this->db->select('passation_marches_pr.*')
+                        ->from($this->table)
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=passation_marches_pr.id_convention_entete')
+                        ->join('contrat_partenaire_relai','contrat_partenaire_relai.id_convention_entete=convention_cisco_feffi_entete.id')
+                        ->where("contrat_partenaire_relai.id", $id_contrat_partenaire_relai)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function getpassationByconvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }
+
+    }
+    public function getpassationinvalideByconvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }
+
+    }
+    public function getpassationvalideByconvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 1)
                         ->order_by('id')
                         ->get()
                         ->result();

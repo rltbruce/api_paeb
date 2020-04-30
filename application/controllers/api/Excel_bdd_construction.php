@@ -149,9 +149,9 @@ class Excel_bdd_construction extends REST_Controller
                     $avenant_moe= $this->Avenant_beManager->getavenantBycontrat($contrat_moe[0]->id);
                     $avenant_pr= $this->Avenant_partenaire_relaiManager->getavenantBycontrat($contrat_mpe[0]->id);
                     $avenant_mpe= $this->Avenant_prestataireManager->getavenantBycontrat($contrat_pr[0]->id);
-                    $paiement_batiment_pre= $this->Paiement_batiment_prestataireManager->getpaiementbat_mpeBycontrat($contrat_moe[0]->id); 
-                    $paiement_latrine_pre= $this->Paiement_latrine_prestataireManager->getpaiementlat_mpeBycontrat($contrat_moe[0]->id);  
-                    $paiement_mobilier_pre= $this->Paiement_mobilier_prestataireManager->getpaiementmob_mpeBycontrat($contrat_moe[0]->id);
+                    $paiement_batiment_pre= $this->Paiement_batiment_prestataireManager->getpaiementbat_mpeBycontrat($contrat_mpe[0]->id); 
+                    $paiement_latrine_pre= $this->Paiement_latrine_prestataireManager->getpaiementlat_mpeBycontrat($contrat_mpe[0]->id);  
+                    $paiement_mobilier_pre= $this->Paiement_mobilier_prestataireManager->getpaiementmob_mpeBycontrat($contrat_mpe[0]->id);
 
                     
                     $module_dpp= $this->Module_dppManager->getmoduleBycontrat($contrat_pr[0]->id);
@@ -466,7 +466,8 @@ class Excel_bdd_construction extends REST_Controller
                             $data[$key]['decaissement_batiment'] = $decaissement_b;
                         }
 
-                       $data[$key]['paiement1_batiment_pre'] = $paiement1_batiment_pre;                           
+                      // $data[$key]['paiement1_batiment_pre'] = $paiement1_batiment_pre;   //                        
+                       $data[$key]['paiement1_batiment_pre'] = 0;                           
                         $data[$key]['date_approbation1_batiment_pre'] = $date_approbation1_batiment_pre;
 
                         $data[$key]['paiement2_batiment_pre'] = $paiement2_batiment_pre;                           
@@ -538,15 +539,15 @@ class Excel_bdd_construction extends REST_Controller
                         $date_approbation1_mobilier_pre = '';                         
                         $paiement2_mobilier_pre = 0;                           
                         $date_approbation2_mobilier_pre = '';
-                        foreach ($paiement_latrine_pre as $keyl => $valuem){
+                        foreach ($paiement_mobilier_pre as $keyl => $valuem){
 
                             if ($valuem->code=='tranche 1') {
-                                $paiement1_mobilier_pre = $valueb->montant_paiement;                           
-                                $date_approbation1_mobilier_pre = $valueb->date_approbation;
+                                $paiement1_mobilier_pre = $valuem->montant_paiement;                           
+                                $date_approbation1_mobilier_pre = $valuem->date_approbation;
                             }
                             if ($valuem->code=='tranche 2') {
-                                $paiement2_mobilier_pre = $valueb->montant_paiement;                           
-                                $date_approbation2_mobilier_pre = $valueb->date_approbation;
+                                $paiement2_mobilier_pre = $valuem->montant_paiement;                           
+                                $date_approbation2_mobilier_pre = $valuem->date_approbation;
                                
                             }
                             $cumul_mobilier = $cumul_mobilier + $valuem->montant_paiement;
@@ -2888,9 +2889,7 @@ class Excel_bdd_construction extends REST_Controller
 
             $objPHPExcel->getActiveSheet()->getStyle("GC".$ligne)->applyFromArray($stylecontenu);
            // $objPHPExcel->getActiveSheet()->getStyle("EI".$ligne)->getAlignment()->setWrapText(true);
-            if ($data[0]['paiement1_batiment_pre']) {
-                
-            }
+           
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GC".$ligne, $data[0]['paiement1_batiment_pre']);
         
             $objPHPExcel->getActiveSheet()->getStyle("GD".$ligne)->applyFromArray($stylecontenu);
@@ -3138,7 +3137,7 @@ class Excel_bdd_construction extends REST_Controller
         {
             $this->response([
                   'status' => FALSE,
-                   'nom_file' => array(),
+                   'nom_file' => $paiement_batiment_pre,
                    'message' => "Something went wrong: ". $e->getMessage(),
                 ], REST_Controller::HTTP_OK);
         }

@@ -64,8 +64,51 @@ class Contrat_partenaire_relai_model extends CI_Model {
             return $q->row();
         }
     }
-
-    public function findAllByConvention($id_convention_entete) {               
+    public function findinvalideByConvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findvalideByConvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findcontratByConvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+   /* public function findAllByConvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
@@ -170,6 +213,22 @@ class Contrat_partenaire_relai_model extends CI_Model {
         return $this->db->query($sql)->result();
     }
 
+    public function findinvalideByConvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('contrat_partenaire_relai.*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function getcontratByconvention($id_convention_entete)
     {               
         $result =  $this->db->select('contrat_partenaire_relai.*, partenaire_relai.nom')
@@ -185,6 +244,6 @@ class Contrat_partenaire_relai_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
 }

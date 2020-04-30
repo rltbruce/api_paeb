@@ -18,9 +18,9 @@ class Paiement_batiment_moe extends REST_Controller {
         $id = $this->get('id');
         $id_demande_batiment_moe = $this->get('id_demande_batiment_moe');
             
-        if ($id_demande_batiment_moe) 
+        if ($menu=='getpaiementinvalideBydemande') 
         {   $data = array();
-            $tmp = $this->Paiement_batiment_moeManager->findBydemande_batiment_moe($id_demande_batiment_moe);
+            $tmp = $this->Paiement_batiment_moeManager->findpaiementinvalideBydemande($id_demande_batiment_moe);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -31,6 +31,43 @@ class Paiement_batiment_moe extends REST_Controller {
                     $data[$key]['montant_paiement'] = $value->montant_paiement;
                     $data[$key]['date_paiement'] = $value->date_paiement;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['demande_batiment_moe'] = $demande_batiment_moe;
+                }
+            }
+        }
+        elseif ($menu=='getpaiementvalideBydemande') 
+        {   $data = array();
+            $tmp = $this->Paiement_batiment_moeManager->findpaiementvalideBydemand($id_demande_batiment_moe);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_batiment_moe = array();
+                    $demande_batiment_moe = $this->Demande_batiment_moeManager->findById($value->id_demande_batiment_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant_paiement'] = $value->montant_paiement;
+                    $data[$key]['date_paiement'] = $value->date_paiement;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['demande_batiment_moe'] = $demande_batiment_moe;
+                }
+            }
+        }
+        elseif ($menu=='getpaiementBydemande') 
+        {   $data = array();
+            $tmp = $this->Paiement_batiment_moeManager->findpaiementBydemande($id_demande_batiment_moe);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_batiment_moe = array();
+                    $demande_batiment_moe = $this->Demande_batiment_moeManager->findById($value->id_demande_batiment_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant_paiement'] = $value->montant_paiement;
+                    $data[$key]['date_paiement'] = $value->date_paiement;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['demande_batiment_moe'] = $demande_batiment_moe;
                 }
             }

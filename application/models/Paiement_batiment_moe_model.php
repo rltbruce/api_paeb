@@ -63,10 +63,40 @@ class Paiement_batiment_moe_model extends CI_Model {
         }
     }
 
-    public function findBydemande_batiment_moe($id_demande_batiment_moe) {               
+    public function findpaiementBydemande($id_demande_batiment_moe) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_demande_batiment_moe", $id_demande_batiment_moe)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpaiementvalideBydemande($id_demande_batiment_moe) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_batiment_moe", $id_demande_batiment_moe)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpaiementinvalideBydemande($id_demande_batiment_moe) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_batiment_moe", $id_demande_batiment_moe)
+                        ->where("validation", 0)
                         ->order_by('id')
                         ->get()
                         ->result();

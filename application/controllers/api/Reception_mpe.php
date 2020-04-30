@@ -22,8 +22,38 @@ class Reception_mpe extends REST_Controller {
         $menu = $this->get('menu');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $id_cisco = $this->get('id_cisco');
-         
-        if ($menu=='getreceptionBycisco')
+       
+       if ($menu=='getreception_mpeBycontrat')
+         {
+            $tmp = $this->Reception_mpeManager->findreception_mpeBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data = $tmp;
+            }
+                else
+                    $data = array();
+        }  
+        elseif ($menu=='getreception_mpevalideBycontrat')
+         {
+            $tmp = $this->Reception_mpeManager->findreception_mpevalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data = $tmp;
+            }
+                else
+                    $data = array();
+        }  
+        elseif ($menu=='getreception_mpeinvalideBycontrat')
+         {
+            $tmp = $this->Reception_mpeManager->findtreception_mpeinvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data = $tmp;
+            }
+                else
+                    $data = array();
+        }   
+       /* if ($menu=='getreceptionBycisco')
          {
             $tmp = $this->Reception_mpeManager->findAllByCisco($id_cisco);
             if ($tmp) 
@@ -72,7 +102,7 @@ class Reception_mpe extends REST_Controller {
             }
                 else
                     $data = array();
-        }  
+        } */ 
         elseif ($id)
         {
             $data = array();
@@ -90,6 +120,7 @@ class Reception_mpe extends REST_Controller {
             $data['date_previ_recep_defi']   = $reception_mpe->date_previ_recep_defi;
             $data['date_reel_recep_defi']    = $reception_mpe->date_reel_recep_defi;
             $data['observation'] = $reception_mpe->observation;
+            $data['validation'] = $reception_mpe->validation;
             $data['contrat_prestataire'] = $contrat_prestataire;
         } 
         else 
@@ -111,6 +142,7 @@ class Reception_mpe extends REST_Controller {
                     $data[$key]['date_previ_recep_defi']    = $value->date_previ_recep_defi;
                     $data[$key]['date_reel_recep_defi']     = $value->date_reel_recep_defi;
                     $data[$key]['observation']              = $value->observation;
+                    $data[$key]['validation']              = $value->validation;
                     $data[$key]['contrat_prestataire']      = $contrat_prestataire;
                 }
             } 

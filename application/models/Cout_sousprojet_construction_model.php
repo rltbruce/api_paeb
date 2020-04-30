@@ -25,8 +25,8 @@ class Cout_sousprojet_construction_model extends CI_Model {
     }
     public function _set($cout_sousprojet_construction) {
         return array(
-            'description'       =>      $cout_sousprojet_construction['description'],
             'id_convention_entete'      =>      $cout_sousprojet_construction['id_convention_entete'],
+            'id_type_cout_sousprojet'      =>      $cout_sousprojet_construction['id_type_cout_sousprojet'],
             'cout'                      =>      $cout_sousprojet_construction['cout']                       
         );
     }

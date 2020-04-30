@@ -64,11 +64,12 @@ class Decaiss_fonct_feffi_model extends CI_Model {
         }
     }
 
-    public function findByconvention($id_convention_entete) {               
+    public function findinvalideBycisco($id_cisco) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_convention_entete", $id_convention_entete)
-                        ->order_by('id')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=decaiss_fonct_feffi.id_convention_entete')
+                        ->where("id_cisco", $id_cisco)
+                        ->where("decaiss_fonct_feffi.validation", 0)
                         ->get()
                         ->result();
         if($result)
@@ -83,6 +84,51 @@ class Decaiss_fonct_feffi_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findinvalideByconvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findallByconvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function countdecaissByconvention($id_convention_entete) {           //mande    
+        $result =  $this->db->select('count(decaiss_fonct_feffi.id) as nbr_decaiss')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)                        
                         ->where("validation", 0)
                         ->order_by('id')
                         ->get()

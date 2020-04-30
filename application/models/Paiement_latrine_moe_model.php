@@ -28,6 +28,7 @@ class Paiement_latrine_moe_model extends CI_Model {
             'montant_paiement'       =>      $paiement_latrine_moe['montant_paiement'],
             'date_paiement'       =>      $paiement_latrine_moe['date_paiement'],
             'observation'       =>      $paiement_latrine_moe['observation'],
+            'validation'       =>      $paiement_latrine_moe['validation'],
             'id_demande_latrine_moe'    => $paiement_latrine_moe['id_demande_latrine_moe']                       
         );
     }
@@ -61,10 +62,40 @@ class Paiement_latrine_moe_model extends CI_Model {
         }
     }
 
-    public function findBydemande_latrine_moe($id_demande_latrine_moe) {               
+       public function findpaiementBydemande($id_demande_latrine_moe) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_demande_latrine_moe", $id_demande_latrine_moe)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpaiementvalideBydemande($id_demande_latrine_moe) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_latrine_moe", $id_demande_latrine_moe)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpaiementinvalideBydemande($id_demande_latrine_moe) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_latrine_moe", $id_demande_latrine_moe)
+                        ->where("validation", 0)
                         ->order_by('id')
                         ->get()
                         ->result();

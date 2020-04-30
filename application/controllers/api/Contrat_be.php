@@ -22,7 +22,7 @@ class Contrat_be extends REST_Controller {
         $id_cisco = $this->get('id_cisco');
         $menus = $this->get('menus');
          
-         if ($menus=='getcontratBycisco')
+        /* if ($menus=='getcontratBycisco')
          {
             $menu = $this->Contrat_beManager->findAllBycisco($id_cisco);
             if ($menu) 
@@ -66,7 +66,8 @@ class Contrat_be extends REST_Controller {
                 else
                     $data = array();
         }   
-        elseif ($menus=='getcontratByconvention')
+        else*/
+        if ($menus=='getcontratByconvention')
          {
             $menu = $this->Contrat_beManager->findAllByConvention($id_convention_entete);
             if ($menu) 
@@ -81,13 +82,60 @@ class Contrat_be extends REST_Controller {
                     $data[$key]['ref_contrat']   = $value->ref_contrat;
                     $data[$key]['montant_contrat']    = $value->montant_contrat;
                     $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['bureau_etude'] = $bureau_etude;
                         }
             } 
                 else
                     $data = array();
-        }   
+        }
+        elseif ($menus=='getcontratvalideByconvention')
+         {
+            $menu = $this->Contrat_beManager->findcontratvalideByConvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['ref_contrat']   = $value->ref_contrat;
+                    $data[$key]['montant_contrat']    = $value->montant_contrat;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['bureau_etude'] = $bureau_etude;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menus=='getcontratinvalideByconvention')
+        {
+            $menu = $this->Contrat_beManager->findcontratinvalideByConvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['ref_contrat']   = $value->ref_contrat;
+                    $data[$key]['montant_contrat']    = $value->montant_contrat;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['bureau_etude'] = $bureau_etude;
+                        }
+            } 
+                else
+                    $data = array();
+        }     
         elseif ($id)
         {
             $data = array();
@@ -155,7 +203,8 @@ class Contrat_be extends REST_Controller {
                     'montant_contrat'    => $this->post('montant_contrat'),
                     'date_signature' => $this->post('date_signature'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'id_bureau_etude' => $this->post('id_bureau_etude')
+                    'id_bureau_etude' => $this->post('id_bureau_etude'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data) {
                     $this->response([
@@ -186,7 +235,8 @@ class Contrat_be extends REST_Controller {
                     'montant_contrat'    => $this->post('montant_contrat'),
                     'date_signature' => $this->post('date_signature'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'id_bureau_etude' => $this->post('id_bureau_etude')
+                    'id_bureau_etude' => $this->post('id_bureau_etude'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {
                     $this->response([

@@ -64,6 +64,48 @@ class Memoire_technique_model extends CI_Model {
         }
     }
 
+     function findmemoireBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    function findmemoirevalideBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    function findmemoireinvalideBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", 0)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
    /* public function findAllBycontrat($id_contrat_bureau_etude,$validation) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
@@ -95,7 +137,7 @@ class Memoire_technique_model extends CI_Model {
         }                 
     }*/
 
-    public function findAllvalidationBycisco($validation,$id_cisco)
+    /*public function findAllvalidationBycisco($validation,$id_cisco)
     {               
         $result =  $this->db->select('memoire_technique.*')
                         ->from($this->table)
@@ -128,6 +170,6 @@ class Memoire_technique_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
 }

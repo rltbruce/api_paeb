@@ -21,7 +21,70 @@ class Appel_offre extends REST_Controller {
         $validation = $this->get('validation');
         $menu = $this->get('menu');
             
-        if ($menu == "getappelvalidationBycisco")
+        if ($menu == "getappelBycontrat")
+        {
+            $tmp = $this->Appel_offreManager->findappelBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getappelvalideBycontrat")
+        {
+            $tmp = $this->Appel_offreManager->findappelvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getappelinvalideBycontrat")
+        {
+            $tmp = $this->Appel_offreManager->findappelinvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_be = array();
+                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['date_livraison'] = $value->date_livraison;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_be'] = $contrat_be;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        /*if ($menu == "getappelvalidationBycisco")
         {
             $tmp = $this->Appel_offreManager->findAllvalidationBycisco($validation,$id_cisco);
             if ($tmp) 
@@ -62,7 +125,7 @@ class Appel_offre extends REST_Controller {
             } 
                 else
                     $data = array();
-        }
+        }*/
         /*if ($menu == "getappelBycontrat")
         {
             $tmp = $this->Appel_offreManager->findAllBycontrat($id_contrat_bureau_etude,$validation);

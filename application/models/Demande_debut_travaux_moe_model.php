@@ -68,8 +68,67 @@ class Demande_debut_travaux_moe_model extends CI_Model {
             return $q->row();
         }
     }
+    public function finddemandeBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+     public function finddemandeinvalideBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+     public function finddemandevalidebcafBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function countAllByInvalide($invalide)
+    {
+        $result = $this->db->select('COUNT(*) as nombre')
+                        ->from($this->table)
+                        ->where("validation", $invalide)
+                        ->order_by('id', 'desc')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                  
+    }
 
-    public function findAllInvalideBycontrat($id_contrat_bureau_etude) {               
+   /* public function findAllInvalideBycontrat($id_contrat_bureau_etude) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("validation", 0)
@@ -88,6 +147,21 @@ class Demande_debut_travaux_moe_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function finddemandedisponibleBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation >", 0)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -157,21 +231,7 @@ class Demande_debut_travaux_moe_model extends CI_Model {
             return null;
         }                 
     }
-    public function countAllByInvalide($invalide)
-    {
-        $result = $this->db->select('COUNT(*) as nombre')
-                        ->from($this->table)
-                        ->where("validation", $invalide)
-                        ->order_by('id', 'desc')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                  
-    }
+    
 
     public function findAllInvalideBycisco($id_cisco)
     {               
@@ -210,7 +270,7 @@ class Demande_debut_travaux_moe_model extends CI_Model {
         }else{
             return null;
         }                 
-    }  
+    } */ 
 
    /* public function findAllInvalide() {               
         $result =  $this->db->select('*')

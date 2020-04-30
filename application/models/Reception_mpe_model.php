@@ -69,8 +69,49 @@ class Reception_mpe_model extends CI_Model {
             return $q->row();
         }
     }
+    public function findreception_mpeBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('reception_mpe.*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findreception_mpevalideBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('reception_mpe.*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findreception_mpeinvalideBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('reception_mpe.*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("validation", 0)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
-    public function findAllByContrat_prestataire($id_contrat_prestataire) {               
+   /* public function findAllByContrat_prestataire($id_contrat_prestataire) {               
         $result =  $this->db->select('reception_mpe.*')
                             ->from($this->table)
                         ->join('contrat_prestataire','contrat_prestataire.id=reception_mpe.id_contrat_prestataire')
@@ -118,6 +159,6 @@ class Reception_mpe_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
 }
