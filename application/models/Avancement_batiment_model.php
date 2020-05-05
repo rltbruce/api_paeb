@@ -31,7 +31,9 @@ class Avancement_batiment_model extends CI_Model {
             'observation'    => $avancement_batiment['observation'],
             'date'   => $avancement_batiment['date'],
             'id_attachement_batiment' => $avancement_batiment['id_attachement_batiment'],
-            'id_batiment_construction' => $avancement_batiment['id_batiment_construction']                      
+            'id_batiment_construction' => $avancement_batiment['id_batiment_construction'] ,
+            'id_contrat_prestataire' => $avancement_batiment['id_contrat_prestataire'] ,
+            'validation' => $avancement_batiment['validation']                    
         );
     }
     public function delete($id) {
@@ -64,6 +66,52 @@ class Avancement_batiment_model extends CI_Model {
         }
     }
 
+    public function findavancementinvalideBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findavancementvalideBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findavancementBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findAllByBatiment_construction($id_batiment_construction) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
@@ -78,7 +126,7 @@ class Avancement_batiment_model extends CI_Model {
             return null;
         }                 
     }
-            public function getavancementByconvention($id_convention_entete)
+   /* public function getavancementByconvention($id_convention_entete)
     {               
         $sql=" select 
                        detail.id_conv as id_conv,
@@ -150,15 +198,15 @@ class Avancement_batiment_model extends CI_Model {
 
             ";
             return $this->db->query($sql)->result();             
-    }
+    }*/
 
-  /*      public function getavancementByconvention($id_convention_entete)
+    public function getavancementByconvention($id_convention_entete)
     {               
         $sql=" select 
                        detail.id_conv as id_conv,
-                       detail.avancement_bat avancement_batiment,
-                        detail.avancement_lat as avancement_latrine,
-                       detail.avancement_mob as avancement_mobilier
+                       sum(detail.avancement_bat) avancement_batiment,
+                       sum( detail.avancement_lat) as avancement_latrine,
+                       sum(detail.avancement_mob) as avancement_mobilier
                from (
                
                 (
@@ -175,7 +223,7 @@ class Avancement_batiment_model extends CI_Model {
                             inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
 
                         where 
-                            conv.id= '".$id_convention_entete."'
+                            conv.id= '".$id_convention_entete."' and avanc.validation=1
 
                             group by conv.id
                 )
@@ -194,14 +242,14 @@ class Avancement_batiment_model extends CI_Model {
                             inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
 
                         where 
-                            conv.id= '".$id_convention_entete."'
+                            conv.id= '".$id_convention_entete."' and avanc_lat.validation=1
 
                             group by conv.id
                 )
                 UNION
                 (
                     select 
-                        conv.id as id_conv,,
+                        conv.id as id_conv,
                         0 as avancement_bat,
                         0 as avancement_lat,
                         max(atta_mob.ponderation_mobilier) as avancement_mob
@@ -213,7 +261,7 @@ class Avancement_batiment_model extends CI_Model {
                             inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
 
                         where 
-                            conv.id= '".$id_convention_entete."'
+                            conv.id= '".$id_convention_entete."' and avanc_mob.validation=1
 
                             group by conv.id
                 ) 
@@ -224,7 +272,7 @@ class Avancement_batiment_model extends CI_Model {
 
             ";
             return $this->db->query($sql)->result();             
-    }*/
+    }
    /*     public function getavancementByconvention($id_convention_entete)
     {               
         $result =  $this->db->select('max(attachement_batiment.ponderation_batiment) as avancement')

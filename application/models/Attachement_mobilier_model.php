@@ -75,6 +75,24 @@ class Attachement_mobilier_model extends CI_Model {
             return null;
         }                 
     }
+    public function findBycontrat($id_contrat_prestataire)
+    {               
+        $result =  $this->db->select('attachement_mobilier.*')
+                        ->from($this->table)
+                        ->join('type_mobilier','type_mobilier.id= attachement_mobilier.id_type_mobilier')
+                        ->join('mobilier_construction','mobilier_construction.id_type_mobilier= type_mobilier.id')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id= mobilier_construction.id_convention_entete')
+                        ->join('contrat_prestataire','contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id')
+                        ->where('contrat_prestataire.id',$id_contrat_prestataire)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 
 

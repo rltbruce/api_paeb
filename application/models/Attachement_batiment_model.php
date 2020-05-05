@@ -75,6 +75,24 @@ class Attachement_batiment_model extends CI_Model {
             return null;
         }                 
     }
+    public function findBycontrat($id_contrat_prestataire)
+    {               
+        $result =  $this->db->select('attachement_batiment.*')
+                        ->from($this->table)
+                        ->join('type_batiment','type_batiment.id= attachement_batiment.id_type_batiment')
+                        ->join('batiment_construction','batiment_construction.id_type_batiment= type_batiment.id')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id= batiment_construction.id_convention_entete')
+                        ->join('contrat_prestataire','contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id')
+                        ->where('contrat_prestataire.id',$id_contrat_prestataire)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 
 

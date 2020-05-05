@@ -26,7 +26,7 @@ class Paiement_batiment_prestataire_model extends CI_Model {
     public function _set($paiement_batiment_prestataire) {
         return array(
             'montant_paiement'       =>      $paiement_batiment_prestataire['montant_paiement'],
-            //'cumul'       =>      $paiement_batiment_prestataire['cumul'],
+            'validation'       =>      $paiement_batiment_prestataire['validation'],
             //'pourcentage_paiement'   =>      $paiement_batiment_prestataire['pourcentage_paiement'],
             'date_paiement'       =>      $paiement_batiment_prestataire['date_paiement'],
             'observation'       =>      $paiement_batiment_prestataire['observation'],
@@ -61,6 +61,51 @@ class Paiement_batiment_prestataire_model extends CI_Model {
         if ($q->num_rows() > 0) {
             return $q->row();
         }
+    }    
+
+    public function findpaiementBydemande($id_demande_batiment_pre) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_batiment_pre", $id_demande_batiment_pre)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpaiementvalideBydemande($id_demande_batiment_pre) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_batiment_pre", $id_demande_batiment_pre)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpaiementinvalideBydemande($id_demande_batiment_pre) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_batiment_pre", $id_demande_batiment_pre)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     }
 
     public function findBydemande_batiment_prestataire($id_demande_batiment_pre) {               

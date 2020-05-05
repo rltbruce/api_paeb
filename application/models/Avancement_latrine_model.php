@@ -31,7 +31,9 @@ class Avancement_latrine_model extends CI_Model {
             'observation'    => $avancement_latrine['observation'],
             'date'   => $avancement_latrine['date'],
             'id_attachement_latrine' => $avancement_latrine['id_attachement_latrine'],
-            'id_latrine_construction' => $avancement_latrine['id_latrine_construction']                      
+            'id_latrine_construction' => $avancement_latrine['id_latrine_construction'] ,
+            'id_contrat_prestataire' => $avancement_latrine['id_contrat_prestataire'] ,
+            'validation' => $avancement_latrine['validation']                       
         );
     }
     public function delete($id) {
@@ -62,6 +64,53 @@ class Avancement_latrine_model extends CI_Model {
         if ($q->num_rows() > 0) {
             return $q->row();
         }
+    }
+
+    public function findavancementinvalideBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findavancementvalideBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findavancementBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     }
 
     public function findAllBylatrine_construction($id_latrine_construction) {               

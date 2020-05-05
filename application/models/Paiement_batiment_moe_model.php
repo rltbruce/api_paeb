@@ -26,7 +26,7 @@ class Paiement_batiment_moe_model extends CI_Model {
     public function _set($paiement_batiment_moe) {
         return array(
             'montant_paiement'       =>      $paiement_batiment_moe['montant_paiement'],
-            //'cumul'       =>      $paiement_batiment_moe['cumul'],
+            'validation'       =>      $paiement_batiment_moe['validation'],
             //'pourcentage_paiement'   =>      $paiement_batiment_moe['pourcentage_paiement'],
             'date_paiement'       =>      $paiement_batiment_moe['date_paiement'],
             'observation'       =>      $paiement_batiment_moe['observation'],

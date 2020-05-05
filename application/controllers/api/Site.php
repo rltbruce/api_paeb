@@ -12,6 +12,7 @@ class Site extends REST_Controller {
         $this->load->model('site_model', 'SiteManager');
         $this->load->model('ecole_model', 'EcoleManager');
         $this->load->model('classification_site_model', 'Classification_siteManager');
+        $this->load->model('agence_acc_model', 'Agence_accManager');
     }
 
     public function index_get() 
@@ -30,15 +31,18 @@ class Site extends REST_Controller {
                 {
                     $ecole = $this->EcoleManager->findById($value->id_ecole);
                     $classification_site = $this->Classification_siteManager->findById($value->id_classification_site);
+                    $agence_acc = $this->Agence_accManager->findById($value->id_agence_acc);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code_sous_projet'] = $value->code_sous_projet;
                     $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
                     $data[$key]['denomination_epp'] = $value->denomination_epp;
-                    $data[$key]['agence_acc'] = $value->agence_acc;
+                    $data[$key]['lot'] = $value->lot;
                     $data[$key]['statu_convention'] = $value->statu_convention;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['ecole'] = $ecole;
                     $data[$key]['classification_site'] = $classification_site;
+                    $data[$key]['lot'] = $value->lot;
+                    $data[$key]['agence_acc'] = $agence_acc;
                 
                 }
             }
@@ -53,15 +57,17 @@ class Site extends REST_Controller {
                     $ecole = array();
                     $ecole = $this->EcoleManager->findById($value->id_ecole);
                     $classification_site = $this->Classification_siteManager->findById($value->id_classification_site);
+                    $agence_acc = $this->Agence_accManager->findById($value->id_agence_acc);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code_sous_projet'] = $value->code_sous_projet;
                     $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
                     $data[$key]['denomination_epp'] = $value->denomination_epp;
-                    $data[$key]['agence_acc'] = $value->agence_acc;
                     $data[$key]['statu_convention'] = $value->statu_convention;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['ecole'] = $ecole;
                     $data[$key]['classification_site'] = $classification_site;
+                    $data[$key]['lot'] = $value->lot;
+                    $data[$key]['agence_acc'] = $agence_acc;
                 }
             }
         }
@@ -70,16 +76,18 @@ class Site extends REST_Controller {
             $data = array();
             $site = $this->SiteManager->findById($id);
             $ecole = $this->EcoleManager->findById($site->id_ecole);
-            $classification_site = $this->Classification_siteManager->findById($value->id_classification_site);
+            $classification_site = $this->Classification_siteManager->findById($site->id_classification_site);
+            $agence_acc = $this->Agence_accManager->findById($site->id_agence_acc);
             $data['id'] = $site->id;
             $data['code_sous_projet'] = $site->code_sous_projet;
             $data['objet_sous_projet'] = $site->objet_sous_projet;
             $data['denomination_epp'] = $site->denomination_epp;
-            $data['agence_acc'] = $site->agence_acc;
             $data['statu_convention'] = $site->statu_convention;
             $data['observation'] = $site->observation;
             $data['ecole'] = $ecole;
             $data['classification_site'] = $classification_site;
+            $data['lot'] = $site->lot;
+            $data['agence_acc'] = $agence_acc;
         } 
         else 
         {
@@ -91,15 +99,17 @@ class Site extends REST_Controller {
                     $ecole = array();
                     $ecole = $this->EcoleManager->findById($value->id_ecole);
                     $classification_site = $this->Classification_siteManager->findById($value->id_classification_site);
+                    $agence_acc = $this->Agence_accManager->findById($value->id_agence_acc);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code_sous_projet'] = $value->code_sous_projet;
                     $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
                     $data[$key]['denomination_epp'] = $value->denomination_epp;
-                    $data[$key]['agence_acc'] = $value->agence_acc;
                     $data[$key]['statu_convention'] = $value->statu_convention;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['ecole'] = $ecole;
                     $data[$key]['classification_site'] = $classification_site;
+                    $data[$key]['lot'] = $value->lot;
+                    $data[$key]['agence_acc'] = $agence_acc;
                 }
             } 
                 else
@@ -131,11 +141,12 @@ class Site extends REST_Controller {
                     'code_sous_projet' => $this->post('code_sous_projet'),
                     'objet_sous_projet' => $this->post('objet_sous_projet'),
                     'denomination_epp' => $this->post('denomination_epp'),
-                    'agence_acc' => $this->post('agence_acc'),
+                    'id_agence_acc' => $this->post('id_agence_acc'),
                     'statu_convention' => $this->post('statu_convention'),
                     'observation' => $this->post('observation'),
                     'id_ecole' => $this->post('id_ecole'),
-                    'id_classification_site' => $this->post('id_classification_site')
+                    'id_classification_site' => $this->post('id_classification_site'),
+                    'lot' => $this->post('lot')
                 );
                 if (!$data) {
                     $this->response([
@@ -163,11 +174,12 @@ class Site extends REST_Controller {
                     'code_sous_projet' => $this->post('code_sous_projet'),
                     'objet_sous_projet' => $this->post('objet_sous_projet'),
                     'denomination_epp' => $this->post('denomination_epp'),
-                    'agence_acc' => $this->post('agence_acc'),
+                    'id_agence_acc' => $this->post('id_agence_acc'),
                     'statu_convention' => $this->post('statu_convention'),
                     'observation' => $this->post('observation'),
                     'id_ecole' => $this->post('id_ecole'),
-                    'id_classification_site' => $this->post('id_classification_site')
+                    'id_classification_site' => $this->post('id_classification_site'),
+                    'lot' => $this->post('lot')
                 );
                 if (!$data || !$id) {
                     $this->response([

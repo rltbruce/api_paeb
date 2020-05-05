@@ -128,6 +128,7 @@ class Paiement_fin_travaux_moe extends REST_Controller {
                     'montant_paiement' => $this->post('montant_paiement'),
                     'date_paiement' => $this->post('date_paiement'),
                     'observation' => $this->post('observation'),
+                    'validation' => $this->post('validation'),
                     'id_demande_fin_travaux' => $this->post('id_demande_fin_travaux')
                 );
                 if (!$data) {
@@ -156,6 +157,7 @@ class Paiement_fin_travaux_moe extends REST_Controller {
                     'montant_paiement' => $this->post('montant_paiement'),
                     'date_paiement' => $this->post('date_paiement'),
                     'observation' => $this->post('observation'),
+                    'validation' => $this->post('validation'),
                     'id_demande_fin_travaux' => $this->post('id_demande_fin_travaux')
                 );
                 if (!$data || !$id) {

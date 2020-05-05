@@ -18,7 +18,26 @@ class Attachement_mobilier extends REST_Controller {
         $id = $this->get('id');
         $id_type_mobilier = $this->get('id_type_mobilier');
             
-        if ($id_type_mobilier) 
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+            
+        if ($id_contrat_prestataire) 
+        {   $data = array();
+            $tmp = $this->Attachement_mobilierManager->findBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $type_mobilier = array();
+                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ponderation_mobilier'] = $value->ponderation_mobilier;
+                    $data[$key]['type_mobilier'] = $type_mobilier;
+                }
+            }
+        }
+        elseif ($id_type_mobilier) 
         {   $data = array();
             $tmp = $this->Attachement_mobilierManager->findBytype_mobilier($id_type_mobilier);
             if ($tmp) 

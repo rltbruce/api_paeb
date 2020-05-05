@@ -26,7 +26,7 @@ class Paiement_mobilier_prestataire_model extends CI_Model {
     public function _set($paiement_mobilier_prestataire) {
         return array(
             'montant_paiement'       =>      $paiement_mobilier_prestataire['montant_paiement'],
-            //'cumul'       =>      $paiement_mobilier_prestataire['cumul'],
+            'validation'       =>      $paiement_mobilier_prestataire['validation'],
             //'pourcentage_paiement'   =>      $paiement_mobilier_prestataire['pourcentage_paiement'],
             'date_paiement'       =>      $paiement_mobilier_prestataire['date_paiement'],
             'observation'       =>      $paiement_mobilier_prestataire['observation'],
@@ -61,6 +61,51 @@ class Paiement_mobilier_prestataire_model extends CI_Model {
         if ($q->num_rows() > 0) {
             return $q->row();
         }
+    }
+
+    public function findpaiementBydemande($id_demande_mobilier_pre) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_mobilier_pre", $id_demande_mobilier_pre)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpaiementvalideBydemande($id_demande_mobilier_pre) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_mobilier_pre", $id_demande_mobilier_pre)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findpaiementinvalideBydemande($id_demande_mobilier_pre) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_mobilier_pre", $id_demande_mobilier_pre)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     }
 
     public function findBydemande_mobilier_prestataire($id_demande_mobilier_pre) {               

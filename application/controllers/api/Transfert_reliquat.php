@@ -141,10 +141,12 @@ class transfert_reliquat extends REST_Controller {
                     'montant' => $this->post('montant'),
                     'date_transfert' => $this->post('date_transfert'),
                     'objet_utilisation' => $this->post('objet_utilisation'),
+                    'situation_utilisation' => $this->post('situation_utilisation'),
                     'rib' => $this->post('rib'),
                     'intitule_compte' => $this->post('intitule_compte'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'validation' => $this->post('validation')
+                    'validation' => $this->post('validation'),
+                    'observation' => $this->post('observation')
                 );
                 if (!$data) {
                     $this->response([
@@ -172,10 +174,12 @@ class transfert_reliquat extends REST_Controller {
                     'montant' => $this->post('montant'),
                     'date_transfert' => $this->post('date_transfert'),
                     'objet_utilisation' => $this->post('objet_utilisation'),
+                    'situation_utilisation' => $this->post('situation_utilisation'),
                     'rib' => $this->post('rib'),
                     'intitule_compte' => $this->post('intitule_compte'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'validation' => $this->post('validation')
+                    'validation' => $this->post('validation'),
+                    'observation' => $this->post('observation')
                 );
                 if (!$data || !$id) {
                     $this->response([

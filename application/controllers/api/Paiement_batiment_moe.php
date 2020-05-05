@@ -17,6 +17,7 @@ class Paiement_batiment_moe extends REST_Controller {
     {
         $id = $this->get('id');
         $id_demande_batiment_moe = $this->get('id_demande_batiment_moe');
+        $menu = $this->get('menu');
             
         if ($menu=='getpaiementinvalideBydemande') 
         {   $data = array();
@@ -125,7 +126,7 @@ class Paiement_batiment_moe extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'montant_paiement' => $this->post('montant_paiement'),
-                    //'cumul' => $this->post('cumul'),
+                    'validation' => $this->post('validation'),
                     //'pourcentage_paiement' => $this->post('pourcentage_paiement'),
                     'date_paiement' => $this->post('date_paiement'),
                     'observation' => $this->post('observation'),
@@ -154,7 +155,8 @@ class Paiement_batiment_moe extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'montant_paiement' => $this->post('montant_paiement'),
+                    'montant_paiement' => $this->post('montant_paiement'),                    
+                    'validation' => $this->post('validation'),
                     //'cumul' => $this->post('cumul'),
                     //'pourcentage_paiement' => $this->post('pourcentage_paiement'),
                     'date_paiement' => $this->post('date_paiement'),

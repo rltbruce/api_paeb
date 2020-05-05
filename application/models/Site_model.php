@@ -29,11 +29,12 @@ class Site_model extends CI_Model {
             'code_sous_projet' =>      $site['code_sous_projet'],
             'objet_sous_projet' =>      $site['objet_sous_projet'],
             'denomination_epp' =>      $site['denomination_epp'],
-            'agence_acc' =>      $site['agence_acc'],
+            'id_agence_acc' =>      $site['id_agence_acc'],
             'statu_convention' =>      $site['statu_convention'],
             'observation' =>      $site['observation'],
             'id_ecole' =>      $site['id_ecole'],
-            'id_classification_site' =>      $site['id_classification_site']                      
+            'id_classification_site' =>      $site['id_classification_site'],
+            'lot' =>      $site['lot']                      
         );
     }
     public function delete($id) {

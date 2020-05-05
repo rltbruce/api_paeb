@@ -17,9 +17,73 @@ class Avancement_mobilier extends REST_Controller {
     {
         $id = $this->get('id');
         $id_mobilier_construction = $this->get('id_mobilier_construction');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $menu = $this->get('menu');
 
-         if ($menu=='getavancementBymobilier')
+         if ($menu=='getavancementinvalideBycontrat')
+         {
+            $tmp = $this->Avancement_mobilierManager->findavancementinvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $attachement_mobilier = $this->Attachement_mobilierManager->findById($value->id_attachement_mobilier);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['intitule']   = $value->intitule;
+                    $data[$key]['observation']    = $value->observation;
+                    $data[$key]['date']   = $value->date;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['attachement_mobilier'] = $attachement_mobilier;
+                }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavancementvalideBycontrat')
+         {
+            $tmp = $this->Avancement_mobilierManager->findavancementvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $attachement_mobilier = $this->Attachement_mobilierManager->findById($value->id_attachement_mobilier);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['intitule']   = $value->intitule;
+                    $data[$key]['observation']    = $value->observation;
+                    $data[$key]['date']   = $value->date;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['attachement_mobilier'] = $attachement_mobilier;
+                }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavancementBycontrat')
+         {
+            $tmp = $this->Avancement_mobilierManager->findavancementBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $attachement_mobilier = $this->Attachement_mobilierManager->findById($value->id_attachement_mobilier);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['intitule']   = $value->intitule;
+                    $data[$key]['observation']    = $value->observation;
+                    $data[$key]['date']   = $value->date;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['attachement_mobilier'] = $attachement_mobilier;
+                }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavancementBymobilier')
          {
             $menu = $this->Avancement_mobilierManager->findAllBymobilier_construction($id_mobilier_construction);
             if ($menu) 

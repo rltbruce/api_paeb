@@ -17,10 +17,11 @@ class Paiement_mobilier_prestataire extends REST_Controller {
     {
         $id = $this->get('id');
         $id_demande_mobilier_pre = $this->get('id_demande_mobilier_pre');
+        $menu = $this->get('menu');
             
-        if ($id_demande_mobilier_pre) 
+        if ($menu=='getpaiementinvalideBydemande') 
         {   $data = array();
-            $tmp = $this->Paiement_mobilier_prestataireManager->findBydemande_mobilier_prestataire($id_demande_mobilier_pre);
+            $tmp = $this->Paiement_mobilier_prestataireManager->findpaiementinvalideBydemande($id_demande_mobilier_pre);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -29,6 +30,47 @@ class Paiement_mobilier_prestataire extends REST_Controller {
                     $demande_mobilier_prestataire = $this->Demande_mobilier_prestataireManager->findById($value->id_demande_mobilier_pre);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['montant_paiement'] = $value->montant_paiement;
+                    $data[$key]['validation'] = $value->validation;
+                    //$data[$key]['pourcentage_paiement'] = $value->pourcentage_paiement;
+                    $data[$key]['date_paiement'] = $value->date_paiement;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['demande_mobilier_prestataire'] = $demande_mobilier_prestataire;
+                }
+            }
+        }
+        elseif ($menu=='getpaiementvalideBydemande') 
+        {   $data = array();
+            $tmp = $this->Paiement_mobilier_prestataireManager->findpaiementvalideBydemande($id_demande_mobilier_pre);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_mobilier_prestataire = array();
+                    $demande_mobilier_prestataire = $this->Demande_mobilier_prestataireManager->findById($value->id_demande_mobilier_pre);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant_paiement'] = $value->montant_paiement;
+                    $data[$key]['validation'] = $value->validation;
+                    //$data[$key]['cumul'] = $value->cumul;
+                    //$data[$key]['pourcentage_paiement'] = $value->pourcentage_paiement;
+                    $data[$key]['date_paiement'] = $value->date_paiement;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['demande_mobilier_prestataire'] = $demande_mobilier_prestataire;
+                }
+            }
+        }
+
+        elseif ($menu=='getpaiementBydemande') 
+        {   $data = array();
+            $tmp = $this->Paiement_mobilier_prestataireManager->findpaiementBydemande($id_demande_mobilier_pre);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $demande_mobilier_prestataire = array();
+                    $demande_mobilier_prestataire = $this->Demande_mobilier_prestataireManager->findById($value->id_demande_mobilier_pre);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant_paiement'] = $value->montant_paiement;
+                    $data[$key]['validation'] = $value->validation;
                     //$data[$key]['cumul'] = $value->cumul;
                     //$data[$key]['pourcentage_paiement'] = $value->pourcentage_paiement;
                     $data[$key]['date_paiement'] = $value->date_paiement;
@@ -94,7 +136,7 @@ class Paiement_mobilier_prestataire extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'montant_paiement' => $this->post('montant_paiement'),
-                    //'cumul' => $this->post('cumul'),
+                    'validation' => $this->post('validation'),
                     //'pourcentage_paiement' => $this->post('pourcentage_paiement'),
                     'date_paiement' => $this->post('date_paiement'),
                     'observation' => $this->post('observation'),
@@ -124,7 +166,7 @@ class Paiement_mobilier_prestataire extends REST_Controller {
             } else {
                 $data = array(
                     'montant_paiement' => $this->post('montant_paiement'),
-                    //'cumul' => $this->post('cumul'),
+                    'validation' => $this->post('validation'),
                     //'pourcentage_paiement' => $this->post('pourcentage_paiement'),
                     'date_paiement' => $this->post('date_paiement'),
                     'observation' => $this->post('observation'),

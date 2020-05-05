@@ -17,8 +17,26 @@ class Attachement_batiment extends REST_Controller {
     {
         $id = $this->get('id');
         $id_type_batiment = $this->get('id_type_batiment');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
             
-        if ($id_type_batiment) 
+        if ($id_contrat_prestataire) 
+        {   $data = array();
+            $tmp = $this->Attachement_batimentManager->findBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $type_batiment = array();
+                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ponderation_batiment'] = $value->ponderation_batiment;
+                    $data[$key]['type_batiment'] = $type_batiment;
+                }
+            }
+        }
+        elseif ($id_type_batiment) 
         {   $data = array();
             $tmp = $this->Attachement_batimentManager->findBytype_batiment($id_type_batiment);
             if ($tmp) 

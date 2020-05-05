@@ -17,14 +17,78 @@ class Avancement_batiment extends REST_Controller {
     {
         $id = $this->get('id');
         $id_batiment_construction = $this->get('id_batiment_construction');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $menu = $this->get('menu');
 
-         if ($menu=='getavancementBybatiment')
+         if ($menu=='getavancementinvalideBycontrat')
          {
-            $menu = $this->Avancement_batimentManager->findAllByBatiment_construction($id_batiment_construction);
-            if ($menu) 
+            $tmp = $this->Avancement_batimentManager->findavancementinvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
+                {
+                    $attachement_batiment = $this->Attachement_batimentManager->findById($value->id_attachement_batiment);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['intitule']   = $value->intitule;
+                    $data[$key]['observation']    = $value->observation;
+                    $data[$key]['date']   = $value->date;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['attachement_batiment'] = $attachement_batiment;
+                }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavancementvalideBycontrat')
+         {
+            $tmp = $this->Avancement_batimentManager->findavancementvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $attachement_batiment = $this->Attachement_batimentManager->findById($value->id_attachement_batiment);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['intitule']   = $value->intitule;
+                    $data[$key]['observation']    = $value->observation;
+                    $data[$key]['date']   = $value->date;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['attachement_batiment'] = $attachement_batiment;
+                }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavancementBycontrat')
+         {
+            $tmp = $this->Avancement_batimentManager->findavancementBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $attachement_batiment = $this->Attachement_batimentManager->findById($value->id_attachement_batiment);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['intitule']   = $value->intitule;
+                    $data[$key]['observation']    = $value->observation;
+                    $data[$key]['date']   = $value->date;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['attachement_batiment'] = $attachement_batiment;
+                }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavancementBybatiment')
+         {
+            $tmp = $this->Avancement_batimentManager->findAllByBatiment_construction($id_batiment_construction);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
                 {
                     $attachement_batiment = $this->Attachement_batimentManager->findById($value->id_attachement_batiment);
 
@@ -34,7 +98,7 @@ class Avancement_batiment extends REST_Controller {
                     $data[$key]['observation']    = $value->observation;
                     $data[$key]['date']   = $value->date;
                     $data[$key]['attachement_batiment'] = $attachement_batiment;
-                        }
+                }
             } 
                 else
                     $data = array();
@@ -102,7 +166,9 @@ class Avancement_batiment extends REST_Controller {
                     'observation'    => $this->post('observation'),
                     'date'   => $this->post('date'),
                     'id_batiment_construction' => $this->post('id_batiment_construction'),
-                    'id_attachement_batiment' => $this->post('id_attachement_batiment')
+                    'id_attachement_batiment' => $this->post('id_attachement_batiment'),
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data) {
                     $this->response([
@@ -133,7 +199,9 @@ class Avancement_batiment extends REST_Controller {
                     'observation'    => $this->post('observation'),
                     'date'   => $this->post('date'),
                     'id_batiment_construction' => $this->post('id_batiment_construction'),
-                    'id_attachement_batiment' => $this->post('id_attachement_batiment')
+                    'id_attachement_batiment' => $this->post('id_attachement_batiment'),
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {
                     $this->response([

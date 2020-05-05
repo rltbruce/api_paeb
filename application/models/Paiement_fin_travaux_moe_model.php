@@ -28,6 +28,7 @@ class Paiement_fin_travaux_moe_model extends CI_Model {
             'montant_paiement'       =>      $paiement_fin_travaux_moe['montant_paiement'],
             'date_paiement'       =>      $paiement_fin_travaux_moe['date_paiement'],
             'observation'       =>      $paiement_fin_travaux_moe['observation'],
+            'validation'       =>      $paiement_fin_travaux_moe['validation'],
             'id_demande_fin_travaux'    => $paiement_fin_travaux_moe['id_demande_fin_travaux']                       
         );
     }

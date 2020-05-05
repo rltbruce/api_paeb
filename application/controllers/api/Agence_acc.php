@@ -5,78 +5,38 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Attachement_latrine extends REST_Controller {
+class Agence_acc extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('attachement_latrine_model', 'Attachement_latrineManager');
-        $this->load->model('type_latrine_model', 'Type_latrineManager');
+        $this->load->model('agence_acc_model', 'Agence_accManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_type_latrine = $this->get('id_type_latrine');
-        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
             
-        if ($id_contrat_prestataire) 
-        {   $data = array();
-            $tmp = $this->Attachement_latrineManager->findBycontrat($id_contrat_prestataire);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $type_latrine = array();
-                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation_latrine'] = $value->ponderation_latrine;
-                    $data[$key]['type_latrine'] = $type_latrine;
-                }
-            }
-        }
-        elseif ($id_type_latrine) 
-        {   $data = array();
-            $tmp = $this->Attachement_latrineManager->findBytype_latrine($id_type_latrine);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $type_latrine = array();
-                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation_latrine'] = $value->ponderation_latrine;
-                    $data[$key]['type_latrine'] = $type_latrine;
-                }
-            }
-        }
-        elseif ($id)
+        if ($id)
         {
             $data = array();
-            $attachement_latrine = $this->Attachement_latrineManager->findById($id);
-            $type_latrine = $this->Type_latrineManager->findById($attachement_latrine->id_type_latrine);
-            $data['id'] = $attachement_latrine->id;
-            $data['libelle'] = $attachement_latrine->libelle;
-            $data['description'] = $attachement_latrine->description;
-            $data['ponderation_latrine'] = $attachement_latrine->ponderation_latrine;
-            $data['type_latrine'] = $type_latrine;
+            $agence_acc = $this->Agence_accManager->findById($id);
+            $data['id'] = $agence_acc->id;
+            $data['telephone'] = $agence_acc->telephone;
+            $data['nom'] = $agence_acc->nom;
+            $data['siege'] = $agence_acc->siege;
         } 
         else 
         {
-            $menu = $this->Attachement_latrineManager->findAll();
+            $menu = $this->Agence_accManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
+                    $district = array();
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation_latrine'] = $value->ponderation_latrine;
-                    $data[$key]['type_latrine'] = $type_latrine;
+                    $data[$key]['telephone'] = $value->telephone;
+                    $data[$key]['nom'] = $value->nom;
+                    $data[$key]['siege'] = $value->siege;
                 }
             } 
                 else
@@ -105,10 +65,9 @@ class Attachement_latrine extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description'),
-                    'ponderation_latrine' => $this->post('ponderation_latrine'),
-                    'id_type_latrine' => $this->post('id_type_latrine')
+                    'telephone' => $this->post('telephone'),
+                    'nom' => $this->post('nom'),
+                    'siege' => $this->post('siege')
                 );
                 if (!$data) {
                     $this->response([
@@ -117,7 +76,7 @@ class Attachement_latrine extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Attachement_latrineManager->add($data);
+                $dataId = $this->Agence_accManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -133,10 +92,9 @@ class Attachement_latrine extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description'),
-                    'ponderation_latrine' => $this->post('ponderation_latrine'),
-                    'id_type_latrine' => $this->post('id_type_latrine')
+                    'telephone' => $this->post('telephone'),
+                    'nom' => $this->post('nom'),
+                    'siege' => $this->post('siege')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -145,7 +103,7 @@ class Attachement_latrine extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Attachement_latrineManager->update($id, $data);
+                $update = $this->Agence_accManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -167,7 +125,7 @@ class Attachement_latrine extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Attachement_latrineManager->delete($id);         
+            $delete = $this->Agence_accManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

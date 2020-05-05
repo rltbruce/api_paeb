@@ -31,7 +31,9 @@ class Avancement_mobilier_model extends CI_Model {
             'observation'    => $avancement_mobilier['observation'],
             'date'   => $avancement_mobilier['date'],
             'id_attachement_mobilier' => $avancement_mobilier['id_attachement_mobilier'],
-            'id_mobilier_construction' => $avancement_mobilier['id_mobilier_construction']                      
+            'id_mobilier_construction' => $avancement_mobilier['id_mobilier_construction'] ,
+            'id_contrat_prestataire' => $avancement_mobilier['id_contrat_prestataire'] ,
+            'validation' => $avancement_mobilier['validation']                       
         );
     }
     public function delete($id) {
@@ -47,6 +49,53 @@ class Avancement_mobilier_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->order_by('date_signature')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findavancementinvalideBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findavancementvalideBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findavancementBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->order_by('id')
                         ->get()
                         ->result();
         if($result)

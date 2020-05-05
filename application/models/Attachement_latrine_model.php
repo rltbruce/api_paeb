@@ -76,5 +76,24 @@ class Attachement_latrine_model extends CI_Model {
         }                 
     }
 
+    public function findBycontrat($id_contrat_prestataire)
+    {               
+        $result =  $this->db->select('attachement_latrine.*')
+                        ->from($this->table)
+                        ->join('type_latrine','type_latrine.id= attachement_latrine.id_type_latrine')
+                        ->join('latrine_construction','latrine_construction.id_type_latrine= type_latrine.id')
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id= latrine_construction.id_convention_entete')
+                        ->join('contrat_prestataire','contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id')
+                        ->where('contrat_prestataire.id',$id_contrat_prestataire)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 
 }

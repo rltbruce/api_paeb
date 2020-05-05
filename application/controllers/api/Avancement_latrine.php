@@ -17,9 +17,73 @@ class Avancement_latrine extends REST_Controller {
     {
         $id = $this->get('id');
         $id_latrine_construction = $this->get('id_latrine_construction');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $menu = $this->get('menu');
 
-         if ($menu=='getavancementBylatrine')
+         if ($menu=='getavancementinvalideBycontrat')
+         {
+            $tmp = $this->Avancement_latrineManager->findavancementinvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $attachement_latrine = $this->Attachement_latrineManager->findById($value->id_attachement_latrine);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['intitule']   = $value->intitule;
+                    $data[$key]['observation']    = $value->observation;
+                    $data[$key]['date']   = $value->date;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['attachement_latrine'] = $attachement_latrine;
+                }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavancementvalideBycontrat')
+         {
+            $tmp = $this->Avancement_latrineManager->findavancementvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $attachement_latrine = $this->Attachement_latrineManager->findById($value->id_attachement_latrine);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['intitule']   = $value->intitule;
+                    $data[$key]['observation']    = $value->observation;
+                    $data[$key]['date']   = $value->date;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['attachement_latrine'] = $attachement_latrine;
+                }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavancementBycontrat')
+         {
+            $tmp = $this->Avancement_latrineManager->findavancementBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $attachement_latrine = $this->Attachement_latrineManager->findById($value->id_attachement_latrine);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['intitule']   = $value->intitule;
+                    $data[$key]['observation']    = $value->observation;
+                    $data[$key]['date']   = $value->date;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['attachement_latrine'] = $attachement_latrine;
+                }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavancementBylatrine')
          {
             $menu = $this->Avancement_latrineManager->findAllBylatrine_construction($id_latrine_construction);
             if ($menu) 
@@ -102,7 +166,9 @@ class Avancement_latrine extends REST_Controller {
                     'observation'    => $this->post('observation'),
                     'date'   => $this->post('date'),
                     'id_latrine_construction' => $this->post('id_latrine_construction'),
-                    'id_attachement_latrine' => $this->post('id_attachement_latrine')
+                    'id_attachement_latrine' => $this->post('id_attachement_latrine'),
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data) {
                     $this->response([
@@ -133,7 +199,9 @@ class Avancement_latrine extends REST_Controller {
                     'observation'    => $this->post('observation'),
                     'date'   => $this->post('date'),
                     'id_latrine_construction' => $this->post('id_latrine_construction'),
-                    'id_attachement_latrine' => $this->post('id_attachement_latrine')
+                    'id_attachement_latrine' => $this->post('id_attachement_latrine'),
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {
                     $this->response([

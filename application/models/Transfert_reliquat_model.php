@@ -31,7 +31,9 @@ class transfert_reliquat_model extends CI_Model {
             'intitule_compte' => $transfert_reliquat['intitule_compte'],
             'id_convention_entete' => $transfert_reliquat['id_convention_entete'],
             'objet_utilisation' => $transfert_reliquat['objet_utilisation'] ,
-            'validation' => $transfert_reliquat['validation']                     
+            'situation_utilisation' => $transfert_reliquat['situation_utilisation'] ,
+            'validation' => $transfert_reliquat['validation'],
+            'observation' => $transfert_reliquat['observation']                     
         );
     }
     public function delete($id) {
