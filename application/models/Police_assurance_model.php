@@ -104,6 +104,19 @@ class Police_assurance_model extends CI_Model {
         }                 
     }
 
+     function getpolice_assuranceBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
    /* public function findAllBycontrat($id_contrat_bureau_etude,$validation) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

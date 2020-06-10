@@ -26,7 +26,7 @@ class Rapport_mensuel_model extends CI_Model {
     public function _set($rapport_mensuel) {
         return array(
             'description'   =>      $rapport_mensuel['description'],
-            //'fichier'   =>      $rapport_mensuel['fichier'],
+            'numero'   =>      $rapport_mensuel['numero'],
             'date_livraison'    =>  $rapport_mensuel['date_livraison'],
             'observation'   =>      $rapport_mensuel['observation'],
             'id_contrat_bureau_etude'    =>  $rapport_mensuel['id_contrat_bureau_etude'],
@@ -101,6 +101,63 @@ class Rapport_mensuel_model extends CI_Model {
             return $result;
         }else{
             return null;
+        }                 
+    }
+
+     function getrapport_mensuel1Bycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("numero",1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
+     function getrapport_mensuel2Bycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("numero",2)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
+     function getrapport_mensuel3Bycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("numero",3)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
+     function getrapport_mensuel4Bycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("numero",4)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
         }                 
     }
 

@@ -19,7 +19,79 @@ class Avenant_prestataire extends REST_Controller {
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $menu = $this->get('menu');
 
-         if ($menu=='getpassationByconvention')
+         if ($menu=='getavenantvalideBycontrat')
+         {
+            $menu = $this->Avenant_prestataireManager->findavenantvalideBycontrat($id_contrat_prestataire);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['cout_batiment']    = $value->cout_batiment;
+                    $data[$key]['cout_latrine']   = $value->cout_latrine;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['ref_avenant'] = $value->ref_avenant;
+                    $data[$key]['validation'] = $value->validation;
+
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavenantinvalideBycontrat')
+         {
+            $menu = $this->Avenant_prestataireManager->findavenantinvalideBycontrat($id_contrat_prestataire);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['cout_batiment']    = $value->cout_batiment;
+                    $data[$key]['cout_latrine']   = $value->cout_latrine;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['ref_avenant'] = $value->ref_avenant;
+                    $data[$key]['validation'] = $value->validation;
+
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavenantBycontrat')
+         {
+            $menu = $this->Avenant_prestataireManager->findavenantBycontrat($id_contrat_prestataire);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['cout_batiment']    = $value->cout_batiment;
+                    $data[$key]['cout_latrine']   = $value->cout_latrine;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['ref_avenant'] = $value->ref_avenant;
+                    $data[$key]['validation'] = $value->validation;
+
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getpassationByconvention')
          {
             $menu = $this->Avenant_prestataireManager->findAllByContrat_prestataire($id_contrat_prestataire);
             if ($menu) 
@@ -108,6 +180,8 @@ class Avenant_prestataire extends REST_Controller {
                     'cout_latrine'   => $this->post('cout_latrine'),
                     'cout_mobilier' => $this->post('cout_mobilier'),
                     'date_signature' => $this->post('date_signature'),
+                    'ref_avenant' => $this->post('ref_avenant'),
+                    'validation' => $this->post('validation'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire')
                 );
                 if (!$data) {
@@ -139,6 +213,8 @@ class Avenant_prestataire extends REST_Controller {
                     'cout_latrine'   => $this->post('cout_latrine'),
                     'cout_mobilier' => $this->post('cout_mobilier'),
                     'date_signature' => $this->post('date_signature'),
+                    'ref_avenant' => $this->post('ref_avenant'),
+                    'validation' => $this->post('validation'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire')
                 );
                 if (!$data || !$id) {

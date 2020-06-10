@@ -144,6 +144,71 @@ class Demande_batiment_moe_model extends CI_Model {
             return $q->row();
         }
     }
+
+
+
+    
+
+    public function finddemandevalidedaafByIdcontrat($id_contrat_bureau_etude) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)                        
+                        ->where("validation",7)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+  
+    public function finddemandeemidpfiByIdcontrat($id_contrat_bureau_etude) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)                        
+                        ->where("validation IN(1,2,3)")
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+   public function findallByIdcontrat($id_contrat_bureau_etude) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findcreerByIdcontrat($id_contrat_bureau_etude) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)                        
+                        ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
    /* public function findById($id)  {
         $this->db->where("id", $id);
         $q = $this->db->get($this->table);

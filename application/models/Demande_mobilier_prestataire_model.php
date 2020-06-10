@@ -14,7 +14,7 @@ class Demande_mobilier_prestataire_model extends CI_Model {
     }
     public function update($id, $demande_mobilier_prestataire) {
         $this->db->set($this->_set($demande_mobilier_prestataire))
-                ->set('date_approbation', 'NOW()', false)
+                //->set('date_approbation', 'NOW()', false)
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -26,17 +26,12 @@ class Demande_mobilier_prestataire_model extends CI_Model {
     }
     public function _set($demande_mobilier_prestataire) {
         return array(
-            'objet'          =>      $demande_mobilier_prestataire['objet'],
-            'description'   =>      $demande_mobilier_prestataire['description'],
-            'ref_facture'   =>      $demande_mobilier_prestataire['ref_facture'],
             'montant'   =>      $demande_mobilier_prestataire['montant'],
             'id_tranche_demande_mpe' => $demande_mobilier_prestataire['id_tranche_demande_mpe'],
             'anterieur' => $demande_mobilier_prestataire['anterieur'],
             'cumul' => $demande_mobilier_prestataire['cumul'],
             'reste' => $demande_mobilier_prestataire['reste'],
-            'date'          =>      $demande_mobilier_prestataire['date'],
-            'id_contrat_prestataire'    =>  $demande_mobilier_prestataire['id_contrat_prestataire'],
-            'validation'    =>  $demande_mobilier_prestataire['validation']                       
+            'id_attachement_travaux'    =>  $demande_mobilier_prestataire['id_attachement_travaux']                       
         );
     }
     public function delete($id) {
@@ -68,7 +63,37 @@ class Demande_mobilier_prestataire_model extends CI_Model {
             return $q->row();
         }
     }
+    public function finddemandeByattachement($id_attachement_travaux) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_attachement_travaux", $id_attachement_travaux)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function finddemandeBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->join('attachement_travaux','attachement_travaux.id = demande_mobilier_presta.id_attachement_travaux')
+                        ->join('facture_mpe','facture_mpe.id=attachement_travaux.id_facture_mpe')
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->order_by('demande_mobilier_presta.id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    /*public function finddemandeBycontrat($id_contrat_prestataire) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_contrat_prestataire", $id_contrat_prestataire)
@@ -126,7 +151,7 @@ class Demande_mobilier_prestataire_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
      public function countAllByInvalide($invalide)
     {
         $result = $this->db->select('COUNT(*) as nombre')
@@ -143,26 +168,12 @@ class Demande_mobilier_prestataire_model extends CI_Model {
         }                  
     }
 
-   /* public function findAllInvalide() {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("validation", 0)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-
-    public function findAllInvalideBycisco($id_cisco) {               
+   /* public function findAllInvalideBycisco($id_cisco) {               
         $result =  $this->db->select('demande_mobilier_presta.*')
                         ->from($this->table)
                         ->join('contrat_prestataire','contrat_prestataire.id = demande_mobilier_presta.id_contrat_prestataire')
                         ->join('convention_cisco_feffi_entete','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
+                        
                         ->where("demande_mobilier_presta.validation", 0)
                         ->where("convention_cisco_feffi_entete.id_cisco", $id_cisco)
                         ->order_by('id')
@@ -179,14 +190,32 @@ class Demande_mobilier_prestataire_model extends CI_Model {
         public function findAllValideBycisco($id_cisco) {               
         $result =  $this->db->select('demande_mobilier_presta.*, contrat_prestataire.id as id_contrat')
                         ->from($this->table)
-                        ->join('contrat_prestataire','contrat_prestataire.id = demande_mobilier_presta.id_contrat_prestataire')
-                        ->join('convention_cisco_feffi_entete','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->join('mobilier_construction','mobilier_construction.id = demande_mobilier_presta.id_mobilier_construction')
+                        ->join('convention_cisco_feffi_entete','mobilier_construction.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->join('contrat_prestataire','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
                         ->where("demande_mobilier_presta.validation", 3)
                         ->where("convention_cisco_feffi_entete.id_cisco", $id_cisco)
                         ->order_by('id')
                         ->get()
                         ->result();
         if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+            public function findValideBycisco($id_cisco) {               
+        $result =  $this->db->select('demande_mobilier_presta.*, contrat_prestataire.id as id_contrat')
+                        ->from($this->table)
+                        ->join('contrat_prestataire','contrat_prestataire.id = demande_mobilier_presta.id_contrat_prestataire')
+                        ->join('convention_cisco_feffi_entete','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
+                        
+                        ->where("demande_mobilier_presta.validation", 3)
+                        ->where("convention_cisco_feffi_entete.id_cisco", $id_cisco)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
         if($result)
         {
             return $result;
@@ -238,14 +267,15 @@ class Demande_mobilier_prestataire_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
-    public function countAllByInvalide($invalide)
-    {
-        $result = $this->db->select('COUNT(*) as nombre')
+   
+    /*public function findAlldemandeBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('demande_mobilier_presta.*')
                         ->from($this->table)
-                        ->where("validation", $invalide)
-                        ->order_by('id', 'desc')
+                        ->join('contrat_prestataire','contrat_prestataire.id = demande_mobilier_presta.id_contrat_prestataire')
+                        ->where("contrat_prestataire.id", $id_contrat_prestataire)
+                        ->order_by('id')
                         ->get()
                         ->result();
         if($result)
@@ -253,8 +283,9 @@ class Demande_mobilier_prestataire_model extends CI_Model {
             return $result;
         }else{
             return null;
-        }                  
+        }                 
     }
+
     public function finddemandedisponibleBycontrat($id_contrat_prestataire) {               
         $result =  $this->db->select('demande_mobilier_presta.*')
                         ->from($this->table)
@@ -270,22 +301,7 @@ class Demande_mobilier_prestataire_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
-
-     public function finddemandeBycontrat($id_contrat_prestataire) {               
-        $result =  $this->db->select('demande_mobilier_presta.*')
-                        ->from($this->table)
-                        ->join('contrat_prestataire','contrat_prestataire.id = demande_mobilier_presta.id_contrat_prestataire')
-                        ->where("contrat_prestataire.id", $id_contrat_prestataire)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    } */
+    }*/
+     
 
 }

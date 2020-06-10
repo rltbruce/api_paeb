@@ -96,4 +96,19 @@ class Participant_emies_model extends CI_Model {
             return $q->row();
         }
     }
+    public function getparticipantBymodulefonction($id_module_emies,$id_fonction) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_module_emies", $id_module_emies)
+                        ->where("id_situation_participant_emies", $id_fonction)
+                        ->order_by('nom')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
 }

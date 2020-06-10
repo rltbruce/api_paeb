@@ -77,7 +77,7 @@ class Convention_ufp_daaf_detail_model extends CI_Model {
         }                 
     }
         public function findByIdligne($id_convention_ufp_daaf_entete)  {
-        $this->db->select('convention_ufp_daaf_detail.delai as delai,convention_ufp_daaf_detail.id_convention_ufp_daaf_entete as id_convention_ufp_daaf_entete, convention_ufp_daaf_detail.date_signature as date_signature,convention_ufp_daaf_detail.observation as observation, compte_daaf.nom_banque as nom_banque,compte_daaf.rib as rib, compte_daaf.numero_compte,compte_daaf.adresse_banque as adresse_banque')
+        $this->db->select('convention_ufp_daaf_detail.delai as delai,convention_ufp_daaf_detail.id_convention_ufp_daaf_entete as id_convention_ufp_daaf_entete, convention_ufp_daaf_detail.date_signature as date_signature,convention_ufp_daaf_detail.observation as observation, compte_daaf.compte as compte,compte_daaf.intitule as intitule, compte_daaf.agence as agence')
         ->join('compte_daaf','compte_daaf.id=convention_ufp_daaf_detail.id_compte_daaf')
         ->where("id_convention_ufp_daaf_entete", $id_convention_ufp_daaf_entete);
         $q = $this->db->get($this->table);

@@ -96,4 +96,19 @@ class Participant_pmc_model extends CI_Model {
             return $q->row();
         }
     }
+    public function getparticipantBymodulefonction($id_module_pmc,$id_fonction) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_module_pmc", $id_module_pmc)
+                        ->where("id_situation_participant_pmc", $id_fonction)
+                        ->order_by('nom')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
 }

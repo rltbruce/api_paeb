@@ -90,6 +90,11 @@ class Cisco_model extends CI_Model {
         }else{
             return null;
         }                 
+    }
+    public function findByNom($nom) {
+        $requete="select * from cisco where lower(description)='".$nom."'";
+        $query = $this->db->query($requete);
+        return $query->result();                
     } 
 
 }

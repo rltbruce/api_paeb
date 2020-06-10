@@ -108,7 +108,8 @@ class Contrat_partenaire_relai_model extends CI_Model {
             return null;
         }                 
     }
-   /* public function findAllByConvention($id_convention_entete) {               
+
+    public function getcontratByconvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
@@ -119,131 +120,16 @@ class Contrat_partenaire_relai_model extends CI_Model {
         {
             return $result;
         }else{
-            return null;
-        }                 
-    }
-
-    public function findcontratByvalidation($validation) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("validation", $validation)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-
-    public function findAllBypartenaire_relai($id_partenaire_relai) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("id_partenaire_relai", $id_partenaire_relai)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-
-    public function findByBatiment($id_batiment_construction)  {
-        $this->db->select('contrat_partenaire_relai.ref_contrat as ref_contrat, contrat_partenaire_relai.intitule as intitule, contrat_partenaire_relai.montant_contrat as montant_contrat, contrat_partenaire_relai.date_signature as date_signature,contrat_partenaire_relai.id_partenaire_relai as id_partenaire_relai, contrat_partenaire_relai.id_convention_entete as id_convention_entete')
-                ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=contrat_partenaire_relai.id_convention_entete')
-                ->join('batiment_construction','convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
-                ->where("batiment_construction.id", $id_batiment_construction);
-        $q = $this->db->get($this->table);
-        if ($q->num_rows() > 0) {
-            return $q->row();
+            return $result=array();
         }
-    }
 
-    public function findByLatrine($id_latrine_construction)  {
-        $this->db->select('contrat_partenaire_relai.ref_contrat as ref_contrat, contrat_partenaire_relai.intitule as intitule, contrat_partenaire_relai.montant_contrat as montant_contrat, contrat_partenaire_relai.date_signature as date_signature,contrat_partenaire_relai.id_partenaire_relai as id_partenaire_relai, contrat_partenaire_relai.id_convention_entete as id_convention_entete')
-                ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=contrat_partenaire_relai.id_convention_entete')
-                ->join('batiment_construction','convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
-                ->join('latrine_construction','batiment_construction.id=latrine_construction.id_batiment_construction')
-                ->where("latrine_construction.id", $id_latrine_construction);
-        $q = $this->db->get($this->table);
-        if ($q->num_rows() > 0) {
-            return $q->row();
-        }
     }
-
-    public function findByMobilier($id_mobilier_construction)  {
-        $this->db->select('contrat_partenaire_relai.ref_contrat as ref_contrat, contrat_partenaire_relai.intitule as intitule, contrat_partenaire_relai.montant_contrat as montant_contrat, contrat_partenaire_relai.date_signature as date_signature,contrat_partenaire_relai.id_partenaire_relai as id_partenaire_relai, contrat_partenaire_relai.id_convention_entete as id_convention_entete')
-                ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=contrat_partenaire_relai.id_convention_entete')
-                ->join('batiment_construction','convention_cisco_feffi_entete.id=batiment_construction.id_convention_entete')
-                ->join('mobilier_construction','batiment_construction.id=mobilier_construction.id_batiment_construction')
-                ->where("mobilier_construction.id", $id_mobilier_construction);
-        $q = $this->db->get($this->table);
-        if ($q->num_rows() > 0) {
-            return $q->row();
-        }
-    }
-
-       public function findContratBySansdpp()  {
-        $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_dpp on contrat_partenaire_relai.id = module_dpp.id_contrat_partenaire_relai where module_dpp.id is null group by contrat_partenaire_relai.id";
-        return $this->db->query($sql)->result();
-    }
-    public function findContratBySansemies()  {
-        $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_emies on contrat_partenaire_relai.id = module_emies.id_contrat_partenaire_relai where module_emies.id is null group by contrat_partenaire_relai.id";
-        return $this->db->query($sql)->result();
-    }
-    public function findContratBySansgfpc()  {
-        $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_gfpc on contrat_partenaire_relai.id = module_gfpc.id_contrat_partenaire_relai where module_gfpc.id is null group by contrat_partenaire_relai.id";
-        return $this->db->query($sql)->result();
-    }
-    public function findContratBySansodc()  {
-        $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_odc on contrat_partenaire_relai.id = module_odc.id_contrat_partenaire_relai where module_odc.id is null group by contrat_partenaire_relai.id";
-        return $this->db->query($sql)->result();
-    }
-    public function findContratBySanspmc()  {
-        $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_pmc on contrat_partenaire_relai.id = module_pmc.id_contrat_partenaire_relai where module_pmc.id is null group by contrat_partenaire_relai.id";
-        return $this->db->query($sql)->result();
-    }
-    public function findContratBySanssep()  {
-        $sql=" select contrat_partenaire_relai.* from contrat_partenaire_relai left join module_sep on contrat_partenaire_relai.id = module_sep.id_contrat_partenaire_relai where module_sep.id is null group by contrat_partenaire_relai.id";
-        return $this->db->query($sql)->result();
-    }
-
-    public function findinvalideByConvention($id_convention_entete)
-    {               
-        $result =  $this->db->select('contrat_partenaire_relai.*')
-                        ->from($this->table)
-                        ->where("id_convention_entete", $id_convention_entete)
-                        ->where("validation", 0)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-    public function getcontratByconvention($id_convention_entete)
-    {               
-        $result =  $this->db->select('contrat_partenaire_relai.*, partenaire_relai.nom')
-                        ->from($this->table)
-                        ->join('partenaire_relai','partenaire_relai.id=contrat_partenaire_relai.id_partenaire_relai')
-                        ->where("id_convention_entete", $id_convention_entete)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }*/
+    public function findByRef_convention($ref_convention) {
+        $requete="select contrat_partenaire_relai.* from contrat_partenaire_relai
+        inner join convention_cisco_feffi_entete on convention_cisco_feffi_entete.id=contrat_partenaire_relai.id_convention_entete
+         where lower(ref_convention)='".$ref_convention."'";
+        $query = $this->db->query($requete);
+        return $query->result();                
+    }  
 
 }

@@ -26,10 +26,11 @@ class Avenant_be_model extends CI_Model {
     public function _set($avenant_be) {
         return array(
 
-            'intitule' => $avenant_be['intitule'],
+            'description' => $avenant_be['description'],
             'ref_avenant'    => $avenant_be['ref_avenant'],
-            'montant_avenant'   => $avenant_be['montant_avenant'],
+            'montant'   => $avenant_be['montant'],
             'date_signature' => $avenant_be['date_signature'],
+            'validation' => $avenant_be['validation'],
             'id_contrat_bureau_etude' => $avenant_be['id_contrat_bureau_etude']                      
         );
     }
@@ -81,6 +82,50 @@ class Avenant_be_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findavenantBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findavenantvalideBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findavenantinvalideBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation", 0)
                         ->order_by('id')
                         ->get()
                         ->result();

@@ -82,12 +82,42 @@ class Demande_deblocage_daaf_model extends CI_Model {
         }                 
     }
 
-    public function findDisponibleByconvention_ufpdaaf($id_convention_ufpdaaf) {               
+    public function finddemandeByvalidationconvention($id_convention_ufpdaaf,$validation) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_ufp_daaf_entete", $id_convention_ufpdaaf)
+                        ->where("validation", $validation)
+                        ->order_by('objet')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findDisponibleByconvention_ufpdaaf($id_convention_ufp_daaf_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_ufp_daaf_entete", $id_convention_ufp_daaf_entete)
                         ->where("validation >", 0)
                         ->order_by('objet')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+        public function getdemande_deblocage_daaf($id_convention_ufp_daaf_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_ufp_daaf_entete", $id_convention_ufp_daaf_entete)
+                        ->order_by('id')
                         ->get()
                         ->result();
         if($result)

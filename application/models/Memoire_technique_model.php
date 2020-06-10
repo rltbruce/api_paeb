@@ -106,6 +106,20 @@ class Memoire_technique_model extends CI_Model {
         }                 
     }
 
+     function getmemoire_techniqueBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
+
    /* public function findAllBycontrat($id_contrat_bureau_etude,$validation) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

@@ -68,6 +68,7 @@ class Utilisateurs_model extends CI_Model
         return array(
             'nom'                   =>      $utilisateurs['nom'],
             'prenom'                =>      $utilisateurs['prenom'],
+            'telephone'             =>      $utilisateurs['telephone'],
             'email'                 =>      $utilisateurs['email'],
             'password'              =>      $utilisateurs['password'],
            // 'cin'                   =>      $utilisateurs['cin'],
@@ -96,6 +97,7 @@ class Utilisateurs_model extends CI_Model
         return array(
             'nom'                   =>      $utilisateurs['nom'],
             'prenom'                =>      $utilisateurs['prenom'],
+            'telephone'             =>      $utilisateurs['telephone'],
     /*        'sigle'                =>      $utilisateurs['sigle'],*/
             'email'                 =>      $utilisateurs['email'],
             'password'              =>      $utilisateurs['password'],
@@ -117,6 +119,7 @@ class Utilisateurs_model extends CI_Model
         return array(
             'nom'                   =>      $utilisateurs['nom'],
             'prenom'                =>      $utilisateurs['prenom'],
+            'telephone'             =>      $utilisateurs['telephone'],
             'email'                 =>      $utilisateurs['email'],
             'enabled'               =>      $utilisateurs['enabled'],
             'roles'                 =>      $utilisateurs['roles'],
@@ -231,6 +234,11 @@ class Utilisateurs_model extends CI_Model
             return null;
         }                  
     }
+    public function findByFiltre($requet) {
+        $requete="select * from utilisateur where ".$requet."";
+        $query = $this->db->query($requete);
+        return $query->result();                
+    } 
 
 }
 

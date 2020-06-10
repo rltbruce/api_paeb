@@ -19,9 +19,9 @@ class Avenant_convention extends REST_Controller {
         $id_convention_entete = $this->get('id_convention_entete');
         $menu = $this->get('menu');
 
-         if ($menu=='getavenantinvalideByconvention')
+         if ($menu=='getavenantByconvention')
          {
-            $menu = $this->Avenant_conventionManager->findAllinvalideByconvention($id_convention_entete);
+            $menu = $this->Avenant_conventionManager->findavenantByconvention($id_convention_entete);
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
@@ -29,6 +29,51 @@ class Avenant_convention extends REST_Controller {
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['ref_avenant'] = $value->ref_avenant;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['montant']    = $value->montant;
+                    $data[$key]['date_signature']    = $value->date_signature;
+                    $data[$key]['validation']    = $value->validation;
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavenantinvalideByconvention')
+         {
+            $menu = $this->Avenant_conventionManager->findavenantinvalideByconvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['ref_avenant'] = $value->ref_avenant;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['montant']    = $value->montant;
+                    $data[$key]['date_signature']    = $value->date_signature;
+                    $data[$key]['validation']    = $value->validation;
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavenantByconvention')
+         {
+            $menu = $this->Avenant_conventionManager->findavenantvalideByconvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['ref_avenant'] = $value->ref_avenant;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['montant']    = $value->montant;
                     $data[$key]['date_signature']    = $value->date_signature;
@@ -47,6 +92,7 @@ class Avenant_convention extends REST_Controller {
             $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($avenant_convention->id_contrat_convention);
 
             $data['id'] = $avenant_convention->id;
+            $data['ref_avenant'] = $avenant_convention->ref_avenant;
             $data['description'] = $avenant_convention->description;
             $data['montant']    = $avenant_convention->montant;
             $data['date_signature']    = $avenant_convention->date_signature;
@@ -64,6 +110,7 @@ class Avenant_convention extends REST_Controller {
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_contrat_convention);
 
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['ref_avenant'] = $value->ref_avenant;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['montant']    = $value->montant;
                     $data[$key]['date_signature']    = $value->date_signature;
@@ -99,6 +146,7 @@ class Avenant_convention extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'id' => $this->post('id'),
+                    'ref_avenant' => $this->post('ref_avenant'),
                     'description' => $this->post('description'),
                     'montant'    => $this->post('montant'),
                     'date_signature'    => $this->post('date_signature'),
@@ -129,6 +177,7 @@ class Avenant_convention extends REST_Controller {
             } else {
                 $data = array(
                     'id' => $this->post('id'),
+                    'ref_avenant' => $this->post('ref_avenant'),
                     'description' => $this->post('description'),
                     'montant'    => $this->post('montant'),
                     'date_signature'    => $this->post('date_signature'),

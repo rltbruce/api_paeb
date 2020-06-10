@@ -60,11 +60,100 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
         }                 
     }
 
-    public function findConvention_ufp_daafByValidation($validation)
+    public function findconventionByfiltre($requete)
     {               
-        $result =  $this->db->select('*')
+        $result =  $this->db->select('convention_ufp_daaf_entete.*')
                         ->from($this->table)
-                        ->where('validation',$validation)
+                        ->join('convention_ufp_daaf_detail','convention_ufp_daaf_detail.id_convention_ufp_daaf_entete=convention_ufp_daaf_entete.id')
+                        ->where($requete)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findconvention_invalideByfiltre($requete)
+    {               
+        $result =  $this->db->select('convention_ufp_daaf_entete.*')
+                        ->from($this->table)
+                        ->join('convention_ufp_daaf_detail','convention_ufp_daaf_detail.id_convention_ufp_daaf_entete=convention_ufp_daaf_entete.id')
+                        ->where('validation',0)
+                        ->where($requete)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findconventionBydemandevalidedaaf()
+    {               
+        $result =  $this->db->select('convention_ufp_daaf_entete.*')
+                        ->from($this->table)
+                        ->join('demande_deblocage_daaf','demande_deblocage_daaf.id_convention_ufp_daaf_entete=convention_ufp_daaf_entete.id')
+                        ->where('demande_deblocage_daaf.validation',1)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findConventionByinvalidedemande()
+    {               
+        $result =  $this->db->select('convention_ufp_daaf_entete.*')
+                        ->from($this->table)
+                        ->join('demande_deblocage_daaf','demande_deblocage_daaf.id_convention_ufp_daaf_entete=convention_ufp_daaf_entete.id')
+                        ->where('demande_deblocage_daaf.validation',0)
+                        //->where("DATE_FORMAT(convention_ufp_daaf_detail.date_signature,'%Y')",$annee)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findConvention_now($annee)
+    {               
+        $result =  $this->db->select('convention_ufp_daaf_entete.*')
+                        ->from($this->table)
+                        ->join('convention_ufp_daaf_detail','convention_ufp_daaf_detail.id_convention_ufp_daaf_entete=convention_ufp_daaf_entete.id')
+                        ->where("DATE_FORMAT(convention_ufp_daaf_detail.date_signature,'%Y')",$annee)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findConvention_invalide_now($annee)
+    {               
+        $result =  $this->db->select('convention_ufp_daaf_entete.*')
+                        ->from($this->table)
+                        ->join('convention_ufp_daaf_detail','convention_ufp_daaf_detail.id_convention_ufp_daaf_entete=convention_ufp_daaf_entete.id')
+                        ->where('validation',0)
+                        ->where("DATE_FORMAT(convention_ufp_daaf_detail.date_signature,'%Y')",$annee)
                         ->order_by('ref_convention')
                         ->get()
                         ->result();
@@ -412,8 +501,7 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                         0 as cout_sous
 
                         from latrine_construction as lat_const
-                            inner join batiment_construction as bat_const on bat_const.id=lat_const.id_batiment_construction
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete
+                            inner join convention_cisco_feffi_entete as conv on conv.id = lat_const.id_convention_entete
                             inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf                     
                              where conv_ufp.id = '".$id_convention_ufp_daaf_entete."' 
                        
@@ -431,8 +519,7 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                         0 as cout_sous
 
                         from mobilier_construction as mob_const
-                            inner join batiment_construction as bat_const on bat_const.id=mob_const.id_batiment_construction
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete
+                            inner join convention_cisco_feffi_entete as conv on conv.id = mob_const.id_convention_entete
                             inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf                      
                             where conv_ufp.id = '".$id_convention_ufp_daaf_entete."'
 
@@ -790,5 +877,10 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
             ";
             return $this->db->query($sql)->result();             
     } 
+    public function findByRef_convention($nom) {
+        $requete="select * from site where lower(code_sous_projet)='".$nom."'";
+        $query = $this->db->query($requete);
+        return $query->result();                
+    }
 
 }

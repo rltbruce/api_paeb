@@ -7,8 +7,7 @@ class Zap extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('zap_model', 'ZapManager');        
-        $this->load->model('commune_model', 'CommuneManager');
+        $this->load->model('zap_model', 'ZapManager');
     }
     //recuperation zap
     public function index_get() {
@@ -24,38 +23,28 @@ class Zap extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-					// Récupérationdescription commune
-                    $commune = array();
-                    $commune = $this->CommuneManager->findByIdOLD($value->id_commune);
+					// Récupérationdescription commune;
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['nom'] = $value->nom;
-                    $data[$key]['commune'] = $commune;
                 }
             }    
         } else {
             if ($id) {
                 $data = array();
 				// Récupération par id
-                $zap = $this->ZapManager->findById($id);
-                $commune = $this->CommmuneManager->findById($zap->id_commune);
                 $data['id'] = $zap->id;
                 $data['code'] = $zap->code;
                 $data['nom'] = $zap->nom;
-                $data['commune'] = $commune;
                 
             } else {
 				// Récupération de tous les zap
                 $zap = $this->ZapManager->findAll();
                 if ($zap) {
                     foreach ($zap as $key => $value) {
-                        $commune = array();
-                        $commune = $this->CommuneManager->findById($value->id_commune);
                         $data[$key]['id'] = $value->id;
                         $data[$key]['code'] = $value->code;
                         $data[$key]['nom'] = $value->nom;
-                        $data[$key]['id_commune'] = $value->id_commune;
-                        $data[$key]['commune'] = $commune;
 
                     };
                 } else
@@ -82,8 +71,7 @@ class Zap extends REST_Controller {
         $supprimer = $this->post('supprimer') ;
 		$data = array(
 			'code' => $this->post('code'),
-			'nom' => $this->post('nom'),
-			'id_commune' => $this->post('id_commune')
+			'nom' => $this->post('nom')
 		);               
         if ($supprimer == 0) {
             if ($id == 0) {

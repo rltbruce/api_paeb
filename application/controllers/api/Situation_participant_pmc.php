@@ -26,15 +26,16 @@ class Situation_participant_pmc extends REST_Controller {
         } 
         else 
         {
-            $menu = $this->Situation_participant_pmcManager->findAll();
-            if ($menu) 
+            $tmp = $this->Situation_participant_pmcManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                }
+                }*/
             } 
                 else
                     $data = array();

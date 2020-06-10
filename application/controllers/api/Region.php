@@ -21,14 +21,16 @@ class Region extends REST_Controller {
                 $data['code'] = $region->code;
                 $data['nom'] = $region->nom;
             } else {
-                $menu = $this->RegionManager->findAll();
-                if ($menu) {
-                    foreach ($menu as $key => $value) {
+                $tmp = $this->RegionManager->findAll();
+                if ($tmp)
+                {
+                   $data=$tmp; 
+                    /*foreach ($tmp as $key => $value) {
                         $pays = array();
                         $data[$key]['id'] = $value->id;
                         $data[$key]['code'] = $value->code;
                         $data[$key]['nom'] = $value->nom;
-                    }
+                    }*/
                 } else
                     $data = array();
             }

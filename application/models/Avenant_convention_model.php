@@ -26,6 +26,7 @@ class Avenant_convention_model extends CI_Model {
     public function _set($avenant_convention) {
         return array(
 
+            'ref_avenant' => $avenant_convention['ref_avenant'],
             'description' => $avenant_convention['description'],
             'montant'    => $avenant_convention['montant'],
             'date_signature' => $avenant_convention['date_signature'],
@@ -63,11 +64,42 @@ class Avenant_convention_model extends CI_Model {
         }
     }
 
-    public function findAllinvalideByconvention($id_convention_entete) {               
+    public function findavenantByconvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findavenantinvalideByconvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
                         ->where("validation", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findavenantvalideByconvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 1)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -96,6 +128,11 @@ class Avenant_convention_model extends CI_Model {
         if ($q->num_rows() > 0) {
             return $q->row();
         }
+    }
+    public function findByconventionRef_avenant($id_convention_entete,$ref_avenant) {
+        $requete="select * from avenant_convention where lower(ref_avenant)='".$ref_avenant."' and id_convention_entete='".$id_convention_entete."'";
+        $query = $this->db->query($requete);
+        return $query->result();                
     }
 
 }

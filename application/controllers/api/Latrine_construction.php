@@ -109,7 +109,7 @@ class Latrine_construction extends REST_Controller {
             $data = array();
             $latrine_construction = $this->Latrine_constructionManager->findById($id);
 
-            $convention_entete = $this->convention_cisco_feffi_enteteManager->findById($latrine_construction->id_convention_entete);
+            $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($latrine_construction->id_convention_entete);
             $type_latrine = $this->Type_latrineManager->findById($latrine_construction->id_type_latrine);
 
             $data['id'] = $latrine_construction->id;
@@ -126,7 +126,7 @@ class Latrine_construction extends REST_Controller {
                 foreach ($tmp as $key => $value) 
                 {
                     $data = array();
-                    $convention_entete = $this->convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
                     $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
 

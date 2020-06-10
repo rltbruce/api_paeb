@@ -21,7 +21,7 @@ class Batiment_construction extends REST_Controller {
     {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
-       // $menu = $this->get('menu');
+       $menu = $this->get('menu');
       //  $id_contrat_prestataire = $this->get('id_contrat_prestataire');
     //$id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
 
@@ -76,30 +76,30 @@ class Batiment_construction extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($menu=='getbatimentByContrat_prestataire')
+        else*/
+        if ($menu=='getbatimentByContrat_prestataire')
         {
             $batiment_construction = $this->Batiment_constructionManager->findAllBycontratprestataire($id_contrat_prestataire );
             if ($batiment_construction) 
             {
                 foreach ($batiment_construction as $key => $value) 
                 {                     
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
-                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($id_contrat_prestataire);
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($id_contrat_prestataire);
                     
                     $data[$key]['id'] = $value->id;
                     $data[$key]['type_batiment'] = $type_batiment;                    
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['cout_unitaire'] = $value->cout_unitaire;
                     //$data[$key]['nbr_batiment'] = $value->nbr_batiment;
-                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    //$data[$key]['contrat_prestataire'] = $contrat_prestataire;
                 }
             } 
                 else
                     $data = array();
         }
-        else*/
-        if ($id_convention_entete)
+        elseif ($id_convention_entete)
         {
             $batiment_construction = $this->Batiment_constructionManager->findBatimentByconvention($id_convention_entete );
             if ($batiment_construction) 

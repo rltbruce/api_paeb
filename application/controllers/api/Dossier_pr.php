@@ -22,7 +22,94 @@ class Dossier_pr extends REST_Controller {
         $validation = $this->get('validation');
         $menu = $this->get('menu');
 
-        if ($menu =="getdocument_scanByConvention")
+        if ($menu =="getdocumentinvalideBycontrat")
+        {
+            $tmp = $this->Document_prManager->finddocumentinvalideBycontrat($id_contrat_partenaire_relai);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_partenaire_relai= array();
+                    $existance = false;
+                    //$contrat_partenaire_relai = $this->Contrat_beManager->findById($value->id_contrat_partenaire_relai);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_pr_scan'] = $value->id_document_pr_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    
+                    //$data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                    if ($value->id_document_pr_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu =="getdocumentvalideBycontrat")
+        {
+            $tmp = $this->Document_prManager->finddocumentvalideBycontrat($id_contrat_partenaire_relai);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_partenaire_relai= array();
+                    $existance = false;
+                    //$contrat_partenaire_relai = $this->Contrat_beManager->findById($value->id_contrat_partenaire_relai);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_pr_scan'] = $value->id_document_pr_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    
+                   // $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                    if ($value->id_document_pr_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu =="getdocumentBycontrat")
+        {
+            $tmp = $this->Document_prManager->finddocumentBycontrat($id_contrat_partenaire_relai);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_partenaire_relai= array();
+                    $existance = false;
+                    //$contrat_partenaire_relai = $this->Contrat_beManager->findById($value->id_contrat_partenaire_relai);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_pr_scan'] = $value->id_document_pr_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    
+                    //$data[$key]['contrat_partenaire_relai'] = $value->id_contrat_partenaire_relai;
+                    if ($value->id_document_pr_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu =="getdocument_scanByConvention")
         {
             $menu = $this->Document_prManager->findAllByConvention($id_convention_entete);
             if ($menu) 

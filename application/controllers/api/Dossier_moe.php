@@ -22,7 +22,94 @@ class Dossier_moe extends REST_Controller {
         $validation = $this->get('validation');
         $menu = $this->get('menu');
 
-        if ($menu =="getdocument_scanByConvention")
+        if ($menu =="getdocumentinvalideBycontrat")
+        {
+            $tmp = $this->Document_moeManager->finddocumentinvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_bureau_etude= array();
+                    $existance = false;
+                    //$contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_moe_scan'] = $value->id_document_moe_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    
+                    //$data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+                    if ($value->id_document_moe_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu =="getdocumentvalideBycontrat")
+        {
+            $tmp = $this->Document_moeManager->finddocumentvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_bureau_etude= array();
+                    $existance = false;
+                    //$contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_moe_scan'] = $value->id_document_moe_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    
+                   // $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+                    if ($value->id_document_moe_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu =="getdocumentBycontrat")
+        {
+            $tmp = $this->Document_moeManager->finddocumentBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_bureau_etude= array();
+                    $existance = false;
+                    //$contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_moe_scan'] = $value->id_document_moe_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    
+                    //$data[$key]['contrat_bureau_etude'] = $value->id_contrat_bureau_etude;
+                    if ($value->id_document_moe_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu =="getdocument_scanByConvention")
         {
             $menu = $this->Document_moeManager->findAllByConvention($id_convention_entete);
             if ($menu) 

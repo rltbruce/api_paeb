@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Count_demande_prestataire extends REST_Controller {
+class Count_facture_prestataire extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -17,12 +17,12 @@ class Count_demande_prestataire extends REST_Controller {
         $id = $this->get('id');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $invalide = $this->get('invalide');
-        if ($invalide==1)
+        if ($invalide==2)
         {
-           $demande_batiment_prestataire = $this->Demande_batiment_prestataireManager->countAllByInvalide(0);          
+           $demande_batiment_prestataire = $this->Demande_batiment_prestataireManager->countAllfactureByvalidation(1);          
             $data = $demande_batiment_prestataire;
         }
-        if ($invalide==2)
+       /* if ($invalide==2)
         {
            $demande_batiment_prestataire = $this->Demande_batiment_prestataireManager->countAllByInvalide(1);          
             $data = $demande_batiment_prestataire;
@@ -32,7 +32,7 @@ class Count_demande_prestataire extends REST_Controller {
         {
            $demande_batiment_prestataire = $this->Demande_batiment_prestataireManager->countAllByInvalide(2);          
             $data = $demande_batiment_prestataire;
-        }
+        }*/
     
         
         if (count($data)>0) {

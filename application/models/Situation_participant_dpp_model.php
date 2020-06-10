@@ -58,6 +58,11 @@ class Situation_participant_dpp_model extends CI_Model {
             return $q->row();
         }
     }
+    public function findByFonction($libelle) {
+        $requete="select * from situation_participant_dpp where lower(libelle)='".$libelle."'";
+        $query = $this->db->query($requete);
+        return $query->result();                
+    }
 
 
 

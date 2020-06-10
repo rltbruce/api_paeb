@@ -46,10 +46,11 @@ class Tranche_deblocage_feffi extends REST_Controller {
         } 
         else 
         {
-            $menu = $this->Tranche_deblocage_feffiManager->findAll();
-            if ($menu) 
-            {
-                foreach ($menu as $key => $value) 
+            $tmp = $this->Tranche_deblocage_feffiManager->findAll();
+            if ($tmp) 
+            {   
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
@@ -57,7 +58,7 @@ class Tranche_deblocage_feffi extends REST_Controller {
                     $data[$key]['periode'] = $value->periode;                    
                     $data[$key]['pourcentage'] = $value->pourcentage;
                     $data[$key]['description'] = $value->description;
-                }
+                }*/
             } 
                 else
                     $data = array();

@@ -22,7 +22,94 @@ class Dossier_prestataire extends REST_Controller {
         $validation = $this->get('validation');
         $menu = $this->get('menu');
 
-        if ($menu =="getdocument_scanByContrat")
+        if ($menu =="getdocumentinvalideBycontrat")
+        {
+            $tmp = $this->Document_prestataireManager->finddocumentinvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_prestataire= array();
+                    $existance = false;
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_prestataire_scan'] = $value->id_document_prestataire_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    if ($value->id_document_prestataire_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu =="getdocumentvalideBycontrat")
+        {
+            $tmp = $this->Document_prestataireManager->finddocumentvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_prestataire= array();
+                    $existance = false;
+                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_prestataire_scan'] = $value->id_document_prestataire_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    if ($value->id_document_prestataire_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu =="getdocumentBycontrat")
+        {
+            $tmp = $this->Document_prestataireManager->finddocumentBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_prestataire= array();
+                    $existance = false;
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_prestataire_scan'] = $value->id_document_prestataire_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    
+                    $data[$key]['contrat_prestataire'] = $value->id_contrat_prestataire;
+                    if ($value->id_document_prestataire_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu =="getdocument_scanByContrat")
         {
             $menu = $this->Document_prestataireManager->findAllByContrat($id_contrat_prestataire);
             if ($menu) 

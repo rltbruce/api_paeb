@@ -104,6 +104,19 @@ class Appel_offre_model extends CI_Model {
             return null;
         }                 
     }
+     function getappel_offreBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
 
    /* public function findAllBycontrat($id_contrat_bureau_etude,$validation) {               
         $result =  $this->db->select('*')

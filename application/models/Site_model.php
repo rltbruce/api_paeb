@@ -32,9 +32,14 @@ class Site_model extends CI_Model {
             'id_agence_acc' =>      $site['id_agence_acc'],
             'statu_convention' =>      $site['statu_convention'],
             'observation' =>      $site['observation'],
+            'id_region' => $site['id_region'],
+            'id_cisco' => $site['id_cisco'],
+            'id_commune' => $site['id_commune'],
+            'id_zap' => $site['id_zap'],
             'id_ecole' =>      $site['id_ecole'],
             'id_classification_site' =>      $site['id_classification_site'],
-            'lot' =>      $site['lot']                      
+            'lot' =>      $site['lot'],
+            'validation' =>      $site['validation']                     
         );
     }
     public function delete($id) {
@@ -83,6 +88,90 @@ class Site_model extends CI_Model {
         }else{
             return null;
         }                 
+    }
+
+    public function findsiteByenpreparationinvalide() {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('statu_convention',0)
+                        ->where('validation',0)
+                        ->order_by('code_sous_projet')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findsiteByenpreparation() {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('statu_convention',0)
+                        ->order_by('code_sous_projet')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findsiteByfiltreinvalide($requete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('validation',0)
+                        ->where($requete)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findsiteByfiltre($requete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where($requete)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+   /* public function findsiteByfiltre($requete) {               
+        $result =  $this->db->select('site.*')
+                        ->from($this->table)
+                        ->join('ecole','ecole.id=site.id_ecole')
+                        ->join('zap','zap.id = ecole.id_zap')
+                        ->join('fokontany','fokontany.id = ecole.id_fokontany')
+                        ->join('commune','commune.id = fokontany.id_commune')
+                        ->join('district','district.id = commune.id_district')
+                        ->join('region','region.id = district.id_region')
+                        ->join('cisco','cisco.id_district = district.id')
+                        ->where($requete)                        
+                        ->order_by('ecole.description')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }*/
+    public function findByCode($nom) {
+        $requete="select * from site where lower(code_sous_projet)='".$nom."'";
+        $query = $this->db->query($requete);
+        return $query->result();                
     }
 
 }

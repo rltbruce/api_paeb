@@ -21,7 +21,94 @@ class Dossier_feffi extends REST_Controller {
         $validation = $this->get('validation');
         $menu = $this->get('menu');
 
-        if ($menu =="getdocument_scanByConvention")
+        if ($menu =="getdocumentinvalideByconvention")
+        {
+            $tmp = $this->Document_feffiManager->finddocumentinvalideByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$convention_entete= array();
+                    $existance = false;
+                    //$convention_entete = $this->Contrat_beManager->findById($value->id_convention_entete);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_feffi_scan'] = $value->id_document_feffi_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    
+                    //$data[$key]['convention_entete'] = $convention_entete;
+                    if ($value->id_document_feffi_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu =="getdocumentvalideByconvention")
+        {
+            $tmp = $this->Document_feffiManager->finddocumentvalideByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$convention_entete= array();
+                    $existance = false;
+                    //$convention_entete = $this->Contrat_beManager->findById($value->id_convention_entete);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_feffi_scan'] = $value->id_document_feffi_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    
+                   // $data[$key]['convention_entete'] = $convention_entete;
+                    if ($value->id_document_feffi_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu =="getdocumentByconvention")
+        {
+            $tmp = $this->Document_feffiManager->finddocumentByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$convention_entete= array();
+                    $existance = false;
+                    //$convention_entete = $this->Contrat_beManager->findById($value->id_convention_entete);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['fichier'] = $value->fichier;
+                    $data[$key]['id_document_feffi_scan'] = $value->id_document_feffi_scan;
+                    $data[$key]['date_elaboration'] = $value->date_elaboration;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    
+                    //$data[$key]['convention_entete'] = $value->id_convention_entete;
+                    if ($value->id_document_feffi_scan) {
+                        $existance = true;
+                    }
+                    $data[$key]['existance'] = $existance;
+                }
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu =="getdocument_scanByConvention")
         {
             $menu = $this->Document_feffiManager->findAllByConvention($id_convention_entete,$validation);
             if ($menu) 

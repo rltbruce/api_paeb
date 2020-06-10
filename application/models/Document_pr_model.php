@@ -59,6 +59,162 @@ class Document_pr_model extends CI_Model {
         }
     }
 
+    public function finddocumentinvalideBycontrat($id_contrat_partenaire_relai) {
+        $sql=" 
+
+                select detail.id as id, 
+                        detail.code as code, 
+                        detail.intitule as intitule,
+                        detail.id_document_pr_scan as id_document_pr_scan, 
+                        detail.fichier as fichier, 
+                        detail.date_elaboration as date_elaboration, 
+                        detail.observation as observation, 
+                        detail.id_contrat_partenaire_relai as id_contrat_partenaire_relai,
+                        detail.validation as validation
+
+                    from
+                (select 
+                        doc_pr.id as id, 
+                        doc_pr.code as code, 
+                        doc_pr.intitule as intitule,
+                        doc_scan.id as id_document_pr_scan, 
+                        doc_scan.fichier as fichier, 
+                        doc_scan.date_elaboration as date_elaboration, 
+                        doc_scan.observation as observation, 
+                        doc_scan.id_contrat_partenaire_relai as id_contrat_partenaire_relai,
+                        doc_scan.validation as validation 
+
+                    from document_pr_scan as doc_scan
+            
+                        right join document_pr as doc_pr on doc_scan.id_document_pr = doc_pr.id 
+            
+                        where doc_scan.id_contrat_partenaire_relai = ".$id_contrat_partenaire_relai." and doc_scan.validation=0
+            
+                        group by doc_pr.id 
+                UNION 
+
+                select 
+                        doc_pr.id as id, 
+                        doc_pr.code as code, 
+                        doc_pr.intitule as intitule,
+                        null as id_document_pr_scan, 
+                        null as fichier, 
+                        null as date_elaboration, 
+                        null as observation, 
+                        null as id_contrat_partenaire_relai,
+                        null as validation  
+
+                    from document_pr as doc_pr
+            
+                        group by doc_pr.id) detail
+                group by detail.id  ";
+        return $this->db->query($sql)->result();                
+    }
+
+    public function finddocumentvalideBycontrat($id_contrat_partenaire_relai) {
+        $sql=" 
+
+                select detail.id as id, 
+                        detail.code as code, 
+                        detail.intitule as intitule,
+                        detail.id_document_pr_scan as id_document_pr_scan, 
+                        detail.fichier as fichier, 
+                        detail.date_elaboration as date_elaboration, 
+                        detail.observation as observation, 
+                        detail.id_contrat_partenaire_relai as id_contrat_partenaire_relai,
+                        detail.validation as validation
+
+                    from
+                (select 
+                        doc_pr.id as id, 
+                        doc_pr.code as code, 
+                        doc_pr.intitule as intitule,
+                        doc_scan.id as id_document_pr_scan, 
+                        doc_scan.fichier as fichier, 
+                        doc_scan.date_elaboration as date_elaboration, 
+                        doc_scan.observation as observation, 
+                        doc_scan.id_contrat_partenaire_relai as id_contrat_partenaire_relai,
+                        doc_scan.validation as validation 
+
+                    from document_pr_scan as doc_scan
+            
+                        right join document_pr as doc_pr on doc_scan.id_document_pr = doc_pr.id 
+            
+                        where doc_scan.id_contrat_partenaire_relai = ".$id_contrat_partenaire_relai." and doc_scan.validation=1
+            
+                        group by doc_pr.id 
+                UNION 
+
+                select 
+                        doc_pr.id as id, 
+                        doc_pr.code as code, 
+                        doc_pr.intitule as intitule,
+                        null as id_document_pr_scan, 
+                        null as fichier, 
+                        null as date_elaboration, 
+                        null as observation, 
+                        null as id_contrat_partenaire_relai,
+                        null as validation  
+
+                    from document_pr as doc_pr
+            
+                        group by doc_pr.id) detail
+                group by detail.id  ";
+        return $this->db->query($sql)->result();                
+    }
+
+    public function finddocumentBycontrat($id_contrat_partenaire_relai) {
+        $sql=" 
+
+                select detail.id as id, 
+                        detail.code as code, 
+                        detail.intitule as intitule,
+                        detail.id_document_pr_scan as id_document_pr_scan, 
+                        detail.fichier as fichier, 
+                        detail.date_elaboration as date_elaboration, 
+                        detail.observation as observation, 
+                        detail.id_contrat_partenaire_relai as id_contrat_partenaire_relai,
+                        detail.validation as validation
+
+                    from
+                (select 
+                        doc_pr.id as id, 
+                        doc_pr.code as code, 
+                        doc_pr.intitule as intitule,
+                        doc_scan.id as id_document_pr_scan, 
+                        doc_scan.fichier as fichier, 
+                        doc_scan.date_elaboration as date_elaboration, 
+                        doc_scan.observation as observation, 
+                        doc_scan.id_contrat_partenaire_relai as id_contrat_partenaire_relai,
+                        doc_scan.validation as validation 
+
+                    from document_pr_scan as doc_scan
+            
+                        right join document_pr as doc_pr on doc_scan.id_document_pr = doc_pr.id 
+            
+                        where doc_scan.id_contrat_partenaire_relai = ".$id_contrat_partenaire_relai."
+            
+                        group by doc_pr.id 
+                UNION 
+
+                select 
+                        doc_pr.id as id, 
+                        doc_pr.code as code, 
+                        doc_pr.intitule as intitule,
+                        null as id_document_pr_scan, 
+                        null as fichier, 
+                        null as date_elaboration, 
+                        null as observation, 
+                        null as id_contrat_partenaire_relai,
+                        null as validation  
+
+                    from document_pr as doc_pr
+            
+                        group by doc_pr.id) detail
+                group by detail.id  ";
+        return $this->db->query($sql)->result();                
+    }
+
     public function findAllByContrat($id_contrat_partenaire_relai) {               
        /* $result =  $this->db->select('document_pr.id as id, document_pr.code as code, document_pr.intitule as intitule, document_pr_scan.id as id_document_pr_scan, document_pr_scan.fichier as fichier, document_pr_scan.date_elaboration as date_elaboration, document_pr_scan.observation as observation, document_pr_scan.id_contrat_partenaire_relai as id_contrat_partenaire_relai')
                         ->from($this->table)

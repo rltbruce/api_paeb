@@ -57,6 +57,7 @@ class Utilisateurs extends REST_Controller {
                 $data['id'] = $user->id;
                 $data['nom'] = $user->nom;
                 $data['prenom'] = $user->prenom;
+                $data['telephone'] = $user->telephone;
                // $data['sigle'] = $user->sigle;
                 $data['token'] = $user->token;
                 $data['email'] = $user->email;
@@ -103,6 +104,7 @@ class Utilisateurs extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['nom'] = $value->nom;
                     $data[$key]['prenom'] = $value->prenom;
+                    $data[$key]['telephone'] = $value->telephone;
                  //   $data[$key]['sigle'] = $value->sigle;
                     $data[$key]['token'] = $value->token;
                     $data[$key]['email'] = $value->email;
@@ -110,8 +112,7 @@ class Utilisateurs extends REST_Controller {
 
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['region'] = $region;
-                    $data[$key]['district'] = $district;
-              
+                    $data[$key]['district'] = $district;              
            
                     $data[$key]['roles'] = unserialize($value->roles);
 
@@ -139,6 +140,7 @@ class Utilisateurs extends REST_Controller {
                 $data['id'] = $value[0]->id;
                 $data['nom'] = $value[0]->nom;
                 $data['prenom'] = $value[0]->prenom;
+                $data['telephone'] = $value[0]->telephone;
            //     $data['sigle'] = $value[0]->sigle;
                 $data['token'] = $value[0]->token;
                 $data['email'] = $value[0]->email;
@@ -214,7 +216,8 @@ class Utilisateurs extends REST_Controller {
                 $getrole = $this->post('roles');
                 $data = array(
                     'nom' => $this->post('nom'),
-                    'prenom' => $this->post('prenom'),         
+                    'prenom' => $this->post('prenom'),
+                    'telephone' => $this->post('telephone'),         
                  //   'sigle' => $this->post('sigle'),
                     'email' => $this->post('email'),                 
                     'enabled' => $this->post('enabled'),
@@ -264,6 +267,7 @@ class Utilisateurs extends REST_Controller {
                 $data = array(
                     'nom' => $this->post('nom'),
                     'prenom' => $this->post('prenom'),
+                    'telephone' => $this->post('telephone'),
                     //'cin' => $this->post('cin'),
                     'email' => $this->post('email'),
                     'password' => sha1($this->post('password')),                 
@@ -300,6 +304,7 @@ class Utilisateurs extends REST_Controller {
                 $data = array(
                     'nom' => $this->post('nom'),
                     'prenom' => $this->post('prenom'),
+                    'telephone' => $this->post('telephone'),
                     'sigle' => $this->post('sigle'),
                     'email' => $this->post('email'),
                     'id_region' => $this->post('id_region'),

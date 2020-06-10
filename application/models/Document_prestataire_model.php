@@ -59,6 +59,162 @@ class Document_prestataire_model extends CI_Model {
         }
     }
 
+    public function finddocumentinvalideBycontrat($id_contrat_prestataire) {
+        $sql=" 
+
+                select detail.id as id, 
+                        detail.code as code, 
+                        detail.intitule as intitule,
+                        detail.id_document_prestataire_scan as id_document_prestataire_scan, 
+                        detail.fichier as fichier, 
+                        detail.date_elaboration as date_elaboration, 
+                        detail.observation as observation, 
+                        detail.id_contrat_prestataire as id_contrat_prestataire,
+                        detail.validation as validation
+
+                    from
+                (select 
+                        doc_prestataire.id as id, 
+                        doc_prestataire.code as code, 
+                        doc_prestataire.intitule as intitule,
+                        doc_scan.id as id_document_prestataire_scan, 
+                        doc_scan.fichier as fichier, 
+                        doc_scan.date_elaboration as date_elaboration, 
+                        doc_scan.observation as observation, 
+                        doc_scan.id_contrat_prestataire as id_contrat_prestataire,
+                        doc_scan.validation as validation 
+
+                    from document_prestataire_scan as doc_scan
+            
+                        right join document_prestataire as doc_prestataire on doc_scan.id_document_prestataire = doc_prestataire.id 
+            
+                        where doc_scan.id_contrat_prestataire = ".$id_contrat_prestataire." and doc_scan.validation=0
+            
+                        group by doc_prestataire.id 
+                UNION 
+
+                select 
+                        doc_prestataire.id as id, 
+                        doc_prestataire.code as code, 
+                        doc_prestataire.intitule as intitule,
+                        null as id_document_prestataire_scan, 
+                        null as fichier, 
+                        null as date_elaboration, 
+                        null as observation, 
+                        null as id_contrat_prestataire,
+                        null as validation  
+
+                    from document_prestataire as doc_prestataire
+            
+                        group by doc_prestataire.id) detail
+                group by detail.id  ";
+        return $this->db->query($sql)->result();                
+    }
+
+    public function finddocumentvalideBycontrat($id_contrat_prestataire) {
+        $sql=" 
+
+                select detail.id as id, 
+                        detail.code as code, 
+                        detail.intitule as intitule,
+                        detail.id_document_prestataire_scan as id_document_prestataire_scan, 
+                        detail.fichier as fichier, 
+                        detail.date_elaboration as date_elaboration, 
+                        detail.observation as observation, 
+                        detail.id_contrat_prestataire as id_contrat_prestataire,
+                        detail.validation as validation
+
+                    from
+                (select 
+                        doc_prestataire.id as id, 
+                        doc_prestataire.code as code, 
+                        doc_prestataire.intitule as intitule,
+                        doc_scan.id as id_document_prestataire_scan, 
+                        doc_scan.fichier as fichier, 
+                        doc_scan.date_elaboration as date_elaboration, 
+                        doc_scan.observation as observation, 
+                        doc_scan.id_contrat_prestataire as id_contrat_prestataire,
+                        doc_scan.validation as validation 
+
+                    from document_prestataire_scan as doc_scan
+            
+                        right join document_prestataire as doc_prestataire on doc_scan.id_document_prestataire = doc_prestataire.id 
+            
+                        where doc_scan.id_contrat_prestataire = ".$id_contrat_prestataire." and doc_scan.validation=1
+            
+                        group by doc_prestataire.id 
+                UNION 
+
+                select 
+                        doc_prestataire.id as id, 
+                        doc_prestataire.code as code, 
+                        doc_prestataire.intitule as intitule,
+                        null as id_document_prestataire_scan, 
+                        null as fichier, 
+                        null as date_elaboration, 
+                        null as observation, 
+                        null as id_contrat_prestataire,
+                        null as validation  
+
+                    from document_prestataire as doc_prestataire
+            
+                        group by doc_prestataire.id) detail
+                group by detail.id  ";
+        return $this->db->query($sql)->result();                
+    }
+
+    public function finddocumentBycontrat($id_contrat_prestataire) {
+        $sql=" 
+
+                select detail.id as id, 
+                        detail.code as code, 
+                        detail.intitule as intitule,
+                        detail.id_document_prestataire_scan as id_document_prestataire_scan, 
+                        detail.fichier as fichier, 
+                        detail.date_elaboration as date_elaboration, 
+                        detail.observation as observation, 
+                        detail.id_contrat_prestataire as id_contrat_prestataire,
+                        detail.validation as validation
+
+                    from
+                (select 
+                        doc_prestataire.id as id, 
+                        doc_prestataire.code as code, 
+                        doc_prestataire.intitule as intitule,
+                        doc_scan.id as id_document_prestataire_scan, 
+                        doc_scan.fichier as fichier, 
+                        doc_scan.date_elaboration as date_elaboration, 
+                        doc_scan.observation as observation, 
+                        doc_scan.id_contrat_prestataire as id_contrat_prestataire,
+                        doc_scan.validation as validation 
+
+                    from document_prestataire_scan as doc_scan
+            
+                        right join document_prestataire as doc_prestataire on doc_scan.id_document_prestataire = doc_prestataire.id 
+            
+                        where doc_scan.id_contrat_prestataire = ".$id_contrat_prestataire."
+            
+                        group by doc_prestataire.id 
+                UNION 
+
+                select 
+                        doc_prestataire.id as id, 
+                        doc_prestataire.code as code, 
+                        doc_prestataire.intitule as intitule,
+                        null as id_document_prestataire_scan, 
+                        null as fichier, 
+                        null as date_elaboration, 
+                        null as observation, 
+                        null as id_contrat_prestataire,
+                        null as validation  
+
+                    from document_prestataire as doc_prestataire
+            
+                        group by doc_prestataire.id) detail
+                group by detail.id  ";
+        return $this->db->query($sql)->result();                
+    }
+
     public function findAllByContrat($id_contrat_prestataire) {
         $sql=" 
 
@@ -107,6 +263,7 @@ class Document_prestataire_model extends CI_Model {
                 group by detail.id  ";
         return $this->db->query($sql)->result();                
     }
+
         public function findAllByConvention($id_convention_entete) {               
 
         $sql=" 

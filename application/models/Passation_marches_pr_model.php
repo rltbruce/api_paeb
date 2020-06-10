@@ -128,6 +128,22 @@ class Passation_marches_pr_model extends CI_Model {
         }
 
     }
+
+    public function findpassationByconvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }
+
+    }
     public function getpassationinvalideByconvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

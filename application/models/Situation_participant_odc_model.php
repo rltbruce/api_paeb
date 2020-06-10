@@ -76,5 +76,10 @@ class Situation_participant_odc_model extends CI_Model {
     }
 
 
+    public function findByFonction($libelle) {
+        $requete="select * from situation_participant_odc where lower(libelle)='".$libelle."'";
+        $query = $this->db->query($requete);
+        return $query->result();                
+    }
 
 }

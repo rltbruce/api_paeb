@@ -165,7 +165,9 @@ class Avancement_mobilier extends REST_Controller {
                     'intitule'   => $this->post('intitule'),
                     'observation'    => $this->post('observation'),
                     'date'   => $this->post('date'),
-                    'id_mobilier_construction' => $this->post('id_mobilier_construction'),
+                    'id_mobilier_construction' => $this->post('id_mobilier_construction'),                    
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),                    
+                    'validation' => $this->post('validation'),
                     'id_attachement_mobilier' => $this->post('id_attachement_mobilier')
                 );
                 if (!$data) {
@@ -196,7 +198,9 @@ class Avancement_mobilier extends REST_Controller {
                     'intitule'   => $this->post('intitule'),
                     'observation'    => $this->post('observation'),
                     'date'   => $this->post('date'),
-                    'id_mobilier_construction' => $this->post('id_mobilier_construction'),
+                    'id_mobilier_construction' => $this->post('id_mobilier_construction'),                    
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),                    
+                    'validation' => $this->post('validation'),
                     'id_attachement_mobilier' => $this->post('id_attachement_mobilier')
                 );
                 if (!$data || !$id) {

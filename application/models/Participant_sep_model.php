@@ -96,4 +96,19 @@ class Participant_sep_model extends CI_Model {
             return $q->row();
         }
     }
+    public function getparticipantBymodulefonction($id_module_sep,$id_fonction) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_module_sep", $id_module_sep)
+                        ->where("id_situation_participant_sep", $id_fonction)
+                        ->order_by('nom')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
 }

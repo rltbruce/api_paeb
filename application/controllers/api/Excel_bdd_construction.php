@@ -565,17 +565,17 @@ class Excel_bdd_construction extends REST_Controller
         $objPHPExcel->getActiveSheet()->getStyle("DP".$ligne.":ET".($ligne+1))->applyFromArray($styleTitre);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('DP'.$ligne, "(4) MAITRISE D'ŒUVRE");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("EU".$ligne.":HH".$ligne);
-        $objPHPExcel->getActiveSheet()->getStyle("EU".$ligne.":hH".$ligne)->applyFromArray($styleTitre);
+        $objPHPExcel->getActiveSheet()->mergeCells("EU".$ligne.":HB".$ligne);
+        $objPHPExcel->getActiveSheet()->getStyle("EU".$ligne.":HB".$ligne)->applyFromArray($styleTitre);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('EU'.$ligne, "(5) ENTREPRISE");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("HI".$ligne.":HL".$ligne);
-        $objPHPExcel->getActiveSheet()->getStyle("HI".$ligne.":HL".$ligne)->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HI'.$ligne, "(6) GESTION RELIQUATS DE FONDS");//4287f5
+        $objPHPExcel->getActiveSheet()->mergeCells("HC".$ligne.":HF".$ligne);
+        $objPHPExcel->getActiveSheet()->getStyle("HC".$ligne.":HF".$ligne)->applyFromArray($styleTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HC'.$ligne, "(6) GESTION RELIQUATS DE FONDS");//4287f5
 
-        $objPHPExcel->getActiveSheet()->mergeCells("HM".$ligne.":IC".$ligne);
-        $objPHPExcel->getActiveSheet()->getStyle("HM".$ligne.":IC".$ligne)->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HM'.$ligne, "(7) INDICATEUR");
+        $objPHPExcel->getActiveSheet()->mergeCells("HG".$ligne.":HW".$ligne);
+        $objPHPExcel->getActiveSheet()->getStyle("HG".$ligne.":HW".$ligne)->applyFromArray($styleTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HG'.$ligne, "(7) INDICATEUR");
 //GLOBAL
         $objPHPExcel->getActiveSheet()->getStyle("A".$ligne.":F".($ligne+1))->applyFromArray(array(
         'fill' => array(
@@ -663,14 +663,14 @@ class Excel_bdd_construction extends REST_Controller
             'color' => array('rgb' => '4f81bd')
         )
         ));
-        $objPHPExcel->getActiveSheet()->getStyle("EU".($ligne+1).":HH".($ligne+1))->applyFromArray(array(
+        $objPHPExcel->getActiveSheet()->getStyle("EU".($ligne+1).":HB".($ligne+1))->applyFromArray(array(
         'fill' => array(
             'type' => PHPExcel_Style_Fill::FILL_SOLID,
             'color' => array('rgb' => '5e99bd')
         )
         ));
 
-        $objPHPExcel->getActiveSheet()->getStyle("EU".($ligne+2).":HH".($ligne+3))->applyFromArray(array(
+        $objPHPExcel->getActiveSheet()->getStyle("EU".($ligne+2).":HB".($ligne+3))->applyFromArray(array(
         'fill' => array(
             'type' => PHPExcel_Style_Fill::FILL_SOLID,
             'color' => array('rgb' => '97c8e6')
@@ -679,13 +679,13 @@ class Excel_bdd_construction extends REST_Controller
 
 //reliquat
 
-        $objPHPExcel->getActiveSheet()->getStyle("HI".$ligne.":HL".$ligne)->applyFromArray(array(
+        $objPHPExcel->getActiveSheet()->getStyle("HC".$ligne.":HF".$ligne)->applyFromArray(array(
         'fill' => array(
             'type' => PHPExcel_Style_Fill::FILL_SOLID,
             'color' => array('rgb' => '9266e3')
         )
         ));
-        $objPHPExcel->getActiveSheet()->getStyle("HI".($ligne+1).":HL".($ligne+3))->applyFromArray(array(
+        $objPHPExcel->getActiveSheet()->getStyle("HC".($ligne+1).":HF".($ligne+3))->applyFromArray(array(
         'fill' => array(
             'type' => PHPExcel_Style_Fill::FILL_SOLID,
             'color' => array('rgb' => 'b08df2')
@@ -694,13 +694,13 @@ class Excel_bdd_construction extends REST_Controller
 
 //indicateur
 
-        $objPHPExcel->getActiveSheet()->getStyle("HM".$ligne.":IC".$ligne)->applyFromArray(array(
+        $objPHPExcel->getActiveSheet()->getStyle("HG".$ligne.":HW".$ligne)->applyFromArray(array(
         'fill' => array(
             'type' => PHPExcel_Style_Fill::FILL_SOLID,
             'color' => array('rgb' => 'f5e4bf')
         )
         ));
-        $objPHPExcel->getActiveSheet()->getStyle("HM".($ligne+1).":IC".($ligne+3))->applyFromArray(array(
+        $objPHPExcel->getActiveSheet()->getStyle("HG".($ligne+1).":HW".($ligne+3))->applyFromArray(array(
         'fill' => array(
             'type' => PHPExcel_Style_Fill::FILL_SOLID,
             'color' => array('rgb' => 'fff2cc')
@@ -755,95 +755,95 @@ class Excel_bdd_construction extends REST_Controller
         $objPHPExcel->getActiveSheet()->getStyle("FO".$ligne.":GD".$ligne)->applyFromArray($styleTitre);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('FO'.$ligne, "Suivi de l'exécution de chaque contrat des travaux");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("GE".$ligne.":HH".$ligne);
-        $objPHPExcel->getActiveSheet()->getStyle("GE".$ligne.":HH".$ligne)->applyFromArray($styleTitre);
+        $objPHPExcel->getActiveSheet()->mergeCells("GE".$ligne.":HB".$ligne);
+        $objPHPExcel->getActiveSheet()->getStyle("GE".$ligne.":HB".$ligne)->applyFromArray($styleTitre);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GE'.$ligne, "Suivi de paiement de chaque contrat des travaux");
 
-       $objPHPExcel->getActiveSheet()->mergeCells("HI".$ligne.":HI".($ligne+2));
-        $objPHPExcel->getActiveSheet()->getStyle("HI".$ligne.":HI".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HI'.$ligne, "Montant du reliquat de fonds");
+       $objPHPExcel->getActiveSheet()->mergeCells("HC".$ligne.":HC".($ligne+2));
+        $objPHPExcel->getActiveSheet()->getStyle("HC".$ligne.":HC".($ligne+2))->applyFromArray($styleTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HC'.$ligne, "Montant du reliquat de fonds");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("HJ".$ligne.":HJ".($ligne+2));
-        $objPHPExcel->getActiveSheet()->getStyle("HJ".$ligne.":HJ".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HJ'.$ligne, "Objet de l'utilisation du reliquat");
+        $objPHPExcel->getActiveSheet()->mergeCells("HD".$ligne.":HD".($ligne+2));
+        $objPHPExcel->getActiveSheet()->getStyle("HD".$ligne.":HD".($ligne+2))->applyFromArray($styleTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HD'.$ligne, "Objet de l'utilisation du reliquat");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("HK".$ligne.":HK".($ligne+2));
-        $objPHPExcel->getActiveSheet()->getStyle("HK".$ligne.":HK".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HK'.$ligne, "Situation de l'utilisation du reliquat");
+        $objPHPExcel->getActiveSheet()->mergeCells("HE".$ligne.":HE".($ligne+2));
+        $objPHPExcel->getActiveSheet()->getStyle("HE".$ligne.":HE".($ligne+2))->applyFromArray($styleTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HE'.$ligne, "Situation de l'utilisation du reliquat");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("HL".$ligne.":HL".($ligne+2));
-        $objPHPExcel->getActiveSheet()->getStyle("HL".$ligne.":HL".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HL'.$ligne, "OBSERVATIONS");
+        $objPHPExcel->getActiveSheet()->mergeCells("HF".$ligne.":HF".($ligne+2));
+        $objPHPExcel->getActiveSheet()->getStyle("HF".$ligne.":HF".($ligne+2))->applyFromArray($styleTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HF'.$ligne, "OBSERVATIONS");
 
 //INDICATEUR
 
+        $objPHPExcel->getActiveSheet()->mergeCells("HG".$ligne.":HG".($ligne+2));
+        $objPHPExcel->getActiveSheet()->getStyle("HG".$ligne.":HG".($ligne+2))->applyFromArray($styleTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HG'.$ligne, "Prevision nombre de salles de classe construites");
+        
+        $objPHPExcel->getActiveSheet()->mergeCells("HH".$ligne.":HH".($ligne+2));
+        $objPHPExcel->getActiveSheet()->getStyle("HH".$ligne.":HH".($ligne+2))->applyFromArray($styleTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HH'.$ligne, "Nombre de salles de classe construites");
+        
+        $objPHPExcel->getActiveSheet()->mergeCells("HI".$ligne.":HI".($ligne+2));
+        $objPHPExcel->getActiveSheet()->getStyle("HI".$ligne.":HI".($ligne+2))->applyFromArray($styleTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HI'.$ligne, "Prevision Bénéficiaires directs du programme deconstruction (nombre)");
+        
+        $objPHPExcel->getActiveSheet()->mergeCells("HJ".$ligne.":HJ".($ligne+2));
+        $objPHPExcel->getActiveSheet()->getStyle("HJ".$ligne.":HJ".($ligne+2))->applyFromArray($styleTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HJ'.$ligne, "Bénéficiaires directs du programme de construction (nombre)");
+        
+        $objPHPExcel->getActiveSheet()->mergeCells("HK".$ligne.":HK".($ligne+2));
+        $objPHPExcel->getActiveSheet()->getStyle("HK".$ligne.":HK".($ligne+2))->applyFromArray($styleTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HK'.$ligne, "Prevision Nombre d'Ecoles construites");
+        
+        $objPHPExcel->getActiveSheet()->mergeCells("HL".$ligne.":HL".($ligne+2));
+        $objPHPExcel->getActiveSheet()->getStyle("HL".$ligne.":HL".($ligne+2))->applyFromArray($styleTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HL'.$ligne, "Nombre d'Ecoles construites");
+        
         $objPHPExcel->getActiveSheet()->mergeCells("HM".$ligne.":HM".($ligne+2));
         $objPHPExcel->getActiveSheet()->getStyle("HM".$ligne.":HM".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HM'.$ligne, "Prevision nombre de salles de classe construites");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HM'.$ligne, "Prévision nombre de box de latrine");
         
         $objPHPExcel->getActiveSheet()->mergeCells("HN".$ligne.":HN".($ligne+2));
         $objPHPExcel->getActiveSheet()->getStyle("HN".$ligne.":HN".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HN'.$ligne, "Nombre de salles de classe construites");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HN'.$ligne, "Réalisation box de latrine");
         
         $objPHPExcel->getActiveSheet()->mergeCells("HO".$ligne.":HO".($ligne+2));
         $objPHPExcel->getActiveSheet()->getStyle("HO".$ligne.":HO".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HO'.$ligne, "Prevision Bénéficiaires directs du programme deconstruction (nombre)");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HO'.$ligne, "Prevision Nombre de systèmes de point d'Eau installé");
         
         $objPHPExcel->getActiveSheet()->mergeCells("HP".$ligne.":HP".($ligne+2));
         $objPHPExcel->getActiveSheet()->getStyle("HP".$ligne.":HP".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HP'.$ligne, "Bénéficiaires directs du programme de construction (nombre)");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HP'.$ligne, "Nombre de système de point d'eau  installé");
         
         $objPHPExcel->getActiveSheet()->mergeCells("HQ".$ligne.":HQ".($ligne+2));
         $objPHPExcel->getActiveSheet()->getStyle("HQ".$ligne.":HQ".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HQ'.$ligne, "Prevision Nombre d'Ecoles construites");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HQ'.$ligne, "PREVISION NOMBRE TABLES BANC ");
         
         $objPHPExcel->getActiveSheet()->mergeCells("HR".$ligne.":HR".($ligne+2));
         $objPHPExcel->getActiveSheet()->getStyle("HR".$ligne.":HR".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HR'.$ligne, "Nombre d'Ecoles construites");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HR'.$ligne, "REALISATION NOMBRE TABLES BANC ");
         
         $objPHPExcel->getActiveSheet()->mergeCells("HS".$ligne.":HS".($ligne+2));
         $objPHPExcel->getActiveSheet()->getStyle("HS".$ligne.":HS".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HS'.$ligne, "Prévision nombre de box de latrine");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HS'.$ligne, "PREVISION NOMBRE TABLES DU MAITRE ");
         
         $objPHPExcel->getActiveSheet()->mergeCells("HT".$ligne.":HT".($ligne+2));
         $objPHPExcel->getActiveSheet()->getStyle("HT".$ligne.":HT".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HT'.$ligne, "Réalisation box de latrine");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HT'.$ligne, "REALISATION NOMBRE TABLES DU MAITRE");
         
         $objPHPExcel->getActiveSheet()->mergeCells("HU".$ligne.":HU".($ligne+2));
         $objPHPExcel->getActiveSheet()->getStyle("HU".$ligne.":HU".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HU'.$ligne, "Prevision Nombre de systèmes de point d'Eau installé");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HU'.$ligne, "PREVISION NOMBRE CHAISE DU MAITRE");
         
         $objPHPExcel->getActiveSheet()->mergeCells("HV".$ligne.":HV".($ligne+2));
         $objPHPExcel->getActiveSheet()->getStyle("HV".$ligne.":HV".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HV'.$ligne, "Nombre de système de point d'eau  installé");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HV'.$ligne, "REALISATION NOMBRE CHAISE DU MAITRE");
         
         $objPHPExcel->getActiveSheet()->mergeCells("HW".$ligne.":HW".($ligne+2));
         $objPHPExcel->getActiveSheet()->getStyle("HW".$ligne.":HW".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HW'.$ligne, "PREVISION NOMBRE TABLES BANC ");
-        
-        $objPHPExcel->getActiveSheet()->mergeCells("HX".$ligne.":HX".($ligne+2));
-        $objPHPExcel->getActiveSheet()->getStyle("HX".$ligne.":HX".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HX'.$ligne, "REALISATION NOMBRE TABLES BANC ");
-        
-        $objPHPExcel->getActiveSheet()->mergeCells("HY".$ligne.":HY".($ligne+2));
-        $objPHPExcel->getActiveSheet()->getStyle("HY".$ligne.":HY".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HY'.$ligne, "PREVISION NOMBRE TABLES DU MAITRE ");
-        
-        $objPHPExcel->getActiveSheet()->mergeCells("HZ".$ligne.":HZ".($ligne+2));
-        $objPHPExcel->getActiveSheet()->getStyle("HZ".$ligne.":HZ".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HZ'.$ligne, "REALISATION NOMBRE TABLES DU MAITRE");
-        
-        $objPHPExcel->getActiveSheet()->mergeCells("IA".$ligne.":IA".($ligne+2));
-        $objPHPExcel->getActiveSheet()->getStyle("IA".$ligne.":IA".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('IA'.$ligne, "PREVISION NOMBRE CHAISE DU MAITRE");
-        
-        $objPHPExcel->getActiveSheet()->mergeCells("IB".$ligne.":IB".($ligne+2));
-        $objPHPExcel->getActiveSheet()->getStyle("IB".$ligne.":IB".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('IB'.$ligne, "REALISATION NOMBRE CHAISE DU MAITRE");
-        
-        $objPHPExcel->getActiveSheet()->mergeCells("IC".$ligne.":IC".($ligne+2));
-        $objPHPExcel->getActiveSheet()->getStyle("IC".$ligne.":IC".($ligne+2))->applyFromArray($styleTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('IC'.$ligne, "OBSERVATIONS SUR LES INDICATEURS");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HW'.$ligne, "OBSERVATIONS SUR LES INDICATEURS");
 
         $ligne++;
 
@@ -1225,73 +1225,73 @@ class Excel_bdd_construction extends REST_Controller
         $objPHPExcel->getActiveSheet()->mergeCells("GE".$ligne.":GF".$ligne);
         $objPHPExcel->getActiveSheet()->getStyle("GE".$ligne.":GF".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GE".$ligne, "Premier paiement batiment");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GE".$ligne, "Premier paiement");
 
         $objPHPExcel->getActiveSheet()->mergeCells("GG".$ligne.":GH".$ligne);
         $objPHPExcel->getActiveSheet()->getStyle("GG".$ligne.":GH".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GG".$ligne, "Deuxième paiement batiment");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GG".$ligne, "Deuxième paiement");
 
         $objPHPExcel->getActiveSheet()->mergeCells("GI".$ligne.":GJ".$ligne);
         $objPHPExcel->getActiveSheet()->getStyle("GI".$ligne.":GJ".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GI".$ligne, "Troisième paiement batiment");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GI".$ligne, "Troisième paiement");
 
         $objPHPExcel->getActiveSheet()->mergeCells("GK".$ligne.":GL".$ligne);
         $objPHPExcel->getActiveSheet()->getStyle("GK".$ligne.":GL".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GK".$ligne, "Quatrième paiement batiment");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GK".$ligne, "Quatrième paiement");
 
         $objPHPExcel->getActiveSheet()->mergeCells("GM".$ligne.":GN".$ligne);
         $objPHPExcel->getActiveSheet()->getStyle("GM".$ligne.":GN".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GM".$ligne, "Cinquième paiement batiment");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GM".$ligne, "Cinquième paiement");
 
 
-        $objPHPExcel->getActiveSheet()->mergeCells("GO".$ligne.":GQ".$ligne);
+       /* $objPHPExcel->getActiveSheet()->mergeCells("GO".$ligne.":GQ".$ligne);
         $objPHPExcel->getActiveSheet()->getStyle("GO".$ligne.":GQ".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GO".$ligne, "Taux d'avancement financier (%)");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GO".$ligne, "Taux d'avancement financier (%)");*/
 
-        $objPHPExcel->getActiveSheet()->mergeCells("GR".$ligne.":GS".$ligne);
-        $objPHPExcel->getActiveSheet()->getStyle("GR".$ligne.":GS".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->getActiveSheet()->mergeCells("GO".$ligne.":GP".$ligne);
+        $objPHPExcel->getActiveSheet()->getStyle("GO".$ligne.":GP".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GR".$ligne, "Premier paiement Latrine");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GO".$ligne, "Sixième paiement");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("GT".$ligne.":GU".$ligne);
-        $objPHPExcel->getActiveSheet()->getStyle("GT".$ligne.":GU".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->getActiveSheet()->mergeCells("GQ".$ligne.":GR".$ligne);
+        $objPHPExcel->getActiveSheet()->getStyle("GQ".$ligne.":GR".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GT".$ligne, "Deuxième paiement Latrine");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GQ".$ligne, "Septième paiement");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("GV".$ligne.":GW".$ligne);
-        $objPHPExcel->getActiveSheet()->getStyle("GV".$ligne.":GW".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->getActiveSheet()->mergeCells("GS".$ligne.":GT".$ligne);
+        $objPHPExcel->getActiveSheet()->getStyle("GS".$ligne.":GT".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GV".$ligne, "Troisième paiement Latrine");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GS".$ligne, "Huitème paiement");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("GX".$ligne.":GZ".$ligne);
+       /* $objPHPExcel->getActiveSheet()->mergeCells("GX".$ligne.":GZ".$ligne);
         $objPHPExcel->getActiveSheet()->getStyle("GX".$ligne.":GZ".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GX".$ligne, "Taux d'avancement financier (%)");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GX".$ligne, "Taux d'avancement financier (%)");*/
 
-        $objPHPExcel->getActiveSheet()->mergeCells("HA".$ligne.":HB".$ligne);
-        $objPHPExcel->getActiveSheet()->getStyle("HA".$ligne.":HB".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->getActiveSheet()->mergeCells("GU".$ligne.":GV".$ligne);
+        $objPHPExcel->getActiveSheet()->getStyle("GU".$ligne.":GV".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HA".$ligne, "Premier paiement mobilier");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GU".$ligne, "Neuvième paiement");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("HC".$ligne.":HD".$ligne);
-        $objPHPExcel->getActiveSheet()->getStyle("HC".$ligne.":HD".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->getActiveSheet()->mergeCells("GW".$ligne.":GX".$ligne);
+        $objPHPExcel->getActiveSheet()->getStyle("GW".$ligne.":GX".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HC".$ligne, "Deuxième paiement mobilier");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GW".$ligne, "Deuxième paiement");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("HE".$ligne.":HG".$ligne);
-        $objPHPExcel->getActiveSheet()->getStyle("HE".$ligne.":HG".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->getActiveSheet()->mergeCells("GY".$ligne.":HA".$ligne);
+        $objPHPExcel->getActiveSheet()->getStyle("GY".$ligne.":HA".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HE".$ligne, "Taux d'avancement financier (%)");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GY".$ligne, "Taux d'avancement financier (%)");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("HH".$ligne.":HH".($ligne+2));
-        $objPHPExcel->getActiveSheet()->getStyle("HH".$ligne.":HH".($ligne+2))->applyFromArray($stylesousTitre);
+        $objPHPExcel->getActiveSheet()->mergeCells("HB".$ligne.":HB".($ligne+1));
+        $objPHPExcel->getActiveSheet()->getStyle("HB".$ligne.":HB".($ligne+1))->applyFromArray($stylesousTitre);
         //$objPHPExcel->getActiveSheet()->getStyle("EP".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HH".$ligne, "Observation");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HB".$ligne, "Observation");
 
         $ligne++;
         //$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(FALSE);
@@ -1301,70 +1301,92 @@ class Excel_bdd_construction extends REST_Controller
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$ligne, "Zone Côtière:C01/C02/C03/ ou Zone Hauts plateaux Rurale HPR1/HPR2/HPR3/ ou Zone Hauts plateaux Urbaine:HPU1/HPU2/HPU3");
 
         $objPHPExcel->getActiveSheet()->getStyle("AV".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("AV".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AV'.$ligne, "Date début prévisionnelle de la formation");
 
         $objPHPExcel->getActiveSheet()->getStyle("AW".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("AW".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AW'.$ligne, "Date fin prévisionnelle formation");
 
         $objPHPExcel->getActiveSheet()->getStyle("AX".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("AX".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AX'.$ligne, "Date prévisionnelle de la restitution");
 
         $objPHPExcel->getActiveSheet()->getStyle("AY".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("AY".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AY'.$ligne, "Date début réelle de la formation");
 
         $objPHPExcel->getActiveSheet()->getStyle("AZ".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("AZ".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AZ'.$ligne, "Date fin réelle de la formation");
 
         $objPHPExcel->getActiveSheet()->getStyle("BA".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BA".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BA'.$ligne, "Date réelle de restitution");
 
         $objPHPExcel->getActiveSheet()->getStyle("BB".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BB'.$ligne, "Nombre prévisionnel   participant");
+       $objPHPExcel->getActiveSheet()->getStyle("BB".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BB'.$ligne, "Nombre prévisionnel participant");
 
         $objPHPExcel->getActiveSheet()->getStyle("BC".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BC".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BC'.$ligne, "Nombre de participant");
 
         $objPHPExcel->getActiveSheet()->getStyle("BD".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BD".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BD'.$ligne, "Nombre prévisionnel de femme participant");
 
         $objPHPExcel->getActiveSheet()->getStyle("BE".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BE".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BE'.$ligne, "Nombre réel de femme  participant");
 
         $objPHPExcel->getActiveSheet()->getStyle("BF".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BF".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BF'.$ligne, "Lieu de formation");
         
         $objPHPExcel->getActiveSheet()->getStyle("BG".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BG".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BG'.$ligne, "observations");
 
 
         $objPHPExcel->getActiveSheet()->getStyle("BH".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BH".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BH'.$ligne, "Date début prévisionnelle de la formation");
 
         $objPHPExcel->getActiveSheet()->getStyle("BI".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BI".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BI'.$ligne, "Date fin prévisionnelle formation");
 
         $objPHPExcel->getActiveSheet()->getStyle("BJ".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BJ".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BJ'.$ligne, "Date prévisionnelle de la restitution");
 
         $objPHPExcel->getActiveSheet()->getStyle("BK".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BK".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BK'.$ligne, "Date début réelle de la formation");
 
         $objPHPExcel->getActiveSheet()->getStyle("BL".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BL".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BL'.$ligne, "Date fin réelle de la formation");
 
         $objPHPExcel->getActiveSheet()->getStyle("BM".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BM".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BM'.$ligne, "Date réelle de restitution");
 
         $objPHPExcel->getActiveSheet()->getStyle("BN".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BN".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BN'.$ligne, "Nombre prévisionnel   participant");
 
         $objPHPExcel->getActiveSheet()->getStyle("BO".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BN".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BO'.$ligne, "Nombre de participant");
 
         $objPHPExcel->getActiveSheet()->getStyle("BP".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BP".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BP'.$ligne, "Nombre prévisionnel de femme  participant");
 
         $objPHPExcel->getActiveSheet()->getStyle("BQ".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BQ".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BQ'.$ligne, "Nombre réel de femme  participant ");
 
         $objPHPExcel->getActiveSheet()->getStyle("BR".$ligne)->applyFromArray($stylesousTitre);
@@ -1375,18 +1397,23 @@ class Excel_bdd_construction extends REST_Controller
 
 
         $objPHPExcel->getActiveSheet()->getStyle("BT".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BT".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BT'.$ligne, "Date début prévisionnelle de la formation");
 
         $objPHPExcel->getActiveSheet()->getStyle("BU".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BU".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BU'.$ligne, "Date fin prévisionnelle formation");
 
         $objPHPExcel->getActiveSheet()->getStyle("BV".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BV".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BV'.$ligne, "Date prévisionnelle de la restitution");
 
         $objPHPExcel->getActiveSheet()->getStyle("BW".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BW".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BW'.$ligne, "Date début réelle de la formation");
 
         $objPHPExcel->getActiveSheet()->getStyle("BX".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("BX".$ligne)->getAlignment()->setWrapText(true);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('BX'.$ligne, "Date fin réelle de la formation");
 
         $objPHPExcel->getActiveSheet()->getStyle("BY".$ligne)->applyFromArray($stylesousTitre);
@@ -1711,62 +1738,62 @@ class Excel_bdd_construction extends REST_Controller
         $objPHPExcel->getActiveSheet()->getStyle("GN".$ligne)->applyFromArray($stylesousTitre);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GN'.$ligne, "montant en Ar");
 
-        $objPHPExcel->getActiveSheet()->getStyle("GO".$ligne)->applyFromArray($stylesousTitre);
+        /*$objPHPExcel->getActiveSheet()->getStyle("GO".$ligne)->applyFromArray($stylesousTitre);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GO'.$ligne, "Anterieur");
         
         $objPHPExcel->getActiveSheet()->getStyle("GP".$ligne)->applyFromArray($stylesousTitre);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GP'.$ligne, "Période");
 
         $objPHPExcel->getActiveSheet()->getStyle("GQ".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GQ'.$ligne, "Cumulé");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GQ'.$ligne, "Cumulé");*/
         
+        $objPHPExcel->getActiveSheet()->getStyle("GO".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GO'.$ligne, "Date d'approbation");
+
+        $objPHPExcel->getActiveSheet()->getStyle("GP".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GP'.$ligne, "montant en Ar");
+        
+        $objPHPExcel->getActiveSheet()->getStyle("GQ".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GQ'.$ligne, "Date d'approbation");
+
         $objPHPExcel->getActiveSheet()->getStyle("GR".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GR'.$ligne, "Date d'approbation");
-
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GR'.$ligne, "montant en Ar");
+        
         $objPHPExcel->getActiveSheet()->getStyle("GS".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GS'.$ligne, "montant en Ar");
-        
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GS'.$ligne, "Date d'approbation");
+
         $objPHPExcel->getActiveSheet()->getStyle("GT".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GT'.$ligne, "Date d'approbation");
-
-        $objPHPExcel->getActiveSheet()->getStyle("GU".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GU'.$ligne, "montant en Ar");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GT'.$ligne, "montant en Ar");
         
-        $objPHPExcel->getActiveSheet()->getStyle("GV".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GV'.$ligne, "Date d'approbation");
-
-        $objPHPExcel->getActiveSheet()->getStyle("GW".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GW'.$ligne, "montant en Ar");
-        
-        $objPHPExcel->getActiveSheet()->getStyle("GX".$ligne)->applyFromArray($stylesousTitre);
+       /* $objPHPExcel->getActiveSheet()->getStyle("GX".$ligne)->applyFromArray($stylesousTitre);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GX'.$ligne, "Anterieur");
 
         $objPHPExcel->getActiveSheet()->getStyle("GY".$ligne)->applyFromArray($stylesousTitre);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GY'.$ligne, "Période");
 
         $objPHPExcel->getActiveSheet()->getStyle("GZ".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GZ'.$ligne, "Cumulé");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GZ'.$ligne, "Cumulé");*/
+        
+        $objPHPExcel->getActiveSheet()->getStyle("GU".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GU'.$ligne, "Date d'approbation");
+
+        $objPHPExcel->getActiveSheet()->getStyle("GV".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GV'.$ligne, "montant en Ar");
+        
+        $objPHPExcel->getActiveSheet()->getStyle("GW".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GW'.$ligne, "Date d'approbation");
+
+        $objPHPExcel->getActiveSheet()->getStyle("GX".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GX'.$ligne, "montant en Ar");
+        
+        $objPHPExcel->getActiveSheet()->getStyle("GY".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GY'.$ligne, "Anterieur");
+
+        $objPHPExcel->getActiveSheet()->getStyle("GZ".$ligne)->applyFromArray($stylesousTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('GZ'.$ligne, "Période");
         
         $objPHPExcel->getActiveSheet()->getStyle("HA".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HA'.$ligne, "Date d'approbation");
-
-        $objPHPExcel->getActiveSheet()->getStyle("HB".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HB'.$ligne, "montant en Ar");
-        
-        $objPHPExcel->getActiveSheet()->getStyle("HC".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HC'.$ligne, "Date d'approbation");
-
-        $objPHPExcel->getActiveSheet()->getStyle("HD".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HD'.$ligne, "montant en Ar");
-        
-        $objPHPExcel->getActiveSheet()->getStyle("HE".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HE'.$ligne, "Anterieur");
-
-        $objPHPExcel->getActiveSheet()->getStyle("HF".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HF'.$ligne, "Période");
-        
-        $objPHPExcel->getActiveSheet()->getStyle("HG".$ligne)->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HG'.$ligne, "Cumulé");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('HA'.$ligne, "Cumulé");
         
         //$objPHPExcel->getActiveSheet()->getStyle("GZ".$ligne)->applyFromArray($stylesousTitre);
         //$objPHPExcel->setActiveSheetIndex(0)->setCellValue('GZ'.$ligne, "% decaissement");
@@ -1888,11 +1915,11 @@ class Excel_bdd_construction extends REST_Controller
 
         $objPHPExcel->getActiveSheet()->getStyle("AC".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AB".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AC".$ligne, $value->montant_paiement_batiment_mpe1 + $value->montant_paiement_batiment_mpe2 + $value->montant_paiement_batiment_mpe3 + $value->montant_paiement_batiment_mpe4 +$value->montant_paiement_batiment_mpe5 + $value->montant_paiement_latrine_mpe1+ $value->montant_paiement_latrine_mpe2+ $value->montant_paiement_latrine_mpe3+ $value->montant_paiement_mobilier_mpe1+ $value->montant_paiement_mobilier_mpe2 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AC".$ligne, $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe);
 
         $objPHPExcel->getActiveSheet()->getStyle("AD".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AB".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AD".$ligne, (($value->montant_paiement_batiment_mpe1 + $value->montant_paiement_batiment_mpe2 + $value->montant_paiement_batiment_mpe3 + $value->montant_paiement_batiment_mpe4 +$value->montant_paiement_batiment_mpe5 + $value->montant_paiement_latrine_mpe1+ $value->montant_paiement_latrine_mpe2+ $value->montant_paiement_latrine_mpe3+ $value->montant_paiement_mobilier_mpe1+ $value->montant_paiement_mobilier_mpe2 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe)*100)/$value->soustotaldepense);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AD".$ligne, (($value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe)*100)/$value->soustotaldepense);
 
         $objPHPExcel->getActiveSheet()->getStyle("AE".$ligne)->applyFromArray($stylecontenu);
 
@@ -1912,11 +1939,11 @@ class Excel_bdd_construction extends REST_Controller
 
         $objPHPExcel->getActiveSheet()->getStyle("AI".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AG".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AI".$ligne, $value->montant_decaiss_fonct_feffi + $value->montant_paiement_batiment_mpe1 + $value->montant_paiement_batiment_mpe2 + $value->montant_paiement_batiment_mpe3 + $value->montant_paiement_batiment_mpe4 +$value->montant_paiement_batiment_mpe5 + $value->montant_paiement_latrine_mpe1+ $value->montant_paiement_latrine_mpe2+ $value->montant_paiement_latrine_mpe3+ $value->montant_paiement_mobilier_mpe1+ $value->montant_paiement_mobilier_mpe2 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AI".$ligne, $value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe);
 
         $objPHPExcel->getActiveSheet()->getStyle("AJ".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AG".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AJ".$ligne, $value->montant_convention - ($value->montant_decaiss_fonct_feffi + $value->montant_paiement_batiment_mpe1 + $value->montant_paiement_batiment_mpe2 + $value->montant_paiement_batiment_mpe3 + $value->montant_paiement_batiment_mpe4 +$value->montant_paiement_batiment_mpe5 + $value->montant_paiement_latrine_mpe1+ $value->montant_paiement_latrine_mpe2+ $value->montant_paiement_latrine_mpe3+ $value->montant_paiement_mobilier_mpe1+ $value->montant_paiement_mobilier_mpe2 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe));
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AJ".$ligne, $value->montant_convention - ($value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe));
 
 //Suivi Passation des marchés PR
 
@@ -2372,7 +2399,7 @@ class Excel_bdd_construction extends REST_Controller
 
         $objPHPExcel->getActiveSheet()->getStyle("ER".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-            $this->db ->select("(select sum(paiement_batiment_moe.montant_paiement) from paiement_batiment_moe,demande_batiment_moe, contrat_bureau_etude, convention_cisco_feffi_entete where paiement_batiment_moe.id_demande_batiment_moe=demande_batiment_moe.id and demande_batiment_moe.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and paiement_batiment_moe.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_batiment_moe",FALSE);
+           /* $this->db ->select("(select sum(paiement_batiment_moe.montant_paiement) from paiement_batiment_moe,demande_batiment_moe, contrat_bureau_etude, convention_cisco_feffi_entete where paiement_batiment_moe.id_demande_batiment_moe=demande_batiment_moe.id and demande_batiment_moe.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and paiement_batiment_moe.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_batiment_moe",FALSE);*/
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue("ER".$ligne, $value->montant_paiement_debut_moe +$value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe);
 
         $objPHPExcel->getActiveSheet()->getStyle("ES".$ligne)->applyFromArray($stylecontenu);
@@ -2533,207 +2560,207 @@ class Excel_bdd_construction extends REST_Controller
 
         $objPHPExcel->getActiveSheet()->getStyle("GE".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GE".$ligne, $value->date_approbation_batiment_mpe1);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GE".$ligne, $value->date_approbation_mpe1);
 
         $objPHPExcel->getActiveSheet()->getStyle("GF".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GF".$ligne, $value->montant_paiement_batiment_mpe1);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GF".$ligne, $value->montant_paiement_mpe1);
 
         $objPHPExcel->getActiveSheet()->getStyle("GG".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GG".$ligne, $value->date_approbation_batiment_mpe2);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GG".$ligne, $value->date_approbation_mpe2);
 
         $objPHPExcel->getActiveSheet()->getStyle("GH".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GH".$ligne, $value->montant_paiement_batiment_mpe2);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GH".$ligne, $value->montant_paiement_mpe2);
 
         $objPHPExcel->getActiveSheet()->getStyle("GI".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GI".$ligne, $value->date_approbation_batiment_mpe3);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GI".$ligne, $value->date_approbation_mpe3);
 
         $objPHPExcel->getActiveSheet()->getStyle("GJ".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GJ".$ligne, $value->montant_paiement_batiment_mpe3);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GJ".$ligne, $value->montant_paiement_mpe3);
 
         $objPHPExcel->getActiveSheet()->getStyle("GK".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GK".$ligne, $value->date_approbation_batiment_mpe4);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GK".$ligne, $value->date_approbation_mpe4);
 
         $objPHPExcel->getActiveSheet()->getStyle("GL".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GL".$ligne, $value->montant_paiement_batiment_mpe4);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GL".$ligne, $value->montant_paiement_mpe4);
 
         $objPHPExcel->getActiveSheet()->getStyle("GM".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GM".$ligne, $value->date_approbation_batiment_mpe5);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GM".$ligne, $value->date_approbation_mpe5);
 
         $objPHPExcel->getActiveSheet()->getStyle("GN".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GN".$ligne, $value->montant_paiement_batiment_mpe5);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GN".$ligne, $value->montant_paiement_mpe5);
 
-        $objPHPExcel->getActiveSheet()->getStyle("GO".$ligne)->applyFromArray($stylecontenu);
+       /* $objPHPExcel->getActiveSheet()->getStyle("GO".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GO".$ligne, $value->anterieur_batiment_mpe);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GO".$ligne, $value->anterieur_mpe);
 
         $objPHPExcel->getActiveSheet()->getStyle("GP".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GP".$ligne, $value->periode_batiment_mpe);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GP".$ligne, $value->periode_mpe);
 
         $objPHPExcel->getActiveSheet()->getStyle("GQ".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GQ".$ligne, $value->cumul_batiment_mpe);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GQ".$ligne, $value->cumul_mpe);*/
+
+        $objPHPExcel->getActiveSheet()->getStyle("GO".$ligne)->applyFromArray($stylecontenu);
+        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GO".$ligne, $value->date_approbation_mpe6);
+
+        $objPHPExcel->getActiveSheet()->getStyle("GP".$ligne)->applyFromArray($stylecontenu);
+        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GP".$ligne, $value->montant_paiement_mpe6);
+
+        $objPHPExcel->getActiveSheet()->getStyle("GQ".$ligne)->applyFromArray($stylecontenu);
+        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GQ".$ligne, $value->date_approbation_mpe7);
 
         $objPHPExcel->getActiveSheet()->getStyle("GR".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GR".$ligne, $value->date_approbation_latrine_mpe1);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GR".$ligne, $value->montant_paiement_mpe7);
 
         $objPHPExcel->getActiveSheet()->getStyle("GS".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GS".$ligne, $value->montant_paiement_latrine_mpe1);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GS".$ligne, $value->date_approbation_mpe8);
 
         $objPHPExcel->getActiveSheet()->getStyle("GT".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GT".$ligne, $value->date_approbation_latrine_mpe2);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GT".$ligne, $value->montant_paiement_mpe8);
 
-        $objPHPExcel->getActiveSheet()->getStyle("GU".$ligne)->applyFromArray($stylecontenu);
+        /*$objPHPExcel->getActiveSheet()->getStyle("GX".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GU".$ligne, $value->montant_paiement_latrine_mpe2);
-
-        $objPHPExcel->getActiveSheet()->getStyle("GV".$ligne)->applyFromArray($stylecontenu);
-        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GV".$ligne, $value->date_approbation_latrine_mpe3);
-
-        $objPHPExcel->getActiveSheet()->getStyle("GW".$ligne)->applyFromArray($stylecontenu);
-        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GW".$ligne, $value->montant_paiement_latrine_mpe3);
-
-        $objPHPExcel->getActiveSheet()->getStyle("GX".$ligne)->applyFromArray($stylecontenu);
-        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GX".$ligne, $value->anterieur_latrine_mpe);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GX".$ligne, $value->anterieur_mpe);
 
         $objPHPExcel->getActiveSheet()->getStyle("GY".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GY".$ligne, $value->periode_latrine_mpe);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GY".$ligne, $value->periode_mpe);
 
         $objPHPExcel->getActiveSheet()->getStyle("GZ".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GZ".$ligne, $value->cumul_latrine_mpe);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GZ".$ligne, $value->cumul_mpe);*/
+
+        $objPHPExcel->getActiveSheet()->getStyle("GU".$ligne)->applyFromArray($stylecontenu);
+        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GU".$ligne, $value->date_approbation_mpe9);
+
+        $objPHPExcel->getActiveSheet()->getStyle("GV".$ligne)->applyFromArray($stylecontenu);
+        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GV".$ligne, $value->montant_paiement_mpe9);
+
+        $objPHPExcel->getActiveSheet()->getStyle("GW".$ligne)->applyFromArray($stylecontenu);
+        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GW".$ligne, $value->date_approbation_mpe10);
+
+        $objPHPExcel->getActiveSheet()->getStyle("GX".$ligne)->applyFromArray($stylecontenu);
+        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GX".$ligne, $value->montant_paiement_mpe10);
+
+        $objPHPExcel->getActiveSheet()->getStyle("GY".$ligne)->applyFromArray($stylecontenu);
+        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GY".$ligne, $value->anterieur_mpe);
+
+        $objPHPExcel->getActiveSheet()->getStyle("GZ".$ligne)->applyFromArray($stylecontenu);
+        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("GZ".$ligne, $value->periode_mpe);
 
         $objPHPExcel->getActiveSheet()->getStyle("HA".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HA".$ligne, $value->date_approbation_mobilier_mpe1);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HA".$ligne, $value->cumul_mpe);
 
         $objPHPExcel->getActiveSheet()->getStyle("HB".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HB".$ligne, $value->montant_paiement_mobilier_mpe1);
+        //$objPHPExcel->setActiveSheetIndex(0)->setCellValue("HH".$ligne, $value->);
 
         $objPHPExcel->getActiveSheet()->getStyle("HC".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HC".$ligne, $value->date_approbation_mobilier_mpe2);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HC".$ligne, $value->montant_transfert_reliquat);
 
         $objPHPExcel->getActiveSheet()->getStyle("HD".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HD".$ligne, $value->montant_paiement_mobilier_mpe2);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HD".$ligne, $value->objet_utilisation_reliquat);
 
         $objPHPExcel->getActiveSheet()->getStyle("HE".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HE".$ligne, $value->anterieur_mobilier_mpe);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HE".$ligne, $value->situation_utilisation_reliquat);
 
         $objPHPExcel->getActiveSheet()->getStyle("HF".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HF".$ligne, $value->periode_mobilier_mpe);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HF".$ligne, $value->observation_reliquat);
 
         $objPHPExcel->getActiveSheet()->getStyle("HG".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HG".$ligne, $value->cumul_mobilier_mpe);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HG".$ligne, $value->prev_nbr_salle);
 
         $objPHPExcel->getActiveSheet()->getStyle("HH".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        //$objPHPExcel->setActiveSheetIndex(0)->setCellValue("HH".$ligne, $value->);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HH".$ligne, $value->nbr_salle_const_indicateur);
 
         $objPHPExcel->getActiveSheet()->getStyle("HI".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HI".$ligne, $value->montant_transfert_reliquat);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HI".$ligne, $value->prev_beneficiaire);
 
         $objPHPExcel->getActiveSheet()->getStyle("HJ".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HJ".$ligne, $value->objet_utilisation_reliquat);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HJ".$ligne, $value->nbr_beneficiaire_indicateur);
 
         $objPHPExcel->getActiveSheet()->getStyle("HK".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HK".$ligne, $value->situation_utilisation_reliquat);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HK".$ligne, $value->prev_nbr_ecole);
 
         $objPHPExcel->getActiveSheet()->getStyle("HL".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HL".$ligne, $value->observation_reliquat);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HL".$ligne, $value->nbr_ecole_indicateur);
 
         $objPHPExcel->getActiveSheet()->getStyle("HM".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HM".$ligne, $value->prev_nbr_salle);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HM".$ligne, $value->prev_nbr_box_latrine);
 
         $objPHPExcel->getActiveSheet()->getStyle("HN".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HN".$ligne, $value->nbr_salle_const_indicateur);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HN".$ligne, $value->nbr_box_indicateur);
 
         $objPHPExcel->getActiveSheet()->getStyle("HO".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HO".$ligne, $value->prev_beneficiaire);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HO".$ligne, $value->prev_nbr_point_eau);
 
         $objPHPExcel->getActiveSheet()->getStyle("HP".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HP".$ligne, $value->nbr_beneficiaire_indicateur);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HP".$ligne, $value->nbr_point_eau_indicateur);
 
         $objPHPExcel->getActiveSheet()->getStyle("HQ".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HQ".$ligne, $value->prev_nbr_ecole);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HQ".$ligne, $value->prev_nbr_table_banc);
 
         $objPHPExcel->getActiveSheet()->getStyle("HR".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HR".$ligne, $value->nbr_ecole_indicateur);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HR".$ligne, $value->nbr_banc_indicateur);
 
         $objPHPExcel->getActiveSheet()->getStyle("HS".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HS".$ligne, $value->prev_nbr_box_latrine);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HS".$ligne, $value->prev_nbr_table_maitre);
 
         $objPHPExcel->getActiveSheet()->getStyle("HT".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HT".$ligne, $value->nbr_box_indicateur);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HT".$ligne, $value->nbr_table_maitre_indicateur);
 
         $objPHPExcel->getActiveSheet()->getStyle("HU".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HU".$ligne, $value->prev_nbr_point_eau);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HU".$ligne, $value->prev_nbr_chaise_maitre);
 
         $objPHPExcel->getActiveSheet()->getStyle("HV".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HV".$ligne, $value->nbr_point_eau_indicateur);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HV".$ligne, $value->nbr_chaise_indicateur);
 
         $objPHPExcel->getActiveSheet()->getStyle("HW".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HW".$ligne, $value->prev_nbr_table_banc);
-
-        $objPHPExcel->getActiveSheet()->getStyle("HX".$ligne)->applyFromArray($stylecontenu);
-        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HX".$ligne, $value->nbr_banc_indicateur);
-
-        $objPHPExcel->getActiveSheet()->getStyle("HY".$ligne)->applyFromArray($stylecontenu);
-        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HY".$ligne, $value->prev_nbr_table_maitre);
-
-        $objPHPExcel->getActiveSheet()->getStyle("HZ".$ligne)->applyFromArray($stylecontenu);
-        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HZ".$ligne, $value->nbr_table_maitre_indicateur);
-
-        $objPHPExcel->getActiveSheet()->getStyle("IA".$ligne)->applyFromArray($stylecontenu);
-        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("IA".$ligne, $value->prev_nbr_chaise_maitre);
-
-        $objPHPExcel->getActiveSheet()->getStyle("IB".$ligne)->applyFromArray($stylecontenu);
-        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("IB".$ligne, $value->nbr_chaise_indicateur);
-
-        $objPHPExcel->getActiveSheet()->getStyle("IC".$ligne)->applyFromArray($stylecontenu);
-        //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("IC".$ligne, $value->observation_indicateur);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("HW".$ligne, $value->observation_indicateur);
 
             $ligne++;
         }

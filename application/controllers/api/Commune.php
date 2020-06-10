@@ -41,7 +41,7 @@ class Commune extends REST_Controller {
                     $data[$key]['nom'] = $value->nom;
                     $data[$key]['district'] = $district;
                 }
-            }
+            }else $data =array();  
         }elseif ($id) 
         {
             $data = array();

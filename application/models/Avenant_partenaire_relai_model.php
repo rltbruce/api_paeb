@@ -26,10 +26,11 @@ class Avenant_partenaire_relai_model extends CI_Model {
     public function _set($avenant_partenaire_relai) {
         return array(
 
-            'intitule' => $avenant_partenaire_relai['intitule'],
+            'description' => $avenant_partenaire_relai['description'],
             'ref_avenant'    => $avenant_partenaire_relai['ref_avenant'],
-            'montant_avenant'   => $avenant_partenaire_relai['montant_avenant'],
+            'montant'   => $avenant_partenaire_relai['montant'],
             'date_signature' => $avenant_partenaire_relai['date_signature'],
+            'validation' => $avenant_partenaire_relai['validation'],
             'id_contrat_partenaire_relai' => $avenant_partenaire_relai['id_contrat_partenaire_relai']                      
         );
     }
@@ -82,6 +83,53 @@ class Avenant_partenaire_relai_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_contrat_partenaire_relai", $id_contrat_partenaire_relai)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findavenantByContrat($id_contrat_partenaire_relai) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_partenaire_relai", $id_contrat_partenaire_relai)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findavenantvalideByContrat($id_contrat_partenaire_relai) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_partenaire_relai", $id_contrat_partenaire_relai)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findavenantinvalideByContrat($id_contrat_partenaire_relai) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_partenaire_relai", $id_contrat_partenaire_relai)
+                        ->where("validation", 0)
                         ->order_by('id')
                         ->get()
                         ->result();

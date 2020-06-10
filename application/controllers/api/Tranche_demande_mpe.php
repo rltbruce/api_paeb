@@ -46,10 +46,11 @@ class Tranche_demande_mpe extends REST_Controller {
         } 
         else 
         {
-            $menu = $this->Tranche_demande_mpeManager->findAll();
-            if ($menu) 
+            $tmp = $this->Tranche_demande_mpeManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
@@ -57,7 +58,7 @@ class Tranche_demande_mpe extends REST_Controller {
                     $data[$key]['periode'] = $value->periode;                    
                     $data[$key]['pourcentage'] = $value->pourcentage;
                     $data[$key]['description'] = $value->description;
-                }
+                }*/
             } 
                 else
                     $data = array();

@@ -134,5 +134,16 @@ class Feffi_model extends CI_Model {
             return null;
         }                 
     }
+    public function findByNom($nom) {
+        $requete="select 
+                        feffi.id as id, ecole.id_zone_subvention as id_zone_subvention,ecole.id_acces_zone as id_acces_zone 
+
+                        from feffi inner join ecole on ecole.id=feffi.id_ecole 
+
+                        where lower(feffi.denomination)='".$nom."'";
+
+        $query = $this->db->query($requete);
+        return $query->result();                
+    }
 
 }

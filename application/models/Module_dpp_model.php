@@ -25,7 +25,7 @@ class Module_dpp_model extends CI_Model {
     }
     public function _set($module_dpp) {
         return array( 
-            'id' => $module_dpp['id'],
+            //'id' => $module_dpp['id'],
             'date_debut_previ_form' => $module_dpp['date_debut_previ_form'],
             'date_fin_previ_form'   => $module_dpp['date_fin_previ_form'],
             'date_previ_resti'    => $module_dpp['date_previ_resti'],
@@ -113,6 +113,30 @@ class Module_dpp_model extends CI_Model {
         }else{
             return null;
         }                 
+    }
+    public function getmoduleBycontrat($id_contrat_partenaire_relai)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_contrat_partenaire_relai',$id_contrat_partenaire_relai)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
+
+    public function findByRef_convention($ref_convention) {
+        $requete="select module_dpp.* 
+                    from module_dpp 
+                    inner join contrat_partenaire_relai on contrat_partenaire_relai.id=module_dpp.id_contrat_partenaire_relai
+                    inner join convention_cisco_feffi_entete on convention_cisco_feffi_entete.id=contrat_partenaire_relai.id_convention_entete 
+                    where lower(convention_cisco_feffi_entete.ref_convention)='".$ref_convention."'";
+        $query = $this->db->query($requete);
+        return $query->result();                
     }
 
     /*    public function findAllBycontrat($id_contrat_partenaire_relai) {               

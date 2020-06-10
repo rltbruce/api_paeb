@@ -26,7 +26,7 @@ class Fokontany extends REST_Controller {
                 {
 					// Récupérationdescription commune
                     $commune = array();
-                    $commune = $this->CommuneManager->findByIdOLD($value->id_commune);
+                    $commune = $this->CommuneManager->findById($value->id_commune);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['nom'] = $value->nom;

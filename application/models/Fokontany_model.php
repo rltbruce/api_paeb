@@ -126,5 +126,19 @@ class Fokontany_model extends CI_Model {
             return $q->row();
         }
     }
+    public function findAllByCommune($id_commune) 
+    {   // Selection fokontany par id_commune
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->order_by('nom')
+                        ->where("id_commune", $id_commune)
+                        ->get()
+                        ->result();
+        if($result) {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 }
 ?>

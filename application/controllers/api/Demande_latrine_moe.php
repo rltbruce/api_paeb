@@ -54,6 +54,35 @@ class Demande_latrine_moe extends REST_Controller {
         }
         elseif ($menu=="getdemandevalideBycontrat")
         {
+            $tmp = $this->Demande_latrine_moeManager->finddemandevalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_latrine_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    //$data[$key]['latrine_construction'] = $latrine_construction;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandevalidebcafBycontrat")
+        {
             $tmp = $this->Demande_latrine_moeManager->finddemandevalidebcafBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
             {
@@ -105,6 +134,66 @@ class Demande_latrine_moe extends REST_Controller {
                     //$data[$key]['latrine_construction'] = $latrine_construction;
                     $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
 
+                }
+            } 
+                else
+                    $data = array();
+        }
+
+
+
+
+
+        elseif ($menu=='getdemandeemidpfiBycontrat') //mande
+        {
+            $tmp = $this->Demande_latrine_moeManager->finddemandeemidpfiByIdcontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_bureau_etude= array();
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_d_fin_travaux_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+                }
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getdemandecreerBycontrat') //mande
+        {
+            $tmp = $this->Demande_latrine_moeManager->findcreerByIdcontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $contrat_bureau_etude= array();
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_demande_latrine_moe = $this->Tranche_demande_latrine_moeManager->findById($value->id_tranche_demande_latrine_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_d_fin_travaux_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
                 }
             } 
                 else

@@ -60,6 +60,11 @@ class Situation_participant_emies_model extends CI_Model {
     }
 
 
+    public function findByFonction($libelle) {
+        $requete="select * from situation_participant_emies where lower(libelle)='".$libelle."'";
+        $query = $this->db->query($requete);
+        return $query->result();                
+    }
 
 
 }

@@ -96,4 +96,19 @@ class Participant_gfpc_model extends CI_Model {
             return $q->row();
         }
     }
+    public function getparticipantBymodulefonction($id_module_gfpc,$id_fonction) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_module_gfpc", $id_module_gfpc)
+                        ->where("id_situation_participant_gfpc", $id_fonction)
+                        ->order_by('nom')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
 }

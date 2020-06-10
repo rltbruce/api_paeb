@@ -33,7 +33,10 @@ class Ecole_model extends CI_Model {
             'altitude'      =>      $ecole['altitude'],
             'id_zone_subvention' => $ecole['id_zone_subvention'],
             'id_acces_zone' => $ecole['id_acces_zone'],
-            'id_fokontany'    =>    $ecole['id_fokontany']                       
+            'id_fokontany'    =>    $ecole['id_fokontany'] ,
+            'id_cisco'    =>    $ecole['id_cisco'],
+            'id_commune'    =>    $ecole['id_commune'],
+            'id_zap'    =>    $ecole['id_zap']                         
         );
     }
     public function delete($id) {
@@ -82,6 +85,23 @@ class Ecole_model extends CI_Model {
             return null;
         }                 
     }
+    public function findByzap($id_zap) {               
+        $result =  $this->db->select('ecole.*')
+                        ->from($this->table)
+                        ->join('fokontany','fokontany.id=ecole.id_fokontany')
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->join('zap_commune','zap_commune.id_commune=commune.id')
+                        ->where('zap_commune.id_zap',$id_zap)
+                        ->order_by('ecole.description')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findByIdZone($id)  {
         $this->db->select('ecole.id as id,ecole.code as code,ecole.description as description,zone_subvention.libelle as libelle_zone,acces_zone.libelle as libelle_acces,zone_subvention.id as id_zone,acces_zone.id as id_acces')
         ->where("ecole.id", $id)
@@ -95,13 +115,34 @@ class Ecole_model extends CI_Model {
 
     public function findBycisco($id_cisco)
     {               
-        $result =  $this->db->select('ecole.code as code, ecole.description as description, ecole.lieu as lieu, ecole.latitude as latitude, ecole.id as id, ecole.longitude as longitude, ecole.altitude as altitude, ecole.id_fokontany as id_fokontany, ecole.id_zone_subvention as id_zone_subvention, ecole.id_acces_zone as id_acces_zone')
+        $result =  $this->db->select('ecole.*')
                         ->from($this->table)
                         ->join('fokontany','fokontany.id=ecole.id_fokontany')
                         ->join('commune','commune.id=fokontany.id_commune')
                         ->join('district','district.id=commune.id_district')
                         ->join('cisco','cisco.id_district=district.id')
                         ->where('cisco.id',$id_cisco)
+                        ->order_by('ecole.code')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    } 
+
+    public function findByfiltre($requete)
+    {               
+        $result =  $this->db->select('ecole.*')
+                        ->from($this->table)
+                        ->join('fokontany','fokontany.id=ecole.id_fokontany')
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->join('district','district.id=commune.id_district')
+                        ->join('cisco','cisco.id_district=district.id')
+                        ->join('region','region.id=district.id_region')
+                        ->where($requete)
                         ->order_by('ecole.code')
                         ->get()
                         ->result();

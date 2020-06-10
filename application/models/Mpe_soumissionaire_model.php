@@ -102,4 +102,11 @@ class Mpe_soumissionaire_model extends CI_Model {
         }                 
     }
 
+
+    public function getmpesoumissionaireBypassationpres($id_passation_marches,$id_prestataire) {
+        $requete="select * from mpe_soumissionaire where id_passation_marches='".$id_passation_marches."' and id_prestataire='".$id_prestataire."'";
+        $query = $this->db->query($requete);
+        return $query->result();                
+    }
+
 }

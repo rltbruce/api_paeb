@@ -35,6 +35,7 @@ class Rapport_mensuel extends REST_Controller {
                     $data[$key]['date_livraison'] = $value->date_livraison;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['numero'] = $value->numero;
                     $data[$key]['contrat_be'] = $contrat_be;
                 }
             } 
@@ -56,6 +57,7 @@ class Rapport_mensuel extends REST_Controller {
                     $data[$key]['date_livraison'] = $value->date_livraison;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['numero'] = $value->numero;
                     $data[$key]['contrat_be'] = $contrat_be;
                 }
             } 
@@ -76,6 +78,7 @@ class Rapport_mensuel extends REST_Controller {
                     $data[$key]['date_livraison'] = $value->date_livraison;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['numero'] = $value->numero;
                     $data[$key]['contrat_be'] = $contrat_be;
                 }
             } 
@@ -152,6 +155,7 @@ class Rapport_mensuel extends REST_Controller {
             //$data['fichier'] = $rapport_mensuel->fichier;
             $data['date_livraison'] = $rapport_mensuel->date_livraison;
             $data['observation'] = $rapport_mensuel->observation;
+            $data['numero'] = $rapport_mensuel->numero;
             $data['contrat_be'] = $contrat_be;
         } 
         else 
@@ -168,6 +172,7 @@ class Rapport_mensuel extends REST_Controller {
                     //$data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_livraison'] = $value->date_livraison;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['numero'] = $value->numero;
                     $data[$key]['contrat_be'] = $contrat_be;
                 }
             } 
@@ -201,6 +206,7 @@ class Rapport_mensuel extends REST_Controller {
                     //'fichier' => $this->post('fichier'),
                     'date_livraison' => $this->post('date_livraison'),
                     'observation' => $this->post('observation'),
+                    'numero' => $this->post('numero'),
                     'id_contrat_bureau_etude' => $this->post('id_contrat_bureau_etude'),
                     'validation' => $this->post('validation')
                 );
@@ -231,6 +237,7 @@ class Rapport_mensuel extends REST_Controller {
                     //'fichier' => $this->post('fichier'),
                     'date_livraison' => $this->post('date_livraison'),
                     'observation' => $this->post('observation'),
+                    'numero' => $this->post('numero'),
                     'id_contrat_bureau_etude' => $this->post('id_contrat_bureau_etude'),
                     'validation' => $this->post('validation')
                 );

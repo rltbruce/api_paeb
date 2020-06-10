@@ -29,10 +29,7 @@ class Zap_model extends CI_Model {
 		// Affectation des valeurs
         return array(
             'code'       =>  $zap['code'],
-            'nom'        =>  $zap['nom'],
-            'latitude'   =>  $zap['latitude'],
-            'longitude'  =>  $zap['longitude'],
-            'id_commune' =>  $zap['id_commune']                       
+            'nom'        =>  $zap['nom']                      
         );
     }
     public function delete($id) {

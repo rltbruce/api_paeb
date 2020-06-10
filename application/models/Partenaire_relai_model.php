@@ -62,4 +62,10 @@ class Partenaire_relai_model extends CI_Model {
         }
     }
 
+    public function findByNom($nom) {
+        $requete="select * from partenaire_relai where lower(nom)='".$nom."'";
+        $query = $this->db->query($requete);
+        return $query->result();                
+    }
+
 }

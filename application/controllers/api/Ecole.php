@@ -14,6 +14,9 @@ class Ecole extends REST_Controller {
         $this->load->model('zone_subvention_model', 'Zone_subventionManager');
         $this->load->model('acces_zone_model', 'Acces_zoneManager');
         $this->load->model('cisco_model', 'CiscoManager');
+        $this->load->model('commune_model', 'CommuneManager');
+        $this->load->model('zap_model', 'ZapManager');
+        $this->load->model('region_model', 'RegionManager');
     }
 
     public function index_get() 
@@ -23,8 +26,64 @@ class Ecole extends REST_Controller {
         $menus = $this->get('menus');
         $id_cisco = $this->get('id_cisco');
         $id_commune = $this->get('id_commune');
+        $id_zap = $this->get('id_zap');
+        $id_region = $this->get('id_region');
+        $id_ecole = $this->get('id_ecole');
             
-        if ($menus=='getecoleBycommune') 
+        if ($menus=='getecoleByfiltre') 
+        {   $data = array();
+            $tmp = $this->EcoleManager->findByfiltre($this->generer_requete($id_region,$id_cisco,$id_commune,$id_ecole,$id_zap));
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    
+                    $fokontany = $this->FokontanyManager->findById($value->id_fokontany);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $commune = $this->CommuneManager->findById($value->id_commune);
+                    //$region = $this->RegionManager->findByIdcisco($value->id_cisco);
+                    $zap = $this->ZapManager->findById($value->id_zap);
+                    $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
+                    $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['lieu'] = $value->lieu;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['latitude'] = $value->latitude;
+                    $data[$key]['longitude'] = $value->longitude;
+                    $data[$key]['altitude'] = $value->altitude;
+                    $data[$key]['zone_subvention'] = $zone_subvention;
+                    $data[$key]['acces_zone'] = $acces_zone;
+                    $data[$key]['fokontany'] = $fokontany;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['commune'] = $commune;
+                    $data[$key]['zap'] = $zap;
+                    //$data[$key]['region'] = $region;
+                }
+            }
+        }
+        elseif ($menus=='getecoleByzap') 
+        {   $data = array();
+            $tmp = $this->EcoleManager->findByzap($id_zap);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
+                    $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['lieu'] = $value->lieu;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['latitude'] = $value->latitude;
+                    $data[$key]['longitude'] = $value->longitude;
+                    $data[$key]['altitude'] = $value->altitude;
+                    $data[$key]['zone_subvention'] = $zone_subvention;
+                    $data[$key]['acces_zone'] = $acces_zone;
+                }
+            }
+        }
+        elseif ($menus=='getecoleBycommune') 
         {   $data = array();
             $tmp = $this->EcoleManager->findBycommune($id_commune);
             if ($tmp) 
@@ -54,6 +113,10 @@ class Ecole extends REST_Controller {
                 {
                     $fokontany = array();
                     $fokontany = $this->FokontanyManager->findById($value->id_fokontany);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $commune = $this->CommuneManager->findById($value->id_commune);
+                    $region = $this->RegionManager->findByIdcisco($value->id_cisco);
+                    $zap = $this->ZapManager->findById($value->id_zap);
                     $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
                     $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
                     $data[$key]['id'] = $value->id;
@@ -66,6 +129,10 @@ class Ecole extends REST_Controller {
                     $data[$key]['zone_subvention'] = $zone_subvention;
                     $data[$key]['acces_zone'] = $acces_zone;
                     $data[$key]['fokontany'] = $fokontany;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['commune'] = $commune;
+                    $data[$key]['zap'] = $zap;
+                    $data[$key]['region'] = $region;
                 }
             }
         }
@@ -80,6 +147,9 @@ class Ecole extends REST_Controller {
                     $fokontany = $this->FokontanyManager->findById($value->id_fokontany);
                     $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
                     $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $commune = $this->CommuneManager->findById($value->id_commune);
+                    $zap = $this->ZapManager->findById($value->id_zap);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['lieu'] = $value->lieu;
@@ -90,6 +160,9 @@ class Ecole extends REST_Controller {
                     $data[$key]['zone_subvention'] = $zone_subvention;
                     $data[$key]['acces_zone'] = $acces_zone;
                     $data[$key]['fokontany'] = $fokontany;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['commune'] = $commune;
+                    $data[$key]['zap'] = $zap;
                 }
             }
         }
@@ -100,6 +173,9 @@ class Ecole extends REST_Controller {
             $fokontany = $this->FokontanyManager->findById($ecole->id_fokontany);
             $zone_subvention = $this->Zone_subventionManager->findById($ecole->id_zone_subvention);
             $acces_zone = $this->Acces_zoneManager->findById($ecole->id_acces_zone);
+            $cisco = $this->CiscoManager->findById($ecole->id_cisco);
+            $commune = $this->CommuneManager->findById($ecole->id_commune);
+            $zap = $this->ZapManager->findById($ecole->id_zap);
             $data['id'] = $ecole->id;
             $data['code'] = $ecole->code;
             $data['lieu'] = $ecole->lieu;
@@ -110,6 +186,9 @@ class Ecole extends REST_Controller {
             $data['zone_subvention'] = $zone_subvention;
             $data['acces_zone'] = $acces_zone;
             $data['fokontany'] = $fokontany;
+            $data['cisco'] = $cisco;
+            $data['commune'] = $commune;
+            $data['zap'] = $zap;
         } 
         else 
         {
@@ -122,6 +201,9 @@ class Ecole extends REST_Controller {
                     $fokontany = $this->FokontanyManager->findById($value->id_fokontany);
                     $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
                     $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $commune = $this->CommuneManager->findById($value->id_commune);
+                    $zap = $this->ZapManager->findById($value->id_zap);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['lieu'] = $value->lieu;
@@ -132,6 +214,9 @@ class Ecole extends REST_Controller {
                     $data[$key]['zone_subvention'] = $zone_subvention;
                     $data[$key]['acces_zone'] = $acces_zone;
                     $data[$key]['fokontany'] = $fokontany;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['commune'] = $commune;
+                    $data[$key]['zap'] = $zap;
                 }
             } 
                 else
@@ -168,7 +253,10 @@ class Ecole extends REST_Controller {
                     'altitude' => $this->post('altitude'),
                     'id_zone_subvention' => $this->post('id_zone_subvention'),
                     'id_acces_zone' => $this->post('id_acces_zone'),
-                    'id_fokontany' => $this->post('id_fokontany')
+                    'id_fokontany' => $this->post('id_fokontany'),
+                    'id_cisco' => $this->post('id_cisco'),
+                    'id_commune' => $this->post('id_commune'),
+                    'id_zap' => $this->post('id_zap')
                 );
                 if (!$data) {
                     $this->response([
@@ -201,7 +289,10 @@ class Ecole extends REST_Controller {
                     'altitude' => $this->post('altitude'),
                     'id_zone_subvention' => $this->post('id_zone_subvention'),
                     'id_acces_zone' => $this->post('id_acces_zone'),
-                    'id_fokontany' => $this->post('id_fokontany')
+                    'id_fokontany' => $this->post('id_fokontany'),
+                    'id_cisco' => $this->post('id_cisco'),
+                    'id_commune' => $this->post('id_commune'),
+                    'id_zap' => $this->post('id_zap')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -247,6 +338,36 @@ class Ecole extends REST_Controller {
                         ], REST_Controller::HTTP_OK);
             }
         }        
+    }
+
+
+    public function generer_requete($id_region,$id_cisco,$id_commune,$id_ecole,$id_zap)
+    {            
+        
+            $requete = "region.id='".$id_region."'" ;
+           
+
+            if (($id_cisco!='*')&&($id_cisco!='undefined')&&($id_cisco!='null')) 
+            {
+                $requete = $requete." AND ecole.id_cisco='".$id_cisco."'" ;
+            }
+
+            if (($id_commune!='*')&&($id_commune!='undefined')&&($id_commune!='null')) 
+            {
+                $requete = $requete." AND ecole.id_commune='".$id_commune."'" ;
+            }
+
+            if (($id_ecole!='*')&&($id_ecole!='undefined')&&($id_ecole!='null')) 
+            {
+                $requete = $requete." AND ecole.id='".$id_ecole."'" ;
+            }
+
+            if (($id_zap!='*')&&($id_zap!='undefined')&&($id_zap!='null')) 
+            {
+                $requete = $requete." AND ecole.id_zap='".$id_zap."'" ;
+            }
+            
+        return $requete ;
     }
 }
 /* End of file controllername.php */

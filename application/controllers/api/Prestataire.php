@@ -29,10 +29,11 @@ class Prestataire extends REST_Controller {
         } 
         else 
         {
-            $menu = $this->PrestataireManager->findAll();
-            if ($menu) 
+            $tmp = $this->PrestataireManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $district = array();
                     $data[$key]['id'] = $value->id;
@@ -41,7 +42,7 @@ class Prestataire extends REST_Controller {
                     $data[$key]['nif'] = $value->nif;
                     $data[$key]['stat'] = $value->stat;
                     $data[$key]['siege'] = $value->siege;
-                }
+                }*/
             } 
                 else
                     $data = array();

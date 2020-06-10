@@ -114,6 +114,20 @@ class Contrat_prestataire_model extends CI_Model {
             return null;
         }                 
     }
+    public function getcontratByconvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
 
   /*  public function findAllByConvention($id_convention_entete) {               
         $result =  $this->db->select('*')
@@ -129,20 +143,7 @@ class Contrat_prestataire_model extends CI_Model {
             return null;
         }                 
     }
-    public function findcontratByconvention($id_convention_entete) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("id_convention_entete", $id_convention_entete)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
+    
 
     public function findcontratconvenBydemande_batiment($id_demande_batiment_pre) {               
         $result =  $this->db->select('convention_cisco_feffi_entete.ref_convention as ref_convention,contrat_prestataire.num_contrat as num_contrat, prestataire.nom as nom_prestataire,feffi.denomination as denomination_feffi, cisco.code as code_cisco')

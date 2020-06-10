@@ -84,6 +84,20 @@ class Passation_marches_model extends CI_Model {
             return null;
         }                 
     }
+    public function getpassationByconvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
     public function findpassationvalideByconvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
@@ -114,7 +128,21 @@ class Passation_marches_model extends CI_Model {
             return null;
         }                 
     }
-
+    public function findByRef_convention($ref_convention) {               
+        $result =  $this->db->select('passation_marches.*')
+                        ->from($this->table)
+                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=passation_marches.id_convention_entete')
+                        ->where("convention_cisco_feffi_entete.ref_convention", $ref_convention)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
+    }
    /* public function findAllByConvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

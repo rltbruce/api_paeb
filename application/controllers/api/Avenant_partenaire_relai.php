@@ -19,9 +19,9 @@ class Avenant_partenaire_relai extends REST_Controller {
         $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
         $menu = $this->get('menu');
 
-         if ($menu=='getavenantBycontrat')
+         if ($menu=='getavenantinvalideBycontrat')
          {
-            $menu = $this->Avenant_partenaire_relaiManager->findAllByContrat_partenaire_relai($id_contrat_partenaire_relai);
+            $menu = $this->Avenant_partenaire_relaiManager->findavenantinvalideByContrat($id_contrat_partenaire_relai);
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
@@ -29,10 +29,55 @@ class Avenant_partenaire_relai extends REST_Controller {
                     $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
 
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['description'] = $value->description;
                     $data[$key]['ref_avenant']    = $value->ref_avenant;
-                    $data[$key]['montant_avenant']   = $value->montant_avenant;
+                    $data[$key]['montant']   = $value->montant;
                     $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['validation'] = $value->validation;
+
+                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavenantvalideBycontrat')
+         {
+            $menu = $this->Avenant_partenaire_relaiManager->findavenantvalideByContrat($id_contrat_partenaire_relai);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_avenant']    = $value->ref_avenant;
+                    $data[$key]['montant']   = $value->montant;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['validation'] = $value->validation;
+
+                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavenantBycontrat')
+         {
+            $menu = $this->Avenant_partenaire_relaiManager->findavenantByContrat($id_contrat_partenaire_relai);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_avenant']    = $value->ref_avenant;
+                    $data[$key]['montant']   = $value->montant;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['validation'] = $value->validation;
 
                     $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
                         }
@@ -47,9 +92,9 @@ class Avenant_partenaire_relai extends REST_Controller {
             $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($avenant_partenaire_relai->id_contrat_partenaire_relai);
 
             $data['id'] = $avenant_partenaire_relai->id;
-            $data['intitule'] = $avenant_partenaire_relai->intitule;
+            $data['description'] = $avenant_partenaire_relai->description;
             $data['ref_avenant']    = $avenant_partenaire_relai->ref_avenant;
-            $data['montant_avenant']   = $avenant_partenaire_relai->montant_avenant;
+            $data['montant']   = $avenant_partenaire_relai->montant;
             $data['date_signature'] = $avenant_partenaire_relai->date_signature;
 
             $data['contrat_partenaire_relai'] = $contrat_partenaire_relai;
@@ -64,9 +109,9 @@ class Avenant_partenaire_relai extends REST_Controller {
                     $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
 
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['description'] = $value->description;
                     $data[$key]['ref_avenant']    = $value->ref_avenant;
-                    $data[$key]['montant_avenant']   = $value->montant_avenant;
+                    $data[$key]['montant']   = $value->montant;
                     $data[$key]['date_signature'] = $value->date_signature;
 
                     $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
@@ -99,10 +144,11 @@ class Avenant_partenaire_relai extends REST_Controller {
             if ($id == 0) {
                 $data = array(
                     'id' => $this->post('id'),
-                    'intitule' => $this->post('intitule'),
+                    'description' => $this->post('description'),
                     'ref_avenant'    => $this->post('ref_avenant'),
-                    'montant_avenant'   => $this->post('montant_avenant'),
+                    'montant'   => $this->post('montant'),
                     'date_signature' => $this->post('date_signature'),
+                    'validation' => $this->post('validation'),
                     'id_contrat_partenaire_relai' => $this->post('id_contrat_partenaire_relai')
                 );
                 if (!$data) {
@@ -129,10 +175,11 @@ class Avenant_partenaire_relai extends REST_Controller {
             } else {
                 $data = array(
                     'id' => $this->post('id'),
-                    'intitule' => $this->post('intitule'),
+                    'description' => $this->post('description'),
                     'ref_avenant'    => $this->post('ref_avenant'),
-                    'montant_avenant'   => $this->post('montant_avenant'),
+                    'montant'   => $this->post('montant'),
                     'date_signature' => $this->post('date_signature'),
+                    'validation' => $this->post('validation'),
                     'id_contrat_partenaire_relai' => $this->post('id_contrat_partenaire_relai')
                 );
                 if (!$data || !$id) {
