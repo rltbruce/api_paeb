@@ -22,7 +22,16 @@ class Attachement_travaux extends REST_Controller {
         $id_facture_mpe = $this->get('id_facture_mpe');
         $menu = $this->get('menu');
 
-        if ($menu=="getattachement_prevuBycontrat")
+        if ($menu=="getattachement_travauxBycontrat")
+        {
+            $tmp = $this->Attachement_travauxManager->findattachement_travauxBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data = $tmp;            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getattachement_prevuBycontrat")
         {
             $tmp = $this->Attachement_travauxManager->findmontant_attachement_prevuBycontrat($id_contrat_prestataire);
             if ($tmp) 

@@ -236,6 +236,21 @@ class Demande_fin_travaux_moe_model extends CI_Model {
             return null;
         }                 
     }
+    public function finddemandedisponibleBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation >", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
    /* public function findAllInvalideBycontrat($id_contrat_bureau_etude) {               
         $result =  $this->db->select('*')

@@ -67,6 +67,7 @@ class Demande_deblocage_daaf extends REST_Controller {
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['id_convention_ufp_daaf_entete'] = $value->id_convention_ufp_daaf_entete;
                 }
             } 
                 else

@@ -67,37 +67,6 @@ class Demande_realimentation_feffi_model extends CI_Model {
         }
     }
 
-   /* public function findByIdconvention_cife_entete($id_convention_cife_entete)
-    { 
-        $result = $this->db->query(' 
-            select  dem_real_fef.id as id,
-                    dem_real_fef.id_convention_cife_entete as id_convention_cife_entete, 
-                    dem_real_fef.date as date, 
-                    dem_real_fef.date_approbation as date_approbation, 
-                    dem_real_fef.validation as validation,
-                    tranche.libelle as libelle,
-                    tranche.pourcentage as pourcentage,
-                    tranche.periode as periode,
-                    tranche.description as description,
-                    convention_detail.montant_total as montant
-
-            
-            from demande_realimentation_feffi as dem_real_fef
-
-                    join tranche_deblocage_feffi as tranche on tranche.id=dem_real_fef.id_tranche_deblocage
-                    join convention_cisco_feffi_entete as convention_entete on convention_entete.id=dem_real_fef.id_convention_cife_entete
-                    join convention_cisco_feffi_detail as convention_detail on convention_detail.id_convention_entete=convention_entete.id
-                group by dem_real_fef.id')
-                    ->result();                              
-
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }
-                    
-    }*/
     public function finddemandevalidedaafByIdconvention_cife_entete($id_convention_cife_entete) {           //mande    
         $result =  $this->db->select('*')
                         ->from($this->table)
@@ -188,7 +157,7 @@ class Demande_realimentation_feffi_model extends CI_Model {
         }                 
     }
 
-  /*  public function finddemandedisponibleByconvention($id_convention_cife_entete) {               
+    public function finddemandedisponibleByconvention($id_convention_cife_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_cife_entete", $id_convention_cife_entete)
@@ -204,85 +173,7 @@ class Demande_realimentation_feffi_model extends CI_Model {
         }                 
     }
 
-    public function findByIdInvalide($validation) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("validation",$validation )
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-
-    public function findByIdValide($validation) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where_not_in("validation", $validation)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
     
-    public function finddemande_invalideBycisco($id_cisco)
-    {               
-        $result =  $this->db->select('demande_realimentation_feffi.*')
-                        ->from($this->table)
-                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=demande_realimentation_feffi.id_convention_cife_entete')
-                        ->join('cisco','cisco.id=convention_cisco_feffi_entete.id_cisco')
-                        ->where("cisco.id",$id_cisco )
-                        ->where("demande_realimentation_feffi.validation",0 )
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }*/
-
-   /* public function findByIdTechniquementInvalide() {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("validation", 1)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-
-    public function findByIdTechniquementValide() {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("validation", 2)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }*/
-
     public function countAllByInvalide($invalide)
     {
         $result = $this->db->select('COUNT(*) as nombre')

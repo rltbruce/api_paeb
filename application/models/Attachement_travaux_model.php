@@ -66,6 +66,21 @@ class Attachement_travaux_model extends CI_Model {
             return $q->row();
         }
     }
+    public function findattachement_travauxBycontrat($id_contrat_prestataire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->join('facture_mpe','facture_mpe.id=attachement_travaux.id_facture_mpe')
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->order_by('attachement_travaux.id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findattachement_travauxByfacture($id_facture_mpe) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

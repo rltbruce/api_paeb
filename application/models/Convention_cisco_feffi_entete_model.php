@@ -973,7 +973,44 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         return $query->result();                
     }
 
-         public function getconventionNeedvalidationpdfi()
+    public function getconventionNeeddemandefeffivalidationdaaf()
+    {
+        $sql=" select 
+                       convention.*,
+                       count(demande.id)
+               from convention_cisco_feffi_entete as convention
+
+               inner join demande_realimentation_feffi as demande on demande.id_convention_cife_entete = convention.id
+
+                where 
+                        demande.validation= 4
+                            group by convention.id
+                            having count(demande.id)>0
+             
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }
+    public function getconventionNeeddemandefeffivalidationpdfi()
+    {
+        $sql=" select 
+                       convention.*,
+                       count(demande.id)
+               from convention_cisco_feffi_entete as convention
+
+               inner join demande_realimentation_feffi as demande on demande.id_convention_cife_entete = convention.id
+
+                where 
+                        demande.validation= 1
+                            group by convention.id
+                            having count(demande.id)>0
+             
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }
+
+    public function getconventionNeedvalidationpdfi()
     {
         $sql=" select 
                        convention.*,

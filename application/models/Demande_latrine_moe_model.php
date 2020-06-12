@@ -192,6 +192,21 @@ class Demande_latrine_moe_model extends CI_Model {
         }                 
     }
 
+    public function finddemandedisponibleBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("validation >", 0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }
+}
    /* public function findAllInvalideBylatrine($id_latrine_construction) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

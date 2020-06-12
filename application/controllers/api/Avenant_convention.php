@@ -40,6 +40,28 @@ class Avenant_convention extends REST_Controller {
             } 
                 else
                     $data = array();
+        } 
+        elseif ($menu=='getavenantvalideByconvention')
+         {
+            $menu = $this->Avenant_conventionManager->findavenantvalideByconvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['ref_avenant'] = $value->ref_avenant;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['montant']    = $value->montant;
+                    $data[$key]['date_signature']    = $value->date_signature;
+                    $data[$key]['validation']    = $value->validation;
+
+                    $data[$key]['convention_entete'] = $convention_entete;
+                        }
+            } 
+                else
+                    $data = array();
         }   
         elseif ($menu=='getavenantinvalideByconvention')
          {

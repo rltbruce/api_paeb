@@ -36,6 +36,7 @@ class Facture_mpe_model extends CI_Model {
             'remboursement_acompte' => $facture_mpe['remboursement_acompte'],
             'penalite_retard' => $facture_mpe['penalite_retard'],
             'retenue_garantie' => $facture_mpe['retenue_garantie'],
+            'remboursement_plaque' => $facture_mpe['remboursement_plaque'],
             'net_payer' => $facture_mpe['net_payer'],
             'date_signature' => $facture_mpe['date_signature'],
             'id_contrat_prestataire' => $facture_mpe['id_contrat_prestataire'],

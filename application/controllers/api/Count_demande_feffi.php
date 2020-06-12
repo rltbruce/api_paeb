@@ -28,7 +28,7 @@ class Count_demande_feffi extends REST_Controller {
         }
         if ($invalide==3)
         {
-           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByInvalide(2);          
+           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByInvalide(4);          
             $data = $demande_realimentation_feffi;
         }
     

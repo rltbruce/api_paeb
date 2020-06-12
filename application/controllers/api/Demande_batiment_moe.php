@@ -23,7 +23,36 @@ class Demande_batiment_moe extends REST_Controller {
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $menu = $this->get('menu');
 
-       if ($menu=="getdemandeBycontrat")
+       if ($menu=="getdemandedisponibleBycontrat")
+        {
+            $tmp = $this->Demande_batiment_moeManager->finddemandedisponibleBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    
+                    $contrat_bureau_etude = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
+                    $tranche_demande_batiment_moe = $this->Tranche_demande_batiment_moeManager->findById($value->id_tranche_demande_batiment_moe);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['ref_facture'] = $value->ref_facture;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['tranche'] = $tranche_demande_batiment_moe;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    //$data[$key]['batiment_construction'] = $batiment_construction;
+                    $data[$key]['contrat_bureau_etude'] = $contrat_bureau_etude;
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandeBycontrat")
         {
             $tmp = $this->Demande_batiment_moeManager->finddemandeBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
@@ -157,7 +186,7 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['description'] = $value->description;
                     $data[$key]['ref_facture'] = $value->ref_facture;
                     $data[$key]['montant'] = $value->montant;
-                    $data[$key]['tranche'] = $tranche_d_fin_travaux_moe;
+                    $data[$key]['tranche'] = $tranche_demande_batiment_moe;
                     $data[$key]['cumul'] = $value->cumul;
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
@@ -185,7 +214,7 @@ class Demande_batiment_moe extends REST_Controller {
                     $data[$key]['description'] = $value->description;
                     $data[$key]['ref_facture'] = $value->ref_facture;
                     $data[$key]['montant'] = $value->montant;
-                    $data[$key]['tranche'] = $tranche_d_fin_travaux_moe;
+                    $data[$key]['tranche'] = $tranche_demande_batiment_moe;
                     $data[$key]['cumul'] = $value->cumul;
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;

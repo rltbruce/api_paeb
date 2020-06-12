@@ -8,6 +8,7 @@ class Zap extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('zap_model', 'ZapManager');
+        $this->load->model('zap_commune_model', 'Zap_communeManager');
     }
     //recuperation zap
     public function index_get() {
@@ -18,15 +19,16 @@ class Zap extends REST_Controller {
         if ($cle_etrangere) {
             $data = array();
 			// Récupération des zap par commune
-            $tmp = $this->ZapManager->findAllByCommune($cle_etrangere);
+            $tmp = $this->Zap_communeManager->findAllByCommune($cle_etrangere);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
-                {
+                {   
+                    $zap = $this->ZapManager->findById($value->id_zap);
 					// Récupérationdescription commune;
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['code'] = $value->code;
-                    $data[$key]['nom'] = $value->nom;
+                    $data[$key]['id'] = $zap->id;
+                    $data[$key]['code'] = $zap->code;
+                    $data[$key]['nom'] = $zap->nom;
                 }
             }    
         } else {

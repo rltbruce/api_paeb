@@ -460,7 +460,9 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                         sum(niveau1.cout_batiment) as cout_batiment,
                         sum(niveau1.cout_latrine) as cout_latrine,
                         sum(niveau1.cout_mobilier) as cout_mobilier,
-                        sum(niveau1.cout_divers) as cout_divers
+                        sum(niveau1.cout_divers) as cout_divers,
+                        sum(niveau1.cout_divers) as montant_divers,
+                        (sum(niveau1.cout_batiment) + sum(niveau1.cout_latrine) + sum(niveau1.cout_mobilier)) as montant_trav_mob
 
             from(
 

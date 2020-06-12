@@ -53,6 +53,7 @@ class Facture_mpe extends REST_Controller {
             $data['remboursement_acompte'] = $facture_mpe->remboursement_acompte;
             $data['penalite_retard'] = $facture_mpe->penalite_retard ;
             $data['retenue_garantie'] = $facture_mpe->retenue_garantie ;
+            $data['remboursement_plaque'] = $facture_mpe->remboursement_plaque;
             $data['net_payer'] = $facture_mpe->net_payer ;
             $data['date_signature'] = $facture_mpe->date_signature ;
             $data['id_contrat_prestataire'] = $facture_mpe->id_contrat_prestataire;
@@ -101,6 +102,7 @@ class Facture_mpe extends REST_Controller {
                     'remboursement_acompte' => $this->post('remboursement_acompte'),
                     'penalite_retard' => $this->post('penalite_retard'),
                     'retenue_garantie' => $this->post('retenue_garantie'),
+                    'remboursement_plaque' => $this->post('remboursement_plaque'),
                     'net_payer' => $this->post('net_payer'),
                     'date_signature' => $this->post('date_signature'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
@@ -139,6 +141,7 @@ class Facture_mpe extends REST_Controller {
                     'remboursement_acompte' => $this->post('remboursement_acompte'),
                     'penalite_retard' => $this->post('penalite_retard'),
                     'retenue_garantie' => $this->post('retenue_garantie'),
+                    'remboursement_plaque' => $this->post('remboursement_plaque'),
                     'net_payer' => $this->post('net_payer'),
                     'date_signature' => $this->post('date_signature'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),

@@ -25,75 +25,36 @@ class Demande_realimentation_feffi extends REST_Controller {
         $validation= $this->get('validation');
         $id_cisco = $this->get('id_cisco');
 
-       /* if ($invalide==1)
-        {
-           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByInvalide(0);          
-            $data = $demande_realimentation_feffi;
-        }
-        elseif ($invalide==2)
-        {
-           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByInvalide(1);          
-            $data = $demande_realimentation_feffi;
-        } 
-        else*/
-       /* if ($menu=='getdemandedisponible')
-        {
-            $menu = $this->Demande_realimentation_feffiManager->finddemandedisponibleByconvention($id_convention_cife_entete);
-            if ($menu) 
-            { 
-                foreach ($menu as $key => $value) 
-                {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
-                    $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['compte_feffi'] = $compte_feffi;
-                    $data[$key]['tranche'] = $tranche_deblocage_feffi;
-                    $data[$key]['prevu'] = $value->prevu;
-                    $data[$key]['cumul'] = $value->cumul;
-                    $data[$key]['anterieur'] = $value->anterieur;
-                    $data[$key]['reste'] = $value->reste;
-                    $data[$key]['date'] = $value->date;
-                    $data[$key]['validation'] = $value->validation;
-                    $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
-                }
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($menu=='getdemande_invalideBycisco')
-        {
-            $menu = $this->Demande_realimentation_feffiManager->finddemande_invalideBycisco($id_cisco);
-            if ($menu) 
-            { 
-                foreach ($menu as $key => $value) 
-                {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
-                    $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['compte_feffi'] = $compte_feffi;
-                    $data[$key]['tranche'] = $tranche_deblocage_feffi;
-                    $data[$key]['prevu'] = $value->prevu;
-                    $data[$key]['cumul'] = $value->cumul;
-                    $data[$key]['anterieur'] = $value->anterieur;
-                    $data[$key]['reste'] = $value->reste;
-                    $data[$key]['date'] = $value->date;
-                    $data[$key]['validation'] = $value->validation;
-                    $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
-                }
-            } 
-                else
-                    $data = array();
-        }
-        else*/
         if ($menu=='getdemandevalidedaafByconvention') //mande
         {
             $menu = $this->Demande_realimentation_feffiManager->finddemandevalidedaafByIdconvention_cife_entete($id_convention_cife_entete);
+            if ($menu) 
+            { 
+                foreach ($menu as $key => $value) 
+                {
+                    $convention_cife_entete= array();
+                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
+                    $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
+                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['compte_feffi'] = $compte_feffi;
+                    $data[$key]['tranche'] = $tranche_deblocage_feffi;
+                    $data[$key]['prevu'] = $value->prevu;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getdemandedisponibleByconvention') //mande
+        {
+            $menu = $this->Demande_realimentation_feffiManager->finddemandedisponibleByconvention($id_convention_cife_entete);
             if ($menu) 
             { 
                 foreach ($menu as $key => $value) 
@@ -230,142 +191,6 @@ class Demande_realimentation_feffi extends REST_Controller {
                 else
                     $data = array();
         }
-       /* elseif ($menu=='getdemande_realimentation_feffi')
-        {
-            $menu = $this->Demande_realimentation_feffiManager->findByIdconvention_cife_entete($id_convention_cife_entete);
-            if ($menu) 
-            { 
-                foreach ($menu as $key => $value) 
-                {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
-                    $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['compte_feffi'] = $compte_feffi;
-                    $data[$key]['tranche'] = $tranche_deblocage_feffi;
-                    $data[$key]['prevu'] = $value->prevu;
-                    $data[$key]['cumul'] = $value->cumul;
-                    $data[$key]['anterieur'] = $value->anterieur;
-                    $data[$key]['reste'] = $value->reste;
-                    $data[$key]['date'] = $value->date;
-                    $data[$key]['validation'] = $value->validation;
-                    $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
-                }
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($menu=="getdemande_realimentation_feffi_invalide")
-        {
-            $menu = $this->Demande_realimentation_feffiManager->findByIdInvalide($validation);
-            if ($menu) 
-            { 
-                foreach ($menu as $key => $value) 
-                {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
-                    $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['compte_feffi'] = $compte_feffi;
-                    $data[$key]['tranche'] = $tranche_deblocage_feffi;
-                    $data[$key]['prevu'] = $value->prevu;
-                    $data[$key]['cumul'] = $value->cumul;
-                    $data[$key]['anterieur'] = $value->anterieur;
-                    $data[$key]['reste'] = $value->reste;
-                    $data[$key]['date'] = $value->date;
-                    $data[$key]['validation'] = $value->validation;
-                    $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
-                }
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($menu=="getdemande_realimentation_feffi_valide")
-        {
-            $menu = $this->Demande_realimentation_feffiManager->findByIdValide($validation);
-            if ($menu) 
-            { 
-                foreach ($menu as $key => $value) 
-                {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
-                    $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['compte_feffi'] = $compte_feffi;
-                    $data[$key]['tranche'] = $tranche_deblocage_feffi;
-                    $data[$key]['prevu'] = $value->prevu;
-                    $data[$key]['cumul'] = $value->cumul;
-                    $data[$key]['anterieur'] = $value->anterieur;
-                    $data[$key]['reste'] = $value->reste;
-                    $data[$key]['date'] = $value->date;
-                    $data[$key]['validation'] = $value->validation;
-                    $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
-                }
-            } 
-                else
-                    $data = array();
-        }*/
-       /* elseif ($menu=="getdemande_techniquement_invalide")
-        {
-            $menu = $this->Demande_realimentation_feffiManager->findByIdTechniquementInvalide();
-            if ($menu) 
-            { 
-                foreach ($menu as $key => $value) 
-                {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
-                    $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['compte_feffi'] = $compte_feffi;
-                    $data[$key]['tranche'] = $tranche_deblocage_feffi;
-                    $data[$key]['prevu'] = $value->prevu;
-                    $data[$key]['cumul'] = $value->cumul;
-                    $data[$key]['anterieur'] = $value->anterieur;
-                    $data[$key]['reste'] = $value->reste;
-                    $data[$key]['date'] = $value->date;
-                    $data[$key]['validation'] = $value->validation;
-                    $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
-                }
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($menu=="getdemande_techniquement_valide")
-        {
-            $menu = $this->Demande_realimentation_feffiManager->findByIdTechniquementValide();
-            if ($menu) 
-            { 
-                foreach ($menu as $key => $value) 
-                {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
-                    $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['compte_feffi'] = $compte_feffi;
-                    $data[$key]['tranche'] = $tranche_deblocage_feffi;
-                    $data[$key]['prevu'] = $value->prevu;
-                    $data[$key]['cumul'] = $value->cumul;
-                    $data[$key]['anterieur'] = $value->anterieur;
-                    $data[$key]['reste'] = $value->reste;
-                    $data[$key]['date'] = $value->date;
-                    $data[$key]['validation'] = $value->validation;
-                    $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
-                }
-            } 
-                else
-                    $data = array();
-        }*/
-
         elseif ($id)
         {
             $data = array();

@@ -87,12 +87,13 @@ class Convention_ufp_daaf_entete extends REST_Controller {
             $tmp = $this->Convention_ufp_daaf_enteteManager->findDetailcoutByConvention($id_convention_ufp_daaf_entete);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+               /* foreach ($tmp as $key => $value) 
                 {
                     $data[$key]['montant_trav_mob'] = $value->cout_batiment + $value->cout_latrine + $value->cout_mobilier;
                     $data[$key]['montant_divers'] = $value->cout_divers;
                     
-                }
+                }*/
+                $data=$tmp;
             } 
                 else
                     $data = array();

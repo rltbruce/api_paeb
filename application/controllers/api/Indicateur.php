@@ -20,7 +20,7 @@ class Indicateur extends REST_Controller {
          
          if ($menu=='getindicateurinvalideByconvention')
          {
-            $tmp = $this->IndicateurManager->findinvalideByConvention($id_convention_entete);
+            $tmp = $this->IndicateurManager->findindicateurinvalideByConvention($id_convention_entete);
             if ($tmp) 
             {
                 $data = $tmp;
@@ -30,7 +30,7 @@ class Indicateur extends REST_Controller {
         }
         elseif ($menu=='getindicateurvalideByconvention')
          {
-            $tmp = $this->IndicateurManager->findvalideByConvention($id_convention_entete);
+            $tmp = $this->IndicateurManager->findindicateurvalideByConvention($id_convention_entete);
             if ($tmp) 
             {
                 $data = $tmp;
