@@ -105,6 +105,20 @@ class Site_model extends CI_Model {
             return null;
         }                 
     }
+    public function findsiteInvalide() {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('validation',0)
+                        ->order_by('code_sous_projet')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
     public function findsiteByenpreparation() {               
         $result =  $this->db->select('*')
@@ -138,6 +152,20 @@ class Site_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where($requete)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findsite_disponible($requete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where($requete)
+                        ->where('statu_convention',0)
                         ->get()
                         ->result();
         if($result)

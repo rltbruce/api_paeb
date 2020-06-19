@@ -78,7 +78,7 @@ class Demande_batiment_prestataire_model extends CI_Model {
         }                 
     }
     public function finddemandeBycontrat($id_contrat_prestataire) {               
-        $result =  $this->db->select('*')
+        $result =  $this->db->select('demande_batiment_presta.*')
                         ->from($this->table)
                         ->join('attachement_travaux','attachement_travaux.id = demande_batiment_presta.id_attachement_travaux')
                         ->join('facture_mpe','facture_mpe.id=attachement_travaux.id_facture_mpe')

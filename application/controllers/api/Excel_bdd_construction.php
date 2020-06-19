@@ -51,7 +51,6 @@ class Excel_bdd_construction extends REST_Controller
         if (count($data)>0) {
         
         $export=$this->export_excel($repertoire,$data);
-            
 
         } else {
             $this->response([
@@ -1904,7 +1903,10 @@ class Excel_bdd_construction extends REST_Controller
 
             $objPHPExcel->getActiveSheet()->getStyle("AA".$ligne)->applyFromArray($stylecontenu);
             //$objPHPExcel->getActiveSheet()->getStyle("AA".$ligne)->getAlignment()->setWrapText(true);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AA".$ligne,  (($value->transfert_tranche1 + $value->transfert_tranche2 + $value->transfert_tranche3 + $value->transfert_tranche4)*100)/$value->montant_convention);
+            if ($value->montant_convention) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AA".$ligne,  (($value->transfert_tranche1 + $value->transfert_tranche2 + $value->transfert_tranche3 + $value->transfert_tranche4)*100)/$value->montant_convention);
+            }
+            
 
 
         $objPHPExcel->getActiveSheet()->getStyle("AB".$ligne)->applyFromArray($stylecontenu);
@@ -1919,7 +1921,10 @@ class Excel_bdd_construction extends REST_Controller
 
         $objPHPExcel->getActiveSheet()->getStyle("AD".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AB".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AD".$ligne, (($value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe)*100)/$value->soustotaldepense);
+        if ($value->soustotaldepense) {
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AD".$ligne, (($value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe)*100)/$value->soustotaldepense);
+        }
+        
 
         $objPHPExcel->getActiveSheet()->getStyle("AE".$ligne)->applyFromArray($stylecontenu);
 
@@ -1932,7 +1937,10 @@ class Excel_bdd_construction extends REST_Controller
 
         $objPHPExcel->getActiveSheet()->getStyle("AG".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AG".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AG".$ligne, ($value->montant_decaiss_fonct_feffi*100)/$value->cout_sousprojet);
+        if ($value->cout_sousprojet) {
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("AG".$ligne, ($value->montant_decaiss_fonct_feffi*100)/$value->cout_sousprojet);
+        }
+        
 
 
         $objPHPExcel->getActiveSheet()->getStyle("AH".$ligne)->applyFromArray($stylecontenu);
@@ -2404,7 +2412,10 @@ class Excel_bdd_construction extends REST_Controller
 
         $objPHPExcel->getActiveSheet()->getStyle("ES".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("ES".$ligne, (($value->montant_paiement_debut_moe +$value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe)*100)/$value->montant_contrat_moe);
+        if ($value->montant_contrat_moe) {
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("ES".$ligne, (($value->montant_paiement_debut_moe +$value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe)*100)/$value->montant_contrat_moe);
+        }
+        
 
         $objPHPExcel->getActiveSheet()->getStyle("ET".$ligne)->applyFromArray($stylecontenu);
         //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
@@ -2810,7 +2821,7 @@ class Excel_bdd_construction extends REST_Controller
     }
     public function generer_requete($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot)
     {
-            $requete = "date_signature BETWEEN '".$date_debut."' AND '".$date_fin."' " ;
+            $requete = "Convention_cisco_feffi_detail.date_signature BETWEEN '".$date_debut."' AND '".$date_fin."' " ;
         
             
 

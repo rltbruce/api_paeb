@@ -86,8 +86,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
     public function findAllInvalidenow($annee) {             //mande  
         $result =  $this->db->select('convention_cisco_feffi_entete.*')
                         ->from($this->table)
-                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete=convention_cisco_feffi_entete.id')
-                        ->where("DATE_FORMAT(convention_cisco_feffi_detail.date_signature,'%Y')",$annee)
+                        ->where("DATE_FORMAT(date_creation,'%Y')",$annee)
                         ->where("validation",0)
                         ->order_by('ref_convention')
                         ->get()
@@ -160,8 +159,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
     public function findAllInvalideByfiltre($requete) {             //mande  
         $result =  $this->db->select('convention_cisco_feffi_entete.*')
-                        ->from($this->table)
-                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete=convention_cisco_feffi_entete.id')                        
+                        ->from($this->table)                        
                         ->join('site','site.id = convention_cisco_feffi_entete.id_site')
                         ->join('ecole','ecole.id = site.id_ecole')
                         ->join('zap','zap.id = ecole.id_zap')
@@ -200,13 +198,20 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         }                 
     }
 
-    public function findAllInvalideByid_ciscofiltre($id_cisco,$requete) {             //mande  
+    public function findAllInvalideByutilisateurfiltre($id_utilisateur,$requete) {             //mande  
         $result =  $this->db->select('convention_cisco_feffi_entete.*')
                         ->from($this->table)
-                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete=convention_cisco_feffi_entete.id')
+                        ->join('site','site.id = convention_cisco_feffi_entete.id_site')
+                        ->join('ecole','ecole.id = site.id_ecole')
+                        ->join('zap','zap.id = ecole.id_zap')
+                        ->join('fokontany','fokontany.id = ecole.id_fokontany')
+                        ->join('commune','commune.id = fokontany.id_commune')
+                        ->join('district','district.id = commune.id_district')
+                        ->join('region','region.id = district.id_region')
+                        ->join('cisco','cisco.id_district = district.id')
                         ->where($requete)
-                        ->where("validation",0)
-                        ->where("id_cisco",$id_cisco)
+                        ->where("convention_cisco_feffi_entete.validation",0)
+                        ->where("id_user",$id_utilisateur)
                         ->order_by('ref_convention')
                         ->get()
                         ->result();
@@ -221,8 +226,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
     public function findAllInvalideByid_cisconow($id_cisco,$annee) {             //mande  
         $result =  $this->db->select('convention_cisco_feffi_entete.*')
                         ->from($this->table)
-                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete=convention_cisco_feffi_entete.id')
-                        ->where("DATE_FORMAT(convention_cisco_feffi_detail.date_signature,'%Y')",$annee)
+                        ->where("DATE_FORMAT(date_creation,'%Y')",$annee)
                         ->where("validation",0)
                         ->where("id_cisco",$id_cisco)
                         ->order_by('ref_convention')
@@ -234,6 +238,20 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         }else{
             return null;
         }                 
+    }
+
+    public function findAllInvalideByutilisateurnow($id_utilisateur,$annee) {             //mande  
+        
+        $sql=" select 
+                       convention.*
+               from convention_cisco_feffi_entete as convention
+
+                where 
+                            convention.validation= 0 and DATE_FORMAT(convention.date_creation,'%Y')= '".$annee."' and id_user ='".$id_utilisateur."'
+             
+
+            ";
+            return $this->db->query($sql)->result();                  
     }
 
     public function findAllInvalideByid_cisco($id_cisco) {             //mande  
@@ -335,6 +353,54 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                         ->join('region','region.id = district.id_region')
                         ->join('cisco','cisco.id_district = district.id')
                         ->where($requete)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findconventionvalideufpByfiltrecisco($requete,$id_cisco) {               
+        $result =  $this->db->select('convention_cisco_feffi_entete.*')
+                        ->from($this->table)
+                        ->where("convention_cisco_feffi_entete.validation",2)
+                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->join('site','site.id = convention_cisco_feffi_entete.id_site')
+                        ->join('ecole','ecole.id = site.id_ecole')
+                        ->join('fokontany','fokontany.id = ecole.id_fokontany')
+                        ->join('commune','commune.id = fokontany.id_commune')
+                        ->join('district','district.id = commune.id_district')
+                        ->join('region','region.id = district.id_region')
+                        ->join('cisco','cisco.id_district = district.id')
+                        ->where($requete)
+                        ->where('convention_cisco_feffi_entete.id_cisco',$id_cisco)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findconventionvalideufpBydateutilisateur($requete,$id_utilisateur) {               
+        $result =  $this->db->select('convention_cisco_feffi_entete.*')
+                        ->from($this->table)
+                        ->where("convention_cisco_feffi_entete.validation",2)
+                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->join('site','site.id = convention_cisco_feffi_entete.id_site')
+                        ->join('ecole','ecole.id = site.id_ecole')
+                        ->join('fokontany','fokontany.id = ecole.id_fokontany')
+                        ->join('commune','commune.id = fokontany.id_commune')
+                        ->join('district','district.id = commune.id_district')
+                        ->join('region','region.id = district.id_region')
+                        ->join('cisco','cisco.id_district = district.id')
+                        ->where($requete)
+                        ->where('convention_cisco_feffi_entete.id_user',$id_utilisateur)
                         ->order_by('ref_convention')
                         ->get()
                         ->result();
@@ -766,10 +832,6 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
                 $this->db ->select("(select attachement_travaux.total_periode from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where attachement_travaux.id_facture_mpe=facture_mpe.id and facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,attachement_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where atta_tra.id_facture_mpe=fact_mpe.id and fact_mpe.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv )) as periode_mpe",FALSE);
 
-           /* $this->db ->select("(select demande_mobilier_presta.cumul from paiement_mobilier_prestataire,demande_mobilier_presta, contrat_prestataire, convention_cisco_feffi_entete where paiement_mobilier_prestataire.id_demande_mobilier_pre=demande_mobilier_presta.id and demande_mobilier_presta.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and paiement_mobilier_prestataire.validation = '1' and convention_cisco_feffi_entete.id = id_conv and demande_mobilier_presta.id=(select max(demande_mob.id) from paiement_mobilier_prestataire as pai_mob,demande_mobilier_presta as demande_mob, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where pai_mob.id_demande_mobilier_pre=demande_mob.id and demande_mob.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and pai_mob.validation = '1' and conve_m.id = id_conv )) as cumul_mobilier_mpe",FALSE);
-
-            $this->db ->select("(select tranche_demande_mobilier_mpe.periode from paiement_mobilier_prestataire,demande_mobilier_presta,tranche_demande_mobilier_mpe, contrat_prestataire, convention_cisco_feffi_entete where paiement_mobilier_prestataire.id_demande_mobilier_pre=demande_mobilier_presta.id and tranche_demande_mobilier_mpe.id=demande_mobilier_presta.id_tranche_demande_mpe and demande_mobilier_presta.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and paiement_mobilier_prestataire.validation = '1' and convention_cisco_feffi_entete.id = id_conv and demande_mobilier_presta.id=(select max(demande_mob.id) from paiement_mobilier_prestataire as pai_mob,demande_mobilier_presta as demande_mob, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where pai_mob.id_demande_mobilier_pre=demande_mob.id and demande_mob.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and pai_mob.validation = '1' and conve_m.id = id_conv )) as periode_mobilier_mpe",FALSE);*/
-
 //transfert reliquat
 
             $this->db ->select("(select transfert_reliquat.montant from transfert_reliquat, convention_cisco_feffi_entete where transfert_reliquat.id_convention_entete= convention_cisco_feffi_entete.id and transfert_reliquat.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as montant_transfert_reliquat",FALSE);
@@ -816,30 +878,26 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
             $this->db ->select("(select type_mobilier.nbr_chaise_maitre from type_mobilier,mobilier_construction where type_mobilier.id = mobilier_construction.id_type_mobilier and mobilier_construction.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as prev_nbr_chaise_maitre",FALSE);
 
-           // $this->db ->select("(select latrine_construction.cout_unitaire from latrine_construction where latrine_construction.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as cout_latrine",FALSE);
-
-           // $this->db ->select("(select mobilier_construction.cout_unitaire from mobilier_construction where mobilier_construction.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as cout_mobilier",FALSE);
 
 
 
 
 
-
-    $result =  $this->db->from('convention_cisco_feffi_entete,convention_cisco_feffi_detail,site,ecole,fokontany,commune,district,region,cisco,agence_acc,zone_subvention,acces_zone,feffi')
+    $result =  $this->db->from('convention_cisco_feffi_entete')
                         
                         ->where("convention_cisco_feffi_entete.validation",2)
-                        ->where('convention_cisco_feffi_detail.id_convention_entete = convention_cisco_feffi_entete.id')
-                        ->where('convention_cisco_feffi_entete.id_feffi = feffi.id')
-                        ->where('site.id = convention_cisco_feffi_entete.id_site')
-                        ->where('agence_acc.id = site.id_agence_acc')
-                        ->where('ecole.id = site.id_ecole')
-                        ->where('zone_subvention.id = ecole.id_zone_subvention')
-                        ->where('acces_zone.id = ecole.id_acces_zone')
-                        ->where('fokontany.id = ecole.id_fokontany')
-                        ->where('commune.id = fokontany.id_commune')
-                        ->where('district.id = commune.id_district')
-                        ->where('region.id = district.id_region')
-                        ->where('cisco.id_district = district.id')
+                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->join('site','site.id = convention_cisco_feffi_entete.id_site')
+                        ->join('agence_acc','agence_acc.id = site.id_agence_acc')                       
+                        ->join('cisco','cisco.id = convention_cisco_feffi_entete.id_cisco')                       
+                        ->join('feffi','feffi.id = convention_cisco_feffi_entete.id_feffi')
+                        ->join('ecole','ecole.id = site.id_ecole')
+                        ->join('zone_subvention','zone_subvention.id = ecole.id_zone_subvention')
+                        ->join('acces_zone','acces_zone.id = ecole.id_acces_zone')
+                        ->join('fokontany','fokontany.id = ecole.id_fokontany')
+                        ->join('commune','commune.id = fokontany.id_commune')
+                        ->join('district','district.id = commune.id_district')
+                        ->join('region','region.id = district.id_region')            
                         ->where($requete)
                         ->order_by('ref_convention')
                         ->get()

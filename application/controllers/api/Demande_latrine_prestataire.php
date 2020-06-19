@@ -14,6 +14,7 @@ class Demande_latrine_prestataire extends REST_Controller {
         $this->load->model('tranche_demande_mpe_model', 'Tranche_demande_mpeManager');
         $this->load->model('contrat_prestataire_model', 'Contrat_prestataireManager');
         $this->load->model('type_latrine_model', 'Type_latrineManager');
+        $this->load->model('facture_mpe_model', 'Facture_mpeManager');
     }
 
     public function index_get() 
@@ -58,6 +59,7 @@ class Demande_latrine_prestataire extends REST_Controller {
                     $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
 
                     //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $facture_mpe = $this->Facture_mpeManager->findByAttachement_travaux($value->id_attachement_travaux);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['montant'] = $value->montant;
                     $data[$key]['tranche'] = $tranche_demande_mpe;
@@ -65,6 +67,7 @@ class Demande_latrine_prestataire extends REST_Controller {
                     $data[$key]['anterieur'] = $value->anterieur;
                     $data[$key]['reste'] = $value->reste;
                     $data[$key]['id_attachement_travaux'] = $value->id_attachement_travaux;
+                    $data[$key]['facture_mpe'] = $facture_mpe;
 
                 }
             } 

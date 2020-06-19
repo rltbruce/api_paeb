@@ -29,7 +29,7 @@ class Compte_feffi_model extends CI_Model {
             'nom_banque'          =>      $compte_feffi['nom_banque'],
             'numero_compte'           =>      $compte_feffi['numero_compte'],
             'adresse_banque'          =>      $compte_feffi['adresse_banque'],
-            'id_membre_feffi'           =>      $compte_feffi['id_membre_feffi'],
+            //'id_membre_feffi'           =>      $compte_feffi['id_membre_feffi'],
             'id_feffi'     =>      $compte_feffi['id_feffi']                       
         );
     }

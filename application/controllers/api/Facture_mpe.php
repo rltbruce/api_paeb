@@ -17,14 +17,107 @@ class Facture_mpe extends REST_Controller {
     {
         $id = $this->get('id');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_facture_mpe = $this->get('id_facture_mpe');
         $menu = $this->get('menu');
 
-        if ($menu=="getfacture_mpevalidebcafBycontrat")
+        if ($menu=="getdecompte_mpeBycontrat")
+        {
+            $tmp = $this->Facture_mpeManager->finddecompte_mpeBycontrat($id_contrat_prestataire,$id_facture_mpe);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value)
+                {
+                    if (intval($value->nbr_fact)==1 )
+                    {
+                        
+                             
+                            $data[$key]['montant_travaux_to'] = $value->montant_travaux_to ;
+                            $data[$key]['montant_rabais_to'] = $value->montant_rabais_to ;
+                            $data[$key]['montant_ht_to'] = $value->montant_ht_to ;
+                            $data[$key]['montant_tva_to'] = $value->montant_tva_to ;
+                            $data[$key]['montant_ttc_to'] = $value->montant_ttc_to ;
+                            $data[$key]['remboursement_acompte_to'] = $value->remboursement_acompte_to;
+                            $data[$key]['penalite_retard_to'] = $value->penalite_retard_to ;
+                            $data[$key]['retenue_garantie_to'] = $value->retenue_garantie_to ;
+                            $data[$key]['remboursement_plaque_to'] = $value->remboursement_plaque_to;
+                            $data[$key]['net_payer_to'] = $value->net_payer_to + $value->net_payer_avanc ;
+                            $data[$key]['net_payer_avanc_to'] = $value->net_payer_avanc ;
+
+                            $data[$key]['montant_travaux_pe'] = $value->montant_travaux_pe ;
+                            $data[$key]['montant_rabais_pe'] = $value->montant_rabais_pe ;
+                            $data[$key]['montant_ht_pe'] = $value->montant_ht_pe ;
+                            $data[$key]['montant_tva_pe'] = $value->montant_tva_pe ;
+                            $data[$key]['montant_ttc_pe'] = $value->montant_ttc_pe ;
+                            $data[$key]['remboursement_acompte_pe'] = $value->remboursement_acompte_pe;
+                            $data[$key]['penalite_retard_pe'] = $value->penalite_retard_pe ;
+                            $data[$key]['retenue_garantie_pe'] = $value->retenue_garantie_pe;
+                            $data[$key]['remboursement_plaque_pe'] = $value->remboursement_plaque_pe;
+                            $data[$key]['net_payer_pe'] = $value->net_payer_pe ;
+                            $data[$key]['net_payer_avanc_pe'] = 0;
+
+                            $data[$key]['montant_travaux_ante'] = $value->montant_travaux_ante ;
+                            $data[$key]['montant_rabais_ante'] = $value->montant_rabais_ante ;
+                            $data[$key]['montant_ht_ante'] = $value->montant_ht_ante ;
+                            $data[$key]['montant_tva_ante'] = $value->montant_tva_ante ;
+                            $data[$key]['montant_ttc_ante'] = $value->montant_ttc_ante ;
+                            $data[$key]['remboursement_acompte_ante'] = $value->remboursement_acompte_ante;
+                            $data[$key]['penalite_retard_ante'] = $value->penalite_retard_ante ;
+                            $data[$key]['retenue_garantie_ante'] = $value->retenue_garantie_ante;
+                            $data[$key]['remboursement_plaque_ante'] = $value->remboursement_plaque_ante;
+                            $data[$key]['net_payer_ante'] = $value->net_payer_ante + $value->net_payer_avanc;
+                            $data[$key]['net_payer_avanc_ante'] = $value->net_payer_avanc ;
+                        
+                    }
+                    else
+                    {
+                        $data[$key]['montant_travaux_to'] = $value->montant_travaux_to ;
+                            $data[$key]['montant_rabais_to'] = $value->montant_rabais_to ;
+                            $data[$key]['montant_ht_to'] = $value->montant_ht_to ;
+                            $data[$key]['montant_tva_to'] = $value->montant_tva_to ;
+                            $data[$key]['montant_ttc_to'] = $value->montant_ttc_to ;
+                            $data[$key]['remboursement_acompte_to'] = $value->remboursement_acompte_to;
+                            $data[$key]['penalite_retard_to'] = $value->penalite_retard_to ;
+                            $data[$key]['retenue_garantie_to'] = $value->retenue_garantie_to ;
+                            $data[$key]['remboursement_plaque_to'] = $value->remboursement_plaque_to;
+                            $data[$key]['net_payer_to'] = $value->net_payer_to + $value->net_payer_avanc ;
+                            $data[$key]['net_payer_avanc_to'] = $value->net_payer_avanc ;
+
+                            $data[$key]['montant_travaux_pe'] = $value->montant_travaux_pe ;
+                            $data[$key]['montant_rabais_pe'] = $value->montant_rabais_pe ;
+                            $data[$key]['montant_ht_pe'] = $value->montant_ht_pe ;
+                            $data[$key]['montant_tva_pe'] = $value->montant_tva_pe ;
+                            $data[$key]['montant_ttc_pe'] = $value->montant_ttc_pe ;
+                            $data[$key]['remboursement_acompte_pe'] = $value->remboursement_acompte_pe;
+                            $data[$key]['penalite_retard_pe'] = $value->penalite_retard_pe ;
+                            $data[$key]['retenue_garantie_pe'] = $value->retenue_garantie_pe;
+                            $data[$key]['remboursement_plaque_pe'] = $value->remboursement_plaque_pe;
+                            $data[$key]['net_payer_pe'] = $value->net_payer_pe ;
+                            $data[$key]['net_payer_avanc_pe'] = 0;
+
+                            $data[$key]['montant_travaux_ante'] = $value->montant_travaux_ante ;
+                            $data[$key]['montant_rabais_ante'] = $value->montant_rabais_ante ;
+                            $data[$key]['montant_ht_ante'] = $value->montant_ht_ante ;
+                            $data[$key]['montant_tva_ante'] = $value->montant_tva_ante ;
+                            $data[$key]['montant_ttc_ante'] = $value->montant_ttc_ante ;
+                            $data[$key]['remboursement_acompte_ante'] = $value->remboursement_acompte_ante;
+                            $data[$key]['penalite_retard_ante'] = $value->penalite_retard_ante ;
+                            $data[$key]['retenue_garantie_ante'] = $value->retenue_garantie_ante;
+                            $data[$key]['remboursement_plaque_ante'] = $value->remboursement_plaque_ante;
+                            $data[$key]['net_payer_ante'] = $value->net_payer_ante ;
+                            $data[$key]['net_payer_avanc_ante'] = 0 ;
+                    }
+                }            
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getfacture_mpevalidebcafBycontrat")
         {
             $tmp = $this->Facture_mpeManager->findfacture_mpevalidebcafBycontrat($id_contrat_prestataire);
             if ($tmp) 
             {
-                $data = $tmp;            } 
+                $data = $tmp;            
+            } 
                 else
                     $data = array();
         }
