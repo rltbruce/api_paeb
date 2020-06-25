@@ -204,166 +204,68 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
         $sql="
         select 
                        niveau1.id_conv_ufp as id_conv_ufp,
-                       sum(niveau1.avancement_batiment) as avancement_batiment,
-                       sum(niveau1.avancement_latrine) as avancement_latrine,
-                       sum(niveau1.avancement_mobilier) as avancement_mobilier,
+                       sum(niveau1.avancement_bat) as avancement_batiment,
+                       sum(niveau1.avancement_lat) as avancement_latrine,
+                       sum(niveau1.avancement_mob) as avancement_mobilier,
                        count(niveau1.id_conv) as nbr_conv
 
             from(
-
-                    select 
-                       detail.id_conv_ufp as id_conv_ufp,
-                       detail.id_conv as id_conv,
-                        CASE  WHEN 
-                                sum(detail.nbr_batiment) =0 THEN 0
-                             ELSE 
-                            (sum(detail.avancement_bat)/sum(detail.nbr_batiment))
-                        END as avancement_batiment,
-
-                        CASE  WHEN 
-                                sum(detail.nbr_latrine) =0 THEN 0
-                             ELSE 
-                            (sum(detail.avancement_lat)/sum(detail.nbr_latrine))
-                        END as avancement_latrine,
-
-                        CASE  WHEN 
-                                sum(detail.nbr_mobilier) =0 THEN 0
-                             ELSE 
-                            (sum(detail.avancement_mob)/sum(detail.nbr_mobilier))
-                        END as avancement_mobilier
-               from (
-
-               (
-                select 
-                        conv_ufp.id as id_conv_ufp,
-                        conv.id as id_conv,
-                        bat_const.id as id_bat_const,
-                        count(bat_const.id) as nbr_batiment,
-                        0 as avancement_bat,
-                        0 as avancement_lat,
-                        0 as nbr_latrine,
-                        0 as avancement_mob,
-                        0 as nbr_mobilier
-
-
-                        from batiment_construction as bat_const
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete 
-                            inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf                     
-
-                            group by conv_ufp.id,conv.id, bat_const.id
-                )
-                UNION
+               
                 (
                     select 
                         conv_ufp.id as id_conv_ufp,
                         conv.id as id_conv,
-                        bat_const.id as id_bat_const,
-                        0 as nbr_batiment,
                          max(atta_bat.ponderation_batiment) as avancement_bat,
                          0 as avancement_lat,
-                         0 as nbr_latrine,
-                         0 as avancement_mob,
-                         0 as nbr_mobilier
+                         0 as avancement_mob
 
                         from attachement_batiment as atta_bat
 
                             inner join avancement_batiment as avanc on avanc.id_attachement_batiment = atta_bat.id
-                            inner join batiment_construction as bat_const on bat_const.id=avanc.id_batiment_construction
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete
+                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
                             inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf                     
 
-                            group by conv_ufp.id,conv.id, bat_const.id
+                            group by conv_ufp.id,conv.id
                 )
                 UNION
                 (
                     select 
                         conv_ufp.id as id_conv_ufp,
                         conv.id as id_conv,
-                        bat_const.id as id_bat_const,
-                        0 as nbr_batiment,
-                        0 as avancement_bat,
-                        max(atta_lat.ponderation_latrine) as avancement_lat,
-                        0 as nbr_latrine,
-                        0 as avancement_mob,
-                        0 as nbr_mobilier
+                         0 as avancement_bat,
+                         max(atta_lat.ponderation_latrine) as avancement_lat,
+                         0 as avancement_mob
 
                         from attachement_latrine as atta_lat
 
-                            inner join avancement_latrine as avanc_lat on avanc_lat.id_attachement_latrine = atta_lat.id
-                            inner join latrine_construction as lat_const on lat_const.id=avanc_lat.id_latrine_construction
-                            inner join batiment_construction as bat_const on bat_const.id=lat_const.id_batiment_construction
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete
-                            inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf
+                            inner join avancement_latrine as avanc on avanc.id_attachement_latrine = atta_lat.id
+                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
+                            inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf                     
 
-                            group by conv_ufp.id,conv.id, bat_const.id,lat_const.id
-                )
-                UNION
-                (
-                    select 
-                        conv_ufp.id as id_conv_ufp,
-                        conv.id as id_conv,
-                        bat_const.id as id_bat_const,
-                        0 as nbr_batiment,
-                        0 as avancement_bat,
-                        0 as avancement_lat,
-                        count(lat_const.id) as nbr_latrine,
-                        0 as avancement_mob,
-                        0 as nbr_mobilier
-
-                        from latrine_construction as lat_const
-                            inner join batiment_construction as bat_const on bat_const.id=lat_const.id_batiment_construction
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete
-                            inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf 
-                       
-                            group by conv_ufp.id, conv.id, bat_const.id
+                            group by conv_ufp.id,conv.id
                 )
                 UNION
                 (
                     select
-                        conv_ufp.id as id_conv_ufp, 
+                        conv_ufp.id as id_conv_ufp,
                         conv.id as id_conv,
-                        bat_const.id as id_bat_const,
-                        0 as nbr_batiment,
-                        0 as avancement_bat,
-                        0 as avancement_lat,
-                        0 as nbr_latrine,
-                        max(atta_mob.ponderation_mobilier) as avancement_mob,
-                        0 as nbr_mobilier
+                         0 as avancement_bat,
+                         0 as avancement_lat,
+                         max(atta_mob.ponderation_mobilier) as avancement_mob
 
                         from attachement_mobilier as atta_mob
 
-                            inner join avancement_mobilier as avanc_mob on avanc_mob.id_attachement_mobilier = atta_mob.id
-                            inner join mobilier_construction as mob_const on mob_const.id=avanc_mob.id_mobilier_construction
-                            inner join batiment_construction as bat_const on bat_const.id=mob_const.id_batiment_construction
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete
-                            inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf 
+                            inner join avancement_mobilier as avanc on avanc.id_attachement_mobilier = atta_mob.id
+                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
+                            inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf                     
 
-                            group by conv_ufp.id, conv.id, bat_const.id,mob_const.id
-                )
-                UNION
-                (
-                    select 
-                        conv_ufp.id as id_conv_ufp,
-                        conv.id as id_conv,
-                        bat_const.id as id_bat_const,
-                        0 as nbr_batiment,
-                        0 as avancement_bat,
-                        0 as avancement_lat,
-                        0 as nbr_latrine,
-                        0 as avancement_mob,
-                        count(mob_const.id) as nbr_mobilier
-
-                        from mobilier_construction as mob_const
-                            inner join batiment_construction as bat_const on bat_const.id=mob_const.id_batiment_construction
-                            inner join convention_cisco_feffi_entete as conv on conv.id = bat_const.id_convention_entete
-                            inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf 
-
-                            group by conv_ufp.id, conv.id, bat_const.id
+                            group by conv_ufp.id,conv.id
                 ) 
 
-                )detail
-
-                group by detail.id_conv_ufp,detail.id_conv) niveau1
+                ) niveau1
 
                 group by niveau1.id_conv_ufp
             ";
