@@ -214,6 +214,24 @@ class Utilisateurs extends REST_Controller {
             if ($supprimer == 0) 
             {
                 $getrole = $this->post('roles');
+                $id_region=null;
+                $tmp_region = $this->post('id_region');
+                if($tmp_region !="" && intval($tmp_region) >0) 
+                {
+                    $id_region=$tmp_region;
+                }
+                $id_district=null;
+                $tmp_disrict = $this->post('id_disrict');
+                if($tmp_disrict !="" && intval($tmp_disrict) >0) 
+                {
+                    $id_disrict=$tmp_disrict;
+                }
+                $id_cisco=null;
+                $tmp_cisco = $this->post('id_cisco');
+                if($tmp_cisco !="" && intval($tmp_cisco) >0) 
+                {
+                    $id_cisco=$tmp_cisco;
+                }
                 $data = array(
                     'nom' => $this->post('nom'),
                     'prenom' => $this->post('prenom'),
@@ -221,10 +239,10 @@ class Utilisateurs extends REST_Controller {
                  //   'sigle' => $this->post('sigle'),
                     'email' => $this->post('email'),                 
                     'enabled' => $this->post('enabled'),
-                    'roles' => serialize($getrole),                 
-                    'id_region' => $this->post('id_region'),                 
-                    'id_district' => $this->post('id_district'),                 
-                    'id_cisco' => $this->post('id_cisco')
+                    'roles' => serialize($getrole),                  
+                    'id_region' => $id_region,                 
+                    'id_district' => $id_district,                 
+                    'id_cisco' => $id_cisco
                   
                 );
 
@@ -263,7 +281,25 @@ class Utilisateurs extends REST_Controller {
         else
         {
             if ($profil == 1) 
-            {
+            {   
+                $id_region=null;
+                $tmp_region = $this->post('id_region');
+                if($tmp_region !="" && intval($tmp_region) >0) 
+                {
+                    $id_region=$tmp_region;
+                }
+                $id_district=null;
+                $tmp_disrict = $this->post('id_disrict');
+                if($tmp_disrict !="" && intval($tmp_disrict) >0) 
+                {
+                    $id_disrict=$tmp_disrict;
+                }
+                $id_cisco=null;
+                $tmp_cisco = $this->post('id_cisco');
+                if($tmp_cisco !="" && intval($tmp_cisco) >0) 
+                {
+                    $id_cisco=$tmp_cisco;
+                }
                 $data = array(
                     'nom' => $this->post('nom'),
                     'prenom' => $this->post('prenom'),
@@ -271,9 +307,9 @@ class Utilisateurs extends REST_Controller {
                     //'cin' => $this->post('cin'),
                     'email' => $this->post('email'),
                     'password' => sha1($this->post('password')),                 
-                    'id_region' => $this->post('id_region'),                 
-                    'id_district' => $this->post('id_district'),                 
-                    'id_cisco' => $this->post('id_cisco')
+                    'id_region' => $id_region,                 
+                    'id_district' => $id_district,                 
+                    'id_cisco' => $id_cisco
           
                 );
 
@@ -301,15 +337,33 @@ class Utilisateurs extends REST_Controller {
             else 
             {
                 $getrole = array("USER");
+                $id_region=null;
+                $tmp_region = $this->post('id_region');
+                if($tmp_region !="" && intval($tmp_region) >0) 
+                {
+                    $id_region=$tmp_region;
+                }
+                $id_district=null;
+                $tmp_disrict = $this->post('id_disrict');
+                if($tmp_disrict !="" && intval($tmp_disrict) >0) 
+                {
+                    $id_disrict=$tmp_disrict;
+                }
+                $id_cisco=null;
+                $tmp_cisco = $this->post('id_cisco');
+                if($tmp_cisco !="" && intval($tmp_cisco) >0) 
+                {
+                    $id_cisco=$tmp_cisco;
+                }
                 $data = array(
                     'nom' => $this->post('nom'),
                     'prenom' => $this->post('prenom'),
                     'telephone' => $this->post('telephone'),
                     'sigle' => $this->post('sigle'),
-                    'email' => $this->post('email'),
-                    'id_region' => $this->post('id_region'),
-                    'id_district' => $this->post('id_district'),
-                    'id_cisco' => $this->post('id_cisco'),
+                    'email' => $this->post('email'),                 
+                    'id_region' => $id_region,                 
+                    'id_district' => $id_district,                 
+                    'id_cisco' => $id_cisco,
                     'password' => sha1($this->post('password')),
                     'enabled' => 0,
                     'token' => bin2hex(openssl_random_pseudo_bytes(32)),

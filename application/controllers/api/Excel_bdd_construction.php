@@ -35,29 +35,549 @@ class Excel_bdd_construction extends REST_Controller
 
         //*********************************** Nombre echantillon *************************
         
-        if ($menu=='getdonneeexporter') //mande       
-         {
+ 
                     
+            
+        
+        
+        //********************************* fin Nombre echantillon *****************************
+        if ($menu=='getdonneeexporter') //mande       
+        {   
             $tmp = $this->Convention_cisco_feffi_enteteManager->finddonneeexporter($this->generer_requete($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot));
             if ($tmp) 
             {
                 $data =$tmp;
             } 
             else
+            {
                     $data = array();
-        }
-        
-        //********************************* fin Nombre echantillon *****************************
-        if (count($data)>0) {
-        
-        $export=$this->export_excel($repertoire,$data);
+            }
 
-        } else {
+            if (count($data)>0) 
+            {
+            
+                $export=$this->export_excel($repertoire,$data);
+
+            } else {
+                $this->response([
+                    'status' => FALSE,
+                    'response' => array(),
+                    'message' => 'No data were found'
+                ], REST_Controller::HTTP_OK);
+            }
+        }
+        else
+        {   
+            $tmp = $this->Convention_cisco_feffi_enteteManager->finddonneeexporter($this->generer_requete($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot));
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value)
+                {  
+
+        //donnee globale             
+                    $data[$key]['nom_agence']= $value->nom_agence;
+                    $data[$key]['nom_ecole']= $value->nom_ecole;
+                    $data[$key]['nom_commune']= $value->nom_commune;
+                    $data[$key]['nom_cisco']= $value->nom_cisco;
+                    $data[$key]['nom_region']= $value->nom_region;
+                    $data[$key]['type_convention']= $value->libelle_zone.$value->libelle_acces;
+
+        //estimation convention
+
+                    $data[$key]['nom_feffi']= $value->nom_feffi;
+                    $data[$key]['date_signature_convention']= $value->date_signature_convention;
+
+                    $data[$key]['cout_batiment']= $value->cout_batiment;
+
+                    $data[$key]['cout_latrine']= $value->cout_latrine;
+
+                    $data[$key]['cout_mobilier']= $value->cout_mobilier;
+
+                    $data[$key]['cout_maitrise']= $value->cout_maitrise;
+
+                    $data[$key]['soustotaldepense']= $value->soustotaldepense;
+
+                    $data[$key]['cout_sousprojet']= $value->cout_sousprojet;
+
+                    $data[$key]['montant_convention']= $value->montant_convention;
+
+                    $data[$key]['cout_avenant']= $value->cout_avenant;
+
+                    $data[$key]['montant_apres_avenant']= $value->montant_convention + $value->cout_avenant;
+
+        //suivi financier
+
+                    $data[$key]['transfert_tranche1']= $value->transfert_tranche1;
+
+                    $data[$key]['date_approbation1']= $value->date_approbation1;
+
+                    $data[$key]['transfert_tranche2']= $value->transfert_tranche2;
+
+                    $data[$key]['date_approbation2']= $value->date_approbation2;
+
+                    $data[$key]['transfert_tranche3']= $value->transfert_tranche3;
+
+                    $data[$key]['date_approbation3']= $value->date_approbation3;
+
+                
+                    $data[$key]['transfert_tranche4']=  $value->transfert_tranche4;
+                
+                    $data[$key]['date_approbation4']=$value->date_approbation4;
+                
+                    $data[$key]['total_transfert']= $value->transfert_tranche1 + $value->transfert_tranche2 + $value->transfert_tranche3 + $value->transfert_tranche4;
+
+                    if ($value->montant_convention) {
+                        $data[$key]['decaissement_transfert']=  (($value->transfert_tranche1 + $value->transfert_tranche2 + $value->transfert_tranche3 + $value->transfert_tranche4)*100)/$value->montant_convention;
+                    }
+                    
+
+        //SUIVI FINANCIER FEFFI -PRESTATAIRE
+
+                $data[$key]['montant_decaiss_feffi_pre']= $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe;
+
+                if ($value->soustotaldepense) {
+                    $data[$key]['pourcentage_decaiss_feffi_pre']= (($value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe)*100)/$value->soustotaldepense;
+                }
+                
+
+
+        //SUIVI FINANCIER FEFFI FONCTIONNEMENT
+
+                $data[$key]['montant_decaiss_fonct_feffi']= $value->montant_decaiss_fonct_feffi;
+
+                if ($value->cout_sousprojet) {
+                    $data[$key]['pourcentage_decaiss_fonct_feffi']= ($value->montant_decaiss_fonct_feffi*100)/$value->cout_sousprojet;
+                }
+                
+
+
+                $data[$key]['total_convention_decaiss']= $value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe;
+
+                $data[$key]['reliqua_fond']= $value->montant_convention - ($value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe);
+
+        //Suivi Passation des marchés PR
+
+                $data[$key]['date_manifestation_pr']= $value->date_manifestation_pr;
+
+                $data[$key]['date_lancement_dp_pr']= $value->date_lancement_dp_pr;
+
+                $data[$key]['date_remise_pr']= $value->date_remise_pr;
+
+                $data[$key]['nbr_offre_recu_pr']= $value->nbr_offre_recu_pr;
+
+                $data[$key]['date_os_pr']= $value->date_os_pr;
+
+                $data[$key]['nom_pr']= $value->nom_pr;
+
+                $data[$key]['montant_contrat_pr']= $value->montant_contrat_pr;
+
+
+
+        //module dpp        
+
+                $data[$key]['date_debut_previ_form_dpp_pr']= $value->date_debut_previ_form_dpp_pr;
+
+                $data[$key]['date_fin_previ_form_dpp_pr']= $value->date_fin_previ_form_dpp_pr;
+
+                $data[$key]['date_previ_resti_dpp_pr']= $value->date_previ_resti_dpp_pr;
+
+                $data[$key]['date_debut_reel_form_dpp_pr']= $value->date_debut_reel_form_dpp_pr;
+
+                $data[$key]['date_fin_reel_form_dpp_pr']= $value->date_fin_reel_form_dpp_pr;
+
+                $data[$key]['date_reel_resti_dpp_pr']= $value->date_reel_resti_dpp_pr;
+
+                $data[$key]['nbr_previ_parti_dpp_pr']= $value->nbr_previ_parti_dpp_pr;
+
+                $data[$key]['nbr_parti_dpp_pr']= $value->nbr_parti_dpp_pr;
+
+                $data[$key]['nbr_previ_fem_parti_dpp_pr']= $value->nbr_previ_fem_parti_dpp_pr;
+
+                $data[$key]['nbr_reel_fem_parti_dpp_pr']= $value->nbr_reel_fem_parti_dpp_pr;
+
+                $data[$key]['lieu_formation_dpp_pr']= $value->lieu_formation_dpp_pr;
+
+                $data[$key]['observation_dpp_pr']= $value->observation_dpp_pr;
+
+        //modeule odc        
+
+                $data[$key]['date_debut_previ_form_odc_pr']= $value->date_debut_previ_form_odc_pr;
+
+                $data[$key]['date_fin_previ_form_odc_pr']= $value->date_fin_previ_form_odc_pr;
+
+                $data[$key]['date_previ_resti_odc_pr']= $value->date_previ_resti_odc_pr;
+
+                $data[$key]['date_debut_reel_form_odc_pr']= $value->date_debut_reel_form_odc_pr;
+
+                $data[$key]['date_fin_reel_form_odc_pr']= $value->date_fin_reel_form_odc_pr;
+
+                $data[$key]['date_reel_resti_odc_pr']= $value->date_reel_resti_odc_pr;
+
+                $data[$key]['nbr_previ_parti_odc_pr']= $value->nbr_previ_parti_odc_pr;
+
+                $data[$key]['nbr_parti_odc_pr']= $value->nbr_parti_odc_pr;
+
+                $data[$key]['nbr_previ_fem_parti_odc_pr']= $value->nbr_previ_fem_parti_odc_pr;
+
+                $data[$key]['nbr_reel_fem_parti_odc_pr']= $value->nbr_reel_fem_parti_odc_pr;
+
+                $data[$key]['lieu_formation_odc_pr']= $value->lieu_formation_odc_pr;
+
+                $data[$key]['observation_odc_pr']= $value->observation_odc_pr;
+
+        //modeule pmc        
+
+                $data[$key]['date_debut_previ_form_pmc_pr']= $value->date_debut_previ_form_pmc_pr;
+
+                $data[$key]['date_fin_previ_form_pmc_pr']= $value->date_fin_previ_form_pmc_pr;
+
+                $data[$key]['date_previ_resti_pmc_pr']= $value->date_previ_resti_pmc_pr;
+
+                $data[$key]['date_debut_reel_form_pmc_pr']= $value->date_debut_reel_form_pmc_pr;
+
+                $data[$key]['date_fin_reel_form_pmc_pr']= $value->date_fin_reel_form_pmc_pr;
+
+                $data[$key]['date_reel_resti_pmc_pr']= $value->date_reel_resti_pmc_pr;
+
+                $data[$key]['nbr_previ_parti_pmc_pr']= $value->nbr_previ_parti_pmc_pr;
+
+                $data[$key]['nbr_parti_pmc_pr']= $value->nbr_parti_pmc_pr;
+
+                $data[$key]['nbr_previ_fem_parti_pmc_pr']= $value->nbr_previ_fem_parti_pmc_pr;
+
+                $data[$key]['nbr_reel_fem_parti_pmc_pr']= $value->nbr_reel_fem_parti_pmc_pr;
+
+                $data[$key]['lieu_formation_pmc_pr']= $value->lieu_formation_pmc_pr;
+
+                $data[$key]['observation_pmc_pr']= $value->observation_pmc_pr;
+
+        //modeule gfpc         
+
+                $data[$key]['date_debut_previ_form_gfpc_pr']= $value->date_debut_previ_form_gfpc_pr;
+
+                $data[$key]['date_fin_previ_form_gfpc_pr']= $value->date_fin_previ_form_gfpc_pr;
+
+                $data[$key]['date_previ_resti_gfpc_pr']= $value->date_previ_resti_gfpc_pr;
+
+                $data[$key]['date_debut_reel_form_gfpc_pr']= $value->date_debut_reel_form_gfpc_pr;
+
+                $data[$key]['date_fin_reel_form_gfpc_pr']= $value->date_fin_reel_form_gfpc_pr;
+
+                $data[$key]['date_reel_resti_gfpc_pr']= $value->date_reel_resti_gfpc_pr;
+
+                $data[$key]['nbr_previ_parti_gfpc_pr']= $value->nbr_previ_parti_gfpc_pr;
+
+                $data[$key]['nbr_parti_gfpc_pr']= $value->nbr_parti_gfpc_pr;
+
+                $data[$key]['nbr_previ_fem_parti_gfpc_pr']= $value->nbr_previ_fem_parti_gfpc_pr;
+
+                $data[$key]['nbr_reel_fem_parti_gfpc_pr']= $value->nbr_reel_fem_parti_gfpc_pr;
+
+                $data[$key]['lieu_formation_gfpc_pr']= $value->lieu_formation_gfpc_pr;
+
+                $data[$key]['observation_gfpc_pr']= $value->observation_gfpc_pr;
+
+        //modeule sep         
+
+                $data[$key]['date_debut_previ_form_sep_pr']= $value->date_debut_previ_form_sep_pr;
+
+                $data[$key]['date_fin_previ_form_sep_pr']= $value->date_fin_previ_form_sep_pr;
+
+                $data[$key]['date_previ_resti_sep_pr']= $value->date_previ_resti_sep_pr;
+
+                $data[$key]['date_debut_reel_form_sep_pr']= $value->date_debut_reel_form_sep_pr;
+
+                $data[$key]['date_fin_reel_form_sep_pr']= $value->date_fin_reel_form_sep_pr;
+
+                $data[$key]['date_reel_resti_sep_pr']= $value->date_reel_resti_sep_pr;
+
+                $data[$key]['nbr_previ_parti_sep_pr']= $value->nbr_previ_parti_sep_pr;
+
+                $data[$key]['nbr_parti_sep_pr']= $value->nbr_parti_sep_pr;
+
+                $data[$key]['nbr_previ_fem_parti_sep_pr']= $value->nbr_previ_fem_parti_sep_pr;
+
+                $data[$key]['nbr_reel_fem_parti_sep_pr']= $value->nbr_reel_fem_parti_sep_pr;
+
+                $data[$key]['lieu_formation_sep_pr']= $value->lieu_formation_sep_pr;
+
+                $data[$key]['observation_sep_pr']= $value->observation_sep_pr;
+
+        //modeule emies        
+
+                $data[$key]['date_debut_previ_form_emies_pr']= $value->date_debut_previ_form_emies_pr;
+
+                $data[$key]['date_fin_previ_form_emies_pr']= $value->date_fin_previ_form_emies_pr;
+
+                $data[$key]['date_previ_resti_emies_pr']= $value->date_previ_resti_emies_pr;
+
+                $data[$key]['date_debut_reel_form_emies_pr']= $value->date_debut_reel_form_emies_pr;
+
+                $data[$key]['date_fin_reel_form_emies_pr']= $value->date_fin_reel_form_emies_pr;
+
+                $data[$key]['date_reel_resti_emies_pr']= $value->date_reel_resti_emies_pr;
+
+                $data[$key]['nbr_previ_parti_emies_pr']= $value->nbr_previ_parti_emies_pr;
+
+                $data[$key]['nbr_parti_emies_pr']= $value->nbr_parti_emies_pr;
+
+                $data[$key]['nbr_previ_fem_parti_emies_pr']= $value->nbr_previ_fem_parti_emies_pr;
+
+                $data[$key]['nbr_reel_fem_parti_emies_pr']= $value->nbr_reel_fem_parti_emies_pr;
+
+                $data[$key]['lieu_formation_emies_pr']= $value->lieu_formation_emies_pr;
+
+                $data[$key]['observation_emies_pr']= $value->observation_emies_pr;
+
+        //passation moe
+
+                $data[$key]['date_shortlist_moe']= $value->date_shortlist_moe;
+
+                $data[$key]['date_manifestation_moe']= $value->date_manifestation_moe;
+
+                $data[$key]['date_lancement_dp_moe']= $value->date_lancement_dp_moe;
+
+                $data[$key]['date_remise_moe']= $value->date_remise_moe;
+
+                $data[$key]['nbr_offre_recu_moe']= $value->nbr_offre_recu_moe;
+
+                $data[$key]['date_rapport_evaluation_moe']= $value->date_rapport_evaluation_moe;
+
+                $data[$key]['date_demande_ano_dpfi_moe']= $value->date_demande_ano_dpfi_moe;
+
+                $data[$key]['date_ano_dpfi_moe']= $value->date_ano_dpfi_moe;
+
+                $data[$key]['notification_intention_moe']= $value->notification_intention_moe;
+
+                $data[$key]['date_notification_attribution_moe']= $value->date_notification_attribution_moe;
+
+                $data[$key]['date_signature_contrat_moe']= $value->date_signature_contrat_moe;
+
+                $data[$key]['date_os_moe']= $value->date_os_moe;
+
+                $data[$key]['nom_bureau_etude_moe']= $value->nom_bureau_etude_moe;
+
+                $data[$key]['statut_moe']= $value->statut_moe;
+
+                $data[$key]['montant_contrat_moe']= $value->montant_contrat_moe;
+
+                $data[$key]['montant_avenant_moe']= $value->montant_avenant_moe;
+
+                $data[$key]['montant_apres_avenant_moe']= $value->montant_avenant_moe + $value->montant_contrat_moe;
+
+                $data[$key]['observation_moe']= $value->observation_moe;
+
+
+        //PRESTATIO MOE
+                $data[$key]['date_livraison_mt']= $value->date_livraison_mt;
+
+                $data[$key]['date_approbation_mt']= $value->date_approbation_mt;
+
+                $data[$key]['date_livraison_dao']= $value->date_livraison_dao;
+
+                $data[$key]['date_approbation_dao']= $value->date_approbation_dao;
+
+                $data[$key]['date_livraison_rp1']= $value->date_livraison_rp1;
+
+                $data[$key]['date_livraison_rp2']= $value->date_livraison_rp2;
+
+                $data[$key]['date_livraison_rp3']= $value->date_livraison_rp3;
+
+                $data[$key]['date_livraison_rp4']= $value->date_livraison_rp4;
+
+                $data[$key]['date_livraison_mg']= $value->date_livraison_mg;
+
+                $data[$key]['cumule_paiement_be']= $value->montant_paiement_debut_moe +$value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe;
+
+                if ($value->montant_contrat_moe) {
+                    $data[$key]['pourcentage_paiement_be']= (($value->montant_paiement_debut_moe +$value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe)*100)/$value->montant_contrat_moe;
+                }
+                
+
+                $data[$key]['date_expiration_poli_moe']= $value->date_expiration_poli_moe;
+
+        //passation mpe
+
+                $data[$key]['date_lancement_pme']= $value->date_lancement_pme;
+
+                $data[$key]['date_remise_pme']= $value->date_remise_pme;
+
+                $data[$key]['nbr_mpe_soumissionaire_pme']= $value->nbr_mpe_soumissionaire_pme;
+                
+                $data[$key]['nbr_mpe_soumissionaire_pme']= $value->nbr_mpe_soumissionaire_pme;
+
+                $data[$key]['montant_moin_chere_pme']= $value->montant_moin_chere_pme;
+
+                $data[$key]['date_rapport_evaluation_pme']= $value->date_rapport_evaluation_pme;
+
+                $data[$key]['date_demande_ano_dpfi_pme']= $value->date_demande_ano_dpfi_pme;
+
+                $data[$key]['date_ano_dpfi_pme']= $value->date_ano_dpfi_pme;
+
+                $data[$key]['notification_intention_pme']= $value->notification_intention_pme;
+
+                $data[$key]['date_notification_attribution_pme']= $value->date_notification_attribution_pme;
+
+                $data[$key]['date_signature_pme']= $value->date_signature_pme;
+
+                $data[$key]['date_os_pme']= $value->date_os_pme;
+
+                $data[$key]['nom_prestataire']= $value->nom_prestataire;
+
+                $data[$key]['observation_passation_pme']= $value->observation_passation_pme;
+
+                $data[$key]['cout_batiment_pme']= $value->cout_batiment_pme;
+
+                $data[$key]['cout_latrine_pme']= $value->cout_latrine_pme;
+                $data[$key]['cout_mobilier_pme']= $value->cout_mobilier_pme;
+
+                $data[$key]['montant_total_mpe']= $value->cout_mobilier_pme + $value->cout_latrine_pme + $value->cout_batiment_pme;
+
+                $data[$key]['avenant_mpe']= $value->cout_latrine_avenant_mpe + $value->cout_batiment_avenant_mpe + $value->cout_mobilier_avenant_mpe;
+                $data[$key]['montant_apres_avenant']= $value->cout_mobilier_pme + $value->cout_latrine_pme + $value->cout_batiment_pme + $value->cout_latrine_avenant_mpe + $value->cout_batiment_avenant_mpe + $value->cout_mobilier_avenant_mpe;
+
+                $data[$key]['phase_sousprojet_mpe']= $value->phase_sousprojet_mpe;
+
+                $data[$key]['date_prev_debu_travau_mpe']= $value->date_prev_debu_travau_mpe;
+
+                $data[$key]['date_reel_debu_travau_mpe']= $value->date_reel_debu_travau_mpe;
+
+                $data[$key]['delai_execution_mpe']= $value->delai_execution_mpe;
+
+        //reception
+
+                $data[$key]['date_previ_recep_tech_mpe']= $value->date_previ_recep_tech_mpe;
+
+                $data[$key]['date_reel_tech_mpe']= $value->date_reel_tech_mpe;
+
+                $data[$key]['date_leve_recep_tech_mpe']= $value->date_leve_recep_tech_mpe;
+
+                $data[$key]['date_previ_recep_prov_mpe']= $value->date_previ_recep_prov_mpe;
+
+                $data[$key]['date_reel_recep_prov_mpe']= $value->date_reel_recep_prov_mpe;
+
+                $data[$key]['date_previ_leve_mpe']= $value->date_previ_leve_mpe;
+
+                $data[$key]['date_reel_lev_ava_rd_mpe']= $value->date_reel_lev_ava_rd_mpe;
+
+                $data[$key]['date_previ_recep_defi_mpe']= $value->date_previ_recep_defi_mpe;
+
+                $data[$key]['date_reel_recep_defi_mpe']= $value->date_reel_recep_defi_mpe;
+
+                $data[$key]['avancement_physique']= (($value->avancement_batiment_mpe + $value->avancement_latrine_mpe +$value->avancement_mobilier_mpe)/3).' %';
+
+                $data[$key]['observation_recep_mpe']= $value->observation_recep_mpe;
+
+                $data[$key]['date_expiration_police_mpe']= $value->date_expiration_police_mpe;
+
+                $data[$key]['date_approbation_mpe1']= $value->date_approbation_mpe1;
+
+                $data[$key]['montant_paiement_mpe1']= $value->montant_paiement_mpe1;
+
+                $data[$key]['date_approbation_mpe2']= $value->date_approbation_mpe2;
+
+                $data[$key]['montant_paiement_mpe2']= $value->montant_paiement_mpe2;
+
+                $data[$key]['date_approbation_mpe3']= $value->date_approbation_mpe3;
+
+                $data[$key]['montant_paiement_mpe3']= $value->montant_paiement_mpe3;
+
+                $data[$key]['date_approbation_mpe4']= $value->date_approbation_mpe4;
+
+                $data[$key]['montant_paiement_mpe4']= $value->montant_paiement_mpe4;
+
+                $data[$key]['date_approbation_mpe5']= $value->date_approbation_mpe5;
+
+                $data[$key]['montant_paiement_mpe5']= $value->montant_paiement_mpe5;
+
+                $data[$key]['date_approbation_mpe6']= $value->date_approbation_mpe6;
+
+                $data[$key]['montant_paiement_mpe6']= $value->montant_paiement_mpe6;
+
+                $data[$key]['date_approbation_mpe7']= $value->date_approbation_mpe7;
+
+                $data[$key]['montant_paiement_mpe7']= $value->montant_paiement_mpe7;
+
+                $data[$key]['date_approbation_mpe8']= $value->date_approbation_mpe8;
+
+                $data[$key]['montant_paiement_mpe8']= $value->montant_paiement_mpe8;
+
+                $data[$key]['date_approbation_mpe9']= $value->date_approbation_mpe9;
+
+                $data[$key]['montant_paiement_mpe9']= $value->montant_paiement_mpe9;
+
+                $data[$key]['date_approbation_mpe10']= $value->date_approbation_mpe10;
+
+                $data[$key]['montant_paiement_mpe10']= $value->montant_paiement_mpe10;
+
+                $data[$key]['anterieur_mpe']= $value->anterieur_mpe;
+
+                $data[$key]['periode_mpe']= $value->periode_mpe;
+
+                $data[$key]['cumul_mpe']= $value->cumul_mpe;
+
+                $data[$key]['montant_transfert_reliquat']= $value->montant_transfert_reliquat;
+
+                $data[$key]['objet_utilisation_reliquat']= $value->objet_utilisation_reliquat;
+
+                $data[$key]['situation_utilisation_reliquat']= $value->situation_utilisation_reliquat;
+
+                $data[$key]['observation_reliquat']= $value->observation_reliquat;
+
+                $data[$key]['prev_nbr_salle']= $value->prev_nbr_salle;
+
+                $data[$key]['nbr_salle_const_indicateur']= $value->nbr_salle_const_indicateur;
+
+                $data[$key]['prev_beneficiaire']= $value->prev_beneficiaire;
+
+                $data[$key]['nbr_beneficiaire_indicateur']= $value->nbr_beneficiaire_indicateur;
+
+                $data[$key]['prev_nbr_ecole']= $value->prev_nbr_ecole;
+                $data[$key]['nbr_ecole_indicateur']= $value->nbr_ecole_indicateur;
+
+                $data[$key]['prev_nbr_box_latrine']= $value->prev_nbr_box_latrine;
+
+                $data[$key]['nbr_box_indicateur']= $value->nbr_box_indicateur;
+
+                $data[$key]['prev_nbr_point_eau']= $value->prev_nbr_point_eau;
+
+                $data[$key]['nbr_point_eau_indicateur']= $value->nbr_point_eau_indicateur;
+
+                $data[$key]['prev_nbr_table_banc']= $value->prev_nbr_table_banc;
+
+                $data[$key]['nbr_banc_indicateur']= $value->nbr_banc_indicateur;
+
+                $data[$key]['prev_nbr_table_maitre']= $value->prev_nbr_table_maitre;
+
+                $data[$key]['nbr_table_maitre_indicateur']= $value->nbr_table_maitre_indicateur;
+
+                $data[$key]['prev_nbr_chaise_maitre']= $value->prev_nbr_chaise_maitre;
+
+                $data[$key]['nbr_chaise_indicateur']= $value->nbr_chaise_indicateur;
+
+                $data[$key]['observation_indicateur']= $value->observation_indicateur;
+
+                }
+            } 
+            else
+            {
+                    $data = array();
+            }
+
+            if (count($data)>0) {
+        
             $this->response([
-                'status' => FALSE,
-                'response' => array(),
-                'message' => 'No data were found'
+                'status' => TRUE,
+                'response' => $data,
+                'message' => 'Get data success',
             ], REST_Controller::HTTP_OK);
+            } else {
+                $this->response([
+                    'status' => FALSE,
+                    'response' => array(),
+                    'message' => 'No data were found'
+                ], REST_Controller::HTTP_OK);
+            }
         }
     }
 

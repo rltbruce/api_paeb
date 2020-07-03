@@ -90,6 +90,10 @@ class Demande_fin_travaux_moe_model extends CI_Model {
             inner join demande_debut_travaux_moe on demande_debut_travaux_moe.id_tranche_d_debut_travaux_moe = tranche_d_debut_travaux_moe.id            
             inner join contrat_bureau_etude on contrat_bureau_etude.id = demande_debut_travaux_moe.id_contrat_bureau_etude
             where contrat_bureau_etude.id = id_contr and demande_debut_travaux_moe.validation=3) as pourcentage_debut_travaux",FALSE);
+        $this->db ->select("(select sum(tranche_d_fin_travaux_moe.pourcentage) from tranche_d_fin_travaux_moe
+            inner join demande_fin_travaux_moe on demande_fin_travaux_moe.id_tranche_d_fin_travaux_moe = tranche_d_fin_travaux_moe.id            
+            inner join contrat_bureau_etude on contrat_bureau_etude.id = demande_fin_travaux_moe.id_contrat_bureau_etude
+            where contrat_bureau_etude.id = id_contr and demande_fin_travaux_moe.validation=3) as pourcentage_fin_travaux",FALSE);
 
         $this->db ->select("(select sum(tranche_d_fin_travaux_moe.pourcentage) from tranche_d_fin_travaux_moe) as pourcentage_tranche_fin_travaux",FALSE); 
 

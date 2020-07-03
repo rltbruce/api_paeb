@@ -99,5 +99,25 @@ class Region_model extends CI_Model
         if ($q->num_rows() > 0) {
             return $q->row();
         }
+    }
+        
+
+
+    public function getregionbycisco($id_cisco)
+    {
+        $result =  $this->db->select('region.*')
+                        ->from($this->table)
+                         ->join('district','district.id_region=region.id')
+                        ->join('cisco','cisco.id_district=district.id')
+                        ->where('cisco.id',$id_cisco)
+                        ->order_by('nom')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     }    
 }

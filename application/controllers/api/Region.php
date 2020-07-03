@@ -14,13 +14,33 @@ class Region extends REST_Controller {
 
     public function index_get() {
         $id = $this->get('id');
-            if ($id) {
+        $menu = $this->get('menu');
+        $id_cisco = $this->get('id_cisco');
+            if ($id) 
+            {
                 $data = array();
                 $region = $this->RegionManager->findById($id);
                 $data['id'] = $region->id;
                 $data['code'] = $region->code;
                 $data['nom'] = $region->nom;
-            } else {
+            } 
+            elseif ($menu=='getregionbycisco')
+            {
+                $tmp = $this->RegionManager->getregionbycisco($id_cisco);
+                if ($tmp)
+                {
+                   $data=$tmp; 
+                    /*foreach ($tmp as $key => $value) {
+                        $pays = array();
+                        $data[$key]['id'] = $value->id;
+                        $data[$key]['code'] = $value->code;
+                        $data[$key]['nom'] = $value->nom;
+                    }*/
+                } else
+                    $data = array();
+            } 
+            else 
+            {
                 $tmp = $this->RegionManager->findAll();
                 if ($tmp)
                 {
