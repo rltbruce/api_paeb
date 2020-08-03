@@ -62,5 +62,75 @@ class Zap_model extends CI_Model {
             return $q->row();
         }
     }
+
+
+   /* public function getzapbynom($nom) {
+        $requete="select * from zap
+         where lower(nom)=".$nom."";
+        $query = $this->db->query($requete)->result();
+        //return $query->result(); 
+
+        if($query) {
+            return $query;
+        }else{
+            return null;
+        }               
+    }*/
+    public function getzapbynom($nom) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("lower(nom)=", $nom)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
+
+    public function getcommunebynom($nom) {               
+        $result =  $this->db->select('*')
+                        ->from('commune')
+                        ->where("lower(nom)=", $nom)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
+
+    public function getzapbycommune($nom) {               
+        $result =  $this->db->select('*')
+                        ->from('commune')
+                        ->where("lower(nom)=", $nom)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
+
+    public function getzap_communebyid($id_zap, $id_commune) {               
+        $result =  $this->db->select('*')
+                        ->from('zap_commune')
+                        ->where("id_zap", $id_zap)
+                        ->where("id_commune", $id_commune)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 }
 ?>

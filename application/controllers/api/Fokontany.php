@@ -30,8 +30,8 @@ class Fokontany extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['nom'] = $value->nom;
-                    $data[$key]['latitude'] = $value->latitude;
-                    $data[$key]['longitude'] = $value->longitude;
+                    //$data[$key]['latitude'] = $value->latitude;
+                    //$data[$key]['longitude'] = $value->longitude;
                     $data[$key]['commune'] = $commune;
                 }
             }    
@@ -44,8 +44,8 @@ class Fokontany extends REST_Controller {
                 $data['id'] = $fokontany->id;
                 $data['code'] = $fokontany->code;
                 $data['nom'] = $fokontany->nom;
-                $data['latitude'] = $fokontany->latitude;
-                $data['longitude'] = $fokontany->longitude;
+                //$data['latitude'] = $fokontany->latitude;
+                //$data['longitude'] = $fokontany->longitude;
                 $data['commune'] = $commune;
                 
             } else {
@@ -59,8 +59,8 @@ class Fokontany extends REST_Controller {
                         $data[$key]['code'] = $value->code;
                         $data[$key]['nom'] = $value->nom;
                         $data[$key]['id_commune'] = $value->id_commune;
-                        $data[$key]['latitude'] = $value->latitude;
-                        $data[$key]['longitude'] = $value->longitude;
+                        //$data[$key]['latitude'] = $value->latitude;
+                        //$data[$key]['longitude'] = $value->longitude;
                         $data[$key]['commune'] = $commune;
 
                     };
@@ -89,8 +89,8 @@ class Fokontany extends REST_Controller {
 		$data = array(
 			'code' => $this->post('code'),
 			'nom' => $this->post('nom'),
-			'latitude' => $this->post('latitude'),
-			'longitude' => $this->post('longitude'),
+			//'latitude' => $this->post('latitude'),
+			//'longitude' => $this->post('longitude'),
 			'id_commune' => $this->post('id_commune')
 		);               
         if ($supprimer == 0) {

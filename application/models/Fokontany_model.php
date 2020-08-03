@@ -30,8 +30,8 @@ class Fokontany_model extends CI_Model {
         return array(
             'code'       =>  $fokontany['code'],
             'nom'        =>  $fokontany['nom'],
-            'latitude'   =>  $fokontany['latitude'],
-            'longitude'  =>  $fokontany['longitude'],
+            //'latitude'   =>  $fokontany['latitude'],
+            //'longitude'  =>  $fokontany['longitude'],
             'id_commune' =>  $fokontany['id_commune']                       
         );
     }

@@ -14,11 +14,70 @@ class District extends REST_Controller {
     }
 
     public function index_get() 
-    {
+    {   
+        set_time_limit(0);
+        ini_set ('memory_limit', '40000M');
         $id = $this->get('id');
         $id_region = $this->get('id_region');
+        $menu = $this->get('menu');
+        $now = date('yy');
+        $datearray= $date_t     = explode('-', $now) ;
             
-        if ($id_region) 
+        if ($menu=="reportingvuecarte2") 
+        {   
+            $tmp = $this->DistrictManager->findAll();
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $reporting = array();
+                    $reporting = $this->DistrictManager->findreporting($now, $value->id);
+                    $coordonnees=null;                
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $now;
+                    $data[$key]['nom'] = $value->nom;
+                    if (!is_null($value->coordonnees) && $value->coordonnees!='')
+                    {
+                        $coordonnees=unserialize($value->coordonnees);
+                    }
+                    $data[$key]['coordonnees'] = unserialize($value->coordonnees);
+                    
+                    $data[$key]['reporting'] =$reporting;
+                    
+                }
+
+               // $data = $tmp ;
+            }
+            else 
+                $data = array();
+        }
+        elseif ($menu=="reportingvuecarte") 
+        {   
+            $tmp = $this->DistrictManager->findAll();
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $coordonnees=null;                
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['nom'] = $value->nom;
+                    if (!is_null($value->coordonnees) && $value->coordonnees!='')
+                    {
+                        $coordonnees=unserialize($value->coordonnees);
+                    }
+                    $data[$key]['coordonnees'] = unserialize($value->coordonnees);
+
+                    
+                    
+                }
+
+               // $data = $tmp ;
+            }
+            else 
+                $data = array();
+        }
+        elseif ($id_region) 
         {   $data = array();
             $tmp = $this->DistrictManager->findByregion($id_region);
             if ($tmp) 
