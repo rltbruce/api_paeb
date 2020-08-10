@@ -104,6 +104,34 @@ class Zap_model extends CI_Model {
         }                 
     }
 
+    public function getdistrictbynom($nom) {               
+        $result =  $this->db->select('*')
+                        ->from('district')
+                        ->where("lower(nom)=", $nom)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
+
+    public function getdistricttest($nom) {               
+        $result =  $this->db->select('*')
+                        ->from('district')
+                        ->where("lower(nom)=", $nom)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
+
     public function getzapbycommune($nom) {               
         $result =  $this->db->select('*')
                         ->from('commune')
@@ -118,18 +146,21 @@ class Zap_model extends CI_Model {
         }                 
     }
 
-    public function getzap_communebyid($id_zap, $id_commune) {               
+    public function getzap_commune_districtbyid($id_zap, $id_commune,$id_district) {               
         $result =  $this->db->select('*')
                         ->from('zap_commune')
+                        ->join('commune','commune.id=zap_commune.id_commune')
+                        ->join('district','district.id=commune.id_district')
                         ->where("id_zap", $id_zap)
                         ->where("id_commune", $id_commune)
+                        ->where("district.id", $id_district)
                         ->get()
                         ->result();
         if($result)
         {
             return $result;
         }else{
-            return null;
+            return array();
         }                 
     }
 }
