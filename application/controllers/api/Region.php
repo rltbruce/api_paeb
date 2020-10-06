@@ -24,7 +24,7 @@ class Region extends REST_Controller {
                 $data['code'] = $region->code;
                 $data['nom'] = $region->nom;
             } 
-            elseif ($menu=='getregionbycisco')
+            elseif ($menu=='getregionBycisco')
             {
                 $tmp = $this->RegionManager->getregionbycisco($id_cisco);
                 if ($tmp)

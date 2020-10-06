@@ -86,6 +86,7 @@ class transfert_reliquat extends REST_Controller {
                     $data[$key]['objet_utilisation'] = $value->objet_utilisation;
                     $data[$key]['date_transfert'] = $value->date_transfert;
                     $data[$key]['intitule_compte'] = $value->intitule_compte;
+                    $data[$key]['observation'] = $value->observation;
                     $data[$key]['rib'] = $value->rib;                    
                     $data[$key]['convention_entete'] = $convention_entete;
                     

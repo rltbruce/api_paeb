@@ -78,11 +78,13 @@ class Demande_latrine_prestataire_model extends CI_Model {
         }                 
     }
     public function finddemandeBycontrat($id_contrat_prestataire) {               
-        $result =  $this->db->select('*')
+        $result =  $this->db->select('demande_latrine_presta.*')
                         ->from($this->table)
                         ->join('attachement_travaux','attachement_travaux.id = demande_latrine_presta.id_attachement_travaux')
-                        ->join('facture_mpe','facture_mpe.id=attachement_travaux.id_facture_mpe')
+                        ->join('facture_mpe','facture_mpe.id_attachement_travaux = attachement_travaux.id')
+                        //->join('attachement_travaux','attachement_travaux.id=attachement_travaux.id_attachement_travaux')
                         ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("facture_mpe.validation", 4)
                         ->order_by('demande_latrine_presta.id')
                         ->get()
                         ->result();
@@ -93,65 +95,7 @@ class Demande_latrine_prestataire_model extends CI_Model {
             return null;
         }                 
     }
-    /*public function finddemandeBycontrat($id_contrat_prestataire) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-     public function finddemandeinvalideBycontrat($id_contrat_prestataire) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
-                        ->where("validation", 0)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-     public function finddemandevalidebcafBycontrat($id_contrat_prestataire) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
-                        ->where("validation", 1)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-    public function finddemandevalideBycontrat($id_contrat_prestataire) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
-                        ->where("validation", 2)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }*/
+   
      public function countAllByInvalide($invalide)
     {
         $result = $this->db->select('COUNT(*) as nombre')

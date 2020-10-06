@@ -124,21 +124,20 @@ class District_model extends CI_Model {
                         dist.id as id_dist,
                         0 as nom_dist,                        
                         0 as coordonnees_dist,
-                         max(atta_bat.ponderation_batiment) as avancement_bat,
+                         max(avanc_bat.pourcentage) as avancement_bat,
                          0 as avancement_lat,
                          0 as avancement_mob
 
-                        from attachement_batiment as atta_bat
+                        from avancement_physi_batiment as avanc_bat
 
-                            inner join avancement_batiment as avanc on avanc.id_attachement_batiment = atta_bat.id
-                            inner join contrat_prestataire as cont_prest on cont_prest.id=avanc.id_contrat_prestataire
+                            inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_bat.id_contrat_prestataire
                             inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
                             inner join convention_cisco_feffi_detail as conv_d on conv_d.id_convention_entete = conv.id
                             inner join cisco as cis on cis.id = conv.id_cisco
                             inner join district as dist on dist.id = cis.id_district
 
                         where 
-                            conv.validation= 2 and avanc.validation=1 and DATE_FORMAT(conv_d.date_signature,'%Y')= '".$now."' and dist.id= '".$id_district."'
+                            conv.validation= 2 and DATE_FORMAT(conv_d.date_signature,'%Y')= '".$now."' and dist.id= '".$id_district."'
 
                             group by conv.id,dist.id
                 )
@@ -151,12 +150,11 @@ class District_model extends CI_Model {
                         0 as nom_dist,                        
                         0 as coordonnees_dist,
                         0 as avancement_bat,
-                        max(atta_lat.ponderation_latrine) as avancement_lat,
+                        max(avanc_lat.pourcentage) as avancement_lat,
                         0 as avancement_mob
 
-                        from attachement_latrine as atta_lat
+                        from avancement_physi_latrine as avanc_lat
 
-                            inner join avancement_latrine as avanc_lat on avanc_lat.id_attachement_latrine = atta_lat.id
                             inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_lat.id_contrat_prestataire
                             inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
                             inner join convention_cisco_feffi_detail as conv_d on conv_d.id_convention_entete = conv.id
@@ -164,7 +162,7 @@ class District_model extends CI_Model {
                             inner join district as dist on dist.id = cis.id_district
 
                         where 
-                            conv.validation= 2 and avanc_lat.validation=1 and DATE_FORMAT(conv_d.date_signature,'%Y')= '".$now."' and dist.id= '".$id_district."'
+                            conv.validation= 2 and DATE_FORMAT(conv_d.date_signature,'%Y')= '".$now."' and dist.id= '".$id_district."'
 
                             group by conv.id,dist.id
                 )
@@ -178,11 +176,10 @@ class District_model extends CI_Model {
                         0 as coordonnees_dist,
                         0 as avancement_bat,
                         0 as avancement_lat,
-                        max(atta_mob.ponderation_mobilier) as avancement_mob
+                        max(avanc_mob.pourcentage) as avancement_mob
 
-                        from attachement_mobilier as atta_mob
+                        from avancement_physi_mobilier as avanc_mob
 
-                            inner join avancement_mobilier as avanc_mob on avanc_mob.id_attachement_mobilier = atta_mob.id
                             inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_mob.id_contrat_prestataire
                             inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
                             inner join convention_cisco_feffi_detail as conv_d on conv_d.id_convention_entete = conv.id
@@ -190,7 +187,7 @@ class District_model extends CI_Model {
                             inner join district as dist on dist.id = cis.id_district
 
                         where 
-                            conv.validation= 2 and avanc_mob.validation=1 and DATE_FORMAT(conv_d.date_signature,'%Y')= '".$now."' and dist.id= '".$id_district."'
+                            conv.validation= 2 and DATE_FORMAT(conv_d.date_signature,'%Y')= '".$now."' and dist.id= '".$id_district."'
 
                             group by conv.id,dist.id
                 ) 

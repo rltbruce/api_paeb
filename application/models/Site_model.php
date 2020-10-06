@@ -28,7 +28,7 @@ class Site_model extends CI_Model {
 
             'code_sous_projet' =>      $site['code_sous_projet'],
             'objet_sous_projet' =>      $site['objet_sous_projet'],
-            'denomination_epp' =>      $site['denomination_epp'],
+            //'denomination_epp' =>      $site['denomination_epp'],
             'id_agence_acc' =>      $site['id_agence_acc'],
             'statu_convention' =>      $site['statu_convention'],
             'observation' =>      $site['observation'],
@@ -39,7 +39,8 @@ class Site_model extends CI_Model {
             'id_ecole' =>      $site['id_ecole'],
             'id_classification_site' =>      $site['id_classification_site'],
             'lot' =>      $site['lot'],
-            'validation' =>      $site['validation']                     
+            'validation' =>      $site['validation'],
+            'acces' =>      $site['acces']                      
         );
     }
     public function delete($id) {

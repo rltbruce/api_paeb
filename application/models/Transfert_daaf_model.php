@@ -142,6 +142,25 @@ class Transfert_daaf_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
+    }
+
+    public function gettransfertByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('sum(transfert_daaf.montant_transfert) as montant_transfert')
+                        ->from($this->table)
+                        ->join('demande_realimentation_feffi','demande_realimentation_feffi.id=transfert_daaf.id_demande_rea_feffi')
+                        ->join('convention_cisco_feffi_entete','demande_realimentation_feffi.id_convention_cife_entete=convention_cisco_feffi_entete.id')
+                        ->where("convention_cisco_feffi_entete.id",$id_convention_entete)
+                        ->where("transfert_daaf.validation",1)
+                       //->order_by('code')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }  
 
 }

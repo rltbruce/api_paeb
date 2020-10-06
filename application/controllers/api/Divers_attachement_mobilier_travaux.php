@@ -19,51 +19,69 @@ class Divers_attachement_mobilier_travaux extends REST_Controller {
         $id = $this->get('id');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $id_demande_mobilier_mpe = $this->get('id_demande_mobilier_mpe');
-        $id_divers_attachement_mobilier_prevu = $this->get('id_divers_attachement_mobilier_prevu');
+        $id_attachement_mobilier = $this->get('id_attachement_mobilier');
+        $id_attachement_mobilier_prevu = $this->get('id_attachement_mobilier_prevu');
         $menu = $this->get('menu');
  
-        if ($menu == "getmaxattachement_travauxByattachement_prevu")
+       /* if ($menu == "getmax_1attachement_travauxByattachement_prevu")
         {
-            $tmp = $this->Divers_attachement_mobilier_travauxManager->findmaxattachement_travauxByattachement_prevu($id_divers_attachement_mobilier_prevu,$id_contrat_prestataire);
+            $tmp = $this->Divers_attachement_mobilier_travauxManager->findmax_1attachement_travauxByattachement_prevu($id_attachement_mobilier_prevu,$id_contrat_prestataire);
             if ($tmp) 
             {   
-               foreach ($tmp as $key => $value)
+                foreach ($tmp as $key => $value)
                 {   
 
-                    $divers_attachement_mobilier_prevu = $this->Divers_attachement_mobilier_prevuManager->findByIdlibelle($value->id_divers_attachement_mobilier_prevu);                 
+                    $divers_attachement_mobilier_prevu = $this->Divers_attachement_mobilier_prevuManager->findByIdlibelle($value->id_attachement_mobilier_prevu);                 
                     $data[$key]['id'] = $value->id;                  
-                    $data[$key]['id_demande_mobilier'] = $value->id_demande_mobilier;                  
+                    $data[$key]['id_demande_mobilier_mpe'] = $value->id_demande_mobilier_mpe;                  
+                    $data[$key]['quantite_periode'] = $value->quantite_periode;                  
+                    $data[$key]['quantite_anterieur'] = $value->quantite_anterieur;                  
+                    $data[$key]['quantite_cumul'] = $value->quantite_cumul;                  
                     $data[$key]['montant_prevu'] = $value->montant_prevu;                  
                     $data[$key]['montant_periode'] = $value->montant_periode;                  
                     $data[$key]['montant_anterieur'] = $value->montant_anterieur;                  
                     $data[$key]['montant_cumul'] = $value->montant_cumul;                 
                     $data[$key]['pourcentage'] = $value->pourcentage;                 
-                    $data[$key]['divers_attachement_mobilier_prevu'] = $value->divers_attachement_mobilier_prevu;
+                    $data[$key]['attachement_mobilier_prevu'] = $value->divers_attachement_mobilier_prevu;
                 }
                // $data=$tmp;
             } 
                 else
                     $data = array();
         }
-        elseif ($menu == "getdivers_attachementByDemande")
+        elseif ($menu == "getmaxattachement_travauxByattachement_prevu")
         {
-            $tmp = $this->Divers_attachement_mobilier_travauxManager->finddivers_attachementByDemande($id_demande_mobilier_mpe);
+            $tmp = $this->Divers_attachement_mobilier_travauxManager->findmaxattachement_travauxByattachement_prevu($id_attachement_mobilier_prevu,$id_contrat_prestataire);
             if ($tmp) 
             {   
-               foreach ($tmp as $key => $value)
+                foreach ($tmp as $key => $value)
                 {   
 
-                    $divers_attachement_mobilier_prevu = $this->Divers_attachement_mobilier_prevuManager->findByIdlibelle($value->id_divers_attachement_mobilier_prevu);                 
+                    $divers_attachement_mobilier_prevu = $this->Divers_attachement_mobilier_prevuManager->findByIdlibelle($value->id_attachement_mobilier_prevu);                 
                     $data[$key]['id'] = $value->id;                  
                     $data[$key]['id_demande_mobilier_mpe'] = $value->id_demande_mobilier_mpe;                  
-                    //$data[$key]['montant_prevu'] = $value->montant_prevu;                  
+                    $data[$key]['quantite_periode'] = $value->quantite_periode;                  
+                    $data[$key]['quantite_anterieur'] = $value->quantite_anterieur;                  
+                    $data[$key]['quantite_cumul'] = $value->quantite_cumul;                  
+                    $data[$key]['montant_prevu'] = $value->montant_prevu;                  
                     $data[$key]['montant_periode'] = $value->montant_periode;                  
                     $data[$key]['montant_anterieur'] = $value->montant_anterieur;                  
                     $data[$key]['montant_cumul'] = $value->montant_cumul;                 
                     $data[$key]['pourcentage'] = $value->pourcentage;                 
-                    $data[$key]['divers_attachement_mobilier_prevu'] = $divers_attachement_mobilier_prevu;
+                    $data[$key]['attachement_mobilier_prevu'] = $value->divers_attachement_mobilier_prevu;
                 }
                // $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        else*/
+        if ($menu == "getattachement_mobiliertravauxbydemande")
+        {
+            $tmp = $this->Divers_attachement_mobilier_travauxManager->finddivers_attachementByDemande($id_contrat_prestataire,$id_demande_mobilier_mpe,$id_attachement_mobilier);
+            if ($tmp) 
+            {   
+               $data=$tmp;
             } 
                 else
                     $data = array();
@@ -110,12 +128,15 @@ class Divers_attachement_mobilier_travaux extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
+                    'quantite_periode' => $this->post('quantite_periode'),
+                    'quantite_anterieur' => $this->post('quantite_anterieur'),
+                    'quantite_cumul' => $this->post('quantite_cumul'),
                     'montant_periode' => $this->post('montant_periode'),
                     'montant_anterieur' => $this->post('montant_anterieur'),
                     'montant_cumul' => $this->post('montant_cumul'),
                     'pourcentage' => $this->post('pourcentage'),
                     'id_demande_mobilier_mpe' => $this->post('id_demande_mobilier_mpe'),
-                    'id_divers_attachement_mobilier_prevu' => $this->post('id_divers_attachement_mobilier_prevu')            
+                    'id_attachement_mobilier_prevu' => $this->post('id_attachement_mobilier_prevu')            
               
                 );
                 if (!$data) {
@@ -141,12 +162,15 @@ class Divers_attachement_mobilier_travaux extends REST_Controller {
                 }
             } else {
                 $data = array(
+                    'quantite_periode' => $this->post('quantite_periode'),
+                    'quantite_anterieur' => $this->post('quantite_anterieur'),
+                    'quantite_cumul' => $this->post('quantite_cumul'),
                     'montant_periode' => $this->post('montant_periode'),
                     'montant_anterieur' => $this->post('montant_anterieur'),
                     'montant_cumul' => $this->post('montant_cumul'),
                     'pourcentage' => $this->post('pourcentage'),
                     'id_demande_mobilier_mpe' => $this->post('id_demande_mobilier_mpe'),
-                    'id_divers_attachement_mobilier_prevu' => $this->post('id_divers_attachement_mobilier_prevu')
+                    'id_attachement_mobilier_prevu' => $this->post('id_attachement_mobilier_prevu')
                 );
                 if (!$data || !$id) {
                     $this->response([

@@ -18,22 +18,67 @@ class Divers_attachement_batiment_prevu extends REST_Controller {
     {
         $id = $this->get('id');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_attachement_batiment = $this->get('id_attachement_batiment'); 
         $menu = $this->get('menu');
  
-        if ($menu == "getdivers_attachement_prevuBycontrat")
+        if ($menu == "getattachement_batiment_prevuwithdetailbyrubrique")
         {
-            $tmp = $this->Divers_attachement_batiment_prevuManager->finddivers_attachement_prevuBycontrat($id_contrat_prestataire);
+            $tmp = $this->Divers_attachement_batiment_prevuManager->getattachement_batiment_prevuwithdetailbyrubrique($id_contrat_prestataire,$id_attachement_batiment);
+            if ($tmp) 
+            { 
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getmontant_total_prevubycontrat")
+        {
+            $tmp = $this->Divers_attachement_batiment_prevuManager->getmontant_total_prevubycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            { 
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getattachement_batimentprevubyrubrique")
+        {
+            $tmp = $this->Divers_attachement_batiment_prevuManager->getattachement_batimentprevubyrubrique($id_contrat_prestataire,$id_attachement_batiment);
             if ($tmp) 
             {   
-                foreach ($tmp as $key => $value)
+                /*foreach ($tmp as $key => $value)
                 {
                     $divers_attachement_batiment = $this->Divers_attachement_batimentManager->findById($value->id_divers_attachement_batiment);
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['quantite_prevu'] = $value->quantite_prevu;
+                    $data[$key]['prix_unitaire'] = $value->prix_unitaire;
                     $data[$key]['montant_prevu'] = $value->montant_prevu;
                     $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
                     $data[$key]['divers_attachement_batiment'] = $divers_attachement_batiment;
-                }
-                //$data=$tmp;
+                    $data[$key]['divers_attachement_batiment'] = $divers_attachement_batiment;
+                }*/
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getprevuattachement_batimentbycontrat")
+        {
+            $tmp = $this->Divers_attachement_batiment_prevuManager->getprevuattachement_batimentbycontrat($id_contrat_prestataire,$id_attachement_batiment);
+            if ($tmp) 
+            {   
+                /*foreach ($tmp as $key => $value)
+                {
+                    $divers_attachement_batiment = $this->Divers_attachement_batimentManager->findById($value->id_divers_attachement_batiment);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['quantite_prevu'] = $value->quantite_prevu;
+                    $data[$key]['prix_unitaire'] = $value->prix_unitaire;
+                    $data[$key]['montant_prevu'] = $value->montant_prevu;
+                    $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
+                    $data[$key]['divers_attachement_batiment'] = $divers_attachement_batiment;
+                    $data[$key]['divers_attachement_batiment'] = $divers_attachement_batiment;
+                }*/
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -43,6 +88,8 @@ class Divers_attachement_batiment_prevu extends REST_Controller {
             $data = array();
             $divers_attachement_batiment_prevu = $this->Divers_attachement_batiment_prevuManager->findById($id);
             $data['id'] = $divers_attachement_batiment_prevu->id;
+            $data['quantite_prevu'] = $divers_attachement_batiment_prevu->quantite_prevu;
+            $data['prix_unitaire'] = $divers_attachement_batiment_prevu->prix_unitaire;
             $data['montant_prevu'] = $divers_attachement_batiment_prevu->montant_prevu;
             $data['id_contrat_prestataire'] = $divers_attachement_batiment_prevu->id_contrat_prestataire;
             $data['id_divers_attachement_batiment'] = $divers_attachement_batiment_prevu->id_divers_attachement_batiment;
@@ -80,9 +127,12 @@ class Divers_attachement_batiment_prevu extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
+                    'quantite_prevu' => $this->post('quantite_prevu'),
+                    'prix_unitaire' => $this->post('prix_unitaire'),
                     'montant_prevu' => $this->post('montant_prevu'),
+                    'unite' => $this->post('unite'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
-                    'id_divers_attachement_batiment' => $this->post('id_divers_attachement_batiment')
+                    'id_attachement_batiment_detail' => $this->post('id_attachement_batiment_detail')
                 );
                 if (!$data) {
                     $this->response([
@@ -107,9 +157,12 @@ class Divers_attachement_batiment_prevu extends REST_Controller {
                 }
             } else {
                 $data = array(
+                    'quantite_prevu' => $this->post('quantite_prevu'),
+                    'prix_unitaire' => $this->post('prix_unitaire'),
                     'montant_prevu' => $this->post('montant_prevu'),
+                    'unite' => $this->post('unite'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
-                    'id_divers_attachement_batiment' => $this->post('id_divers_attachement_batiment')
+                    'id_attachement_batiment_detail' => $this->post('id_attachement_batiment_detail')
                 );
                 if (!$data || !$id) {
                     $this->response([

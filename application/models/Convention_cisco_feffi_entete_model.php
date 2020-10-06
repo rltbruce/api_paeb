@@ -32,7 +32,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             'id_feffi' => $convention['id_feffi'],
             'id_site' => $convention['id_site'],
             'ref_financement'    => $convention['ref_financement'],
-            'avancement'=> $convention['avancement'],            
+            //'avancement'=> $convention['avancement'],            
             'montant_total' =>    $convention['montant_total'],
             'validation'   =>$convention['validation'],
             'id_convention_ufpdaaf'   =>$convention['id_convention_ufpdaaf'],
@@ -73,6 +73,22 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id", $id)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findcreerInvalidenow($annee) {             //mande  
+        $result =  $this->db->select('convention_cisco_feffi_entete.*')
+                        ->from($this->table)
+                        ->where("DATE_FORMAT(date_creation,'%Y')",$annee)
+                        ->where("validation",0)
+                        ->order_by('ref_convention')
                         ->get()
                         ->result();
         if($result)
@@ -133,7 +149,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         }                 
     }
 
-    public function findAllByfiltre($requete) {             //mande  
+    public function findcreerByfiltre($requete) {             //mande  
         $result =  $this->db->select('convention_cisco_feffi_entete.*')
                         ->from($this->table)
                         ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete=convention_cisco_feffi_entete.id')                        
@@ -146,6 +162,53 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                         ->join('region','region.id = district.id_region')
                         ->join('cisco','cisco.id_district = district.id')
                         ->where($requete)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findAllByfiltre($requete) {             //tsy mande  
+        $result =  $this->db->select('convention_cisco_feffi_entete.*')
+                        ->from($this->table)
+                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete=convention_cisco_feffi_entete.id')                        
+                        ->join('site','site.id = convention_cisco_feffi_entete.id_site')
+                        ->join('ecole','ecole.id = site.id_ecole')
+                        ->join('zap','zap.id = ecole.id_zap')
+                        ->join('fokontany','fokontany.id = ecole.id_fokontany')
+                        ->join('commune','commune.id = fokontany.id_commune')
+                        ->join('district','district.id = commune.id_district')
+                        ->join('region','region.id = district.id_region')
+                        ->join('cisco','cisco.id_district = district.id')
+                        ->where($requete)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findconventioncreerinvalidefiltre($requete) {             //mande  
+        $result =  $this->db->select('convention_cisco_feffi_entete.*')
+                        ->from($this->table)                        
+                        ->join('site','site.id = convention_cisco_feffi_entete.id_site')
+                        ->join('ecole','ecole.id = site.id_ecole')
+                        ->join('zap','zap.id = ecole.id_zap')
+                        ->join('fokontany','fokontany.id = ecole.id_fokontany')
+                        ->join('commune','commune.id = fokontany.id_commune')
+                        ->join('district','district.id = commune.id_district')
+                        ->join('region','region.id = district.id_region')
+                        ->join('cisco','cisco.id_district = district.id')
+                        ->where($requete)
+                        ->where("convention_cisco_feffi_entete.validation",0)
                         ->order_by('ref_convention')
                         ->get()
                         ->result();
@@ -198,6 +261,31 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         }                 
     }
 
+    public function findcreerInvalideByutilisateurfiltre($id_utilisateur,$requete) {             //mande  
+        $result =  $this->db->select('convention_cisco_feffi_entete.*')
+                        ->from($this->table)
+                        ->join('site','site.id = convention_cisco_feffi_entete.id_site')
+                        ->join('ecole','ecole.id = site.id_ecole')
+                        ->join('zap','zap.id = ecole.id_zap')
+                        ->join('fokontany','fokontany.id = ecole.id_fokontany')
+                        ->join('commune','commune.id = fokontany.id_commune')
+                        ->join('district','district.id = commune.id_district')
+                        ->join('region','region.id = district.id_region')
+                        ->join('cisco','cisco.id_district = district.id')
+                        ->where($requete)
+                        ->where("convention_cisco_feffi_entete.validation",0)
+                        ->where("id_user",$id_utilisateur)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
     public function findAllInvalideByutilisateurfiltre($id_utilisateur,$requete) {             //mande  
         $result =  $this->db->select('convention_cisco_feffi_entete.*')
                         ->from($this->table)
@@ -223,7 +311,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         }                 
     }
 
-    public function findAllInvalideByid_cisconow($id_cisco,$annee) {             //mande  
+    public function findcreerInvalideByid_cisconow($id_cisco,$annee) {             //mande  
         $result =  $this->db->select('convention_cisco_feffi_entete.*')
                         ->from($this->table)
                         ->where("DATE_FORMAT(date_creation,'%Y')",$annee)
@@ -238,6 +326,37 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         }else{
             return null;
         }                 
+    }
+
+    public function findAllInvalideByid_cisconow($id_cisco,$annee) { 
+        $result =  $this->db->select('convention_cisco_feffi_entete.*')
+                        ->from($this->table)
+                        ->where("DATE_FORMAT(date_creation,'%Y')",$annee)
+                        ->where("validation",0)
+                        ->where("id_cisco",$id_cisco)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function findcreerInvalideByutilisateurnow($id_utilisateur,$annee) {             //mande  
+        
+        $sql=" select 
+                       convention.*
+               from convention_cisco_feffi_entete as convention
+
+                where 
+                            convention.validation= 0 and DATE_FORMAT(convention.date_creation,'%Y')= '".$annee."' and id_user ='".$id_utilisateur."'
+             
+
+            ";
+            return $this->db->query($sql)->result();                  
     }
 
     public function findAllInvalideByutilisateurnow($id_utilisateur,$annee) {             //mande  
@@ -324,6 +443,29 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                         ->join('site','site.id = convention_cisco_feffi_entete.id_site')
                         ->join('ecole','ecole.id = site.id_ecole')
                         ->join('zap','zap.id = ecole.id_zap')
+                        ->join('fokontany','fokontany.id = ecole.id_fokontany')
+                        ->join('commune','commune.id = fokontany.id_commune')
+                        ->join('district','district.id = commune.id_district')
+                        ->join('region','region.id = district.id_region')
+                        ->join('cisco','cisco.id_district = district.id')
+                        ->where($requete)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findconventionvalidedaafBydate($requete) {               
+        $result =  $this->db->select('convention_cisco_feffi_entete.*')
+                        ->from($this->table)
+                        ->where("convention_cisco_feffi_entete.validation>",0)
+                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->join('site','site.id = convention_cisco_feffi_entete.id_site')
+                        ->join('ecole','ecole.id = site.id_ecole')
                         ->join('fokontany','fokontany.id = ecole.id_fokontany')
                         ->join('commune','commune.id = fokontany.id_commune')
                         ->join('district','district.id = commune.id_district')
@@ -772,65 +914,120 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
             $this->db ->select("(select reception_mpe.observation from reception_mpe,contrat_prestataire, convention_cisco_feffi_entete where reception_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and reception_mpe.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as observation_recep_mpe",FALSE);
 
-            $this->db ->select("(select max(attachement_batiment.ponderation_batiment) from attachement_batiment,avancement_batiment,contrat_prestataire, convention_cisco_feffi_entete where attachement_batiment.id = avancement_batiment.id_attachement_batiment and avancement_batiment.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and avancement_batiment.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as avancement_batiment_mpe",FALSE);
+            $this->db ->select("(select max(avancement_physi_batiment.pourcentage) from avancement_physi_batiment,contrat_prestataire, convention_cisco_feffi_entete where  avancement_physi_batiment.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as avancement_batiment_mpe",FALSE);
 
+            $this->db ->select("(select max(avancement_physi_latrine.pourcentage) from avancement_physi_latrine,contrat_prestataire, convention_cisco_feffi_entete where  avancement_physi_latrine.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as avancement_latrine_mpe",FALSE);
 
-            $this->db ->select("(select max(attachement_latrine.ponderation_latrine) from attachement_latrine,avancement_latrine,contrat_prestataire, convention_cisco_feffi_entete where attachement_latrine.id = avancement_latrine.id_attachement_latrine and avancement_latrine.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and avancement_latrine.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as avancement_latrine_mpe",FALSE);
+           $this->db ->select("(select max(avancement_physi_mobilier.pourcentage) from avancement_physi_mobilier,contrat_prestataire, convention_cisco_feffi_entete where  avancement_physi_mobilier.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as avancement_mobilier_mpe",FALSE);
 
+//PAIEMENT MPE talou fa ts net fotsiny
+          /*  $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='1') as montant_paiement_mpe1",FALSE);
 
-            $this->db ->select("(select max(attachement_mobilier.ponderation_mobilier) from attachement_mobilier,avancement_mobilier,contrat_prestataire, convention_cisco_feffi_entete where attachement_mobilier.id = avancement_mobilier.id_attachement_mobilier and avancement_mobilier.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and avancement_mobilier.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as avancement_mobilier_mpe",FALSE);
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='1') as date_approbation_mpe1",FALSE);
 
-//PAIEMENT MPE
-            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='1') as montant_paiement_mpe1",FALSE);
+            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='2') as montant_paiement_mpe2",FALSE);
 
-            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='1') as date_approbation_mpe1",FALSE);
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='2') as date_approbation_mpe2",FALSE);
 
-            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='2') as montant_paiement_mpe2",FALSE);
+            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='3') as montant_paiement_mpe3",FALSE);
 
-            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='2') as date_approbation_mpe2",FALSE);
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='3') as date_approbation_mpe3",FALSE);
 
-            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='3') as montant_paiement_mpe3",FALSE);
+            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='4') as montant_paiement_mpe4",FALSE);
 
-            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='3') as date_approbation_mpe3",FALSE);
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='4') as date_approbation_mpe4",FALSE);
 
-            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='4') as montant_paiement_mpe4",FALSE);
+            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='5') as montant_paiement_mpe5",FALSE);
 
-            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='4') as date_approbation_mpe4",FALSE);
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='5') as date_approbation_mpe5",FALSE);
 
-            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='5') as montant_paiement_mpe5",FALSE);
+            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='6') as montant_paiement_mpe6",FALSE);
 
-            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='5') as date_approbation_mpe5",FALSE);
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='6') as date_approbation_mpe6",FALSE);
 
-            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='6') as montant_paiement_mpe6",FALSE);
+            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='7') as montant_paiement_mpe7",FALSE);
 
-            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='6') as date_approbation_mpe6",FALSE);
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='7') as date_approbation_mpe7",FALSE);
 
-            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='7') as montant_paiement_mpe7",FALSE);
+            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='8') as montant_paiement_mpe8",FALSE);
 
-            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='7') as date_approbation_mpe7",FALSE);
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='8') as date_approbation_mpe8",FALSE);
 
-            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='8') as montant_paiement_mpe8",FALSE);
+            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='9') as montant_paiement_mpe9",FALSE);
 
-            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='8') as date_approbation_mpe8",FALSE);
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='9') as date_approbation_mpe9",FALSE);
 
-            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='9') as montant_paiement_mpe9",FALSE);
+            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='10') as montant_paiement_mpe10",FALSE);
 
-            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='9') as date_approbation_mpe9",FALSE);
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='10') as date_approbation_mpe10",FALSE);
 
-            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='10') as montant_paiement_mpe10",FALSE);
+            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='11') as montant_paiement_mpe11",FALSE);
 
-            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='10') as date_approbation_mpe10",FALSE);
-
-            $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='11') as montant_paiement_mpe11",FALSE);
-
-            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='11') as date_approbation_mpe11",FALSE);
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='11') as date_approbation_mpe11",FALSE);
 
             
-            $this->db ->select("(select attachement_travaux.total_anterieur + ((attachement_travaux.total_anterieur*20)/100) from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where attachement_travaux.id_facture_mpe=facture_mpe.id and facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,attachement_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where atta_tra.id_facture_mpe=fact_mpe.id and fact_mpe.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv )) as anterieur_mpe",FALSE);
+            $this->db ->select("(select attachement_travaux.total_anterieur + ((attachement_travaux.total_anterieur*20)/100) from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,attachement_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where fact_mpe.id_attachement_travaux=atta_tra.id and atta_tra.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv )) as anterieur_mpe",FALSE);
 
-                $this->db ->select("(select attachement_travaux.total_cumul + ((attachement_travaux.total_cumul*20)/100) from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where attachement_travaux.id_facture_mpe=facture_mpe.id and facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,attachement_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where atta_tra.id_facture_mpe=fact_mpe.id and fact_mpe.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv )) as cumul_mpe",FALSE);
+                $this->db ->select("(select attachement_travaux.total_cumul + ((attachement_travaux.total_cumul*20)/100) from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,attachement_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where fact_mpe.id_attachement_travaux=atta_tra.id and atta_tra.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv )) as cumul_mpe",FALSE);
 
-                $this->db ->select("(select attachement_travaux.total_periode + ((attachement_travaux.total_periode*20)/100) from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where attachement_travaux.id_facture_mpe=facture_mpe.id and facture_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,attachement_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where atta_tra.id_facture_mpe=fact_mpe.id and fact_mpe.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv )) as periode_mpe",FALSE);
+                $this->db ->select("(select attachement_travaux.total_periode + ((attachement_travaux.total_periode*20)/100) from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,attachement_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where fact_mpe.id_attachement_travaux=atta_tra.id and atta_tra.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv )) as periode_mpe",FALSE);*/
+
+//PAIEMENT MPE
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='1') as montant_paiement_mpe1",FALSE);
+
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='1') as date_approbation_mpe1",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='2') as montant_paiement_mpe2",FALSE);
+
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='2') as date_approbation_mpe2",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='3') as montant_paiement_mpe3",FALSE);
+
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='3') as date_approbation_mpe3",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='4') as montant_paiement_mpe4",FALSE);
+
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='4') as date_approbation_mpe4",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='5') as montant_paiement_mpe5",FALSE);
+
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='5') as date_approbation_mpe5",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='6') as montant_paiement_mpe6",FALSE);
+
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='6') as date_approbation_mpe6",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='7') as montant_paiement_mpe7",FALSE);
+
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='7') as date_approbation_mpe7",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='8') as montant_paiement_mpe8",FALSE);
+
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='8') as date_approbation_mpe8",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='9') as montant_paiement_mpe9",FALSE);
+
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='9') as date_approbation_mpe9",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='10') as montant_paiement_mpe10",FALSE);
+
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='10') as date_approbation_mpe10",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='11') as montant_paiement_mpe11",FALSE);
+
+            $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='11') as date_approbation_mpe11",FALSE);
+
+            
+            $this->db ->select("(select facture_mpe.net_payer from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,attachement_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where fact_mpe.id_attachement_travaux=atta_tra.id and atta_tra.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv and fact_mpe.id <(select max(fact_mpe.id) from facture_mpe as fact_mp,attachement_travaux as atta_tr, contrat_prestataire as contra_mp, convention_cisco_feffi_entete as conve_mp where fact_mp.id_attachement_travaux=atta_tr.id and atta_tr.id_contrat_prestataire=contra_mp.id and contra_mp.id_convention_entete= conve_mp.id and fact_mp.validation = '4' and conve_mp.id = id_conv))) as anterieur_mpe",FALSE);
+
+                $this->db ->select("(select sum(facture_mpe.net_payer) from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as cumul_mpe",FALSE);
+
+                $this->db ->select("(select facture_mpe.net_payer from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,attachement_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where fact_mpe.id_attachement_travaux=atta_tra.id and atta_tra.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv )) as periode_mpe",FALSE);
+
+                $this->db ->select("(select avance_demarrage.net_payer from avance_demarrage,contrat_prestataire where avance_demarrage.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and avance_demarrage.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_avance_mpe",FALSE);
+
+                $this->db ->select("(select avance_demarrage.date_approbation from avance_demarrage,contrat_prestataire where avance_demarrage.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and avance_demarrage.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as date_approbation_avance_mpe",FALSE);
+
 
 //transfert reliquat
 
@@ -882,6 +1079,73 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
 
 
+
+    $result =  $this->db->from('convention_cisco_feffi_entete')
+                        
+                        ->where("convention_cisco_feffi_entete.validation",2)
+                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->join('site','site.id = convention_cisco_feffi_entete.id_site')
+                        ->join('agence_acc','agence_acc.id = site.id_agence_acc')                       
+                        ->join('cisco','cisco.id = convention_cisco_feffi_entete.id_cisco')                       
+                        ->join('feffi','feffi.id = convention_cisco_feffi_entete.id_feffi')
+                        ->join('ecole','ecole.id = site.id_ecole')
+                        ->join('zone_subvention','zone_subvention.id = ecole.id_zone_subvention')
+                        ->join('acces_zone','acces_zone.id = ecole.id_acces_zone')
+                        ->join('fokontany','fokontany.id = ecole.id_fokontany')
+                        ->join('commune','commune.id = fokontany.id_commune')
+                        ->join('district','district.id = commune.id_district')
+                        ->join('region','region.id = district.id_region')            
+                        ->where($requete)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findmontantreliquat($requete) {
+    $this->db->select("convention_cisco_feffi_entete.*,convention_cisco_feffi_entete.id as id_conv,
+        agence_acc.nom as nom_agence,ecole.description as nom_ecole, ecole.code as code_ecole, fokontany.nom as nom_fokontany,commune.nom as nom_commune,cisco.description as nom_cisco,region.nom as nom_region,zone_subvention.libelle as libelle_zone,acces_zone.libelle as libelle_acces,feffi.denomination as nom_feffi");
+
+            $this->db ->select("(select (cout_maitrise_construction.cout + mobilier_construction.cout_unitaire + latrine_construction.cout_unitaire + batiment_construction.cout_unitaire + cout_sousprojet_construction.cout) from cout_maitrise_construction, mobilier_construction, latrine_construction, batiment_construction, cout_sousprojet_construction where cout_maitrise_construction.id_convention_entete= convention_cisco_feffi_entete.id and mobilier_construction.id_convention_entete= convention_cisco_feffi_entete.id and latrine_construction.id_convention_entete= convention_cisco_feffi_entete.id and batiment_construction.id_convention_entete= convention_cisco_feffi_entete.id and cout_sousprojet_construction.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as montant_convention",FALSE);
+
+           
+
+            $this->db ->select("(select sum(decaiss_fonct_feffi.montant) from decaiss_fonct_feffi, convention_cisco_feffi_entete where decaiss_fonct_feffi.id_convention_entete= convention_cisco_feffi_entete.id and decaiss_fonct_feffi.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as montant_decaiss_fonct_feffi",FALSE); 
+
+
+
+//PAIEMENT MPE
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='1') as montant_paiement_mpe1",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='2') as montant_paiement_mpe2",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='3') as montant_paiement_mpe3",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='4') as montant_paiement_mpe4",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='5') as montant_paiement_mpe5",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='6') as montant_paiement_mpe6",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='7') as montant_paiement_mpe7",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='8') as montant_paiement_mpe8",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='9') as montant_paiement_mpe9",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='10') as montant_paiement_mpe10",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='11') as montant_paiement_mpe11",FALSE);
+
+            $this->db ->select("(select facture_mpe.net_payer from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,attachement_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where fact_mpe.id_attachement_travaux=atta_tra.id and atta_tra.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv and fact_mpe.id <(select max(fact_mpe.id) from facture_mpe as fact_mp,attachement_travaux as atta_tr, contrat_prestataire as contra_mp, convention_cisco_feffi_entete as conve_mp where fact_mp.id_attachement_travaux=atta_tr.id and atta_tr.id_contrat_prestataire=contra_mp.id and contra_mp.id_convention_entete= conve_mp.id and fact_mp.validation = '4' and conve_mp.id = id_conv))) as anterieur_mpe",FALSE);
+
+                $this->db ->select("(select sum(facture_mpe.net_payer) from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as cumul_mpe",FALSE);
+
+                $this->db ->select("(select facture_mpe.net_payer from attachement_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,attachement_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where fact_mpe.id_attachement_travaux=atta_tra.id and atta_tra.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv )) as periode_mpe",FALSE);
 
     $result =  $this->db->from('convention_cisco_feffi_entete')
                         
@@ -1030,6 +1294,456 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         $query = $this->db->query($requete);
         return $query->result();                
     }
+    public function getconventionNeeddemandefeffivalidationbcaf()
+    {
+        $sql=" select 
+                       convention.*
+               from convention_cisco_feffi_entete as convention
+
+               inner join demande_realimentation_feffi as demande on demande.id_convention_cife_entete = convention.id
+
+                where 
+                        demande.validation= 0
+                            group by convention.id
+             
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }
+    public function getconventionneedfacturevalidationBycisc($id_cisco_user)
+    {
+        $sql=" select 
+                         convention.id as id,
+                        convention.id_feffi as id_feffi,
+                        convention.id_site as id_site,
+                        convention.id_cisco as id_cisco,
+                        convention.type_convention as type_convention,
+                        convention.ref_convention as ref_convention,
+                        convention.objet as objet,
+                        convention.ref_financement as ref_financement,
+                        convention.id_user as id_user,
+                        0 as nbr_demande_d_moe,
+                        0 as nbr_demande_batiment_moe,
+                        0 as nbr_demande_latrine_moe,
+                        0 as nbr_demande_f_moe,
+                        0 as nbr_fact_mpe
+
+                        from convention_cisco_feffi_entete as convention
+                        where 
+                             convention.id_cisco='".$id_cisco_user."'
+                            group by convention.id
+            ";
+            return $this->db->query($sql)->result();                   
+    }
+    public function getconventionneedfacturevalidationBycisco($id_cisco)
+    {
+        $sql=" select 
+                        niveau2.id as id,
+                        niveau2.id_feffi as id_feffi,
+                        niveau2.id_site as id_site,
+                        niveau2.id_cisco as id_cisco,
+                        niveau2.type_convention as type_convention,
+                        niveau2.ref_convention as ref_convention,
+                        niveau2.objet as objet,
+                        niveau2.ref_financement as ref_financement,
+                        niveau2.id_user as id_user,
+                        niveau2.date_creation as date_creation,
+                        sum(niveau2.nbrdemande) as nbrdemande
+               from (
+
+
+                    select 
+                            detail.id as id,
+                            detail.id_feffi as id_feffi,
+                            detail.id_site as id_site,
+                            detail.id_cisco as id_cisco,
+                            detail.type_convention as type_convention,
+                            detail.ref_convention as ref_convention,
+                            detail.objet as objet,
+                            detail.ref_financement as ref_financement,
+                            detail.id_user as id_user,
+                            detail.date_creation as date_creation,
+                            (sum(detail.nbr_demande_d_moe)+sum(detail.nbr_demande_batiment_moe)+sum(detail.nbr_demande_latrine_moe)+sum(detail.nbr_demande_f_moe)++sum(detail.nbr_fact_mpe)) as nbrdemande
+                       
+                       from (
+                       
+                        (
+                            select 
+                                
+                                convention.id as id,  
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                count(demande_d_moe.id) as nbr_demande_d_moe,
+                                0 as nbr_demande_batiment_moe,
+                                0 as nbr_demande_latrine_moe,
+                                0 as nbr_demande_f_moe,
+                                0 as nbr_fact_mpe
+
+                                from convention_cisco_feffi_entete as convention
+                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
+                                inner join demande_debut_travaux_moe as demande_d_moe on demande_d_moe.id_contrat_bureau_etude = contrat_moe.id
+                                where 
+                                    demande_d_moe.validation= 0 and convention.id_cisco='".$id_cisco."'
+                                    group by convention.id
+                        )
+                        UNION
+                        (
+                            select 
+                                convention.id as id,
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                0 as nbr_demande_d_moe,
+                                count(demande_bat_moe.id) as nbr_demande_batiment_moe,
+                                0 as nbr_demande_latrine_moe,
+                                0 as nbr_demande_f_moe,
+                                0 as nbr_fact_mpe
+
+                                from convention_cisco_feffi_entete as convention
+                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
+                                inner join demande_batiment_moe as demande_bat_moe on demande_bat_moe.id_contrat_bureau_etude = contrat_moe.id
+                                where 
+                                    demande_bat_moe.validation= 0 and convention.id_cisco='".$id_cisco."'
+                                    group by convention.id
+                        )
+                        UNION
+                        (
+                            select 
+                                 convention.id as id,
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                0 as nbr_demande_d_moe,
+                                0 as nbr_demande_batiment_moe,
+                                count(demande_lat_moe.id) as nbr_demande_latrine_moe,
+                                0 as nbr_demande_f_moe,
+                                0 as nbr_fact_mpe
+
+                                from convention_cisco_feffi_entete as convention
+                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
+                                inner join demande_latrine_moe as demande_lat_moe on demande_lat_moe.id_contrat_bureau_etude = contrat_moe.id
+                                where 
+                                    demande_lat_moe.validation= 0 and convention.id_cisco='".$id_cisco."'
+                                    group by convention.id
+                        )
+                        UNION
+                        (
+                            select 
+                                 convention.id as id,
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                0 as nbr_demande_d_moe,
+                                0 as nbr_demande_batiment_moe,
+                                0 as nbr_demande_latrine_moe,
+                                count(demande_f_moe.id) as nbr_demande_f_moe,
+                                0 as nbr_fact_mpe
+
+                                from convention_cisco_feffi_entete as convention
+                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
+                                inner join demande_fin_travaux_moe as demande_f_moe on demande_f_moe.id_contrat_bureau_etude = contrat_moe.id
+                                where 
+                                    demande_f_moe.validation= 0 and convention.id_cisco='".$id_cisco."'
+                                    group by convention.id
+                        )
+                        UNION
+                        (
+                            select 
+                                 convention.id as id,
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                0 as nbr_demande_d_moe,
+                                0 as nbr_demande_batiment_moe,
+                                0 as nbr_demande_latrine_moe,
+                                0 as nbr_demande_f_moe,
+                                count(fact_mpe.id) as nbr_fact_mpe
+
+                                from convention_cisco_feffi_entete as convention
+                                inner join contrat_prestataire as contrat_mpe on contrat_mpe.id_convention_entete = convention.id
+                                inner join attachement_travaux as atta_tra on atta_tra.id_contrat_prestataire = contrat_mpe.id
+                                inner join facture_mpe as fact_mpe on fact_mpe.id_attachement_travaux = atta_tra.id
+                                where 
+                                    fact_mpe.validation= 0 and convention.id_cisco='".$id_cisco."'
+                                    group by convention.id
+                        )
+                        UNION
+                        (
+                            select 
+                                 convention.id as id,
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                0 as nbr_demande_d_moe,
+                                0 as nbr_demande_batiment_moe,
+                                0 as nbr_demande_latrine_moe,
+                                0 as nbr_demande_f_moe,
+                                0 as nbr_fact_mpe
+
+                                from convention_cisco_feffi_entete as convention
+                                where 
+                                     convention.id_cisco='".$id_cisco."'
+                                    group by convention.id
+                        )
+                        )detail
+                   
+                        group by detail.id
+
+                            )niveau2
+                            where niveau2.nbrdemande >0
+                            group by niveau2.id
+            ";
+            return $this->db->query($sql)->result();                   
+    }
+    public function getconventionneedfacturevalidation()
+    {
+        $sql=" select 
+                        niveau2.id as id,
+                        niveau2.id_feffi as id_feffi,
+                        niveau2.id_site as id_site,
+                        niveau2.id_cisco as id_cisco,
+                        niveau2.type_convention as type_convention,
+                        niveau2.ref_convention as ref_convention,
+                        niveau2.objet as objet,
+                        niveau2.ref_financement as ref_financement,
+                        niveau2.id_user as id_user,
+                        niveau2.date_creation as date_creation,
+                        sum(niveau2.nbrdemande) as nbrdemande
+               from (
+
+
+                    select 
+                            detail.id as id,
+                            detail.id_feffi as id_feffi,
+                            detail.id_site as id_site,
+                            detail.id_cisco as id_cisco,
+                            detail.type_convention as type_convention,
+                            detail.ref_convention as ref_convention,
+                            detail.objet as objet,
+                            detail.ref_financement as ref_financement,
+                            detail.id_user as id_user,
+                            detail.date_creation as date_creation,
+                            (sum(detail.nbr_demande_d_moe)+sum(detail.nbr_demande_batiment_moe)+sum(detail.nbr_demande_latrine_moe)+sum(detail.nbr_demande_f_moe)++sum(detail.nbr_fact_mpe)) as nbrdemande
+                       
+                       from (
+                       
+                        (
+                            select 
+                                
+                                convention.id as id,  
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                count(demande_d_moe.id) as nbr_demande_d_moe,
+                                0 as nbr_demande_batiment_moe,
+                                0 as nbr_demande_latrine_moe,
+                                0 as nbr_demande_f_moe,
+                                0 as nbr_fact_mpe
+
+                                from convention_cisco_feffi_entete as convention
+                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
+                                inner join demande_debut_travaux_moe as demande_d_moe on demande_d_moe.id_contrat_bureau_etude = contrat_moe.id
+                                where 
+                                    demande_d_moe.validation= 0
+                                    group by convention.id
+                        )
+                        UNION
+                        (
+                            select 
+                                convention.id as id,
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                0 as nbr_demande_d_moe,
+                                count(demande_bat_moe.id) as nbr_demande_batiment_moe,
+                                0 as nbr_demande_latrine_moe,
+                                0 as nbr_demande_f_moe,
+                                0 as nbr_fact_mpe
+
+                                from convention_cisco_feffi_entete as convention
+                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
+                                inner join demande_batiment_moe as demande_bat_moe on demande_bat_moe.id_contrat_bureau_etude = contrat_moe.id
+                                where 
+                                    demande_bat_moe.validation= 0
+                                    group by convention.id
+                        )
+                        UNION
+                        (
+                            select 
+                                 convention.id as id,
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                0 as nbr_demande_d_moe,
+                                0 as nbr_demande_batiment_moe,
+                                count(demande_lat_moe.id) as nbr_demande_latrine_moe,
+                                0 as nbr_demande_f_moe,
+                                0 as nbr_fact_mpe
+
+                                from convention_cisco_feffi_entete as convention
+                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
+                                inner join demande_latrine_moe as demande_lat_moe on demande_lat_moe.id_contrat_bureau_etude = contrat_moe.id
+                                where 
+                                    demande_lat_moe.validation= 0
+                                    group by convention.id
+                        )
+                        UNION
+                        (
+                            select 
+                                 convention.id as id,
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                0 as nbr_demande_d_moe,
+                                0 as nbr_demande_batiment_moe,
+                                0 as nbr_demande_latrine_moe,
+                                count(demande_f_moe.id) as nbr_demande_f_moe,
+                                0 as nbr_fact_mpe
+
+                                from convention_cisco_feffi_entete as convention
+                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
+                                inner join demande_fin_travaux_moe as demande_f_moe on demande_f_moe.id_contrat_bureau_etude = contrat_moe.id
+                                where 
+                                    demande_f_moe.validation= 0
+                                    group by convention.id
+                        )
+                        UNION
+                        (
+                            select 
+                                 convention.id as id,
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                0 as nbr_demande_d_moe,
+                                0 as nbr_demande_batiment_moe,
+                                0 as nbr_demande_latrine_moe,
+                                0 as nbr_demande_f_moe,
+                                count(fact_mpe.id) as nbr_fact_mpe
+
+                                from convention_cisco_feffi_entete as convention
+                                inner join contrat_prestataire as contrat_mpe on contrat_mpe.id_convention_entete = convention.id
+                                inner join attachement_travaux as atta_tra on atta_tra.id_contrat_prestataire = contrat_mpe.id
+                                inner join facture_mpe as fact_mpe on fact_mpe.id_attachement_travaux = atta_tra.id
+                                where 
+                                    fact_mpe.validation= 0
+                                    group by convention.id
+                        )
+                        UNION
+                        (
+                            select 
+                                 convention.id as id,
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                0 as nbr_demande_d_moe,
+                                0 as nbr_demande_batiment_moe,
+                                0 as nbr_demande_latrine_moe,
+                                0 as nbr_demande_f_moe,
+                                0 as nbr_fact_mpe
+
+                                from convention_cisco_feffi_entete as convention
+                                
+                                    group by convention.id
+                        )
+                        )detail
+                   
+                        group by detail.id
+
+                            )niveau2
+                            where niveau2.nbrdemande >0
+                            group by niveau2.id
+            ";
+            return $this->db->query($sql)->result();                   
+    }
+    public function getconventionNeeddemandefeffivalidationbcafwithcisco($id_cisco_user)
+    {
+        $sql=" select 
+                       convention.*
+               from convention_cisco_feffi_entete as convention
+
+               inner join demande_realimentation_feffi as demande on demande.id_convention_cife_entete = convention.id
+
+                where 
+                        demande.validation= 0 and convention.id_cisco='".$id_cisco_user."'
+                            group by convention.id
+             
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }
 
     public function getconventionNeeddemandefeffivalidationdaaf()
     {
@@ -1042,6 +1756,24 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
                 where 
                         demande.validation= 4
+                            group by convention.id
+                            having count(demande.id)>0
+             
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }
+    public function getconventionNeeddemandefeffivalidationufp()
+    {
+        $sql=" select 
+                       convention.*,
+                       count(demande.id)
+               from convention_cisco_feffi_entete as convention
+
+               inner join demande_realimentation_feffi as demande on demande.id_convention_cife_entete = convention.id
+
+                where 
+                        demande.validation= 1
                             group by convention.id
                             having count(demande.id)>0
              
@@ -1078,7 +1810,8 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
                inner join contrat_prestataire as contrat_p on contrat_p.id_convention_entete = convention.id
                inner join contrat_bureau_etude as contrat_b on contrat_b.id_convention_entete = convention.id
-               left join facture_mpe as fact_mpe on fact_mpe.id_contrat_prestataire = contrat_p.id
+               left join attachement_travaux as atta_mpe on atta_mpe.id_contrat_prestataire = contrat_p.id
+               left join facture_mpe as fact_mpe on fact_mpe.id_attachement_travaux = atta_mpe.id
                left join demande_debut_travaux_moe as debut_moe on debut_moe.id_contrat_bureau_etude = contrat_b.id
                left join demande_batiment_moe as batiment_moe on batiment_moe.id_contrat_bureau_etude = contrat_b.id
                left join demande_latrine_moe as latrine_moe on latrine_moe.id_contrat_bureau_etude = contrat_b.id
@@ -1089,6 +1822,52 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                             group by convention.id
                             having (count(fact_mpe.id)>0 OR count(debut_moe.id)>0 OR count(batiment_moe.id)>0 OR count(latrine_moe.id)>0 OR count(fin_moe.id)>0)
              
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }
+
+   
+     public function countConventionbyciscovalidation($id_cisco,$validation)
+    {
+        $result = $this->db->select('COUNT(*) as nombre')
+                        ->from($this->table)
+                        ->where("validation", $validation)
+                        ->where("id_cisco", $id_cisco)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                  
+    }
+   
+    /* public function countConventionbyvalidation($validation)
+    {
+        $result = $this->db->select('COUNT(*) as nombre')
+                        ->from($this->table)
+                        ->where("validation", $validation)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                  
+    }*/
+    public function countConventionbyvalidation($validation)
+    {
+        $sql="
+                    select 
+                        count(conv.id) as nombre
+
+                        from convention_cisco_feffi_entete as conv
+                        where 
+                            conv.validation= '".$validation."'
+                
 
             ";
             return $this->db->query($sql)->result();                  

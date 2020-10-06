@@ -39,7 +39,7 @@ class Facture_mpe_model extends CI_Model {
             'remboursement_plaque' => $facture_mpe['remboursement_plaque'],
             'net_payer' => $facture_mpe['net_payer'],
             'date_signature' => $facture_mpe['date_signature'],
-            'id_contrat_prestataire' => $facture_mpe['id_contrat_prestataire'],
+            'id_attachement_travaux' => $facture_mpe['id_attachement_travaux'],
             'validation' => $facture_mpe['validation']                     
         );
     }
@@ -72,10 +72,10 @@ class Facture_mpe_model extends CI_Model {
             return $q->row();
         }
     }
-    public function findfacture_mpeBycontrat($id_contrat_prestataire) {               
+    public function findfacture_mpeByattachement($id_attachement_travaux) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("id_attachement_travaux", $id_attachement_travaux)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -86,6 +86,81 @@ class Facture_mpe_model extends CI_Model {
             return null;
         }                 
     }
+    public function avancement_financiereBycontrat($id_contrat)
+    {
+        $sql=" select 
+                       (sum(detail.net_payer) + sum(detail.montant_avance)) as montant_facture_total
+               from (
+               
+                (
+                    select 
+                        contrat_mpe.id as id,
+                        sum(fact_mpe.net_payer) as net_payer,
+                        0 as montant_avance
+
+                        from facture_mpe as fact_mpe
+                        inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
+                        inner join contrat_prestataire as contrat_mpe on contrat_mpe.id=atta_tra.id_contrat_prestataire
+                        where 
+                            fact_mpe.validation= 4 and contrat_mpe.id= '".$id_contrat."'
+                )
+                UNION
+                (
+                    select 
+                        contrat_mpe.id as id,
+                        0 as net_payer,                       
+                        sum(avance_dem.net_payer) as montant_avance
+
+                        from avance_demarrage as avance_dem
+                        inner join contrat_prestataire as contrat_mpe on contrat_mpe.id=avance_dem.id_contrat_prestataire
+                        where 
+                            avance_dem.validation= 4 and contrat_mpe.id= '".$id_contrat."'
+                )
+
+                )detail
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }
+   /* public function avancement_financiereBycontrat($id_contrat) otran diso
+    {
+        $sql=" select 
+                       (sum(detail.net_payer) + sum( detail.remboursement_acompte) - sum(detail.montant_avance)) as montant_facture_total
+               from (
+               
+                (
+                    select 
+                        contrat_mpe.id as id,
+                        sum(fact_mpe.net_payer) as net_payer,
+                        sum(fact_mpe.remboursement_acompte) as remboursement_acompte,
+                        0 as montant_avance
+
+                        from facture_mpe as fact_mpe
+                        inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
+                        inner join contrat_prestataire as contrat_mpe on contrat_mpe.id=atta_tra.id_contrat_prestataire
+                        where 
+                            fact_mpe.validation= 4 and contrat_mpe.id= '".$id_contrat."'
+                )
+                UNION
+                (
+                    select 
+                        contrat_mpe.id as id,
+                        0 as net_payer,                        
+                        0 as remboursement_acompte,                        
+                        sum(avance_dem.net_payer) as montant_avance
+
+                        from avance_demarrage as avance_dem
+                        inner join contrat_prestataire as contrat_mpe on contrat_mpe.id=avance_dem.id_contrat_prestataire
+                        where 
+                            avance_dem.validation= 4 and contrat_mpe.id= '".$id_contrat."'
+                )
+
+                )detail
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }*/
+
          public function findfacture_mpevalidebcafBycontrat($id_contrat_prestataire) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
@@ -114,8 +189,285 @@ class Facture_mpe_model extends CI_Model {
             return null;
         }                 
     }
+    public function finddecompte_mpeBycontratandfacture($id_contrat_prestataire,$id_facture_mpe)
+    {               
+        $sql=" select 
+                       detail.id_contrat as id_contrat,
+                       (sum(detail.montant_travaux_to)+sum(detail.montant_travaux_pe)) as montant_travaux_to,
+                         (sum(detail.montant_rabais_to)+sum(detail.montant_rabais_pe)) as montant_rabais_to,
+                         (sum(detail.montant_ht_to)+sum(detail.montant_ht_pe)) as montant_ht_to,
+                         (sum(detail.montant_tva_to)+sum(detail.montant_tva_pe)) as montant_tva_to,
+                         (sum(detail.montant_ttc_to)+sum(detail.montant_ttc_pe)) as montant_ttc_to,
+                         (sum(detail.remboursement_acompte_to)+sum(detail.remboursement_acompte_pe)) as remboursement_acompte_to,
+                         (sum(detail.penalite_retard_to)+sum(detail.penalite_retard_pe)) as penalite_retard_to,
+                         (sum(detail.retenue_garantie_to)+sum(detail.retenue_garantie_pe)) as retenue_garantie_to,
+                         (sum(detail.remboursement_plaque_to)+sum(detail.remboursement_plaque_pe)) as remboursement_plaque_to,
+                         (sum(detail.net_payer_to)+sum(detail.net_payer_pe)) as net_payer_to,
 
-        public function finddecompte_mpeBycontrat($id_contrat_prestataire,$id_facture_mpe)
+                         sum(detail.montant_travaux_pe) as montant_travaux_pe,
+                         sum(detail.montant_rabais_pe) as montant_rabais_pe,
+                         sum(detail.montant_ht_pe) as montant_ht_pe,
+                         sum(detail.montant_tva_pe) as montant_tva_pe,
+                         sum(detail.montant_ttc_pe) as montant_ttc_pe,
+                         sum(detail.remboursement_acompte_pe) as remboursement_acompte_pe,
+                         sum(detail.penalite_retard_pe) as penalite_retard_pe,
+                         sum(detail.retenue_garantie_pe) as retenue_garantie_pe,
+                         sum(detail.remboursement_plaque_pe) as remboursement_plaque_pe,
+                         sum(detail.net_payer_pe) as net_payer_pe,
+
+                         sum(detail.montant_travaux_ante) as montant_travaux_ante,
+                         sum(detail.montant_rabais_ante) as montant_rabais_ante,
+                         sum(detail.montant_ht_ante) as montant_ht_ante,
+                         sum(detail.montant_tva_ante) as montant_tva_ante,
+                         sum(detail.montant_ttc_ante) as montant_ttc_ante,
+                         sum(detail.remboursement_acompte_ante) as remboursement_acompte_ante,
+                         sum(detail.penalite_retard_ante) as penalite_retard_ante,
+                         sum(detail.retenue_garantie_ante) as retenue_garantie_ante,
+                         sum(detail.remboursement_plaque_ante) as remboursement_plaque_ante,
+                         sum(detail.net_payer_ante) as net_payer_ante,
+                         
+                         sum(detail.nbr_fact) as nbr_fact,
+                         sum(detail.net_payer_avanc) as net_payer_avanc
+
+               from (
+               
+                (
+                    select 
+                        atta_tra.id_contrat_prestataire as id_contrat,
+                         sum(fact_mpe.montant_travaux) as montant_travaux_to,
+                         sum(fact_mpe.montant_rabais) as montant_rabais_to,
+                         sum(fact_mpe.montant_ht) as montant_ht_to,
+                         sum(fact_mpe.montant_tva) as montant_tva_to,
+                         sum(fact_mpe.montant_ttc) as montant_ttc_to,
+                         sum(fact_mpe.remboursement_acompte) as remboursement_acompte_to,
+                         sum(fact_mpe.penalite_retard) as penalite_retard_to,
+                         sum(fact_mpe.retenue_garantie) as retenue_garantie_to,
+                         sum(fact_mpe.remboursement_plaque) as remboursement_plaque_to,
+                         sum(fact_mpe.net_payer) as net_payer_to,
+                         0 as montant_travaux_pe,
+                         0 as montant_rabais_pe,
+                         0 as montant_ht_pe,
+                         0 as montant_tva_pe,
+                         0 as montant_ttc_pe,
+                         0 as remboursement_acompte_pe,
+                         0 as penalite_retard_pe,
+                         0 as retenue_garantie_pe,
+                         0 as remboursement_plaque_pe,
+                         0 as net_payer_pe,
+                         0 as montant_travaux_ante,
+                         0 as montant_rabais_ante,
+                         0 as montant_ht_ante,
+                         0 as montant_tva_ante,
+                         0 as montant_ttc_ante,
+                         0 as remboursement_acompte_ante,
+                         0 as penalite_retard_ante,
+                         0 as retenue_garantie_ante,
+                         0 as remboursement_plaque_ante,
+                         0 as net_payer_ante,                         
+                         0 as nbr_fact,
+                         0 as net_payer_avanc
+
+                        from facture_mpe as fact_mpe
+
+                        inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
+                        where fact_mpe.id<= '".$id_facture_mpe."' and
+                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4
+
+                            group by id_contrat
+                )
+                UNION
+                (
+                    select 
+                        atta_tra.id_contrat_prestataire as id_contrat,
+                        0 as montant_travaux_to,
+                        0 as montant_rabais_to,
+                        0 as montant_ht_to,
+                        0 as montant_tva_to,
+                        0 as montant_ttc_to,
+                        0 as remboursement_acompte_to,
+                        0 as penalite_retard_to,
+                        0 as retenue_garantie_to,
+                        0 as remboursement_plaque_to,
+                        0 as net_payer_to,
+                         sum(fact_mpe.montant_travaux) as montant_travaux_pe,
+                         sum(fact_mpe.montant_rabais) as montant_rabais_pe,
+                         sum(fact_mpe.montant_ht) as montant_ht_pe,
+                         sum(fact_mpe.montant_tva) as montant_tva_pe,
+                         sum(fact_mpe.montant_ttc) as montant_ttc_pe,
+                         sum(fact_mpe.remboursement_acompte) as remboursement_acompte_pe,
+                         sum(fact_mpe.penalite_retard) as penalite_retard_pe,
+                         sum(fact_mpe.retenue_garantie) as retenue_garantie_pe,
+                         sum(fact_mpe.remboursement_plaque) as remboursement_plaque_pe,
+                         sum(fact_mpe.net_payer) as net_payer_pe,
+                         0 as montant_travaux_ante,
+                         0 as montant_rabais_ante,
+                         0 as montant_ht_ante,
+                         0 as montant_tva_ante,
+                         0 as montant_ttc_ante,
+                         0 as remboursement_acompte_ante,
+                         0 as penalite_retard_ante,
+                         0 as retenue_garantie_ante,
+                         0 as remboursement_plaque_ante,
+                         0 as net_payer_ante,                         
+                         0 as nbr_fact,
+                         0 as net_payer_avanc
+
+                        from facture_mpe as fact_mpe
+
+                        inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
+                        where 
+                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.id='".$id_facture_mpe."'
+                            group by id_contrat
+                )
+                UNION
+                (
+                    select 
+                        atta_tra.id_contrat_prestataire as id_contrat,
+                        0 as montant_travaux_to,
+                        0 as montant_rabais_to,
+                        0 as montant_ht_to,
+                        0 as montant_tva_to,
+                        0 as montant_ttc_to,
+                        0 as remboursement_acompte_to,
+                        0 as penalite_retard_to,
+                        0 as retenue_garantie_to,
+                        0 as remboursement_plaque_to,
+                        0 as net_payer_to,
+                         0 as montant_travaux_pe,
+                         0 as montant_rabais_pe,
+                         0 as montant_ht_pe,
+                         0 as montant_tva_pe,
+                         0 as montant_ttc_pe,
+                         0 as remboursement_acompte_pe,
+                         0 as penalite_retard_pe,
+                         0 as retenue_garantie_pe,
+                         0 as remboursement_plaque_pe,
+                         0 as net_payer_pe,
+                         sum(fact_mpe.montant_travaux) as montant_travaux_ante,
+                         sum(fact_mpe.montant_rabais) as montant_rabais_ante,
+                         sum(fact_mpe.montant_ht) as montant_ht_ante,
+                         sum(fact_mpe.montant_tva) as montant_tva_ante,
+                         sum(fact_mpe.montant_ttc) as montant_ttc_ante,
+                         sum(fact_mpe.remboursement_acompte) as remboursement_acompte_ante,
+                         sum(fact_mpe.penalite_retard) as penalite_retard_ante,
+                         sum(fact_mpe.retenue_garantie) as retenue_garantie_ante,
+                         sum(fact_mpe.remboursement_plaque) as remboursement_plaque_ante,
+                         sum(fact_mpe.net_payer) as net_payer_ante,                         
+                         0 as nbr_fact,
+                         0 as net_payer_avanc
+
+                        from facture_mpe as fact_mpe
+
+                        inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
+                        where 
+                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id=(
+                                    select max(factu_mpe.id) 
+                                        from facture_mpe as factu_mpe
+                                        inner join attachement_travaux as atta_trav on atta_trav.id=factu_mpe.id_attachement_travaux
+                                            where factu_mpe.id < '".$id_facture_mpe."' and atta_trav.id_contrat_prestataire = '".$id_contrat_prestataire."')
+
+                            group by id_contrat
+                )
+
+                UNION
+                (
+                    select 
+                        atta_tra.id_contrat_prestataire as id_contrat,
+                        0 as montant_travaux_to,
+                        0 as montant_rabais_to,
+                        0 as montant_ht_to,
+                        0 as montant_tva_to,
+                        0 as montant_ttc_to,
+                        0 as remboursement_acompte_to,
+                        0 as penalite_retard_to,
+                        0 as retenue_garantie_to,
+                        0 as remboursement_plaque_to,
+                        0 as net_payer_to,
+                         0 as montant_travaux_pe,
+                         0 as montant_rabais_pe,
+                         0 as montant_ht_pe,
+                         0 as montant_tva_pe,
+                         0 as montant_ttc_pe,
+                         0 as remboursement_acompte_pe,
+                         0 as penalite_retard_pe,
+                         0 as retenue_garantie_pe,
+                         0 as remboursement_plaque_pe,
+                         0 as net_payer_pe,
+                         0 as montant_travaux_ante,
+                         0 as montant_rabais_ante,
+                         0 as montant_ht_ante,
+                         0 as montant_tva_ante,
+                         0 as montant_ttc_ante,
+                         0 as remboursement_acompte_ante,
+                         0 as penalite_retard_ante,
+                         0 as retenue_garantie_ante,
+                         0 as remboursement_plaque_ante,
+                         0 as net_payer_ante,
+                         count(fact_mpe.id) as nbr_fact,
+                         0 as net_payer_avanc
+                            
+                            from facture_mpe as fact_mpe
+                         inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux   
+                        where 
+                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id<= '".$id_facture_mpe."'
+
+                            group by id_contrat
+                )
+
+                UNION
+                (
+                    select 
+                        avance_dem.id_contrat_prestataire as id_contrat,
+                        0 as montant_travaux_to,
+                        0 as montant_rabais_to,
+                        0 as montant_ht_to,
+                        0 as montant_tva_to,
+                        0 as montant_ttc_to,
+                        0 as remboursement_acompte_to,
+                        0 as penalite_retard_to,
+                        0 as retenue_garantie_to,
+                        0 as remboursement_plaque_to,
+                        0 as net_payer_to,
+                         0 as montant_travaux_pe,
+                         0 as montant_rabais_pe,
+                         0 as montant_ht_pe,
+                         0 as montant_tva_pe,
+                         0 as montant_ttc_pe,
+                         0 as remboursement_acompte_pe,
+                         0 as penalite_retard_pe,
+                         0 as retenue_garantie_pe,
+                         0 as remboursement_plaque_pe,
+                         0 as net_payer_pe,
+                         0 as montant_travaux_ante,
+                         0 as montant_rabais_ante,
+                         0 as montant_ht_ante,
+                         0 as montant_tva_ante,
+                         0 as montant_ttc_ante,
+                         0 as remboursement_acompte_ante,
+                         0 as penalite_retard_ante,
+                         0 as retenue_garantie_ante,
+                         0 as remboursement_plaque_ante,
+                         0 as net_payer_ante,
+                         0 as nbr_fact,
+                         sum(avance_dem.net_payer) as net_payer_avanc
+                            
+                            from avance_demarrage as avance_dem
+
+                        where 
+                        avance_dem.id_contrat_prestataire= '".$id_contrat_prestataire."' and avance_dem.validation = 4
+
+                            group by id_contrat
+                )
+
+                )detail
+
+                group by id_contrat
+
+            ";
+            return $this->db->query($sql)->result();             
+    }
+
+    public function finddecompte_mpeBycontrat($id_contrat_prestataire,$id_facture_mpe)
     {               
         $sql=" select 
                        detail.id_contrat as id_contrat,
@@ -159,7 +511,7 @@ class Facture_mpe_model extends CI_Model {
                
                 (
                     select 
-                        fact_mpe.id_contrat_prestataire as id_contrat,
+                        atta_tra.id_contrat_prestataire as id_contrat,
                          sum(fact_mpe.montant_travaux) as montant_travaux_to,
                          sum(fact_mpe.montant_rabais) as montant_rabais_to,
                          sum(fact_mpe.montant_ht) as montant_ht_to,
@@ -195,15 +547,16 @@ class Facture_mpe_model extends CI_Model {
 
                         from facture_mpe as fact_mpe
 
+                        inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
                         where fact_mpe.id<= '".$id_facture_mpe."' and
-                        fact_mpe.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4
+                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4
 
                             group by id_contrat
                 )
                 UNION
                 (
                     select 
-                        fact_mpe.id_contrat_prestataire as id_contrat,
+                        atta_tra.id_contrat_prestataire as id_contrat,
                         0 as montant_travaux_to,
                         0 as montant_rabais_to,
                         0 as montant_ht_to,
@@ -239,14 +592,15 @@ class Facture_mpe_model extends CI_Model {
 
                         from facture_mpe as fact_mpe
 
+                        inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
                         where 
-                        fact_mpe.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id='".$id_facture_mpe."'
+                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id='".$id_facture_mpe."'
                             group by id_contrat
                 )
                 UNION
                 (
                     select 
-                        fact_mpe.id_contrat_prestataire as id_contrat,
+                        atta_tra.id_contrat_prestataire as id_contrat,
                         0 as montant_travaux_to,
                         0 as montant_rabais_to,
                         0 as montant_ht_to,
@@ -282,11 +636,13 @@ class Facture_mpe_model extends CI_Model {
 
                         from facture_mpe as fact_mpe
 
+                        inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
                         where 
-                        fact_mpe.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id=(
+                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id=(
                                     select max(factu_mpe.id) 
                                         from facture_mpe as factu_mpe
-                                            where factu_mpe.id < '".$id_facture_mpe."' and factu_mpe.id_contrat_prestataire = '".$id_contrat_prestataire."')
+                                        inner join attachement_travaux as atta_trav on atta_trav.id=factu_mpe.id_attachement_travaux
+                                            where factu_mpe.id < '".$id_facture_mpe."' and atta_trav.id_contrat_prestataire = '".$id_contrat_prestataire."')
 
                             group by id_contrat
                 )
@@ -294,7 +650,7 @@ class Facture_mpe_model extends CI_Model {
                 UNION
                 (
                     select 
-                        fact_mpe.id_contrat_prestataire as id_contrat,
+                        atta_tra.id_contrat_prestataire as id_contrat,
                         0 as montant_travaux_to,
                         0 as montant_rabais_to,
                         0 as montant_ht_to,
@@ -329,9 +685,9 @@ class Facture_mpe_model extends CI_Model {
                          0 as net_payer_avanc
                             
                             from facture_mpe as fact_mpe
-
+                         inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux   
                         where 
-                        fact_mpe.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id<= '".$id_facture_mpe."'
+                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id<= '".$id_facture_mpe."'
 
                             group by id_contrat
                 )

@@ -12,6 +12,10 @@ class Contrat_be extends REST_Controller {
         $this->load->model('contrat_be_model', 'Contrat_beManager');
         $this->load->model('bureau_etude_model', 'Bureau_etudeManager');
         $this->load->model('convention_cisco_feffi_entete_model', 'Convention_cisco_feffi_enteteManager');
+        $this->load->model('demande_batiment_moe_model', 'Demande_batiment_moeManager');
+        $this->load->model('passation_marches_be_model', 'Passation_marches_beManager');
+        $this->load->model('divers_sousrubrique_calendrier_paie_moe_detail_model', 'Divers_sousrubrique_calendrier_paie_moe_detailManager');
+        $this->load->model('divers_calendrier_paie_moe_prevu_model', 'Divers_calendrier_paie_moe_prevuManager');
     }
 
     public function index_get() 
@@ -21,52 +25,7 @@ class Contrat_be extends REST_Controller {
         $id_bureau_etude = $this->get('id_bureau_etude');
         $id_cisco = $this->get('id_cisco');
         $menus = $this->get('menus');
-         
-        /* if ($menus=='getcontratBycisco')
-         {
-            $menu = $this->Contrat_beManager->findAllBycisco($id_cisco);
-            if ($menu) 
-            {
-                foreach ($menu as $key => $value) 
-                {
-                    $bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['intitule'] = $value->intitule;
-                    $data[$key]['ref_contrat']   = $value->ref_contrat;
-                    $data[$key]['montant_contrat'] = $value->montant_contrat;
-                    $data[$key]['date_signature'] = $value->date_signature;
-                    $data[$key]['convention_entete'] = $convention_entete;
-                    $data[$key]['bureau_etude'] = $bureau_etude;
-                }
-            } 
-                else
-                    $data = array();
-        }   
-        elseif ($menus=='getcontratBybe')
-         {
-            $menu = $this->Contrat_beManager->findAllBybe($id_bureau_etude);
-            if ($menu) 
-            {
-                foreach ($menu as $key => $value) 
-                {
-                    $bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
-
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['intitule'] = $value->intitule;
-                    $data[$key]['ref_contrat']   = $value->ref_contrat;
-                    $data[$key]['montant_contrat'] = $value->montant_contrat;
-                    $data[$key]['date_signature'] = $value->date_signature;
-                    $data[$key]['convention_entete'] = $convention_entete;
-                    $data[$key]['bureau_etude'] = $bureau_etude;
-                }
-            } 
-                else
-                    $data = array();
-        }   
-        else*/
         if ($menus=='getcontratByconvention')
          {
             $menu = $this->Contrat_beManager->findAllByConvention($id_convention_entete);
@@ -76,7 +35,9 @@ class Contrat_be extends REST_Controller {
                 {
                     $bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $passation = $this->Passation_marches_beManager->findpassationarrayByconvention($value->id_convention_entete);
 
+                    $data[$key]['passation'] = $passation;
                     $data[$key]['id'] = $value->id;
                     $data[$key]['intitule'] = $value->intitule;
                     $data[$key]['ref_contrat']   = $value->ref_contrat;
@@ -85,6 +46,37 @@ class Contrat_be extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['bureau_etude'] = $bureau_etude;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menus=='getetatcontratByconvention')
+         {
+            $menu = $this->Contrat_beManager->findcontratvalideByConvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {   $avancement_financ = 0;
+                    $bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
+                    $montant_facture = $this->Demande_batiment_moeManager->avancement_financiereBycontrat($value->id);
+                    if($montant_facture)
+                    {
+                       $avancement_financ = ($montant_facture[0]->montant_facture_total*100)/$value->montant_contrat; 
+                    }
+                    $passation = $this->Passation_marches_beManager->findpassationarrayByconvention($value->id_convention_entete);
+
+                    $data[$key]['passation'] = $passation;
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['ref_contrat']   = $value->ref_contrat;
+                    $data[$key]['montant_contrat']    = $value->montant_contrat;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['validation'] = $value->validation;
+                    //$data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['bureau_etude'] = $bureau_etude;
+                    $data[$key]['avancement_financ'] = $avancement_financ ;
                         }
             } 
                 else
@@ -99,6 +91,9 @@ class Contrat_be extends REST_Controller {
                 {
                     $bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $passation = $this->Passation_marches_beManager->findpassationarrayByconvention($value->id_convention_entete);
+
+                    $data[$key]['passation'] = $passation;
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['intitule'] = $value->intitule;
@@ -122,6 +117,9 @@ class Contrat_be extends REST_Controller {
                 {
                     $bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $passation = $this->Passation_marches_beManager->findpassationarrayByconvention($value->id_convention_entete);
+
+                    $data[$key]['passation'] = $passation;
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['intitule'] = $value->intitule;
@@ -143,6 +141,9 @@ class Contrat_be extends REST_Controller {
 
             $bureau_etude = $this->Bureau_etudeManager->findById($contrat_be->id_bureau_etude);
             $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($contrat_be->id_convention_entete);
+            $passation = $this->Passation_marches_beManager->findpassationarrayByconvention($contrat_be->id_convention_entete);
+
+            $data['passation'] = $passation;
 
             $data['id'] = $contrat_be->id;
             $data['intitule'] = $contrat_be->intitule;
@@ -161,7 +162,10 @@ class Contrat_be extends REST_Controller {
                 {
                     $bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $passation = $this->Passation_marches_beManager->findpassationarrayByconvention($value->id_convention_entete);
 
+                    $data[$key]['passation'] = $passation;
+                    
                     $data[$key]['id'] = $value->id;
                     $data[$key]['intitule'] = $value->intitule;
                     $data[$key]['ref_contrat']   = $value->ref_contrat;
@@ -214,9 +218,30 @@ class Contrat_be extends REST_Controller {
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
                 $dataId = $this->Contrat_beManager->add($data);
-                if (!is_null($dataId)) {
+                if (!is_null($dataId)) 
+                {   
+                    $dataId_calendrier = array();
+                    $status_calendrier = false;
+                    $tmp_calendrier = $this->Divers_sousrubrique_calendrier_paie_moe_detailManager->findAll();
+                    foreach ($tmp_calendrier as $key => $value)
+                    {
+                        
+                        $data_calendrier_paie = array(
+                            'id' => $this->post('id'),
+                            'id_contrat_bureau_etude' => $dataId,
+                            'id_sousrubrique_detail' => $value->id,
+                            'montant_prevu'    => ($this->post('montant_contrat')*$value->pourcentage)/100
+                        );
+
+                        $dataId_calendrier[$key] = $this->Divers_calendrier_paie_moe_prevuManager->add($data_calendrier_paie);
+                    }
+                    if (count($tmp_calendrier)==count($dataId_calendrier))
+                    {
+                        $status_calendrier = true;
+                    }
                     $this->response([
                         'status' => TRUE,
+                        'status_calendrier_paie' => $status_calendrier,
                         'response' => $dataId,
                         'message' => 'Data insert success'
                             ], REST_Controller::HTTP_OK);
@@ -247,9 +272,32 @@ class Contrat_be extends REST_Controller {
                 }
                 $update = $this->Contrat_beManager->update($id, $data);
                 if(!is_null($update)) {
+
+                    $dataId_calendrier = array();
+                    $tmp_calendrier_prevu= array();
+                    $status_calendrier = false;
+                    $tmp_calendrier = $this->Divers_sousrubrique_calendrier_paie_moe_detailManager->findAll();                       
+                    foreach ($tmp_calendrier as $key => $value)
+                    {      
+                        $data_calendrier_paie = array(
+                                        'id_contrat_bureau_etude' => $id,
+                                        'id_sousrubrique_detail' => $value->id,
+                                        'montant_prevu'    => ($this->post('montant_contrat')*$value->pourcentage)/100
+                                );
+
+                        $dataId_calendrier[$key] = $this->Divers_calendrier_paie_moe_prevuManager->update($id,$value->id,$data_calendrier_paie);
+                            
+                            
+                    }
+                    if (count($tmp_calendrier)==count($dataId_calendrier))
+                    {
+                        $status_calendrier = true;
+                    }
+
                     $this->response([
                         'status' => TRUE,
                         'response' => 1,
+                        'status_calendrier_paie' => $status_calendrier,
                         'message' => 'Update data success'
                     ], REST_Controller::HTTP_OK);
                 } else {

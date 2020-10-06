@@ -18,7 +18,23 @@ class Zap_commune extends REST_Controller {
         $id_commune = $this->get('id_commune');
         $menu = $this->get('menu');
 
-        if ($menu=='getzap_communeBycommune') {
+        if ($menu=='getzapBycommune') {
+            $data = array();
+            // Récupération des zap par commune
+            $tmp = $this->Zap_communeManager->findzapByCommune($id_commune);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['nom'] = $value->nom;
+                }
+            }else $data =array();    
+        } 
+        elseif ($menu=='getzap_communeBycommune')
+        {
             $data = array();
 			// Récupération des zap par commune
             $tmp = $this->Zap_communeManager->findAllByCommune($id_commune);

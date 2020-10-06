@@ -33,6 +33,36 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                 else
                     $data = array();
         } 
+        elseif ($menu=='getetatconventionByfiltre') //mande
+        {
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findetatconventionByfiltre($date_debut,$date_fin);
+            if ($tmp) 
+            {
+                $data = $tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getetatconventionwithpourcenfinancByfiltre')
+        {
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findetatconventionwithpourcenfinancByfiltre($date_debut,$date_fin);
+            if ($tmp) 
+            {
+                $data = $tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getconventionByfiltre')
+        {
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findconventionByfiltre($this->generer_requete($date_debut,$date_fin));
+            if ($tmp) 
+            {
+                $data = $tmp;
+            } 
+                else
+                    $data = array();
+        }
         elseif ($menu=='getconventionByfiltre')
         {
             $tmp = $this->Convention_ufp_daaf_enteteManager->findconventionByfiltre($this->generer_requete($date_debut,$date_fin));
@@ -121,6 +151,30 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                 else
                     $data = array();
         }*/
+        elseif ($menu=="getconvention_creerinvalideByfiltre")
+        {
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findconvention_creerinvalideByfiltre($this->generer_requete_convention_creer($date_debut,$date_fin));
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['montant_convention'] = $value->montant_convention;                    
+                    $data[$key]['montant_trans_comm'] = $value->montant_trans_comm;
+                    $data[$key]['frais_bancaire'] = $value->frais_bancaire;
+                    $data[$key]['num_vague'] = $value->num_vague;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
+                    $data[$key]['date_creation'] = $value->date_creation;
+                    
+                }
+            } 
+                else
+                    $data = array();
+        }
         elseif ($menu=="getconvention_invalideByfiltre")
         {
             $tmp = $this->Convention_ufp_daaf_enteteManager->findconvention_invalideByfiltre($this->generer_requete($date_debut,$date_fin));
@@ -138,8 +192,33 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                     $data[$key]['num_vague'] = $value->num_vague;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
+                    $data[$key]['date_creation'] = $value->date_creation;
                     
                 }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getetatconvention_now") //mande
+        {
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findetatConvention_now($annee);
+            if ($tmp) 
+            {
+                /*foreach ($tmp as $key => $value) 
+                {
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['montant_convention'] = $value->montant_convention;                    
+                    $data[$key]['montant_trans_comm'] = $value->montant_trans_comm;
+                    $data[$key]['frais_bancaire'] = $value->frais_bancaire;
+                    $data[$key]['num_vague'] = $value->num_vague;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
+                    
+                }*/
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -161,6 +240,31 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                     $data[$key]['num_vague'] = $value->num_vague;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
+                    $data[$key]['date_creation'] = $value->date_creation;
+                    
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getconvention_creerinvalide_now")
+        {
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findConvention_creerinvalide_now($annee);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['montant_convention'] = $value->montant_convention;                    
+                    $data[$key]['montant_trans_comm'] = $value->montant_trans_comm;
+                    $data[$key]['frais_bancaire'] = $value->frais_bancaire;
+                    $data[$key]['num_vague'] = $value->num_vague;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
+                    $data[$key]['date_creation'] = $value->date_creation;
                     
                 }
             } 
@@ -184,6 +288,7 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                     $data[$key]['num_vague'] = $value->num_vague;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
+                    $data[$key]['date_creation'] = $value->date_creation;
                     
                 }
             } 
@@ -208,6 +313,7 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                     $data[$key]['num_vague'] = $value->num_vague;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
+                    $data[$key]['date_creation'] = $value->date_creation;
                     
                 }
             } 
@@ -231,6 +337,7 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                     $data[$key]['num_vague'] = $value->num_vague;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
+                    $data[$key]['date_creation'] = $value->date_creation;
                     
                 }
             } 
@@ -347,6 +454,13 @@ class Convention_ufp_daaf_entete extends REST_Controller {
                         ], REST_Controller::HTTP_OK);
             }
         }        
+    }
+
+    public function generer_requete_convention_creer($date_debut,$date_fin)
+    {
+            $requete = "date_creation BETWEEN '".$date_debut."' AND '".$date_fin."' " ;
+            
+        return $requete ;
     }
 
     public function generer_requete($date_debut,$date_fin)

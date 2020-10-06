@@ -18,22 +18,57 @@ class Divers_attachement_latrine_prevu extends REST_Controller {
     {
         $id = $this->get('id');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_attachement_latrine = $this->get('id_attachement_latrine'); 
         $menu = $this->get('menu');
  
-        if ($menu == "getdivers_attachement_prevuBycontrat")
+        if ($menu == "getattachement_latrine_prevuwithdetailbyrubrique")
         {
-            $tmp = $this->Divers_attachement_latrine_prevuManager->finddivers_attachement_prevuBycontrat($id_contrat_prestataire);
+            $tmp = $this->Divers_attachement_latrine_prevuManager->getattachement_latrine_prevuwithdetailbyrubrique($id_contrat_prestataire,$id_attachement_latrine);
+            if ($tmp) 
+            { 
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getattachement_latrineprevubyrubrique")
+        {
+            $tmp = $this->Divers_attachement_latrine_prevuManager->getattachement_latrineprevubyrubrique($id_contrat_prestataire,$id_attachement_latrine);
             if ($tmp) 
             {   
-                foreach ($tmp as $key => $value)
+                /*foreach ($tmp as $key => $value)
                 {
                     $divers_attachement_latrine = $this->Divers_attachement_latrineManager->findById($value->id_divers_attachement_latrine);
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['quantite_prevu'] = $value->quantite_prevu;
+                    $data[$key]['prix_unitaire'] = $value->prix_unitaire;
                     $data[$key]['montant_prevu'] = $value->montant_prevu;
                     $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
                     $data[$key]['divers_attachement_latrine'] = $divers_attachement_latrine;
-                }
-                //$data=$tmp;
+                    $data[$key]['divers_attachement_latrine'] = $divers_attachement_latrine;
+                }*/
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getprevuattachement_latrinebycontrat")
+        {
+            $tmp = $this->Divers_attachement_latrine_prevuManager->getprevuattachement_latrinebycontrat($id_contrat_prestataire,$id_attachement_latrine);
+            if ($tmp) 
+            {   
+                /*foreach ($tmp as $key => $value)
+                {
+                    $divers_attachement_latrine = $this->Divers_attachement_latrineManager->findById($value->id_divers_attachement_latrine);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['quantite_prevu'] = $value->quantite_prevu;
+                    $data[$key]['prix_unitaire'] = $value->prix_unitaire;
+                    $data[$key]['montant_prevu'] = $value->montant_prevu;
+                    $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
+                    $data[$key]['divers_attachement_latrine'] = $divers_attachement_latrine;
+                    $data[$key]['divers_attachement_latrine'] = $divers_attachement_latrine;
+                }*/
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -43,6 +78,8 @@ class Divers_attachement_latrine_prevu extends REST_Controller {
             $data = array();
             $divers_attachement_latrine_prevu = $this->Divers_attachement_latrine_prevuManager->findById($id);
             $data['id'] = $divers_attachement_latrine_prevu->id;
+            $data['quantite_prevu'] = $divers_attachement_latrine_prevu->quantite_prevu;
+            $data['prix_unitaire'] = $divers_attachement_latrine_prevu->prix_unitaire;
             $data['montant_prevu'] = $divers_attachement_latrine_prevu->montant_prevu;
             $data['id_contrat_prestataire'] = $divers_attachement_latrine_prevu->id_contrat_prestataire;
             $data['id_divers_attachement_latrine'] = $divers_attachement_latrine_prevu->id_divers_attachement_latrine;
@@ -80,9 +117,12 @@ class Divers_attachement_latrine_prevu extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
+                    'quantite_prevu' => $this->post('quantite_prevu'),
+                    'prix_unitaire' => $this->post('prix_unitaire'),
                     'montant_prevu' => $this->post('montant_prevu'),
+                    'unite' => $this->post('unite'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
-                    'id_divers_attachement_latrine' => $this->post('id_divers_attachement_latrine')
+                    'id_attachement_latrine_detail' => $this->post('id_attachement_latrine_detail')
                 );
                 if (!$data) {
                     $this->response([
@@ -107,9 +147,12 @@ class Divers_attachement_latrine_prevu extends REST_Controller {
                 }
             } else {
                 $data = array(
+                    'quantite_prevu' => $this->post('quantite_prevu'),
+                    'prix_unitaire' => $this->post('prix_unitaire'),
                     'montant_prevu' => $this->post('montant_prevu'),
+                    'unite' => $this->post('unite'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
-                    'id_divers_attachement_latrine' => $this->post('id_divers_attachement_latrine')
+                    'id_attachement_latrine_detail' => $this->post('id_attachement_latrine_detail')
                 );
                 if (!$data || !$id) {
                     $this->response([

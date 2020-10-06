@@ -76,6 +76,89 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
             return null;
         }                 
     }
+    public function findetatconventionwithpourcenfinancByfiltre($date_debut,$date_fin)
+    {               
+        $sql="
+
+        select 
+                niveau1.id as id,
+                niveau1.num_vague as num_vague,
+                niveau1.ref_convention as ref_convention,
+                niveau1.objet as objet,
+                niveau1.ref_financement as ref_financement,
+                niveau1.montant_trans_comm as montant_trans_comm,
+                niveau1.frais_bancaire as frais_bancaire,
+                niveau1.nbr_beneficiaire as nbr_beneficiaire,
+                niveau1.montant_convention as montant_convention,
+                niveau1.validation as validation,
+                ((sum(niveau1.montant_total)*100)/niveau1.montant_convention) as avancement_financ
+
+            from( 
+
+            (select 
+                    conv_ufp.id as id,
+                    conv_ufp.num_vague as num_vague,
+                    conv_ufp.ref_convention as ref_convention,
+                    conv_ufp.objet as objet,
+                    conv_ufp.ref_financement as ref_financement,
+                    conv_ufp.montant_trans_comm as montant_trans_comm,
+                    conv_ufp.frais_bancaire as frais_bancaire,
+                    conv_ufp.nbr_beneficiaire as nbr_beneficiaire,
+                    conv_ufp.montant_convention as montant_convention,
+                    conv_ufp.validation as validation,
+                    sum(trans_ufp.montant_total) as montant_total
+
+                            from convention_ufp_daaf_entete as conv_ufp
+                                inner join convention_ufp_daaf_detail as conv_ufp_de on conv_ufp_de.id_convention_ufp_daaf_entete = conv_ufp.id
+
+                                left join demande_deblocage_daaf as demand_daaf on demand_daaf.id_convention_ufp_daaf_entete = conv_ufp.id
+                                left join transfert_ufp as trans_ufp on trans_ufp.id_demande_deblocage_daaf = demand_daaf.id
+                                where conv_ufp.validation = 1 and trans_ufp.validation=1 and conv_ufp_de.date_signature BETWEEN '".$date_debut."' AND '".$date_fin."'
+                                group by conv_ufp.id
+                )
+                UNION
+                (select 
+                    conv_ufp.id as id,
+                    conv_ufp.num_vague as num_vague,
+                    conv_ufp.ref_convention as ref_convention,
+                    conv_ufp.objet as objet,
+                    conv_ufp.ref_financement as ref_financement,
+                    conv_ufp.montant_trans_comm as montant_trans_comm,
+                    conv_ufp.frais_bancaire as frais_bancaire,
+                    conv_ufp.nbr_beneficiaire as nbr_beneficiaire,
+                    conv_ufp.montant_convention as montant_convention,
+                    conv_ufp.validation as validation,
+                    0 as montant_total
+
+                            from convention_ufp_daaf_entete as conv_ufp
+                                inner join convention_ufp_daaf_detail as conv_ufp_de on conv_ufp_de.id_convention_ufp_daaf_entete = conv_ufp.id
+                                
+                            where conv_ufp.validation = 1 and conv_ufp_de.date_signature BETWEEN '".$date_debut."' AND '".$date_fin."'
+                                group by conv_ufp.id
+                )
+            ) niveau1
+
+                group by niveau1.id
+            ";
+            return $this->db->query($sql)->result();             
+    }
+
+    public function findconvention_creerinvalideByfiltre($requete)
+    {               
+        $result =  $this->db->select('convention_ufp_daaf_entete.*')
+                        ->from($this->table)
+                        ->where('validation',0)
+                        ->where($requete)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
     public function findconvention_invalideByfiltre($requete)
     {               
@@ -147,6 +230,23 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
         }                 
     }
 
+    public function findConvention_creerinvalide_now($annee)
+    {               
+        $result =  $this->db->select('convention_ufp_daaf_entete.*')
+                        ->from($this->table)
+                        ->where('validation',0)
+                        ->where("DATE_FORMAT(date_creation,'%Y')",$annee)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
     public function findConvention_invalide_now($annee)
     {               
         $result =  $this->db->select('convention_ufp_daaf_entete.*')
@@ -198,6 +298,232 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
         }else{
             return null;
         }                 
+    } 
+    public function findetatconventionByfiltre($date_debut,$date_fin)
+    {               
+        $sql="
+
+        select 
+                niveau1.id_conv_ufp as id,
+                sum(niveau1.avancement_bat) as avancement_batiment,
+                sum(niveau1.avancement_lat) as avancement_latrine,
+                sum(niveau1.avancement_mob) as avancement_mobilier,
+                count(niveau1.id_conv) as nbr_conv_cf,
+                (((sum(niveau1.avancement_mob) + sum(niveau1.avancement_lat) + sum(niveau1.avancement_bat))/3)/count(DISTINCT(niveau1.id_conv))) as avancement_physi,
+                niveau1.num_vague as num_vague,
+                niveau1.ref_convention as ref_convention,
+                niveau1.objet as objet,
+                niveau1.ref_financement as ref_financement,
+                niveau1.montant_trans_comm as montant_trans_comm,
+                niveau1.frais_bancaire as frais_bancaire,
+                niveau1.nbr_beneficiaire as nbr_beneficiaire,
+                niveau1.montant_convention as montant_convention,
+                niveau1.validation as validation
+
+            from(
+               
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        conv_ufp.num_vague as num_vague,
+                        conv_ufp.ref_convention as ref_convention,
+                        conv_ufp.objet as objet,
+                        conv_ufp.ref_financement as ref_financement,
+                        conv_ufp.montant_trans_comm as montant_trans_comm,
+                        conv_ufp.frais_bancaire as frais_bancaire,
+                        conv_ufp.nbr_beneficiaire as nbr_beneficiaire,
+                        conv_ufp.montant_convention as montant_convention,
+                        conv_ufp.validation as validation,
+                        conv.id as id_conv,
+                         max(avanc_bat.pourcentage) as avancement_bat,
+                         0 as avancement_lat,
+                         0 as avancement_mob
+
+                        from avancement_physi_batiment as avanc_bat
+
+                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc_bat.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
+                            right join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf 
+                            right join convention_ufp_daaf_detail as conv_ufp_de on conv_ufp_de.id_convention_ufp_daaf_entete = conv_ufp.id
+                            where conv_ufp.validation = 1 and DATE_FORMAT(conv_ufp_de.date_signature,'%Y') BETWEEN '".$date_debut."' AND '".$date_fin."'
+                            group by conv_ufp.id,conv.id
+                )
+                UNION
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        conv_ufp.num_vague as num_vague,
+                        conv_ufp.ref_convention as ref_convention,
+                        conv_ufp.objet as objet,
+                        conv_ufp.ref_financement as ref_financement,
+                        conv_ufp.montant_trans_comm as montant_trans_comm,
+                        conv_ufp.frais_bancaire as frais_bancaire,
+                        conv_ufp.nbr_beneficiaire as nbr_beneficiaire,
+                        conv_ufp.montant_convention as montant_convention,
+                        conv_ufp.validation as validation,
+                        conv.id as id_conv,
+                         0 as avancement_bat,
+                         max(avanc_lat.pourcentage) as avancement_lat,
+                         0 as avancement_mob
+
+                        from avancement_physi_latrine as avanc_lat
+
+                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc_lat.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
+                            right join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf  
+                            right join convention_ufp_daaf_detail as conv_ufp_de on conv_ufp_de.id_convention_ufp_daaf_entete = conv_ufp.id
+                            where conv_ufp.validation = 1 and DATE_FORMAT(conv_ufp_de.date_signature,'%Y') BETWEEN '".$date_debut."' AND '".$date_fin."'                    
+
+                            group by conv_ufp.id,conv.id
+                )
+                UNION
+                (
+                    select
+                        conv_ufp.id as id_conv_ufp,
+                        conv_ufp.num_vague as num_vague,
+                        conv_ufp.ref_convention as ref_convention,
+                        conv_ufp.objet as objet,
+                        conv_ufp.ref_financement as ref_financement,
+                        conv_ufp.montant_trans_comm as montant_trans_comm,
+                        conv_ufp.frais_bancaire as frais_bancaire,
+                        conv_ufp.nbr_beneficiaire as nbr_beneficiaire,
+                        conv_ufp.montant_convention as montant_convention,
+                        conv_ufp.validation as validation,
+                        conv.id as id_conv,
+                         0 as avancement_bat,
+                         0 as avancement_lat,
+                         max(avanc_mob.pourcentage) as avancement_mob
+
+                        from avancement_physi_mobilier as avanc_mob
+
+                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc_mob.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
+                            right join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf  
+                            right join convention_ufp_daaf_detail as conv_ufp_de on conv_ufp_de.id_convention_ufp_daaf_entete = conv_ufp.id
+                            where conv_ufp.validation = 1 and DATE_FORMAT(conv_ufp_de.date_signature,'%Y') BETWEEN '".$date_debut."' AND '".$date_fin."'                  
+
+                            group by conv_ufp.id,conv.id
+                )
+
+                ) niveau1
+
+                group by niveau1.id_conv_ufp
+
+            ";
+            return $this->db->query($sql)->result();             
+    }
+    public function findetatConvention_now($annee)
+    {               
+        $sql="
+
+        select 
+                niveau1.id_conv_ufp as id,
+                sum(niveau1.avancement_bat) as avancement_batiment,
+                sum(niveau1.avancement_lat) as avancement_latrine,
+                sum(niveau1.avancement_mob) as avancement_mobilier,
+                count(niveau1.id_conv) as nbr_conv_cf,
+                (((sum(niveau1.avancement_mob) + sum(niveau1.avancement_lat) + sum(niveau1.avancement_bat))/3)/count(DISTINCT(niveau1.id_conv))) as avancement_physi,
+                niveau1.num_vague as num_vague,
+                niveau1.ref_convention as ref_convention,
+                niveau1.objet as objet,
+                niveau1.ref_financement as ref_financement,
+                niveau1.montant_trans_comm as montant_trans_comm,
+                niveau1.frais_bancaire as frais_bancaire,
+                niveau1.nbr_beneficiaire as nbr_beneficiaire,
+                niveau1.montant_convention as montant_convention,
+                niveau1.validation as validation
+
+            from(
+               
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        conv_ufp.num_vague as num_vague,
+                        conv_ufp.ref_convention as ref_convention,
+                        conv_ufp.objet as objet,
+                        conv_ufp.ref_financement as ref_financement,
+                        conv_ufp.montant_trans_comm as montant_trans_comm,
+                        conv_ufp.frais_bancaire as frais_bancaire,
+                        conv_ufp.nbr_beneficiaire as nbr_beneficiaire,
+                        conv_ufp.montant_convention as montant_convention,
+                        conv_ufp.validation as validation,
+                        conv.id as id_conv,
+                         max(avanc_bat.pourcentage) as avancement_bat,
+                         0 as avancement_lat,
+                         0 as avancement_mob
+
+                        from avancement_physi_batiment as avanc_bat
+
+                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc_bat.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
+                            right join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf 
+                            right join convention_ufp_daaf_detail as conv_ufp_de on conv_ufp_de.id_convention_ufp_daaf_entete = conv_ufp.id
+                            where DATE_FORMAT(conv_ufp_de.date_signature,'%Y') = '".$annee."' and conv_ufp.validation = 1
+                            group by conv_ufp.id,conv.id
+                )
+                UNION
+                (
+                    select 
+                        conv_ufp.id as id_conv_ufp,
+                        conv_ufp.num_vague as num_vague,
+                        conv_ufp.ref_convention as ref_convention,
+                        conv_ufp.objet as objet,
+                        conv_ufp.ref_financement as ref_financement,
+                        conv_ufp.montant_trans_comm as montant_trans_comm,
+                        conv_ufp.frais_bancaire as frais_bancaire,
+                        conv_ufp.nbr_beneficiaire as nbr_beneficiaire,
+                        conv_ufp.montant_convention as montant_convention,
+                        conv_ufp.validation as validation,
+                        conv.id as id_conv,
+                         0 as avancement_bat,
+                         max(avanc_lat.pourcentage) as avancement_lat,
+                         0 as avancement_mob
+
+                        from avancement_physi_latrine as avanc_lat
+
+                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc_lat.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
+                            right join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf  
+                            right join convention_ufp_daaf_detail as conv_ufp_de on conv_ufp_de.id_convention_ufp_daaf_entete = conv_ufp.id
+                            where DATE_FORMAT(conv_ufp_de.date_signature,'%Y') = '".$annee."' and conv_ufp.validation = 1                    
+
+                            group by conv_ufp.id,conv.id
+                )
+                UNION
+                (
+                    select
+                        conv_ufp.id as id_conv_ufp,
+                        conv_ufp.num_vague as num_vague,
+                        conv_ufp.ref_convention as ref_convention,
+                        conv_ufp.objet as objet,
+                        conv_ufp.ref_financement as ref_financement,
+                        conv_ufp.montant_trans_comm as montant_trans_comm,
+                        conv_ufp.frais_bancaire as frais_bancaire,
+                        conv_ufp.nbr_beneficiaire as nbr_beneficiaire,
+                        conv_ufp.montant_convention as montant_convention,
+                        conv_ufp.validation as validation,
+                        conv.id as id_conv,
+                         0 as avancement_bat,
+                         0 as avancement_lat,
+                         max(avanc_mob.pourcentage) as avancement_mob
+
+                        from avancement_physi_mobilier as avanc_mob
+
+                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc_mob.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
+                            right join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf  
+                            right join convention_ufp_daaf_detail as conv_ufp_de on conv_ufp_de.id_convention_ufp_daaf_entete = conv_ufp.id
+                            where DATE_FORMAT(conv_ufp_de.date_signature,'%Y') = '".$annee."' and conv_ufp.validation = 1                   
+
+                            group by conv_ufp.id,conv.id
+                )
+
+                ) niveau1
+
+                group by niveau1.id_conv_ufp
+
+            ";
+            return $this->db->query($sql)->result();             
     }
     public function avancement_convention()
     {               
@@ -207,7 +533,7 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                        sum(niveau1.avancement_bat) as avancement_batiment,
                        sum(niveau1.avancement_lat) as avancement_latrine,
                        sum(niveau1.avancement_mob) as avancement_mobilier,
-                       count(niveau1.id_conv) as nbr_conv
+                       count(DISTINCT(niveau1.id_conv)) as nbr_conv
 
             from(
                
@@ -215,14 +541,13 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                     select 
                         conv_ufp.id as id_conv_ufp,
                         conv.id as id_conv,
-                         max(atta_bat.ponderation_batiment) as avancement_bat,
+                         max(avanc_bat.pourcentage) as avancement_bat,
                          0 as avancement_lat,
                          0 as avancement_mob
 
-                        from attachement_batiment as atta_bat
+                        from avancement_physi_batiment as avanc_bat
 
-                            inner join avancement_batiment as avanc on avanc.id_attachement_batiment = atta_bat.id
-                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc.id_contrat_prestataire
+                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc_bat.id_contrat_prestataire
                             inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
                             inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf                     
 
@@ -234,13 +559,12 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                         conv_ufp.id as id_conv_ufp,
                         conv.id as id_conv,
                          0 as avancement_bat,
-                         max(atta_lat.ponderation_latrine) as avancement_lat,
+                         max(avanc_lat.pourcentage) as avancement_lat,
                          0 as avancement_mob
 
-                        from attachement_latrine as atta_lat
+                        from avancement_physi_latrine as avanc_lat
 
-                            inner join avancement_latrine as avanc on avanc.id_attachement_latrine = atta_lat.id
-                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc.id_contrat_prestataire
+                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc_lat.id_contrat_prestataire
                             inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
                             inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf                     
 
@@ -253,12 +577,11 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                         conv.id as id_conv,
                          0 as avancement_bat,
                          0 as avancement_lat,
-                         max(atta_mob.ponderation_mobilier) as avancement_mob
+                         max(avanc_mob.pourcentage) as avancement_mob
 
-                        from attachement_mobilier as atta_mob
+                        from avancement_physi_mobilier as avanc_mob
 
-                            inner join avancement_mobilier as avanc on avanc.id_attachement_mobilier = atta_mob.id
-                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc.id_contrat_prestataire
+                            inner join contrat_prestataire as cont_pres on cont_pres.id=avanc_mob.id_contrat_prestataire
                             inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
                             inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf                     
 
@@ -272,88 +595,6 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
             return $this->db->query($sql)->result();             
     }
 
-   /* public function avancement_convention()
-    {               
-        $sql="
-        select 
-                       niveau1.id_conv_ufp as id_conv_ufp,
-                       sum(niveau1.avancement_batiment) as avancement_batiment,
-                       sum(niveau1.avancement_latrine) as avancement_latrine,
-                       sum(niveau1.avancement_mobilier) as avancement_mobilier,
-                       count(niveau1.id_conv) as nbr_conv
-
-            from(
-
-                    select 
-                       detail.id_conv_ufp as id_conv_ufp,
-                       detail.id_conv as id_conv,
-                       sum(detail.avancement_bat) as avancement_batiment,
-                        sum(detail.avancement_lat) as avancement_latrine,
-                        sum(detail.avancement_mob) as avancement_mobilier
-               from (
-
-               (
-                    select
-                        conv_ufp.id as id_conv_ufp ,
-                        conv.id as id_conv,
-                         max(atta_bat.ponderation_batiment) as avancement_bat,
-                         0 as avancement_lat,
-                         0 as avancement_mob
-
-                        from attachement_batiment as atta_bat
-
-                            inner join avancement_batiment as avanc on avanc.id_attachement_batiment = atta_bat.id
-                            inner join contrat_prestataire as cont_prest on cont_prest.id=avanc.id_contrat_prestataire
-                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
-                            inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf                     
-
-                            group by conv_ufp.id,conv.id
-                )
-                UNION
-                (
-                    select
-                        conv_ufp.id as id_conv_ufp, 
-                        conv.id as id_conv,
-                        0 as avancement_bat,
-                        max(atta_lat.ponderation_latrine) as avancement_lat,
-                        0 as avancement_mob
-
-                        from attachement_latrine as atta_lat
-
-                            inner join avancement_latrine as avanc_lat on avanc_lat.id_attachement_latrine = atta_lat.id
-                            inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_lat.id_contrat_prestataire
-                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
-                            inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf                     
-
-                            group by conv_ufp.id,conv.id
-                )
-                UNION
-                (
-                    select
-                        conv_ufp.id as id_conv_ufp, 
-                        conv.id as id_conv,
-                        0 as avancement_bat,
-                        0 as avancement_lat,
-                        max(atta_mob.ponderation_mobilier) as avancement_mob
-
-                        from attachement_mobilier as atta_mob
-
-                            inner join avancement_mobilier as avanc_mob on avanc_mob.id_attachement_mobilier = atta_mob.id
-                            inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_mob.id_contrat_prestataire
-                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
-                            inner join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf                     
-
-                            group by conv_ufp.id,conv.id
-                ) 
-
-                )detail
-
-                group by detail.id_conv_ufp,detail.id_conv) niveau1
-
-                group by niveau1.id_conv_ufp
-            ";
-            return $this->db->query($sql)->result();             
-    }*/
     public function findDetailcoutByConvention($id_convention_ufp_daaf_entete)
     {               
         $sql="
@@ -468,7 +709,9 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
 
                 )detail
 
-                group by detail.id_conv_ufp,detail.id_conv) niveau1
+                group by detail.id_conv_ufp,detail.id_conv
+
+                ) niveau1
 
                 group by niveau1.id_conv_ufp
             ";

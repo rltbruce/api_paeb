@@ -10,50 +10,52 @@ class Divers_attachement_latrine extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('divers_attachement_latrine_model', 'Divers_attachement_latrineManager');
-        $this->load->model('type_latrine_model', 'Type_latrineManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_type_latrine = $this->get('id_type_latrine');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_demande_latrine_mpe = $this->get('id_demande_latrine_mpe');
         $menu = $this->get('menu');
 
-        if ($menu == 'getdivers_attachement_latrine_prevu') 
-        {   $data = array();
-            $tmp = $this->Divers_attachement_latrineManager->findattachementBycontrat($id_contrat_prestataire,$id_type_latrine);
+        if ($menu == 'getrubrique_attachement_withmontant_prevu') 
+        {   
+            $data = array();
+            $tmp = $this->Divers_attachement_latrineManager->getrubrique_attachement_withmontant_prevu($id_contrat_prestataire);
            
             if ($tmp) 
             {
                 $data = $tmp;
             }
         }
-        elseif ($menu=='getattachementBytype_latrine') 
-        {   $data = array();
-            $tmp = $this->Divers_attachement_latrineManager->findBytype_latrine($id_type_latrine);
+        elseif ($menu == 'getrubrique_attachement_withmontantbycontrat') 
+        {   
+            $data = array();
+            $tmp = $this->Divers_attachement_latrineManager->getrubrique_attachement_withmontantbycontrat($id_contrat_prestataire,$id_demande_latrine_mpe);
+           
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
-                {
-                    $type_latrine = array();
-                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['type_latrine'] = $type_latrine;
-                }
+                $data = $tmp;
+            }
+        }
+        elseif ($menu == 'getattachement_latrine_prevu') 
+        {   $data = array();
+            $tmp = $this->Divers_attachement_latrineManager->findattachementBycontrat($id_contrat_prestataire);
+           
+            if ($tmp) 
+            {
+                $data = $tmp;
             }
         }
         elseif ($id)
         {
             $data = array();
             $divers_attachement_latrine = $this->Divers_attachement_latrineManager->findById($id);
-            $type_latrine = $this->Type_latrineManager->findById($divers_attachement_latrine->id_type_latrine);
             $data['id'] = $divers_attachement_latrine->id;
             $data['libelle'] = $divers_attachement_latrine->libelle;
             $data['description'] = $divers_attachement_latrine->description;
-            $data['type_latrine'] = $type_latrine;
+            $data['numero'] = $divers_attachement_latrine->numero;
         } 
         else 
         {
@@ -62,11 +64,10 @@ class Divers_attachement_latrine extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['type_latrine'] = $type_latrine;
+                    $data[$key]['numero'] = $value->numero;
                 }
             } 
                 else
@@ -97,8 +98,7 @@ class Divers_attachement_latrine extends REST_Controller {
                 $data = array(
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'montant_prevu' => $this->post('montant_prevu'),
-                    'id_type_latrine' => $this->post('id_type_latrine')
+                    'numero' => $this->post('numero')
                 );
                 if (!$data) {
                     $this->response([
@@ -125,8 +125,7 @@ class Divers_attachement_latrine extends REST_Controller {
                 $data = array(
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'montant_prevu' => $this->post('montant_prevu'),
-                    'id_type_latrine' => $this->post('id_type_latrine')
+                    'numero' => $this->post('numero')
                 );
                 if (!$data || !$id) {
                     $this->response([

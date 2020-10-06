@@ -68,12 +68,35 @@ class Passation_marches_be_model extends CI_Model {
             return null;
         }                 
     }
+    public function findpassationarrayByconvention($id)  {
+        $this->db->where("id_convention_entete", $id);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+    }
     public function findById($id)  {
         $this->db->where("id", $id);
         $q = $this->db->get($this->table);
         if ($q->num_rows() > 0) {
             return $q->row();
         }
+    }
+    
+    public function getdate_contratByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
     }
     
     public function findpassationByconvention($id_convention_entete)

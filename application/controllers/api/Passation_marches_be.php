@@ -22,7 +22,17 @@ class Passation_marches_be extends REST_Controller {
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $menu = $this->get('menu');
 
-        if ($menu=='getpassationByconvention')
+        if ($menu=='getdate_contratByconvention')
+         {
+            $tmp = $this->Passation_marches_beManager->getdate_contratByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getpassationByconvention')
          {
             $tmp = $this->Passation_marches_beManager->getpassationByconvention($id_convention_entete);
             if ($tmp) 
@@ -307,24 +317,91 @@ class Passation_marches_be extends REST_Controller {
     {
         $id = $this->post('id') ;
         $supprimer = $this->post('supprimer') ;
+        
+        $date_lancement_dp = null;
+        $date_remise       = null;
+        $date_rapport_evaluation    = null;
+        $date_demande_ano_dpfi      = null;
+        $date_ano_dpfi              =null;
+        $notification_intention     =null;
+        $date_notification_attribution = null;
+        $date_signature_contrat     =null;
+        $date_os    =null;
+        $date_shortlist =null;
+        $date_manifestation =null;
+
+        if ($this->post('date_lancement_dp')!='' &&$this->post('date_lancement_dp')!='null' && $this->post('date_lancement_dp')!='undefined')
+        {
+            $date_lancement_dp = $this->post('date_lancement_dp');
+        }
+
+        if ($this->post('date_remise')!='' &&$this->post('date_remise')!='null' && $this->post('date_remise')!='undefined')
+        {
+            $date_remise = $this->post('date_remise');
+        }
+
+        if ($this->post('date_rapport_evaluation')!='' &&$this->post('date_rapport_evaluation')!='null' && $this->post('date_rapport_evaluation')!='undefined')
+        {
+            $date_rapport_evaluation = $this->post('date_rapport_evaluation');
+        }
+
+        if ($this->post('date_demande_ano_dpfi')!='' &&$this->post('date_demande_ano_dpfi')!='null' && $this->post('date_demande_ano_dpfi')!='undefined')
+        {
+            $date_demande_ano_dpfi = $this->post('date_demande_ano_dpfi');
+        }
+
+        if ($this->post('date_ano_dpfi')!='' &&$this->post('date_ano_dpfi')!='null' && $this->post('date_ano_dpfi')!='undefined')
+        {
+            $date_ano_dpfi = $this->post('date_ano_dpfi');
+        }
+
+        if ($this->post('notification_intention')!='' &&$this->post('notification_intention')!='null' && $this->post('notification_intention')!='undefined')
+        {
+            $notification_intention = $this->post('notification_intention');
+        }
+
+        if ($this->post('date_notification_attribution')!='' &&$this->post('date_notification_attribution')!='null' && $this->post('date_notification_attribution')!='undefined')
+        {
+            $date_notification_attribution = $this->post('date_notification_attribution');
+        }
+
+        if ($this->post('date_signature_contrat')!='' &&$this->post('date_signature_contrat')!='null' && $this->post('date_signature_contrat')!='undefined')
+        {
+            $date_signature_contrat = $this->post('date_signature_contrat');
+        }
+
+        if ($this->post('date_os')!='' &&$this->post('date_os')!='null' && $this->post('date_os')!='undefined')
+        {
+            $date_os = $this->post('date_os');
+        }
+
+        if ($this->post('date_shortlist')!='' &&$this->post('date_shortlist')!='null' && $this->post('date_shortlist')!='undefined')
+        {
+            $date_shortlist = $this->post('date_shortlist');
+        }
+
+        if ($this->post('date_manifestation')!='' &&$this->post('date_manifestation')!='null' && $this->post('date_manifestation')!='undefined')
+        {
+            $date_manifestation = $this->post('date_manifestation');
+        }
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
                      'id' => $this->post('id'),
-                    'date_lancement_dp' => $this->post('date_lancement_dp'),
-                    'date_remise'   => $this->post('date_remise'),
+                    'date_lancement_dp' => $date_lancement_dp,
+                    'date_remise'   => $date_remise,
                     'nbr_offre_recu'    => $this->post('nbr_offre_recu'),
-                    'date_rapport_evaluation' => $this->post('date_rapport_evaluation'),
-                    'date_demande_ano_dpfi' => $this->post('date_demande_ano_dpfi'),
-                    'date_ano_dpfi' => $this->post('date_ano_dpfi'),
-                    'notification_intention'   => $this->post('notification_intention'),
-                    'date_notification_attribution'    => $this->post('date_notification_attribution'),
-                    'date_signature_contrat'   => $this->post('date_signature_contrat'),
-                    'date_os' => $this->post('date_os'),
+                    'date_rapport_evaluation' => $date_rapport_evaluation,
+                    'date_demande_ano_dpfi' => $date_demande_ano_dpfi,
+                    'date_ano_dpfi' => $date_ano_dpfi,
+                    'notification_intention'   => $notification_intention,
+                    'date_notification_attribution'    => $date_notification_attribution,
+                    'date_signature_contrat'   => $date_signature_contrat,
+                    'date_os' => $date_os,
                     'observation' => $this->post('observation'),
 
-                    'date_shortlist'   => $this->post('date_shortlist'),
-                    'date_manifestation' => $this->post('date_manifestation'),
+                    'date_shortlist' => $date_shortlist,
+                    'date_manifestation' => $date_manifestation,
                     'statut' => $this->post('statut'),
 
                     'id_convention_entete' => $this->post('id_convention_entete'),
@@ -353,26 +430,25 @@ class Passation_marches_be extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'id' => $this->post('id'),
-                    'date_lancement_dp' => $this->post('date_lancement_dp'),
-                    'date_remise'   => $this->post('date_remise'),
+                     'id' => $this->post('id'),
+                    'date_lancement_dp' => $date_lancement_dp,
+                    'date_remise'   => $date_remise,
                     'nbr_offre_recu'    => $this->post('nbr_offre_recu'),
-                    'date_rapport_evaluation' => $this->post('date_rapport_evaluation'),
-                    'date_demande_ano_dpfi' => $this->post('date_demande_ano_dpfi'),
-                    'date_ano_dpfi' => $this->post('date_ano_dpfi'),
-                    'notification_intention'   => $this->post('notification_intention'),
-                    'date_notification_attribution'    => $this->post('date_notification_attribution'),
-                    'date_signature_contrat'   => $this->post('date_signature_contrat'),
-                    'date_os' => $this->post('date_os'),
+                    'date_rapport_evaluation' => $date_rapport_evaluation,
+                    'date_demande_ano_dpfi' => $date_demande_ano_dpfi,
+                    'date_ano_dpfi' => $date_ano_dpfi,
+                    'notification_intention'   => $notification_intention,
+                    'date_notification_attribution'    => $date_notification_attribution,
+                    'date_signature_contrat'   => $date_signature_contrat,
+                    'date_os' => $date_os,
                     'observation' => $this->post('observation'),
 
-                    'date_shortlist'   => $this->post('date_shortlist'),
-                    'date_manifestation' => $this->post('date_manifestation'),
+                    'date_shortlist' => $date_shortlist,
+                    'date_manifestation' => $date_manifestation,
                     'statut' => $this->post('statut'),
 
                     'id_convention_entete' => $this->post('id_convention_entete'),
-                    'validation' => $this->post('validation')
-                    //'id_bureau_etude' => $this->post('id_bureau_etude'),
+                    'validation' => $this->post('validation'),
                 );
                 if (!$data || !$id) {
                     $this->response([

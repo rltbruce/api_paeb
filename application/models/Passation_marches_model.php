@@ -34,6 +34,7 @@ class Passation_marches_model extends CI_Model {
             'date_ano_dpfi' => $passation_marches['date_ano_dpfi'],
             'notification_intention'   => $passation_marches['notification_intention'],
             'date_notification_attribution'    => $passation_marches['date_notification_attribution'],
+            'date_signature_contrat'    => $passation_marches['date_signature_contrat'],
             'date_os' => $passation_marches['date_os'],
             'observation' => $passation_marches['observation'],
             'id_convention_entete' => $passation_marches['id_convention_entete'],
@@ -68,6 +69,30 @@ class Passation_marches_model extends CI_Model {
         if ($q->num_rows() > 0) {
             return $q->row();
         }
+    }
+    
+    public function findpassationarrayByconvention($id)  {
+        $this->db->where("id_convention_entete", $id);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+    }
+    
+    public function getdate_contratByconvention($id_convention_entete)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return $result=array();
+        }                 
     }
 
     public function findpassationByconvention($id_convention_entete) {               
@@ -143,37 +168,5 @@ class Passation_marches_model extends CI_Model {
             return $result=array();
         }                 
     }
-   /* public function findAllByConvention($id_convention_entete) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("id_convention_entete", $id_convention_entete)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-    public function findAllByContrat_prestataire($id_contrat_prestataire) {               
-        $result =  $this->db->select('
-            passation_marches.id as id, passation_marches.id_convention_entete as id_convention_entete, passation_marches.date_lancement as date_lancement, passation_marches.date_remise as date_remise, passation_marches.montant_moin_chere as montant_moin_chere, passation_marches.date_rapport_evaluation as date_rapport_evaluation, passation_marches.date_demande_ano_dpfi as date_demande_ano_dpfi, passation_marches.date_ano_dpfi as date_ano_dpfi, passation_marches.notification_intention as notification_intention, passation_marches.date_notification_attribution as date_notification_attribution, passation_marches.date_os as date_os,passation_marches.observation as observation')
-                        ->from($this->table)
-                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id=passation_marches.id_convention_entete')
-                        ->join('contrat_prestataire','contrat_prestataire.id_convention_entete=convention_cisco_feffi_entete.id')
-                        ->where("contrat_prestataire.id", $id_contrat_prestataire)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }*/
-
 
 }

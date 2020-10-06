@@ -221,10 +221,10 @@ class Utilisateurs extends REST_Controller {
                     $id_region=$tmp_region;
                 }
                 $id_district=null;
-                $tmp_disrict = $this->post('id_disrict');
-                if($tmp_disrict !="" && intval($tmp_disrict) >0) 
+                $tmp_district = $this->post('id_district');
+                if($tmp_district !="" && intval($tmp_district) >0) 
                 {
-                    $id_disrict=$tmp_disrict;
+                    $id_district=$tmp_district;
                 }
                 $id_cisco=null;
                 $tmp_cisco = $this->post('id_cisco');
@@ -289,10 +289,10 @@ class Utilisateurs extends REST_Controller {
                     $id_region=$tmp_region;
                 }
                 $id_district=null;
-                $tmp_disrict = $this->post('id_disrict');
-                if($tmp_disrict !="" && intval($tmp_disrict) >0) 
+                $tmp_district = $this->post('id_district');
+                if($tmp_district !="" && intval($tmp_district) >0) 
                 {
-                    $id_disrict=$tmp_disrict;
+                    $id_district=$tmp_district;
                 }
                 $id_cisco=null;
                 $tmp_cisco = $this->post('id_cisco');
@@ -344,10 +344,10 @@ class Utilisateurs extends REST_Controller {
                     $id_region=$tmp_region;
                 }
                 $id_district=null;
-                $tmp_disrict = $this->post('id_disrict');
-                if($tmp_disrict !="" && intval($tmp_disrict) >0) 
+                $tmp_district = $this->post('id_district');
+                if($tmp_district !="" && intval($tmp_district) >0) 
                 {
-                    $id_disrict=$tmp_disrict;
+                    $id_district=$tmp_district;
                 }
                 $id_cisco=null;
                 $tmp_cisco = $this->post('id_cisco');

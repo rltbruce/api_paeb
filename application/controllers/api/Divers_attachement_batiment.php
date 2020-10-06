@@ -10,50 +10,52 @@ class Divers_attachement_batiment extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('divers_attachement_batiment_model', 'Divers_attachement_batimentManager');
-        $this->load->model('type_batiment_model', 'Type_batimentManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_type_batiment = $this->get('id_type_batiment');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_demande_batiment_mpe = $this->get('id_demande_batiment_mpe');
         $menu = $this->get('menu');
 
-        if ($menu == 'getdivers_attachement_batiment_prevu') 
-        {   $data = array();
-            $tmp = $this->Divers_attachement_batimentManager->findattachementBycontrat($id_contrat_prestataire,$id_type_batiment);
+        if ($menu == 'getrubrique_attachement_withmontant_prevu') 
+        {   
+            $data = array();
+            $tmp = $this->Divers_attachement_batimentManager->getrubrique_attachement_withmontant_prevu($id_contrat_prestataire);
            
             if ($tmp) 
             {
                 $data = $tmp;
             }
         }
-        elseif ($menu=='getattachementBytype_batiment') 
-        {   $data = array();
-            $tmp = $this->Divers_attachement_batimentManager->findBytype_batiment($id_type_batiment);
+        elseif ($menu == 'getrubrique_attachement_withmontantbycontrat') 
+        {   
+            $data = array();
+            $tmp = $this->Divers_attachement_batimentManager->getrubrique_attachement_withmontantbycontrat($id_contrat_prestataire,$id_demande_batiment_mpe);
+           
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
-                {
-                    $type_batiment = array();
-                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['type_batiment'] = $type_batiment;
-                }
+                $data = $tmp;
+            }
+        }
+        elseif ($menu == 'getattachement_batiment_prevu') 
+        {   $data = array();
+            $tmp = $this->Divers_attachement_batimentManager->findattachementBycontrat($id_contrat_prestataire);
+           
+            if ($tmp) 
+            {
+                $data = $tmp;
             }
         }
         elseif ($id)
         {
             $data = array();
             $divers_attachement_batiment = $this->Divers_attachement_batimentManager->findById($id);
-            $type_batiment = $this->Type_batimentManager->findById($divers_attachement_batiment->id_type_batiment);
             $data['id'] = $divers_attachement_batiment->id;
             $data['libelle'] = $divers_attachement_batiment->libelle;
             $data['description'] = $divers_attachement_batiment->description;
-            $data['type_batiment'] = $type_batiment;
+            $data['numero'] = $divers_attachement_batiment->numero;
         } 
         else 
         {
@@ -62,11 +64,10 @@ class Divers_attachement_batiment extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['type_batiment'] = $type_batiment;
+                    $data[$key]['numero'] = $value->numero;
                 }
             } 
                 else
@@ -97,8 +98,7 @@ class Divers_attachement_batiment extends REST_Controller {
                 $data = array(
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'montant_prevu' => $this->post('montant_prevu'),
-                    'id_type_batiment' => $this->post('id_type_batiment')
+                    'numero' => $this->post('numero')
                 );
                 if (!$data) {
                     $this->response([
@@ -125,8 +125,7 @@ class Divers_attachement_batiment extends REST_Controller {
                 $data = array(
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'montant_prevu' => $this->post('montant_prevu'),
-                    'id_type_batiment' => $this->post('id_type_batiment')
+                    'numero' => $this->post('numero')
                 );
                 if (!$data || !$id) {
                     $this->response([

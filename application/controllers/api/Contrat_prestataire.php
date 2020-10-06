@@ -12,6 +12,8 @@ class Contrat_prestataire extends REST_Controller {
         $this->load->model('contrat_prestataire_model', 'Contrat_prestataireManager');
         $this->load->model('prestataire_model', 'PrestataireManager');
         $this->load->model('convention_cisco_feffi_entete_model', 'Convention_cisco_feffi_enteteManager');
+        $this->load->model('facture_mpe_model', 'Facture_mpeManager');
+        $this->load->model('passation_marches_model', 'Passation_marchesManager');
     }
 
     public function index_get() 
@@ -33,7 +35,9 @@ class Contrat_prestataire extends REST_Controller {
                 foreach ($menu as $key => $value) 
                 {
                     $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+                    $passation = $this->Passation_marchesManager->findpassationarrayByconvention($value->id_convention_entete);
 
+                    $data[$key]['passation'] = $passation;
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['num_contrat']   = $value->num_contrat;
@@ -47,7 +51,9 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['paiement_recu'] = $value->paiement_recu;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['prestataire'] = $prestataire;
-                        }
+                    $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
+                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                }
             } 
                 else
                     $data = array();
@@ -60,7 +66,9 @@ class Contrat_prestataire extends REST_Controller {
                 foreach ($menu as $key => $value) 
                 {
                     $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+                    $passation = $this->Passation_marchesManager->findpassationarrayByconvention($value->id_convention_entete);
 
+                    $data[$key]['passation'] = $passation;
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['num_contrat']   = $value->num_contrat;
@@ -74,6 +82,46 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['paiement_recu'] = $value->paiement_recu;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['prestataire'] = $prestataire;
+                    $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
+                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menus=='getetatcontratByconvention')
+         {
+            $menu = $this->Contrat_prestataireManager->findvalideByConvention($id_convention_entete);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {   
+                    $avancement_financ = 0;
+                    $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+                    $montant_facture = $this->Facture_mpeManager->avancement_financiereBycontrat($value->id);
+                    if($montant_facture)
+                    {
+                       $avancement_financ = ($montant_facture[0]->montant_facture_total*100)/($value->cout_batiment + $value->cout_latrine + $value->cout_mobilier); 
+                    }
+
+                    $passation = $this->Passation_marchesManager->findpassationarrayByconvention($value->id_convention_entete);
+
+                    $data[$key]['passation'] = $passation;
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['num_contrat']   = $value->num_contrat;
+                    $data[$key]['cout_batiment']    = $value->cout_batiment;
+                    $data[$key]['cout_latrine']   = $value->cout_latrine;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['date_prev_deb_trav'] = $montant_facture;
+                    //$data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
+                    $data[$key]['delai_execution'] = $value->delai_execution;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                    $data[$key]['avancement_financ'] = $avancement_financ;
+                    $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
+                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
                         }
             } 
                 else
@@ -88,6 +136,9 @@ class Contrat_prestataire extends REST_Controller {
                 {
                     $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
 
+                    $passation = $this->Passation_marchesManager->findpassationarrayByconvention($value->id_convention_entete);
+
+                    $data[$key]['passation'] = $passation;
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['num_contrat']   = $value->num_contrat;
@@ -101,7 +152,9 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['paiement_recu'] = $value->paiement_recu;
                     $data[$key]['prestataire'] = $prestataire;
-                        }
+                    $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
+                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                }
             } 
                 else
                     $data = array();
@@ -234,7 +287,9 @@ class Contrat_prestataire extends REST_Controller {
 
             $prestataire = $this->PrestataireManager->findById($contrat_prestataire->id_prestataire);
             $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($contrat_prestataire->id_convention_entete);
+            $passation = $this->Passation_marchesManager->findpassationarrayByconvention($contrat_prestataire->id_convention_entete);
 
+            $data['passation'] = $passation;
             $data['id'] = $contrat_prestataire->id;
             $data['description'] = $contrat_prestataire->description;
             $data['num_contrat']   = $contrat_prestataire->num_contrat;
@@ -249,6 +304,8 @@ class Contrat_prestataire extends REST_Controller {
 
             $data['convention_entete'] = $convention_entete;
             $data['prestataire'] = $prestataire;
+            $data['montant_total_ttc'] = $contrat_prestataire->cout_mobilier + $contrat_prestataire->cout_latrine + $contrat_prestataire->cout_batiment;
+            $data['montant_total_ht'] = ($contrat_prestataire->cout_mobilier + $contrat_prestataire->cout_latrine + $contrat_prestataire->cout_batiment)/1.2;
         } 
         else 
         {
@@ -260,6 +317,9 @@ class Contrat_prestataire extends REST_Controller {
                     $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
+                    $passation = $this->Passation_marchesManager->findpassationarrayByconvention($value->id_convention_entete);
+
+                    $data[$key]['passation'] = $passation;
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
                     $data[$key]['num_contrat']   = $value->num_contrat;
@@ -274,7 +334,9 @@ class Contrat_prestataire extends REST_Controller {
 
                     $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['prestataire'] = $prestataire;
-                        }
+                    $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
+                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                }
             } 
                 else
                     $data = array();

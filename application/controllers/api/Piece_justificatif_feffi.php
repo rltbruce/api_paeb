@@ -17,22 +17,30 @@ class Piece_justificatif_feffi extends REST_Controller {
     {
         $id = $this->get('id');
         $id_demande_rea_feffi = $this->get('id_demande_rea_feffi');
+        $id_tranche = $this->get('id_tranche');
         $menu = $this->get('menu');
             
         if ($id_demande_rea_feffi)
         {
-            $tmp = $this->Piece_justificatif_feffiManager->findAllBydemande($id_demande_rea_feffi);
+            $tmp = $this->Piece_justificatif_feffiManager->findAllBydemande($id_demande_rea_feffi,$id_tranche);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $demande_realimentation_feffi= array();
-                    $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->findById($value->id_demande_rea_feffi);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
+                    if ($value->id == null)
+                    {
+                        $data[$key]['id'] = 0;
+                    }
+                    else
+                    {
+                        $data[$key]['id'] = $value->id;
+                    }
+                    
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['id_justificatif_prevu'] = $value->id_justificatif_prevu;
                     $data[$key]['fichier'] = $value->fichier;
-                    $data[$key]['date'] = $value->date;
-                    $data[$key]['demande_realimentation_feffi'] = $demande_realimentation_feffi;
+                    $data[$key]['id_demande_rea_feffi'] = $value->id_demande_rea_feffi;
                 }
             } 
                 else
@@ -91,10 +99,9 @@ class Piece_justificatif_feffi extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'description' => $this->post('description'),
                     'fichier' => $this->post('fichier'),
-                    'date' => $this->post('date'),
-                    'id_demande_rea_feffi' => $this->post('id_demande_rea_feffi')
+                    'id_demande_rea_feffi' => $this->post('id_demande_rea_feffi'),
+                    'id_justificatif_prevu' => $this->post('id_justificatif_prevu')
                 );
                 if (!$data) {
                     $this->response([
@@ -119,10 +126,9 @@ class Piece_justificatif_feffi extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'description' => $this->post('description'),
                     'fichier' => $this->post('fichier'),
-                    'date' => $this->post('date'),
-                    'id_demande_rea_feffi' => $this->post('id_demande_rea_feffi')
+                    'id_demande_rea_feffi' => $this->post('id_demande_rea_feffi'),
+                    'id_justificatif_prevu' => $this->post('id_justificatif_prevu')
                 );
                 if (!$data || !$id) {
                     $this->response([

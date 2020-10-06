@@ -30,7 +30,8 @@ class Transfert_ufp_model extends CI_Model {
             'montant_total'   =>      $transfert_ufp['montant_total'],
             'date'       =>      $transfert_ufp['date'],
             'observation'       =>      $transfert_ufp['observation'],
-            'id_demande_deblocage_daaf'    => $transfert_ufp['id_demande_deblocage_daaf']                       
+            'id_demande_deblocage_daaf'    => $transfert_ufp['id_demande_deblocage_daaf'],
+            'validation'    => $transfert_ufp['validation']                       
         );
     }
     public function delete($id) {

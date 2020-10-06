@@ -33,6 +33,7 @@ class Transfert_ufp extends REST_Controller {
                     $data[$key]['montant_total'] = $value->montant_total;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['demande_deblocage_daaf'] = $demande_deblocage_daaf;
                 }
             }
@@ -48,6 +49,7 @@ class Transfert_ufp extends REST_Controller {
             $data['montant_total'] = $transfert_ufp->montant_total;
             $data['date'] = $transfert_ufp->date;
             $data['observation'] = $transfert_ufp->observation;
+            $data['validation'] = $transfert_ufp->validation;
             $data['demande_deblocage_daaf'] = $demande_deblocage_daaf;
         } 
         else 
@@ -64,6 +66,7 @@ class Transfert_ufp extends REST_Controller {
                     $data[$key]['montant_total'] = $value->montant_total;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
                     $data[$key]['demande_deblocage_daaf'] = $demande_deblocage_daaf;
                 }
             } 
@@ -98,7 +101,8 @@ class Transfert_ufp extends REST_Controller {
                     'montant_total' => $this->post('montant_total'),
                     'date' => $this->post('date'),
                     'observation' => $this->post('observation'),
-                    'id_demande_deblocage_daaf' => $this->post('id_demande_deblocage_daaf')
+                    'id_demande_deblocage_daaf' => $this->post('id_demande_deblocage_daaf'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data) {
                     $this->response([
@@ -128,7 +132,8 @@ class Transfert_ufp extends REST_Controller {
                     'montant_total' => $this->post('montant_total'),
                     'date' => $this->post('date'),
                     'observation' => $this->post('observation'),
-                    'id_demande_deblocage_daaf' => $this->post('id_demande_deblocage_daaf')
+                    'id_demande_deblocage_daaf' => $this->post('id_demande_deblocage_daaf'),
+                    'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {
                     $this->response([

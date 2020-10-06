@@ -10,50 +10,52 @@ class Divers_attachement_mobilier extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('divers_attachement_mobilier_model', 'Divers_attachement_mobilierManager');
-        $this->load->model('type_mobilier_model', 'Type_mobilierManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_type_mobilier = $this->get('id_type_mobilier');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_demande_mobilier_mpe = $this->get('id_demande_mobilier_mpe');
         $menu = $this->get('menu');
 
-        if ($menu == 'getdivers_attachement_mobilier_prevu') 
-        {   $data = array();
-            $tmp = $this->Divers_attachement_mobilierManager->findattachementBycontrat($id_contrat_prestataire,$id_type_mobilier);
+        if ($menu == 'getrubrique_attachement_withmontant_prevu') 
+        {   
+            $data = array();
+            $tmp = $this->Divers_attachement_mobilierManager->getrubrique_attachement_withmontant_prevu($id_contrat_prestataire);
            
             if ($tmp) 
             {
                 $data = $tmp;
             }
         }
-        elseif ($menu=='getattachementBytype_mobilier') 
-        {   $data = array();
-            $tmp = $this->Divers_attachement_mobilierManager->findBytype_mobilier($id_type_mobilier);
+        elseif ($menu == 'getrubrique_attachement_withmontantbycontrat') 
+        {   
+            $data = array();
+            $tmp = $this->Divers_attachement_mobilierManager->getrubrique_attachement_withmontantbycontrat($id_contrat_prestataire,$id_demande_mobilier_mpe);
+           
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
-                {
-                    $type_mobilier = array();
-                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['type_mobilier'] = $type_mobilier;
-                }
+                $data = $tmp;
+            }
+        }
+        elseif ($menu == 'getattachement_mobilier_prevu') 
+        {   $data = array();
+            $tmp = $this->Divers_attachement_mobilierManager->findattachementBycontrat($id_contrat_prestataire);
+           
+            if ($tmp) 
+            {
+                $data = $tmp;
             }
         }
         elseif ($id)
         {
             $data = array();
             $divers_attachement_mobilier = $this->Divers_attachement_mobilierManager->findById($id);
-            $type_mobilier = $this->Type_mobilierManager->findById($divers_attachement_mobilier->id_type_mobilier);
             $data['id'] = $divers_attachement_mobilier->id;
             $data['libelle'] = $divers_attachement_mobilier->libelle;
             $data['description'] = $divers_attachement_mobilier->description;
-            $data['type_mobilier'] = $type_mobilier;
+            $data['numero'] = $divers_attachement_mobilier->numero;
         } 
         else 
         {
@@ -62,11 +64,10 @@ class Divers_attachement_mobilier extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['libelle'] = $value->libelle;
                     $data[$key]['description'] = $value->description;
-                    $data[$key]['type_mobilier'] = $type_mobilier;
+                    $data[$key]['numero'] = $value->numero;
                 }
             } 
                 else
@@ -97,8 +98,7 @@ class Divers_attachement_mobilier extends REST_Controller {
                 $data = array(
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'montant_prevu' => $this->post('montant_prevu'),
-                    'id_type_mobilier' => $this->post('id_type_mobilier')
+                    'numero' => $this->post('numero')
                 );
                 if (!$data) {
                     $this->response([
@@ -125,8 +125,7 @@ class Divers_attachement_mobilier extends REST_Controller {
                 $data = array(
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'montant_prevu' => $this->post('montant_prevu'),
-                    'id_type_mobilier' => $this->post('id_type_mobilier')
+                    'numero' => $this->post('numero')
                 );
                 if (!$data || !$id) {
                     $this->response([

@@ -76,5 +76,21 @@ class Zap_commune_model extends CI_Model {
             return null;
         }                 
     }
+    public function findzapByCommune($id_commune) {
+        // Selection de tous les enregitrements
+        $result =  $this->db->select('zap.*')
+                        ->from($this->table)
+                        ->join('zap','zap_commune.id_zap=zap.id')
+                        ->where('id_commune',$id_commune)
+                        ->group_by('zap.id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 }
 ?>

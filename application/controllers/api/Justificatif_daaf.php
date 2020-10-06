@@ -17,21 +17,30 @@ class justificatif_daaf extends REST_Controller {
     {
         $id = $this->get('id');
         $id_demande_deblocage_daaf = $this->get('id_demande_deblocage_daaf');
+        $id_tranche = $this->get('id_tranche');
         $menu = $this->get('menu');
             
         if ($id_demande_deblocage_daaf)
         {
-            $tmp = $this->Justificatif_daafManager->findAllBydemande($id_demande_deblocage_daaf);
+            $tmp = $this->Justificatif_daafManager->findAllBydemande($id_demande_deblocage_daaf,$id_tranche);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $demande_deblocage_daaf= array();
-                    $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($value->id_demande_deblocage_daaf);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
+                    if ($value->id == null)
+                    {
+                        $data[$key]['id'] = 0;
+                    }
+                    else
+                    {
+                        $data[$key]['id'] = $value->id;
+                    }
+                    
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['id_justificatif_prevu'] = $value->id_justificatif_prevu;
                     $data[$key]['fichier'] = $value->fichier;
-                    $data[$key]['demande_deblocage_daaf'] = $demande_deblocage_daaf;
+                    $data[$key]['id_demande_deblocage_daaf'] = $value->id_demande_deblocage_daaf;
                 }
             } 
                 else
@@ -57,7 +66,6 @@ class justificatif_daaf extends REST_Controller {
                     $demande_deblocage_daaf= array();
                     $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->findById($value->id_demande_deblocage_daaf);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
                     $data[$key]['fichier'] = $value->fichier;
                     $data[$key]['demande_deblocage_daaf'] = $demande_deblocage_daaf;
                 }
@@ -88,9 +96,9 @@ class justificatif_daaf extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'description' => $this->post('description'),
                     'fichier' => $this->post('fichier'),
-                    'id_demande_deblocage_daaf' => $this->post('id_demande_deblocage_daaf')
+                    'id_demande_deblocage_daaf' => $this->post('id_demande_deblocage_daaf'),
+                    'id_justificatif_prevu' => $this->post('id_justificatif_prevu')
                 );
                 if (!$data) {
                     $this->response([
@@ -115,9 +123,9 @@ class justificatif_daaf extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'description' => $this->post('description'),
                     'fichier' => $this->post('fichier'),
-                    'id_demande_deblocage_daaf' => $this->post('id_demande_deblocage_daaf')
+                    'id_demande_deblocage_daaf' => $this->post('id_demande_deblocage_daaf'),
+                    'id_justificatif_prevu' => $this->post('id_justificatif_prevu')
                 );
                 if (!$data || !$id) {
                     $this->response([

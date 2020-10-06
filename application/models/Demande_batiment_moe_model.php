@@ -224,6 +224,75 @@ class Demande_batiment_moe_model extends CI_Model {
             return null;
         }
     }
+
+    public function avancement_financiereBycontrat($id_contrat)
+    {
+        $sql=" select 
+                       (sum(detail.montant_debu) + sum( detail.montant_bat) + sum(detail.montant_lat)
+                        + sum( detail.montant_fin)) as montant_facture_total
+               from (
+               
+                (
+                    select 
+                        contrat_moe.id as id,
+                        sum(demande_debu.montant) as montant_debu,
+                        0 as montant_bat,
+                        0 as montant_lat,
+                        0 as montant_fin
+
+                        from demande_debut_travaux_moe as demande_debu
+                        inner join contrat_bureau_etude as contrat_moe on contrat_moe.id=demande_debu.id_contrat_bureau_etude
+                        where 
+                            demande_debu.validation= 4 and contrat_moe.id= '".$id_contrat."'
+                )
+                UNION
+                (
+                    select 
+                        contrat_moe.id as id,
+                        0 as montant_debu,                        
+                        sum(demande_bat.montant) as montant_bat,
+                        0 as montant_lat,
+                        0 as montant_fin
+
+                        from demande_batiment_moe as demande_bat
+                        inner join contrat_bureau_etude as contrat_moe on contrat_moe.id=demande_bat.id_contrat_bureau_etude
+                        where 
+                            demande_bat.validation= 4 and contrat_moe.id= '".$id_contrat."'
+                )
+                UNION
+                (
+                    select 
+                        contrat_moe.id as id,
+                        0 as montant_debu,                        
+                        0 as montant_bat,                        
+                        sum(demande_lat.montant) as montant_lat,
+                        0 as montant_fin
+
+                        from demande_latrine_moe as demande_lat
+                        inner join contrat_bureau_etude as contrat_moe on contrat_moe.id=demande_lat.id_contrat_bureau_etude
+                        where 
+                            demande_lat.validation= 4 and contrat_moe.id= '".$id_contrat."'
+                )
+                UNION
+                (
+                    select 
+                        contrat_moe.id as id,
+                        0 as montant_debu,                        
+                        0 as montant_bat,                        
+                        0 as montant_lat,                        
+                        sum(demande_fin.montant) as montant_fin
+
+                        from demande_fin_travaux_moe as demande_fin
+                        inner join contrat_bureau_etude as contrat_moe on contrat_moe.id=demande_fin.id_contrat_bureau_etude
+                        where 
+                            demande_fin.validation= 4 and contrat_moe.id= '".$id_contrat."'
+                )
+
+                )detail
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }
    /* public function findById($id)  {
         $this->db->where("id", $id);
         $q = $this->db->get($this->table);

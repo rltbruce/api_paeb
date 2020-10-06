@@ -80,9 +80,10 @@ class Demande_batiment_prestataire_model extends CI_Model {
     public function finddemandeBycontrat($id_contrat_prestataire) {               
         $result =  $this->db->select('demande_batiment_presta.*')
                         ->from($this->table)
-                        ->join('attachement_travaux','attachement_travaux.id = demande_batiment_presta.id_attachement_travaux')
-                        ->join('facture_mpe','facture_mpe.id=attachement_travaux.id_facture_mpe')
+                        ->join('attachement_travaux','attachement_travaux.id = demande_batiment_presta.id_attachement_travaux')                        
+                        ->join('facture_mpe','facture_mpe.id_attachement_travaux = attachement_travaux.id')
                         ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("facture_mpe.validation", 4)
                         ->order_by('demande_batiment_presta.id')
                         ->get()
                         ->result();
@@ -152,7 +153,7 @@ class Demande_batiment_prestataire_model extends CI_Model {
             return null;
         }                 
     }*/
-     public function countAllfactureByvalidation($validation)
+    public function countAllfactureByvalidation($validation)
     {
         $sql=" select 
                        sum(detail.nbr_facture_mpe) as nbr_facture_mpe,
@@ -238,6 +239,92 @@ class Demande_batiment_prestataire_model extends CI_Model {
             ";
             return $this->db->query($sql)->result();                  
     }
+   /*  public function countAllfactureByvalidation($validation)
+    {
+        $sql=" select 
+                       sum(detail.nbr_facture_mpe) as nbr_facture_mpe,
+                       sum( detail.nbr_facture_debut_moe) as nbr_facture_debut_moe,
+                       sum(detail.nbr_facture_batiment_moe) as nbr_facture_batiment_moe,
+                       sum( detail.nbr_facture_latrine_moe) as nbr_facture_latrine_moe,
+                       sum(detail.nbr_facture_fin_moe) as nbr_facture_fin_moe,
+                       sum(detail.nbr_facture_mpe) + sum( detail.nbr_facture_debut_moe) + sum(detail.nbr_facture_batiment_moe)
+                        + sum( detail.nbr_facture_latrine_moe) + sum(detail.nbr_facture_fin_moe) as nombre
+               from (
+               
+                (
+                    select 
+                        count(fact_mpe.id) as nbr_facture_mpe,
+                        0 as nbr_facture_debut_moe,
+                        0 as nbr_facture_batiment_moe,
+                        0 as nbr_facture_latrine_moe,
+                        0 as nbr_facture_fin_moe
+
+                        from facture_mpe as fact_mpe
+                        where 
+                            fact_mpe.validation= '".$validation."'
+                )
+                UNION
+                (
+                    select 
+                        0 as nbr_facture_mpe,
+                        count(demande_debut_moe.id) as nbr_facture_debut_moe,
+                        0 as nbr_facture_batiment_moe,
+                        0 as nbr_facture_latrine_moe,
+                        0 as nbr_facture_fin_moe
+
+                        from demande_debut_travaux_moe as demande_debut_moe
+
+                        where 
+                            demande_debut_moe.validation= '".$validation."'
+                )
+                UNION
+                (
+                    select 
+                        0 as nbr_facture_mpe,
+                        0 as nbr_facture_debut_moe,
+                        count(demande_batiment_moe.id) as nbr_facture_batiment_moe,
+                        0 as nbr_facture_latrine_moe,
+                        0 as nbr_facture_fin_moe
+
+                        from demande_batiment_moe as demande_batiment_moe
+
+                        where 
+                            demande_batiment_moe.validation= '".$validation."'
+                )
+                UNION
+                (
+                    select 
+                        0 as nbr_facture_mpe,
+                        0 as nbr_facture_debut_moe,
+                        0 as nbr_facture_batiment_moe,
+                        count(demande_latrine_moe.id) as nbr_facture_latrine_moe,
+                        0 as nbr_facture_fin_moe
+
+                        from demande_latrine_moe as demande_latrine_moe
+
+                        where 
+                            demande_latrine_moe.validation= '".$validation."'
+                )
+                UNION
+                (
+                    select 
+                        0 as nbr_facture_mpe,
+                        0 as nbr_facture_debut_moe,
+                        0 as nbr_facture_batiment_moe,
+                        0 as nbr_facture_latrine_moe,
+                        count(demande_fin_moe.id) as nbr_facture_fin_moe
+
+                        from demande_fin_travaux_moe as demande_fin_moe
+
+                        where 
+                            demande_fin_moe.validation= '".$validation."'
+                )
+
+                )detail
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }*/
 
    /* public function findAllInvalideBycisco($id_cisco) {               
         $result =  $this->db->select('demande_batiment_presta.*')

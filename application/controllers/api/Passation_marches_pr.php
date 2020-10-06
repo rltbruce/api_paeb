@@ -22,7 +22,17 @@ class Passation_marches_pr extends REST_Controller {
         $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
         $menu = $this->get('menu');
 
-         if ($menu=='getpassationByconvention')
+         if ($menu=='getdate_contratByconvention')
+         {
+            $tmp = $this->Passation_marches_prManager->getdate_contratByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getpassationByconvention')
          {
             $tmp = $this->Passation_marches_prManager->getpassationByconvention($id_convention_entete);
             if ($tmp) 
@@ -228,17 +238,47 @@ class Passation_marches_pr extends REST_Controller {
     {
         $id = $this->post('id') ;
         $supprimer = $this->post('supprimer') ;
+
+        $date_lancement_dp = null;
+        $date_remise = null;                    
+        $date_os = null;
+        $date_manifestation = null;
+        $date_signature_contrat = null;
+
+        if ($this->post('date_manifestation')!='' &&$this->post('date_manifestation')!='null' && $this->post('date_manifestation')!='undefined')
+        {
+            $date_manifestation = $this->post('date_manifestation');
+        }
+
+        if ($this->post('date_remise')!='' &&$this->post('date_remise')!='null' && $this->post('date_remise')!='undefined')
+        {
+            $date_remise = $this->post('date_remise');
+        }
+
+        if ($this->post('date_os')!='' &&$this->post('date_os')!='null' && $this->post('date_os')!='undefined')
+        {
+            $date_os = $this->post('date_os');
+        }
+
+        if ($this->post('date_lancement_dp')!='' &&$this->post('date_lancement_dp')!='null' && $this->post('date_lancement_dp')!='undefined')
+        {
+            $date_lancement_dp = $this->post('date_lancement_dp');
+        }
+
+        if ($this->post('date_signature_contrat')!='' &&$this->post('date_signature_contrat')!='null' && $this->post('date_signature_contrat')!='undefined')
+        {
+            $date_signature_contrat = $this->post('date_signature_contrat');
+        }
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
                      'id' => $this->post('id'),
-                    'date_lancement_dp' => $this->post('date_lancement_dp'),
-                    'date_remise'   => $this->post('date_remise'),
-                    'nbr_offre_recu'    => $this->post('nbr_offre_recu'),
-                    
-                    'date_os' => $this->post('date_os'),
-                    'date_manifestation' => $this->post('date_manifestation'),                    
-
+                    'date_lancement_dp' => $date_lancement_dp,
+                    'date_remise'   => $date_remise,
+                    'nbr_offre_recu'    => $this->post('nbr_offre_recu'),                    
+                    'date_os' => $date_os,
+                    'date_manifestation' => $date_manifestation,
+                    'date_signature_contrat' => $date_signature_contrat,
                     'id_convention_entete' => $this->post('id_convention_entete'),
                     'validation' => $this->post('validation')
                 );
@@ -265,12 +305,13 @@ class Passation_marches_pr extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'id' => $this->post('id'),
-                    'date_lancement_dp' => $this->post('date_lancement_dp'),
-                    'date_remise'   => $this->post('date_remise'),
+                     'id' => $this->post('id'),
+                    'date_lancement_dp' => $date_lancement_dp,
+                    'date_remise'   => $date_remise,
                     'nbr_offre_recu'    => $this->post('nbr_offre_recu'),                    
-                    'date_os' => $this->post('date_os'),
-                    'date_manifestation' => $this->post('date_manifestation'),
+                    'date_os' => $date_os,
+                    'date_manifestation' => $date_manifestation,
+                    'date_signature_contrat' => $date_signature_contrat,
                     'id_convention_entete' => $this->post('id_convention_entete'),
                     'validation' => $this->post('validation')
                 );

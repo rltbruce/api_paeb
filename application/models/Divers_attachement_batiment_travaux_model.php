@@ -25,12 +25,15 @@ class Divers_attachement_batiment_travaux_model extends CI_Model {
     }
     public function _set($attachement) {
         return array(
+            'quantite_periode'       =>      $attachement['quantite_periode'],
+            'quantite_anterieur'       =>      $attachement['quantite_anterieur'],
+            'quantite_cumul'       =>      $attachement['quantite_cumul'],
             'montant_periode'       =>      $attachement['montant_periode'],
             'montant_anterieur'       =>      $attachement['montant_anterieur'],
             'montant_cumul'       =>      $attachement['montant_cumul'],
             'pourcentage'       =>      $attachement['pourcentage'],
             'id_demande_batiment_mpe'   =>      $attachement['id_demande_batiment_mpe'],
-            'id_divers_attachement_batiment_prevu'    => $attachement['id_divers_attachement_batiment_prevu']                       
+            'id_attachement_batiment_prevu'    => $attachement['id_attachement_batiment_prevu']                       
         );
     }
     public function delete($id) {
@@ -61,10 +64,13 @@ class Divers_attachement_batiment_travaux_model extends CI_Model {
             return $q->row();
         }
     }
-    public function finddivers_attachementByDemande($id_demande_batiment_mpe)
+   /* public function finddivers_attachementByDemande($id_demande_batiment_mpe,$id_attachement_batiment)
     {               
-        $result =  $this->db->select('*')
+        $result =  $this->db->select('divers_attachement_batiment_travaux.*')
                         ->from($this->table)
+                        ->join('divers_attachement_batiment_prevu','divers_attachement_batiment_prevu.id=divers_attachement_batiment_travaux.id_attachement_batiment_prevu')
+                        ->join('divers_attachement_batiment_detail','divers_attachement_batiment_detail.id=divers_attachement_batiment_prevu.id_attachement_batiment_detail')
+                        ->where('id_attachement_batiment',$id_attachement_batiment)
                         ->where('id_demande_batiment_mpe',$id_demande_batiment_mpe)
                         ->order_by('id')
                         ->get()
@@ -74,77 +80,185 @@ class Divers_attachement_batiment_travaux_model extends CI_Model {
             return $result;
         }else{
             return null;
-        }                 
-    }
-    public function findmaxattachement_travauxByattachement_prevu($id_divers_attachement_batiment_prevu,$id_contrat_prestataire)
+        }            
+    }*/
+   /* public function findmaxattachement_travauxByattachement_prevu($id_attachement_batiment_prevu,$id_contrat_prestataire)
     {               
         $sql = "select divers_attachement_batiment_travaux.*
                         from divers_attachement_batiment_travaux
-                        inner join demande_batiment_presta on demande_batiment_presta.id=divers_attachement_batiment_travaux.id_demande_batiment_mpe
-                        inner join attachement_travaux on attachement_travaux.id=demande_batiment_presta.id_attachement_travaux
-                        inner join facture_mpe on facture_mpe.id=attachement_travaux.id_facture_mpe
-                        where divers_attachement_batiment_travaux.id=(select max(id) from divers_attachement_batiment_travaux) and id_divers_attachement_batiment_prevu =".$id_divers_attachement_batiment_prevu." and facture_mpe.id_contrat_prestataire =".$id_contrat_prestataire."";
+                        inner join divers_attachement_batiment_prevu on divers_attachement_batiment_prevu.id=divers_attachement_batiment_travaux.id_attachement_batiment_prevu
+                        where divers_attachement_batiment_travaux.id<(select max(id) from divers_attachement_batiment_travaux) and divers_attachement_batiment_prevu.id =".$id_attachement_batiment_prevu." and divers_attachement_batiment_prevu.id_contrat_prestataire =".$id_contrat_prestataire."";
         return $this->db->query($sql)->result();                  
     }
-  /*  public function finddivers_attachementByDemande($id_contrat_prestataire,$id_demande_batiment_mpe) {
+    public function findmax_1attachement_travauxByattachement_prevu($id_attachement_batiment_prevu,$id_contrat_prestataire)
+    {               
+        $sql = "select divers_attachement_batiment_travaux.*
+                        from divers_attachement_batiment_travaux
+                        inner join divers_attachement_batiment_prevu on divers_attachement_batiment_prevu.id=divers_attachement_batiment_travaux.id_attachement_batiment_prevu
+                        where divers_attachement_batiment_travaux.id=(select max(id) from divers_attachement_batiment_travaux as attache_bat where attache_bat.id <(select max(id) from divers_attachement_batiment_travaux)) and divers_attachement_batiment_prevu.id =".$id_attachement_batiment_prevu." and divers_attachement_batiment_prevu.id_contrat_prestataire =".$id_contrat_prestataire."";
+        return $this->db->query($sql)->result();                  
+    }*/
+   public function finddivers_attachementByDemande($id_contrat_prestataire,$id_demande_batiment_mpe,$id_attache_batiment) {
         $sql="
-                select detail.description as description, 
-                        detail.libelle as libelle, 
-                        detail.id_attache_batiment as id_attache_batiment,
+                select  detail.libelle as libelle,
+                        detail.numero as numero,
+                        detail.id_attachement_batiment_detail as id_attachement_batiment_detail,
+                        detail.id_attachement_batiment_prevu as id_attachement_batiment_prevu,
                         detail.id as id,
-                        detail.id_contrat_prestataire as id_contrat_prestataire,
-                        detail.montant_prevu as montant_prevu, 
-                        detail.id_divers_attachement_batiment_travaux as id_divers_attachement_batiment_travaux,
-                        detail.montant_periode as montant_periode,
-                        detail.montant_anterieur as montant_anterieur,
-                        detail.montant_cumul as montant_cumul,
-                        detail.pourcentage as pourcentage
+                        sum(detail.montant_periode) as montant_periode,
+                        ((sum(detail.montant_periode) *100)/sum(detail.montant_prevu)) as pourcentage_periode,
+                        sum(detail.montant_anterieur) as montant_anterieur,
+                        ((sum(detail.montant_anterieur) *100)/sum(detail.montant_prevu)) as pourcentage_anterieur,
+                        (sum(detail.montant_cumul)+sum(detail.montant_periode)) as montant_cumul,
+                        (((sum(detail.montant_cumul)+sum(detail.montant_periode)) *100)/sum(detail.montant_prevu)) as pourcentage_cumul,
+                        sum(detail.quantite_periode) as quantite_periode,
+                        sum(detail.quantite_anterieur) as quantite_anterieur,
+                        (sum(detail.quantite_cumul)+sum(detail.quantite_periode)) as quantite_cumul,
+                        sum(detail.montant_prevu) as montant_prevu,
+                        sum(detail.prix_unitaire) as prix_unitaire,
+                        sum(detail.quantite_prevu) as quantite_prevu,
+                        detail.unite as unite 
 
                     from
                 (select  
-                        attache_batiment.description as description, 
-                        attache_batiment.libelle as libelle, 
-                        attache_batiment.id as id_attache_batiment,
-                        attache_prevu.id as id,
-                        attache_prevu.id_contrat_prestataire as id_contrat_prestataire,
-                        attache_prevu.montant_prevu as montant_prevu, 
-                        attache_travaux.id as id_divers_attachement_batiment_travaux,
+                        attache_detail.id as id_attachement_batiment_detail,
+                        attache_prevu.id as id_attachement_batiment_prevu,
+                        attache_detail.libelle as libelle,
+                        attache_detail.numero as numero,
+                        attache_travaux.id as id,
                         attache_travaux.montant_periode as montant_periode,
-                        attache_travaux.montant_anterieur as montant_anterieur,
-                        attache_travaux.montant_cumul as montant_cumul,
-                        attache_travaux.pourcentage as pourcentage
+                        attache_travaux.quantite_periode as quantite_periode,
+                        0 as montant_anterieur,
+                        0 as quantite_anterieur,
+                        0 as montant_cumul,
+                        0 as quantite_cumul,
+                        0 as montant_prevu,
+                        0 as quantite_prevu,
+                        0 as prix_unitaire,                        
+                        attache_prevu.unite as unite
 
                     from divers_attachement_batiment_travaux as attache_travaux
             
-                        right join divers_attachement_batiment_prevu as attache_prevu on attache_travaux.id_divers_attachement_batiment_prevu = attache_prevu.id 
-                        inner join divers_attachement_batiment as attache_batiment on attache_prevu.id_divers_attachement_batiment = attache_batiment.id
+                        inner join divers_attachement_batiment_prevu as attache_prevu on attache_travaux.id_attachement_batiment_prevu = attache_prevu.id
+                        inner join divers_attachement_batiment_detail as attache_detail on attache_prevu.id_attachement_batiment_detail = attache_detail.id 
+                        inner join divers_attachement_batiment as attache_batiment on attache_detail.id_attachement_batiment = attache_batiment.id
             
-                        where attache_prevu.id_contrat_prestataire = ".$id_contrat_prestataire." and attache_travaux.id_demande_batiment_mpe = ".$id_demande_batiment_mpe."
+                        where attache_prevu.id_contrat_prestataire = ".$id_contrat_prestataire." and attache_travaux.id_demande_batiment_mpe = ".$id_demande_batiment_mpe." and attache_batiment.id = ".$id_attache_batiment."
             
-                        group by attache_prevu.id_divers_attachement_batiment 
+                        group by attache_detail.id 
                 UNION 
 
                 select  
-                        attache_batiment.description as description, 
-                        attache_batiment.libelle as libelle, 
-                        attache_batiment.id as id_attache_batiment,
-                        attache_prevu.id as id,
-                        attache_prevu.id_contrat_prestataire as id_contrat_prestataire,
-                        attache_prevu.montant_prevu as montant_prevu, 
-                        0 as id_divers_attachement_batiment_travaux,
+                         
+                        attache_detail.id as id_attachement_batiment_detail,
+                        attache_prevu.id as id_attachement_batiment_prevu,
+                        attache_detail.libelle as libelle,
+                        attache_detail.numero as numero,
+                        attache_travaux.id as id,
                         0 as montant_periode,
-                        0 as montant_anterieur,
+                        0 as quantite_periode,
+                        attache_travaux.montant_periode as montant_anterieur,
+                        attache_travaux.quantite_periode as quantite_anterieur,
                         0 as montant_cumul,
-                        0 as pourcentage
+                        0 as quantite_cumul,
+                        0 as montant_prevu,
+                        0 as quantite_prevu,
+                        0 as prix_unitaire,
+                        attache_prevu.unite as unite
+
+                    from divers_attachement_batiment_travaux as attache_travaux
+            
+                        inner join divers_attachement_batiment_prevu as attache_prevu on attache_travaux.id_attachement_batiment_prevu = attache_prevu.id
+                        inner join divers_attachement_batiment_detail as attache_detail on attache_prevu.id_attachement_batiment_detail = attache_detail.id 
+                        inner join divers_attachement_batiment as attache_batiment on attache_detail.id_attachement_batiment = attache_batiment.id
+                        inner join facture_mpe as fact on fact.id_attachement_travaux = attache_travaux.id
+                        where attache_prevu.id_contrat_prestataire = ".$id_contrat_prestataire." and attache_batiment.id = ".$id_attache_batiment." and attache_travaux.id_demande_batiment_mpe =(select max(id) from divers_attachement_batiment_travaux as div_atta_bat_tra where div_atta_bat_tra.id_demande_batiment_mpe <".$id_demande_batiment_mpe.") and fact.validation=4
+            
+                        group by attache_detail.id
+                UNION 
+
+                select  
+                         
+                        attache_detail.id as id_attachement_batiment_detail,
+                        attache_prevu.id as id_attachement_batiment_prevu,
+                        attache_detail.libelle as libelle,
+                        attache_detail.numero as numero,
+                        attache_travaux.id as id,
+                        0 as montant_periode,
+                        0 as quantite_periode,
+                        0 as montant_anterieur,
+                        0 as quantite_anterieur,
+                        sum(attache_travaux.montant_periode) as montant_cumul,
+                        sum(attache_travaux.quantite_periode) as quantite_cumul,
+                        0 as montant_prevu,
+                        0 as quantite_prevu,
+                        0 as prix_unitaire,
+                        attache_prevu.unite as unite
+
+                    from divers_attachement_batiment_travaux as attache_travaux
+            
+                        inner join divers_attachement_batiment_prevu as attache_prevu on attache_travaux.id_attachement_batiment_prevu = attache_prevu.id
+                        inner join divers_attachement_batiment_detail as attache_detail on attache_prevu.id_attachement_batiment_detail = attache_detail.id 
+                        inner join divers_attachement_batiment as attache_batiment on attache_detail.id_attachement_batiment = attache_batiment.id
+                        inner join facture_mpe as fact on fact.id_attachement_travaux = attache_travaux.id
+                        where attache_prevu.id_contrat_prestataire = ".$id_contrat_prestataire." and attache_batiment.id = ".$id_attache_batiment." and attache_travaux.id_demande_batiment_mpe <".$id_demande_batiment_mpe." and fact.validation=4
+            
+                        group by attache_detail.id
+                UNION 
+
+                select  
+                         
+                        attache_detail.id as id_attachement_batiment_detail,
+                        attache_prevu.id as id_attachement_batiment_prevu,
+                        attache_detail.libelle as libelle,
+                        attache_detail.numero as numero,
+                        0 as id,
+                        0 as montant_periode,
+                        0 as quantite_periode,
+                        0 as montant_anterieur,
+                        0 as quantite_anterieur,
+                        0 as montant_cumul,
+                        0 as quantite_cumul,
+                        attache_prevu.montant_prevu as montant_prevu,
+                        attache_prevu.quantite_prevu as quantite_prevu,
+                        attache_prevu.prix_unitaire as prix_unitaire,
+                        attache_prevu.unite as unite
 
                     from divers_attachement_batiment_prevu as attache_prevu
-                        inner join divers_attachement_batiment as attache_batiment on attache_prevu.id_divers_attachement_batiment = attache_batiment.id
-                        where attache_prevu.id_contrat_prestataire = ".$id_contrat_prestataire."
+                        inner join divers_attachement_batiment_detail as attache_detail on attache_prevu.id_attachement_batiment_detail = attache_detail.id 
+                        inner join divers_attachement_batiment as attache_batiment on attache_detail.id_attachement_batiment = attache_batiment.id
+                        where attache_prevu.id_contrat_prestataire = ".$id_contrat_prestataire." and attache_batiment.id = ".$id_attache_batiment."
             
-                        group by attache_prevu.id_divers_attachement_batiment) detail
-                group by detail.id  ";
+                        group by attache_detail.id
+                UNION 
+
+                select  
+                         
+                        attache_detail.id as id_attachement_batiment_detail,
+                        attache_prevu.id as id_attachement_batiment_prevu,
+                        attache_detail.libelle as libelle,
+                        attache_detail.numero as numero,
+                        0 as id,
+                        0 as montant_periode,
+                        0 as quantite_periode,
+                        0 as montant_anterieur,
+                        0 as quantite_anterieur,
+                        0 as montant_cumul,
+                        0 as quantite_cumul,
+                        0 as montant_prevu,
+                        0 as quantite_prevu,
+                        0 as prix_unitaire,
+                        attache_prevu.unite as unite
+
+                    from divers_attachement_batiment_detail as attache_detail
+                        inner join divers_attachement_batiment as attache_batiment on attache_detail.id_attachement_batiment = attache_batiment.id
+                        inner join divers_attachement_batiment_prevu as attache_prevu on attache_detail.id= attache_prevu.id_attachement_batiment_detail
+                        where attache_batiment.id = ".$id_attache_batiment."
+            
+                        group by attache_detail.id) detail
+                group by detail.id_attachement_batiment_detail  ";
         return $this->db->query($sql)->result();                
-    }*/
+    }
 
 
 }

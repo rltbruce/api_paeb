@@ -49,7 +49,7 @@ class Site extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code_sous_projet'] = $value->code_sous_projet;
                     $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
-                    $data[$key]['denomination_epp'] = $value->denomination_epp;
+                   // //$data[$key]['denomination_epp'] = $value->denomination_epp;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['statu_convention'] = $value->statu_convention;
                     $data[$key]['observation'] = $value->observation;
@@ -57,6 +57,7 @@ class Site extends REST_Controller {
                     $data[$key]['classification_site'] = $classification_site;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['acces'] = $value->acces;
                     $data[$key]['agence_acc'] = $agence_acc;
                     $data[$key]['region'] = $region;
                     $data[$key]['cisco'] = $cisco;
@@ -64,7 +65,7 @@ class Site extends REST_Controller {
                     $data[$key]['zap'] = $zap;
                 
                 }
-            }else $data[0]=$this->generer_requete($id_region,$id_cisco,$id_commune,$id_ecole,$lot,$id_zap);
+            }else $data = array();
         }
         elseif ($menu=='getsiteByfiltreinvalide') 
         {   $data = array();
@@ -83,7 +84,7 @@ class Site extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code_sous_projet'] = $value->code_sous_projet;
                     $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
-                    $data[$key]['denomination_epp'] = $value->denomination_epp;
+                    ////$data[$key]['denomination_epp'] = $value->denomination_epp;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['statu_convention'] = $value->statu_convention;
                     $data[$key]['observation'] = $value->observation;
@@ -91,6 +92,7 @@ class Site extends REST_Controller {
                     $data[$key]['classification_site'] = $classification_site;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['acces'] = $value->acces;
                     $data[$key]['agence_acc'] = $agence_acc;
                     $data[$key]['region'] = $region;
                     $data[$key]['cisco'] = $cisco;
@@ -117,7 +119,7 @@ class Site extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code_sous_projet'] = $value->code_sous_projet;
                     $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
-                    $data[$key]['denomination_epp'] = $value->denomination_epp;
+                   // //$data[$key]['denomination_epp'] = $value->denomination_epp;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['statu_convention'] = $value->statu_convention;
                     $data[$key]['observation'] = $value->observation;
@@ -125,6 +127,7 @@ class Site extends REST_Controller {
                     $data[$key]['classification_site'] = $classification_site;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['acces'] = $value->acces;
                     $data[$key]['agence_acc'] = $agence_acc;
                     $data[$key]['region'] = $region;
                     $data[$key]['cisco'] = $cisco;
@@ -151,7 +154,7 @@ class Site extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code_sous_projet'] = $value->code_sous_projet;
                     $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
-                    $data[$key]['denomination_epp'] = $value->denomination_epp;
+                   // //$data[$key]['denomination_epp'] = $value->denomination_epp;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['statu_convention'] = $value->statu_convention;
                     $data[$key]['observation'] = $value->observation;
@@ -159,6 +162,7 @@ class Site extends REST_Controller {
                     $data[$key]['classification_site'] = $classification_site;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['acces'] = $value->acces;
                     $data[$key]['agence_acc'] = $agence_acc;
                     $data[$key]['region'] = $region;
                     $data[$key]['cisco'] = $cisco;
@@ -185,7 +189,7 @@ class Site extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code_sous_projet'] = $value->code_sous_projet;
                     $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
-                    $data[$key]['denomination_epp'] = $value->denomination_epp;
+                    //$data[$key]['denomination_epp'] = $value->denomination_epp;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['statu_convention'] = $value->statu_convention;
                     $data[$key]['observation'] = $value->observation;
@@ -193,6 +197,7 @@ class Site extends REST_Controller {
                     $data[$key]['classification_site'] = $classification_site;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['acces'] = $value->acces;
                     $data[$key]['agence_acc'] = $agence_acc;
                     $data[$key]['region'] = $region;
                     $data[$key]['cisco'] = $cisco;
@@ -219,7 +224,7 @@ class Site extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code_sous_projet'] = $value->code_sous_projet;
                     $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
-                    $data[$key]['denomination_epp'] = $value->denomination_epp;
+                    //$data[$key]['denomination_epp'] = $value->denomination_epp;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['statu_convention'] = $value->statu_convention;
                     $data[$key]['observation'] = $value->observation;
@@ -227,6 +232,7 @@ class Site extends REST_Controller {
                     $data[$key]['classification_site'] = $classification_site;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['acces'] = $value->acces;
                     $data[$key]['agence_acc'] = $agence_acc;
                     $data[$key]['region'] = $region;
                     $data[$key]['cisco'] = $cisco;
@@ -253,7 +259,7 @@ class Site extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code_sous_projet'] = $value->code_sous_projet;
                     $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
-                    $data[$key]['denomination_epp'] = $value->denomination_epp;
+                    //$data[$key]['denomination_epp'] = $value->denomination_epp;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['statu_convention'] = $value->statu_convention;
                     $data[$key]['observation'] = $value->observation;
@@ -288,13 +294,14 @@ class Site extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code_sous_projet'] = $value->code_sous_projet;
                     $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
-                    $data[$key]['denomination_epp'] = $value->denomination_epp;
+                    //$data[$key]['denomination_epp'] = $value->denomination_epp;
                     $data[$key]['statu_convention'] = $value->statu_convention;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['ecole'] = $ecole;
                     $data[$key]['classification_site'] = $classification_site;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['acces'] = $value->acces;
                     $data[$key]['agence_acc'] = $agence_acc;
                     $data[$key]['region'] = $region;
                     $data[$key]['cisco'] = $cisco;
@@ -317,13 +324,14 @@ class Site extends REST_Controller {
             $data['id'] = $site->id;
             $data['code_sous_projet'] = $site->code_sous_projet;
             $data['objet_sous_projet'] = $site->objet_sous_projet;
-            $data['denomination_epp'] = $site->denomination_epp;
+            //$data['denomination_epp'] = $site->denomination_epp;
             $data['statu_convention'] = $site->statu_convention;
             $data['observation'] = $site->observation;
             $data['ecole'] = $ecole;
             $data['classification_site'] = $classification_site;
             $data['lot'] = $site->lot;
             $data['validation'] = $site->validation;
+            $data['acces'] = $site->acces;
             $data['agence_acc'] = $agence_acc;
             $data['region'] = $region;
             $data['cisco'] = $cisco;
@@ -348,13 +356,14 @@ class Site extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code_sous_projet'] = $value->code_sous_projet;
                     $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
-                    $data[$key]['denomination_epp'] = $value->denomination_epp;
+                    //$data[$key]['denomination_epp'] = $value->denomination_epp;
                     $data[$key]['statu_convention'] = $value->statu_convention;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['ecole'] = $ecole;
                     $data[$key]['classification_site'] = $classification_site;
                     $data[$key]['lot'] = $value->lot;
                     $data[$key]['validation'] = $value->validation;
+                    $data[$key]['acces'] = $value->acces;
                     $data[$key]['agence_acc'] = $agence_acc;
                     $data[$key]['region'] = $region;
                     $data[$key]['cisco'] = $cisco;
@@ -390,7 +399,7 @@ class Site extends REST_Controller {
                 $data = array(
                     'code_sous_projet' => $this->post('code_sous_projet'),
                     'objet_sous_projet' => $this->post('objet_sous_projet'),
-                    'denomination_epp' => $this->post('denomination_epp'),
+                    //'denomination_epp' => $this->post('denomination_epp'),
                     'id_agence_acc' => $this->post('id_agence_acc'),
                     'statu_convention' => $this->post('statu_convention'),
                     'observation' => $this->post('observation'),
@@ -401,7 +410,8 @@ class Site extends REST_Controller {
                     'id_ecole' => $this->post('id_ecole'),
                     'id_classification_site' => $this->post('id_classification_site'),
                     'lot' => $this->post('lot'),
-                    'validation' => $this->post('validation')
+                    'validation' => $this->post('validation'),
+                    'acces' => $this->post('acces')
                 );
                 if (!$data) {
                     $this->response([
@@ -428,7 +438,7 @@ class Site extends REST_Controller {
                 $data = array(
                     'code_sous_projet' => $this->post('code_sous_projet'),
                     'objet_sous_projet' => $this->post('objet_sous_projet'),
-                    'denomination_epp' => $this->post('denomination_epp'),
+                    //'denomination_epp' => $this->post('denomination_epp'),
                     'id_agence_acc' => $this->post('id_agence_acc'),
                     'statu_convention' => $this->post('statu_convention'),
                     'observation' => $this->post('observation'),
@@ -439,7 +449,8 @@ class Site extends REST_Controller {
                     'id_ecole' => $this->post('id_ecole'),
                     'id_classification_site' => $this->post('id_classification_site'),
                     'lot' => $this->post('lot'),
-                    'validation' => $this->post('validation')
+                    'validation' => $this->post('validation'),
+                    'acces' => $this->post('acces')
                 );
                 if (!$data || !$id) {
                     $this->response([

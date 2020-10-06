@@ -22,7 +22,62 @@ class Attachement_travaux extends REST_Controller {
         $id_facture_mpe = $this->get('id_facture_mpe');
         $menu = $this->get('menu');
 
-        if ($menu=="getattachement_travauxBycontrat")
+        if ($menu=="getattachement_travauxneedvalidationdpfiBycontrat")
+        {
+            $tmp = $this->Attachement_travauxManager->getattachement_travauxneedvalidationdpfiBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data = $tmp;            
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getattachement_travauxinvalideBycontrat")
+        {
+            $tmp = $this->Attachement_travauxManager->findattachement_travauxinvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data = $tmp;
+               /* foreach ($tmp as $key => $value) 
+                {   
+                    if ($value->validation_fact==0)
+                   {
+                        $data[$key]['id'] = $value->id;
+                        $data[$key]['numero'] = $value->numero;
+                        $data[$key]['date_fin'] = $value->date_fin;
+                        $data[$key]['date_debut'] = $value->date_debut;
+                        $data[$key]['total_prevu'] = $value->total_prevu;
+                        $data[$key]['total_cumul'] = $value->total_cumul;
+                        $data[$key]['total_anterieur'] = $value->total_anterieur;
+                        $data[$key]['total_periode'] = $value->total_periode;
+                        $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire; 
+                        $data[$key]['validation'] = $value->validation;
+                        $data[$key]['validation_fact'] = $value->validation_fact;
+                    }                 
+                    
+                }*/
+               /* if ($datatmp) 
+                {
+                    $data=$datatmp;
+                }
+                else
+                {                    
+                    $data = array();
+                }*/            
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getetatattachement_travauxBycontrat")
+        {
+            $tmp = $this->Attachement_travauxManager->findetatattachement_travauxBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data = $tmp;            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getattachement_travauxBycontrat")
         {
             $tmp = $this->Attachement_travauxManager->findattachement_travauxBycontrat($id_contrat_prestataire);
             if ($tmp) 
@@ -34,15 +89,6 @@ class Attachement_travaux extends REST_Controller {
         elseif ($menu=="getattachement_prevuBycontrat")
         {
             $tmp = $this->Attachement_travauxManager->findmontant_attachement_prevuBycontrat($id_contrat_prestataire);
-            if ($tmp) 
-            {
-                $data = $tmp;            } 
-                else
-                    $data = array();
-        }
-        elseif ($menu=="getattachement_travauxByfacture")
-        {
-            $tmp = $this->Attachement_travauxManager->findattachement_travauxByfacture($id_facture_mpe);
             if ($tmp) 
             {
                 $data = $tmp;            } 
@@ -61,7 +107,7 @@ class Attachement_travaux extends REST_Controller {
             $data['total_cumul'] = $attachement_travaux->total_cumul;
             $data['total_anterieur'] = $attachement_travaux->total_anterieur;
             $data['total_periode'] = $attachement_travaux->total_periode;
-            $data['id_facture_mpe'] = $attachement_travaux->id_facture_mpe;
+            $data['id_contrat_prestataire'] = $attachement_travaux->id_contrat_prestataire;
         } 
         else 
         {
@@ -103,7 +149,7 @@ class Attachement_travaux extends REST_Controller {
                     'total_anterieur' => $this->post('total_anterieur'),
                     'total_cumul' => $this->post('total_cumul'),
                     'total_periode' => $this->post('total_periode'),
-                    'id_facture_mpe' => $this->post('id_facture_mpe'),
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data) {
@@ -136,7 +182,7 @@ class Attachement_travaux extends REST_Controller {
                     'total_anterieur' => $this->post('total_anterieur'),
                     'total_cumul' => $this->post('total_cumul'),
                     'total_periode' => $this->post('total_periode'),
-                    'id_facture_mpe' => $this->post('id_facture_mpe'),
+                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {

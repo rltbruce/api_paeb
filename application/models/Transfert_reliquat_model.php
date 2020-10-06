@@ -99,7 +99,7 @@ class transfert_reliquat_model extends CI_Model {
     }
     public function findtransfertByconvention($id_convention_entete)
     {               
-        $result =  $this->db->select('*')
+        $result =  $this->db->select('transfert_reliquat.*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
                         ->get()
