@@ -161,6 +161,26 @@ class Facture_mpe_model extends CI_Model {
             return $this->db->query($sql)->result();                  
     }*/
 
+        
+    public function getfacture_mpevalideBycontrat($id_contrat_prestataire)
+    {               
+        $result =  $this->db->select('facture_mpe.*,attachement_travaux.date_debut as date_debut, attachement_travaux.date_fin,((contrat_prestataire.cout_batiment + contrat_prestataire.cout_latrine + contrat_prestataire.cout_mobilier)-facture_mpe.net_payer) as reste_payer,((facture_mpe.montant_travaux*100)/(contrat_prestataire.cout_batiment + contrat_prestataire.cout_latrine + contrat_prestataire.cout_mobilier)) as pourcentage')
+                        ->from($this->table)
+                        ->join('attachement_travaux','attachement_travaux.id=facture_mpe.id_attachement_travaux')
+                        ->join('contrat_prestataire','contrat_prestataire.id=attachement_travaux.id_contrat_prestataire')
+                        ->where("attachement_travaux.id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("facture_mpe.validation", 4)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
          public function findfacture_mpevalidebcafBycontrat($id_contrat_prestataire) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

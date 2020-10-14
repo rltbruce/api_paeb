@@ -52,6 +52,20 @@ class Divers_calendrier_paie_moe_prevu_model extends CI_Model {
             return array();
         }                 
     }
+    public function finddetailcontrat($id_contrat_bureau_etude,$id_sousrubrique_detail) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_contrat_bureau_etude',$id_contrat_bureau_etude)
+                        ->where('id_sousrubrique_detail',$id_sousrubrique_detail)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
     public function findById($id)  {
         $this->db->where("id", $id);
         $q = $this->db->get($this->table);

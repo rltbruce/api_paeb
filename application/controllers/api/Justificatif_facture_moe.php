@@ -5,34 +5,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Justificatif_batiment_moe extends REST_Controller {
+class Justificatif_facture_moe extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('justificatif_batiment_moe_model', 'Justificatif_batiment_moeManager');
-       $this->load->model('demande_batiment_moe_model', 'Demande_batiment_moeManager');
+        $this->load->model('justificatif_facture_moe_model', 'Justificatif_facture_moeManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_demande_batiment_moe = $this->get('id_demande_batiment_moe');
+        $id_facture_moe_entete = $this->get('id_facture_moe_entete');
             
-        if ($id_demande_batiment_moe)
+        if ($id_facture_moe_entete)
         {
-            $tmp = $this->Justificatif_batiment_moeManager->findAllBydemande($id_demande_batiment_moe);
+            $tmp = $this->Justificatif_facture_moeManager->findAllBydemande($id_facture_moe_entete);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
-                {
-                    $demande_batiment_moe= array();
-                    $demande_batiment_moe = $this->Demande_batiment_moeManager->findById($value->id_demande_batiment_moe);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
-                    //$data[$key]['date'] = $value->date;
-                    $data[$key]['demande_batiment_moe'] = $demande_batiment_moe;
-                }
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -40,29 +30,17 @@ class Justificatif_batiment_moe extends REST_Controller {
         elseif ($id)
         {
             $data = array();
-            $justificatif_batiment_moe = $this->Justificatif_batiment_moeManager->findById($id);
-            $demande_batiment_moe = $this->Demande_batiment_moeManager->findById($justificatif_batiment_moe->id_demande_batiment_moe);
-            $data['id'] = $justificatif_batiment_moe->id;
-            $data['description'] = $justificatif_batiment_moe->description;
-            $data['fichier'] = $justificatif_batiment_moe->fichier;
-            //$data['date'] = $justificatif_batiment_moe->date;
-            $data['demande_batiment_moe'] = $demande_batiment_moe;
+            $justificatif_facture_moe = $this->Justificatif_facture_moeManager->findById($id);
+            $data['id'] = $justificatif_facture_moe->id;
+            $data['description'] = $justificatif_facture_moe->description;
+            $data['fichier'] = $justificatif_facture_moe->fichier;
         } 
         else 
         {
-            $menu = $this->Justificatif_batiment_moeManager->findAll();
-            if ($menu) 
+            $tmp = $this->Justificatif_facture_moeManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
-                {
-                    $demande_batiment_moe= array();
-                    $demande_batiment_moe = $this->Demande_batiment_moeManager->findById($value->id_demande_batiment_moe);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
-                    //$data[$key]['date'] = $value->date;
-                    $data[$key]['demande_batiment_moe'] = $demande_batiment_moe;
-                }
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -92,7 +70,7 @@ class Justificatif_batiment_moe extends REST_Controller {
                 $data = array(
                     'description' => $this->post('description'),
                     'fichier' => $this->post('fichier'),
-                    'id_demande_batiment_moe' => $this->post('id_demande_batiment_moe')
+                    'id_facture_moe_entete' => $this->post('id_facture_moe_entete')
                 );
                 if (!$data) {
                     $this->response([
@@ -101,7 +79,7 @@ class Justificatif_batiment_moe extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Justificatif_batiment_moeManager->add($data);
+                $dataId = $this->Justificatif_facture_moeManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -119,7 +97,7 @@ class Justificatif_batiment_moe extends REST_Controller {
                 $data = array(
                     'description' => $this->post('description'),
                     'fichier' => $this->post('fichier'),
-                    'id_demande_batiment_moe' => $this->post('id_demande_batiment_moe')
+                    'id_facture_moe_entete' => $this->post('id_facture_moe_entete')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -128,7 +106,7 @@ class Justificatif_batiment_moe extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Justificatif_batiment_moeManager->update($id, $data);
+                $update = $this->Justificatif_facture_moeManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -150,7 +128,7 @@ class Justificatif_batiment_moe extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Justificatif_batiment_moeManager->delete($id);         
+            $delete = $this->Justificatif_facture_moeManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

@@ -37,7 +37,7 @@ class Avenant_prestataire extends REST_Controller {
                     $data[$key]['ref_avenant'] = $value->ref_avenant;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['cout_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
-                    $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                    $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
 
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                         }
@@ -63,7 +63,7 @@ class Avenant_prestataire extends REST_Controller {
                     $data[$key]['ref_avenant'] = $value->ref_avenant;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['cout_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
-                    $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                    $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
 
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                         }
@@ -89,7 +89,7 @@ class Avenant_prestataire extends REST_Controller {
                     $data[$key]['ref_avenant'] = $value->ref_avenant;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['cout_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
-                    $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                    $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
 
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                         }
@@ -113,7 +113,7 @@ class Avenant_prestataire extends REST_Controller {
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
                     $data[$key]['date_signature'] = $value->date_signature;
                     $data[$key]['cout_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
-                    $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                    $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
 
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                         }
@@ -134,7 +134,7 @@ class Avenant_prestataire extends REST_Controller {
             $data['cout_mobilier'] = $avenant_prestataire->cout_mobilier;
             $data['date_signature'] = $avenant_prestataire->date_signature;
             $data['cout_total_ttc'] = $avenant_prestataire->cout_mobilier + $avenant_prestataire->cout_latrine + $avenant_prestataire->cout_batiment;
-            $data['cout_total_ht'] = ($avenant_prestataire->cout_mobilier + $avenant_prestataire->cout_latrine + $avenant_prestataire->cout_batiment)/1.2;
+            $data['cout_total_ht'] = ($avenant_prestataire->cout_mobilier + $avenant_prestataire->cout_latrine + $avenant_prestataire->cout_batiment)/1;
 
             $data['contrat_prestataire'] = $contrat_prestataire;
         } 
@@ -155,7 +155,7 @@ class Avenant_prestataire extends REST_Controller {
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
                     $data[$key]['date_signature'] = $value->date_signature;
                     $data[$key]['cout_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
-                    $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                    $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
                     
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                         }

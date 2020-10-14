@@ -207,6 +207,16 @@ class Facture_mpe extends REST_Controller {
                 else
                     $data = array();
         }
+        elseif ($menu=="getfacture_mpevalideBycontrat")
+        {
+            $tmp = $this->Facture_mpeManager->getfacture_mpevalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data = $tmp;            
+            } 
+                else
+                    $data = array();
+        }
         elseif ($menu=="getfacture_mpevalidebcafBycontrat")
         {
             $tmp = $this->Facture_mpeManager->findfacture_mpevalidebcafBycontrat($id_contrat_prestataire);

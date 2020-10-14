@@ -19,7 +19,28 @@ class Avance_demarrage extends REST_Controller {
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $menu = $this->get('menu');
 
-        if ($menu=="getavance_demarragevalidebcafBycontrat")
+        if ($menu=="getavancevalideBycontrat")
+        {
+            $tmp = $this->Avance_demarrageManager->getavancevalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value)
+                {
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['numero'] = 'acompte';
+                    $data[$key]['montant_avance'] = $value->montant_avance;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['pourcentage_rabais'] = $value->pourcentage_rabais;
+                    $data[$key]['montant_rabais'] = $value->montant_rabais;
+                    $data[$key]['net_payer'] = $value->net_payer;
+                    $data[$key]['reste_payer'] = ($value->cout_batiment+$value->cout_latrine+$value->cout_mobilier)-$value->montant_avance;
+                }           
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getavance_demarragevalidebcafBycontrat")
         {
             $tmp = $this->Avance_demarrageManager->findavance_demarragevalidebcafBycontrat($id_contrat_prestataire);
             if ($tmp) 

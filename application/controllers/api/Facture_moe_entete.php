@@ -21,7 +21,37 @@ class Facture_moe_entete extends REST_Controller {
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $menu = $this->get('menu');
 
-        if ($menu=="getfacture_moe_enteteBycontrat")
+        if ($menu=="getfacturedisponibleBycontrat")
+        {
+            $tmp = $this->Facture_moe_enteteManager->getfacturedisponibleBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                $data = $tmp;            
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getfactureemidpfiBycontrat")
+        {
+            $tmp = $this->Facture_moe_enteteManager->getfactureemidpfiBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                $data = $tmp;            
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getfacture_moe_enteteinvalideBycontrat")
+        {
+            $tmp = $this->Facture_moe_enteteManager->getfacture_moe_enteteinvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                $data = $tmp;            
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getfacture_moe_enteteBycontrat")
         {
             $tmp = $this->Facture_moe_enteteManager->getfacture_moe_enteteBycontrat($id_contrat_bureau_etude);
             if ($tmp) 

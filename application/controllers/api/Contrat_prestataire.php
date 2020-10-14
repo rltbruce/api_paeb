@@ -52,7 +52,7 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['prestataire'] = $prestataire;
                     $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
-                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
                 }
             } 
                 else
@@ -83,7 +83,7 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['prestataire'] = $prestataire;
                     $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
-                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
                 }
             } 
                 else
@@ -121,7 +121,7 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['paiement_recu'] = $value->paiement_recu;
                     $data[$key]['avancement_financ'] = $avancement_financ;
                     $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
-                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
                         }
             } 
                 else
@@ -153,7 +153,7 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['paiement_recu'] = $value->paiement_recu;
                     $data[$key]['prestataire'] = $prestataire;
                     $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
-                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
                 }
             } 
                 else
@@ -305,7 +305,7 @@ class Contrat_prestataire extends REST_Controller {
             $data['convention_entete'] = $convention_entete;
             $data['prestataire'] = $prestataire;
             $data['montant_total_ttc'] = $contrat_prestataire->cout_mobilier + $contrat_prestataire->cout_latrine + $contrat_prestataire->cout_batiment;
-            $data['montant_total_ht'] = ($contrat_prestataire->cout_mobilier + $contrat_prestataire->cout_latrine + $contrat_prestataire->cout_batiment)/1.2;
+            $data['montant_total_ht'] = ($contrat_prestataire->cout_mobilier + $contrat_prestataire->cout_latrine + $contrat_prestataire->cout_batiment)/1;
         } 
         else 
         {
@@ -335,7 +335,7 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['prestataire'] = $prestataire;
                     $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
-                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1.2;
+                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
                 }
             } 
                 else

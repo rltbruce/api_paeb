@@ -61,7 +61,7 @@ class Facture_moe_detail_model extends CI_Model {
     }
 
 
-     public function getfacture_moe_detailwithcalendrier_detailbyentete($id_contrat_bureau_etude,$id_facture_moe_entete,$id_sousrubrique) {
+     public function getfacture_moe_detailwithcalendrier_detailbyentete1($id_contrat_bureau_etude,$id_facture_moe_entete,$id_sousrubrique) {
         $sql="
                 select detail.id as id, 
                         detail.id_calendrier_paie_moe_prevu as id_calendrier_paie_moe_prevu, 
@@ -71,23 +71,22 @@ class Facture_moe_detail_model extends CI_Model {
                         sum(detail.montant_periode) as montant_periode ,
                         detail.observation as observation ,
                         sum(detail.montant_anterieur) as montant_anterieur,
-                        (sum(detail.montant_cumul)+sum(detail.montant_periode)) as montant_cumul,
+                        (sum(detail.montant_anterieur)+sum(detail.montant_periode)) as montant_cumul,
                         ((sum(detail.montant_periode)*100)/sum(detail.montant_prevu)) as pourcentage_periode,
                         ((sum(detail.montant_anterieur)*100)/sum(detail.montant_prevu)) as pourcentage_anterieur,
-                        (((sum(detail.montant_cumul)+sum(detail.montant_periode))*100)/sum(detail.montant_prevu)) as pourcentage_cumul
+                        (((sum(detail.montant_anterieur)+sum(detail.montant_periode))*100)/sum(detail.montant_prevu)) as pourcentage_cumul
 
                     from
                 (
                 select 
                         calendrier_paie_moe_prevu.id as id_calendrier_paie_moe_prevu, 
                         sousrubrique_calendrier_detail.libelle as libelle,
-                        fact_detail.id as id,
+                        null as id,
                         sum(calendrier_paie_moe_prevu.montant_prevu) as montant_prevu,
                         0 as pourcentage,
                         0 as montant_periode,
-                        fact_detail.observation as observation,
-                        0 as montant_anterieur,
-                        0 as montant_cumul  
+                        null as observation,
+                        0 as montant_anterieur 
 
                     from divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu
             
@@ -101,18 +100,17 @@ class Facture_moe_detail_model extends CI_Model {
                 select 
                         calendrier_paie_moe_prevu.id as id_calendrier_paie_moe_prevu, 
                         sousrubrique_calendrier_detail.libelle as libelle,
-                        fact_detail.id as id,
+                        null as id,
                         0 as montant_prevu,
                         sum(sousrubrique_calendrier_detail.pourcentage) as pourcentage,
                         0 as montant_periode,
-                        fact_detail.observation as observation,
-                        0 as montant_anterieur,
-                        0 as montant_cumul   
+                        null as observation,
+                        0 as montant_anterieur  
 
                     from divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail
                         inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id_sousrubrique_detail = sousrubrique_calendrier_detail.id
                         left join facture_moe_detail as fact_detail on fact_detail.id_calendrier_paie_moe_prevu=calendrier_paie_moe_prevu.id
-                        where  sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                        where  sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique." and calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude."
 
                         group by sousrubrique_calendrier_detail.id 
                 UNION 
@@ -125,11 +123,10 @@ class Facture_moe_detail_model extends CI_Model {
                         0 as pourcentage, 
                         sum(fact_detail.montant_periode) as montant_periode,
                         fact_detail.observation as observation,
-                        0 as montant_anterieur,
-                        0 as montant_cumul  
+                        0 as montant_anterieur 
 
                     from facture_moe_detail as fact_detail
-                        left join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                        inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
                         left join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
             
                         where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." and fact_detail.id_facture_moe_entete = ".$id_facture_moe_entete." and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
@@ -140,44 +137,427 @@ class Facture_moe_detail_model extends CI_Model {
                 select 
                         calendrier_paie_moe_prevu.id as id_calendrier_paie_moe_prevu,  
                         sousrubrique_calendrier_detail.libelle as libelle,
-                        fact_detail.id as id,
+                        null as id,
                         0 as montant_prevu,
                         0 as pourcentage, 
                         0 as montant_periode,
-                        fact_detail.observation as observation, 
-                        sum(fact_detail.montant_periode) as montant_anterieur,
-                        0 as montant_cumul  
+                        null as observation, 
+                        sum(fact_detail.montant_periode) as montant_anterieur  
 
                     from facture_moe_detail as fact_detail
-                        left join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                        inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
                         left join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+                        left join facture_moe_entete as fact_entete on fact_entete.id=fact_detail.id_facture_moe_entete
             
-                        where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique." and fact_detail.id_facture_moe_entete = (select max(f_entete.id) from facture_moe_entete as f_entete where f_entete.id<".$id_facture_moe_entete." and f_entete.id_contrat_bureau_etude = ".$id_contrat_bureau_etude.") 
-            
-                        group by sousrubrique_calendrier_detail.id 
-                UNION
-
-                select 
-                        calendrier_paie_moe_prevu.id as id_calendrier_paie_moe_prevu,  
-                        sousrubrique_calendrier_detail.libelle as libelle,
-                        fact_detail.id as id,
-                        0 as montant_prevu,
-                        0 as pourcentage, 
-                        0 as montant_periode,
-                        fact_detail.observation as observation, 
-                        0 as montant_anterieur, 
-                        sum(fact_detail.montant_periode) as montant_cumul  
-
-                    from facture_moe_detail as fact_detail
-                        left join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
-                        left join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
-            
-                        where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." and fact_detail.id_facture_moe_entete<".$id_facture_moe_entete." and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique." 
-            
+                        where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique." and fact_entete.id<".$id_facture_moe_entete." and fact_entete.validation=4 
                         group by sousrubrique_calendrier_detail.id) detail
                 group by detail.id_calendrier_paie_moe_prevu order by detail.id_calendrier_paie_moe_prevu ";
         return $this->db->query($sql)->result();                
     }
+    public function getfacture_moe_detailwithcalendrier_detailbyentete($id_contrat_bureau_etude,$id_facture_moe_entete,$id_sousrubrique)
+    {
+       $this->db->select("
+            divers_sousrubrique_calendrier_paie_moe_detail.id as id_sousrubrique_detail,
+            divers_sousrubrique_calendrier_paie_moe_detail.libelle as libelle,
+            divers_sousrubrique_calendrier_paie_moe_detail.code as code,
+            divers_sousrubrique_calendrier_paie_moe_detail.pourcentage as pourcentage,
+            divers_calendrier_paie_moe_prevu.montant_prevu as montant_prevu");
+       $this->db ->select("((
+                select fact_detail.id 
+                        
+                        from facture_moe_detail as fact_detail 
+
+                        inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                        inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+            
+                        where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." 
+                                and fact_detail.id_facture_moe_entete = ".$id_facture_moe_entete." 
+                                and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                and sousrubrique_calendrier_detail.id=id_sousrubrique_detail)) as id",false);
+       $this->db ->select("((
+                select fact_detail.observation 
+                        
+                        from facture_moe_detail as fact_detail 
+
+                        inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                        inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+            
+                        where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." 
+                                and fact_detail.id_facture_moe_entete = ".$id_facture_moe_entete." 
+                                and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                and sousrubrique_calendrier_detail.id=id_sousrubrique_detail)) as observation",false);
+
+            $this->db ->select("((
+                select fact_detail.montant_periode 
+                        
+                        from facture_moe_detail as fact_detail 
+
+                        inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                        inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+            
+                        where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." 
+                                and fact_detail.id_facture_moe_entete = ".$id_facture_moe_entete." 
+                                and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                and sousrubrique_calendrier_detail.id=id_sousrubrique_detail)) as montant_periode",false); 
+        $result =  $this->db->from('divers_sousrubrique_calendrier_paie_moe_detail,divers_calendrier_paie_moe_prevu')
+                    
+                    ->where('divers_sousrubrique_calendrier_paie_moe_detail.id = divers_calendrier_paie_moe_prevu.id_sousrubrique_detail')
+                    ->where('id_contrat_bureau_etude',$id_contrat_bureau_etude)
+                   
+                    ->where('id_sousrubrique',$id_sousrubrique)
+                    ->group_by('id_sousrubrique_detail')
+                                       
+                    ->get()
+                    ->result();                              
+
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+
+
+    public function getcalendrier_detail($id_sousrubrique,$id_contrat_bureau_etude) {               
+        $result =  $this->db->select('divers_sousrubrique_calendrier_paie_moe_detail.id as id_sousrubrique_detail,
+                divers_sousrubrique_calendrier_paie_moe_detail.libelle as libelle,
+                divers_sousrubrique_calendrier_paie_moe_detail.code as code,
+                divers_sousrubrique_calendrier_paie_moe_detail.pourcentage as pourcentage,
+                divers_calendrier_paie_moe_prevu.id as id_calendrier_paie_moe_prevu,
+                divers_calendrier_paie_moe_prevu.montant_prevu as montant_prevu')
+                        ->from('divers_sousrubrique_calendrier_paie_moe_detail')
+                        ->join('divers_calendrier_paie_moe_prevu','divers_sousrubrique_calendrier_paie_moe_detail.id = divers_calendrier_paie_moe_prevu.id_sousrubrique_detail')
+                        ->where('id_sousrubrique',$id_sousrubrique)
+                        ->where('id_contrat_bureau_etude',$id_contrat_bureau_etude)
+                        ->group_by('divers_sousrubrique_calendrier_paie_moe_detail.id')
+                        ->order_by('code')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+
+    public function getmontant_prevu_sous_rubrique($id_contrat_bureau_etude,$id_sousrubrique) {               
+        $this->db->select('sum(divers_calendrier_paie_moe_prevu.montant_prevu) as montant_prevu')
+                ->join("divers_sousrubrique_calendrier_paie_moe_detail", "divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail")
+                        ->where('id_sousrubrique',$id_sousrubrique)
+                        ->where('id_contrat_bureau_etude',$id_contrat_bureau_etude);
+        $q = $this->db->get('divers_calendrier_paie_moe_prevu');
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }                 
+    }
+
+    public function getfacture_detail_periodebycontrat($id_contrat_bureau_etude,$id_facture_moe_entete,$id_sousrubrique_detail)
+     {
+        $this->db->select("
+            facture_moe_detail.montant_periode as montant_periode,
+            facture_moe_detail.id as id,
+            facture_moe_detail.observation as observation")
+                
+                ->join("facture_moe_entete", "facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete")
+                ->join("divers_calendrier_paie_moe_prevu", "divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu")
+                ->join("divers_sousrubrique_calendrier_paie_moe_detail", "divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail")
+                ->where("facture_moe_entete.id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                ->where("facture_moe_entete.id", $id_facture_moe_entete)
+                ->where("divers_sousrubrique_calendrier_paie_moe_detail.id", $id_sousrubrique_detail);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }                
+    }
+
+    public function getmontant_periodepbycontratcodep($id_contrat_bureau_etude,$code,$id_facture_moe_entete)
+     {
+        $this->db->select("facture_moe_detail.montant_periode as montant_periode")
+                ->join("facture_moe_entete", "facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete")
+                ->join("divers_calendrier_paie_moe_prevu", "divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu")
+                ->join("divers_sousrubrique_calendrier_paie_moe_detail", "divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail")
+                ->where("facture_moe_entete.id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                ->where("facture_moe_entete.id<", $id_facture_moe_entete)
+                ->where("code", $code)
+                ->where("validation", 4);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }                
+    }
+    public function getmontant_currentpbycontratcodep($id_contrat_bureau_etude,$code,$id_facture_moe_entete)
+     {
+        $this->db->join("facture_moe_entete", "facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete")
+                ->join("divers_calendrier_paie_moe_prevu", "divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu")
+                ->join("divers_sousrubrique_calendrier_paie_moe_detail", "divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail")
+                ->where("facture_moe_entete.id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                ->where("facture_moe_entete.id", $id_facture_moe_entete)
+                ->where("code", $code);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }                
+    }
+    public function getmontant_currentlatrinebycontrat($id_contrat_bureau_etude,$id_facture_moe_entete,$code)
+     {
+        $this->db->select("sum(facture_moe_detail.montant_periode) as montant_periode")
+                ->join("facture_moe_entete", "facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete")
+                ->join("divers_calendrier_paie_moe_prevu", "divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu")
+                ->join("divers_sousrubrique_calendrier_paie_moe_detail", "divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail")
+                ->where("facture_moe_entete.id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                ->where("facture_moe_entete.id>=", $id_facture_moe_entete)
+                ->where_in("code", $code)
+                ->where_in("validation",[4,0]);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }                
+    }
+    public function getmontant_anterieurbycontrat($id_contrat_bureau_etude,$code)
+     {
+        $result =  $this->db->select("sum(facture_moe_detail.montant_periode )as montant_periode,divers_calendrier_paie_moe_prevu.montant_prevu ")
+                        ->from($this->table)
+                        ->join("divers_calendrier_paie_moe_prevu", "divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu")
+                        ->join("divers_sousrubrique_calendrier_paie_moe_detail", "divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail")
+                        ->where("divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("code", $code)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }               
+    }
+    public function getmontant_anterieur_p8bycontrat($id_contrat_bureau_etude)
+     {
+        $result =  $this->db->select("sum(facture_moe_detail.montant_periode )as montant_periode, sum(divers_calendrier_paie_moe_prevu.montant_prevu) as montant_prevu")
+                        ->from($this->table)
+                        ->join("divers_calendrier_paie_moe_prevu", "divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu",'right')
+                        ->join("divers_sousrubrique_calendrier_paie_moe_detail", "divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail")
+                        ->where("divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("code!=", 'p8')
+                        ->where("code!=", 'p9')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }               
+    }
+    public function getmontant_anterieur_p9bycontrat($id_contrat_bureau_etude)
+     {
+        $result =  $this->db->select("sum(facture_moe_detail.montant_periode )as montant_periode, sum(divers_calendrier_paie_moe_prevu.montant_prevu) as montant_prevu")
+                        ->from($this->table)
+                        ->join("divers_calendrier_paie_moe_prevu", "divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu",'right')
+                        ->join("divers_sousrubrique_calendrier_paie_moe_detail", "divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail")
+                        ->where("divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("code!=", 'p9')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }               
+    }
+/*
+
+    public function getfacture_moe_detailwithcalendrier_detailbyentete($id_contrat_bureau_etude,$id_facture_moe_entete,$id_sousrubrique)
+    {
+       $this->db->select("
+            divers_sousrubrique_calendrier_paie_moe_detail.id as id_sousrubrique_detail,
+            divers_sousrubrique_calendrier_paie_moe_detail.libelle as libelle,
+            divers_sousrubrique_calendrier_paie_moe_detail.code as code,
+            divers_sousrubrique_calendrier_paie_moe_detail.pourcentage as pourcentage,
+            divers_calendrier_paie_moe_prevu.montant_prevu as montant_prevu");
+       $this->db ->select("((
+                select fact_detail.id 
+                        
+                        from facture_moe_detail as fact_detail 
+
+                        inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                        inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+            
+                        where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." 
+                                and fact_detail.id_facture_moe_entete = ".$id_facture_moe_entete." 
+                                and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                and sousrubrique_calendrier_detail.id=id_sousrubrique_detail)) as id",false);
+       $this->db ->select("((
+                select fact_detail.observation 
+                        
+                        from facture_moe_detail as fact_detail 
+
+                        inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                        inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+            
+                        where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." 
+                                and fact_detail.id_facture_moe_entete = ".$id_facture_moe_entete." 
+                                and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                and sousrubrique_calendrier_detail.id=id_sousrubrique_detail)) as observation",false);
+
+            $this->db ->select("((
+                select fact_detail.montant_periode 
+                        
+                        from facture_moe_detail as fact_detail 
+
+                        inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                        inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+            
+                        where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." 
+                                and fact_detail.id_facture_moe_entete = ".$id_facture_moe_entete." 
+                                and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                and sousrubrique_calendrier_detail.id=id_sousrubrique_detail)) as montant_periode",false);
+            $this->db ->select("((
+                select sum(fact_detail.montant_periode) 
+                        
+                        from facture_moe_detail as fact_detail 
+
+                        inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                        inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+                        inner join facture_moe_entete as fact_entete on fact_entete.id=fact_detail.id_facture_moe_entete
+            
+                        where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude."  
+                                and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                and sousrubrique_calendrier_detail.id=id_sousrubrique_detail
+                                and fact_entete.id<".$id_facture_moe_entete." and fact_entete.validation=4)) as montant_anterieur",false);
+
+            $this->db ->select("((
+                select 
+                        sum(detail.montant_anterieur)+sum(detail.montant_periode)
+
+                    from
+                        (
+                        select  
+                                fact_detail.montant_periode as montant_periode,
+                                0 as montant_anterieur 
+
+                            from facture_moe_detail as fact_detail 
+
+                                inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                                inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+                    
+                                where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." 
+                                        and fact_detail.id_facture_moe_entete = ".$id_facture_moe_entete." 
+                                        and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                        and sousrubrique_calendrier_detail.id=id_sousrubrique_detail 
+                        UNION
+
+                        select 
+                                0 as montant_periode,
+                                sum(fact_detail.montant_periode) as montant_anterieur  
+
+                            from facture_moe_detail as fact_detail 
+
+                                inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                                inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+                                inner join facture_moe_entete as fact_entete on fact_entete.id=fact_detail.id_facture_moe_entete
+                    
+                                where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude."  
+                                        and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                        and sousrubrique_calendrier_detail.id=id_sousrubrique_detail
+                                        and fact_entete.id<".$id_facture_moe_entete." 
+                                        and fact_entete.validation=4) detail
+                        )) as montant_cumul",false);
+            $this->db ->select("((
+                select 
+                        (sum(fact_detail.montant_periode)*100)/montant_prevu
+
+                        from facture_moe_detail as fact_detail 
+
+                            inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                            inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+                            inner join facture_moe_entete as fact_entete on fact_entete.id=fact_detail.id_facture_moe_entete
+                
+                            where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude."  
+                                    and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                    and sousrubrique_calendrier_detail.id=id_sousrubrique_detail
+                                    and fact_entete.id<".$id_facture_moe_entete." and fact_entete.validation=4
+
+                    
+                        )) as pourcentage_anterieur",false);
+            $this->db ->select("((
+                select 
+                        (fact_detail.montant_periode*100)/montant_prevu
+
+                        from facture_moe_detail as fact_detail 
+
+                            inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                            inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+                    
+                            where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." 
+                                        and fact_detail.id_facture_moe_entete = ".$id_facture_moe_entete." 
+                                        and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                        and sousrubrique_calendrier_detail.id=id_sousrubrique_detail
+
+                    
+                        )) as pourcentage_periode",false);
+            $this->db ->select("((
+                select 
+                        ((sum(detail.montant_anterieur)+sum(detail.montant_periode))*100)/montant_prevu
+
+                    from
+                        (
+                        select  
+                                fact_detail.montant_periode as montant_periode,
+                                0 as montant_anterieur 
+
+                            from facture_moe_detail as fact_detail 
+
+                                inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                                inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+                    
+                                where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude." 
+                                        and fact_detail.id_facture_moe_entete = ".$id_facture_moe_entete." 
+                                        and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                        and sousrubrique_calendrier_detail.id=id_sousrubrique_detail 
+                        UNION
+
+                        select 
+                                0 as montant_periode,
+                                sum(fact_detail.montant_periode) as montant_anterieur  
+
+                            from facture_moe_detail as fact_detail 
+
+                                inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                                inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+                                inner join facture_moe_entete as fact_entete on fact_entete.id=fact_detail.id_facture_moe_entete
+                    
+                                where calendrier_paie_moe_prevu.id_contrat_bureau_etude = ".$id_contrat_bureau_etude."  
+                                        and sousrubrique_calendrier_detail.id_sousrubrique = ".$id_sousrubrique."
+                                        and sousrubrique_calendrier_detail.id=id_sousrubrique_detail
+                                        and fact_entete.id<".$id_facture_moe_entete." 
+                                        and fact_entete.validation=4) detail
+                        )) as pourcentage_cumul",false);
+
+       
+
+        $result =  $this->db->from('divers_sousrubrique_calendrier_paie_moe_detail,divers_calendrier_paie_moe_prevu')
+                    
+                    ->where('divers_sousrubrique_calendrier_paie_moe_detail.id = divers_calendrier_paie_moe_prevu.id_sousrubrique_detail')
+                    ->where('id_contrat_bureau_etude',$id_contrat_bureau_etude)
+                   
+                    ->where('id_sousrubrique',$id_sousrubrique)
+                    ->group_by('id_sousrubrique_detail')
+                                       
+                    ->get()
+                    ->result();                              
+
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }*/
 
    
 

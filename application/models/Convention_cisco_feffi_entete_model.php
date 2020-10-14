@@ -801,14 +801,16 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             $this->db ->select("(select passation_marches_be.observation from passation_marches_be, convention_cisco_feffi_entete where passation_marches_be.id_convention_entete= convention_cisco_feffi_entete.id and passation_marches_be.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as observation_moe",FALSE);
 //paiement moe
 
-            $this->db ->select("(select sum(demande_debut_travaux_moe.montant) from demande_debut_travaux_moe, contrat_bureau_etude, convention_cisco_feffi_entete where  demande_debut_travaux_moe.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and demande_debut_travaux_moe.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_debut_moe",FALSE);
+            $this->db ->select("(select sum(facture_moe_detail.montant_periode) from facture_moe_detail,facture_moe_entete, contrat_bureau_etude, convention_cisco_feffi_entete where facture_moe_detail.id_facture_moe_entete= facture_moe_entete.id and facture_moe_entete.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and facture_moe_entete.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_moe",FALSE);
+
+            /*$this->db ->select("(select sum(demande_debut_travaux_moe.montant) from demande_debut_travaux_moe, contrat_bureau_etude, convention_cisco_feffi_entete where  demande_debut_travaux_moe.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and demande_debut_travaux_moe.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_debut_moe",FALSE);
 
             $this->db ->select("(select sum(demande_batiment_moe.montant) from demande_batiment_moe, contrat_bureau_etude, convention_cisco_feffi_entete where demande_batiment_moe.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and demande_batiment_moe.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_batiment_moe",FALSE);
 
             $this->db ->select("(select sum(demande_latrine_moe.montant) from demande_latrine_moe, contrat_bureau_etude, convention_cisco_feffi_entete where demande_latrine_moe.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and demande_latrine_moe.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_latrine_moe",FALSE);
 
 
-            $this->db ->select("(select sum(demande_fin_travaux_moe.montant) from demande_fin_travaux_moe, contrat_bureau_etude, convention_cisco_feffi_entete where  demande_fin_travaux_moe.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and demande_fin_travaux_moe.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_fin_moe",FALSE);
+            $this->db ->select("(select sum(demande_fin_travaux_moe.montant) from demande_fin_travaux_moe, contrat_bureau_etude, convention_cisco_feffi_entete where  demande_fin_travaux_moe.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and demande_fin_travaux_moe.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_fin_moe",FALSE);*/
 
 
 //contrat_moe
@@ -1310,6 +1312,22 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             ";
             return $this->db->query($sql)->result();                  
     }
+    public function getconventionNeeddecaissfeffivalidationbcaf()
+    {
+        $sql=" select 
+                       convention.*
+               from convention_cisco_feffi_entete as convention
+
+               inner join decaiss_fonct_feffi as decaiss on decaiss.id_convention_entete = convention.id
+
+                where 
+                        decaiss.validation= 0
+                            group by convention.id
+             
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }
     public function getconventionneedfacturevalidationBycisc($id_cisco_user)
     {
         $sql=" select 
@@ -1363,7 +1381,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                             detail.ref_financement as ref_financement,
                             detail.id_user as id_user,
                             detail.date_creation as date_creation,
-                            (sum(detail.nbr_demande_d_moe)+sum(detail.nbr_demande_batiment_moe)+sum(detail.nbr_demande_latrine_moe)+sum(detail.nbr_demande_f_moe)++sum(detail.nbr_fact_mpe)) as nbrdemande
+                            (sum(detail.nbr_fact_moe)+sum(detail.nbr_fact_mpe)) as nbrdemande
                        
                        from (
                        
@@ -1380,43 +1398,14 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                                 convention.ref_financement as ref_financement,
                                 convention.id_user as id_user,
                                 convention.date_creation as date_creation,
-                                count(demande_d_moe.id) as nbr_demande_d_moe,
-                                0 as nbr_demande_batiment_moe,
-                                0 as nbr_demande_latrine_moe,
-                                0 as nbr_demande_f_moe,
+                                count(fact_moe.id) as nbr_fact_moe,
                                 0 as nbr_fact_mpe
 
                                 from convention_cisco_feffi_entete as convention
                                 inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
-                                inner join demande_debut_travaux_moe as demande_d_moe on demande_d_moe.id_contrat_bureau_etude = contrat_moe.id
+                                inner join facture_moe_entete as fact_moe on fact_moe.id_contrat_bureau_etude = contrat_moe.id
                                 where 
-                                    demande_d_moe.validation= 0 and convention.id_cisco='".$id_cisco."'
-                                    group by convention.id
-                        )
-                        UNION
-                        (
-                            select 
-                                convention.id as id,
-                                convention.id_feffi as id_feffi,
-                                convention.id_site as id_site,
-                                convention.id_cisco as id_cisco,
-                                convention.type_convention as type_convention,
-                                convention.ref_convention as ref_convention,
-                                convention.objet as objet,
-                                convention.ref_financement as ref_financement,
-                                convention.id_user as id_user,
-                                convention.date_creation as date_creation,
-                                0 as nbr_demande_d_moe,
-                                count(demande_bat_moe.id) as nbr_demande_batiment_moe,
-                                0 as nbr_demande_latrine_moe,
-                                0 as nbr_demande_f_moe,
-                                0 as nbr_fact_mpe
-
-                                from convention_cisco_feffi_entete as convention
-                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
-                                inner join demande_batiment_moe as demande_bat_moe on demande_bat_moe.id_contrat_bureau_etude = contrat_moe.id
-                                where 
-                                    demande_bat_moe.validation= 0 and convention.id_cisco='".$id_cisco."'
+                                    fact_moe.validation= 0 and convention.id_cisco='".$id_cisco."'
                                     group by convention.id
                         )
                         UNION
@@ -1432,62 +1421,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                                 convention.ref_financement as ref_financement,
                                 convention.id_user as id_user,
                                 convention.date_creation as date_creation,
-                                0 as nbr_demande_d_moe,
-                                0 as nbr_demande_batiment_moe,
-                                count(demande_lat_moe.id) as nbr_demande_latrine_moe,
-                                0 as nbr_demande_f_moe,
-                                0 as nbr_fact_mpe
-
-                                from convention_cisco_feffi_entete as convention
-                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
-                                inner join demande_latrine_moe as demande_lat_moe on demande_lat_moe.id_contrat_bureau_etude = contrat_moe.id
-                                where 
-                                    demande_lat_moe.validation= 0 and convention.id_cisco='".$id_cisco."'
-                                    group by convention.id
-                        )
-                        UNION
-                        (
-                            select 
-                                 convention.id as id,
-                                convention.id_feffi as id_feffi,
-                                convention.id_site as id_site,
-                                convention.id_cisco as id_cisco,
-                                convention.type_convention as type_convention,
-                                convention.ref_convention as ref_convention,
-                                convention.objet as objet,
-                                convention.ref_financement as ref_financement,
-                                convention.id_user as id_user,
-                                convention.date_creation as date_creation,
-                                0 as nbr_demande_d_moe,
-                                0 as nbr_demande_batiment_moe,
-                                0 as nbr_demande_latrine_moe,
-                                count(demande_f_moe.id) as nbr_demande_f_moe,
-                                0 as nbr_fact_mpe
-
-                                from convention_cisco_feffi_entete as convention
-                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
-                                inner join demande_fin_travaux_moe as demande_f_moe on demande_f_moe.id_contrat_bureau_etude = contrat_moe.id
-                                where 
-                                    demande_f_moe.validation= 0 and convention.id_cisco='".$id_cisco."'
-                                    group by convention.id
-                        )
-                        UNION
-                        (
-                            select 
-                                 convention.id as id,
-                                convention.id_feffi as id_feffi,
-                                convention.id_site as id_site,
-                                convention.id_cisco as id_cisco,
-                                convention.type_convention as type_convention,
-                                convention.ref_convention as ref_convention,
-                                convention.objet as objet,
-                                convention.ref_financement as ref_financement,
-                                convention.id_user as id_user,
-                                convention.date_creation as date_creation,
-                                0 as nbr_demande_d_moe,
-                                0 as nbr_demande_batiment_moe,
-                                0 as nbr_demande_latrine_moe,
-                                0 as nbr_demande_f_moe,
+                                0 as nbr_fact_moe,
                                 count(fact_mpe.id) as nbr_fact_mpe
 
                                 from convention_cisco_feffi_entete as convention
@@ -1511,10 +1445,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                                 convention.ref_financement as ref_financement,
                                 convention.id_user as id_user,
                                 convention.date_creation as date_creation,
-                                0 as nbr_demande_d_moe,
-                                0 as nbr_demande_batiment_moe,
-                                0 as nbr_demande_latrine_moe,
-                                0 as nbr_demande_f_moe,
+                                0 as nbr_fact_moe,
                                 0 as nbr_fact_mpe
 
                                 from convention_cisco_feffi_entete as convention
@@ -1560,7 +1491,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                             detail.ref_financement as ref_financement,
                             detail.id_user as id_user,
                             detail.date_creation as date_creation,
-                            (sum(detail.nbr_demande_d_moe)+sum(detail.nbr_demande_batiment_moe)+sum(detail.nbr_demande_latrine_moe)+sum(detail.nbr_demande_f_moe)++sum(detail.nbr_fact_mpe)) as nbrdemande
+                            (sum(detail.nbr_fact_moe)+sum(detail.nbr_fact_mpe)) as nbrdemande
                        
                        from (
                        
@@ -1577,43 +1508,14 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                                 convention.ref_financement as ref_financement,
                                 convention.id_user as id_user,
                                 convention.date_creation as date_creation,
-                                count(demande_d_moe.id) as nbr_demande_d_moe,
-                                0 as nbr_demande_batiment_moe,
-                                0 as nbr_demande_latrine_moe,
-                                0 as nbr_demande_f_moe,
+                                count(fact_moe.id) as nbr_fact_moe,
                                 0 as nbr_fact_mpe
 
                                 from convention_cisco_feffi_entete as convention
                                 inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
-                                inner join demande_debut_travaux_moe as demande_d_moe on demande_d_moe.id_contrat_bureau_etude = contrat_moe.id
+                                inner join facture_moe_entete as fact_moe on fact_moe.id_contrat_bureau_etude = contrat_moe.id
                                 where 
-                                    demande_d_moe.validation= 0
-                                    group by convention.id
-                        )
-                        UNION
-                        (
-                            select 
-                                convention.id as id,
-                                convention.id_feffi as id_feffi,
-                                convention.id_site as id_site,
-                                convention.id_cisco as id_cisco,
-                                convention.type_convention as type_convention,
-                                convention.ref_convention as ref_convention,
-                                convention.objet as objet,
-                                convention.ref_financement as ref_financement,
-                                convention.id_user as id_user,
-                                convention.date_creation as date_creation,
-                                0 as nbr_demande_d_moe,
-                                count(demande_bat_moe.id) as nbr_demande_batiment_moe,
-                                0 as nbr_demande_latrine_moe,
-                                0 as nbr_demande_f_moe,
-                                0 as nbr_fact_mpe
-
-                                from convention_cisco_feffi_entete as convention
-                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
-                                inner join demande_batiment_moe as demande_bat_moe on demande_bat_moe.id_contrat_bureau_etude = contrat_moe.id
-                                where 
-                                    demande_bat_moe.validation= 0
+                                    fact_moe.validation= 0
                                     group by convention.id
                         )
                         UNION
@@ -1629,62 +1531,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                                 convention.ref_financement as ref_financement,
                                 convention.id_user as id_user,
                                 convention.date_creation as date_creation,
-                                0 as nbr_demande_d_moe,
-                                0 as nbr_demande_batiment_moe,
-                                count(demande_lat_moe.id) as nbr_demande_latrine_moe,
-                                0 as nbr_demande_f_moe,
-                                0 as nbr_fact_mpe
-
-                                from convention_cisco_feffi_entete as convention
-                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
-                                inner join demande_latrine_moe as demande_lat_moe on demande_lat_moe.id_contrat_bureau_etude = contrat_moe.id
-                                where 
-                                    demande_lat_moe.validation= 0
-                                    group by convention.id
-                        )
-                        UNION
-                        (
-                            select 
-                                 convention.id as id,
-                                convention.id_feffi as id_feffi,
-                                convention.id_site as id_site,
-                                convention.id_cisco as id_cisco,
-                                convention.type_convention as type_convention,
-                                convention.ref_convention as ref_convention,
-                                convention.objet as objet,
-                                convention.ref_financement as ref_financement,
-                                convention.id_user as id_user,
-                                convention.date_creation as date_creation,
-                                0 as nbr_demande_d_moe,
-                                0 as nbr_demande_batiment_moe,
-                                0 as nbr_demande_latrine_moe,
-                                count(demande_f_moe.id) as nbr_demande_f_moe,
-                                0 as nbr_fact_mpe
-
-                                from convention_cisco_feffi_entete as convention
-                                inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
-                                inner join demande_fin_travaux_moe as demande_f_moe on demande_f_moe.id_contrat_bureau_etude = contrat_moe.id
-                                where 
-                                    demande_f_moe.validation= 0
-                                    group by convention.id
-                        )
-                        UNION
-                        (
-                            select 
-                                 convention.id as id,
-                                convention.id_feffi as id_feffi,
-                                convention.id_site as id_site,
-                                convention.id_cisco as id_cisco,
-                                convention.type_convention as type_convention,
-                                convention.ref_convention as ref_convention,
-                                convention.objet as objet,
-                                convention.ref_financement as ref_financement,
-                                convention.id_user as id_user,
-                                convention.date_creation as date_creation,
-                                0 as nbr_demande_d_moe,
-                                0 as nbr_demande_batiment_moe,
-                                0 as nbr_demande_latrine_moe,
-                                0 as nbr_demande_f_moe,
+                                0 as nbr_fact_moe,
                                 count(fact_mpe.id) as nbr_fact_mpe
 
                                 from convention_cisco_feffi_entete as convention
@@ -1708,10 +1555,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                                 convention.ref_financement as ref_financement,
                                 convention.id_user as id_user,
                                 convention.date_creation as date_creation,
-                                0 as nbr_demande_d_moe,
-                                0 as nbr_demande_batiment_moe,
-                                0 as nbr_demande_latrine_moe,
-                                0 as nbr_demande_f_moe,
+                                0 as nbr_fact_moe,
                                 0 as nbr_fact_mpe
 
                                 from convention_cisco_feffi_entete as convention
@@ -1738,6 +1582,22 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
                 where 
                         demande.validation= 0 and convention.id_cisco='".$id_cisco_user."'
+                            group by convention.id
+             
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }
+    public function getconventionNeeddecaissfeffivalidationbcafwithcisco($id_cisco_user)
+    {
+        $sql=" select 
+                       convention.*
+               from convention_cisco_feffi_entete as convention
+
+               inner join decaiss_fonct_feffi as decaiss on decaiss.id_convention_entete = convention.id
+
+                where 
+                        decaiss.validation= 0 and convention.id_cisco='".$id_cisco_user."'
                             group by convention.id
              
 
@@ -1805,22 +1665,19 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         $sql=" select 
                        convention.*,
                        count(fact_mpe.id),
-                       count(debut_moe.id)
+                       count(fact_moe_entete.id)
                from convention_cisco_feffi_entete as convention
 
                inner join contrat_prestataire as contrat_p on contrat_p.id_convention_entete = convention.id
                inner join contrat_bureau_etude as contrat_b on contrat_b.id_convention_entete = convention.id
                left join attachement_travaux as atta_mpe on atta_mpe.id_contrat_prestataire = contrat_p.id
                left join facture_mpe as fact_mpe on fact_mpe.id_attachement_travaux = atta_mpe.id
-               left join demande_debut_travaux_moe as debut_moe on debut_moe.id_contrat_bureau_etude = contrat_b.id
-               left join demande_batiment_moe as batiment_moe on batiment_moe.id_contrat_bureau_etude = contrat_b.id
-               left join demande_latrine_moe as latrine_moe on latrine_moe.id_contrat_bureau_etude = contrat_b.id
-               left join demande_fin_travaux_moe as fin_moe on fin_moe.id_contrat_bureau_etude = contrat_b.id
+               left join facture_moe_entete as fact_moe_entete on fact_moe_entete.id_contrat_bureau_etude = contrat_b.id
 
                         where 
-                            fact_mpe.validation= 1 OR debut_moe.validation=1 OR batiment_moe.validation=1 OR latrine_moe.validation=1 OR fin_moe.validation=1
+                            fact_mpe.validation= 1 OR fact_moe_entete.validation=1
                             group by convention.id
-                            having (count(fact_mpe.id)>0 OR count(debut_moe.id)>0 OR count(batiment_moe.id)>0 OR count(latrine_moe.id)>0 OR count(fin_moe.id)>0)
+                            having (count(fact_mpe.id)>0 OR count(fact_moe_entete.id)>0)
              
 
             ";

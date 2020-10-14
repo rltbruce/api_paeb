@@ -38,6 +38,24 @@ class Decaiss_fonct_feffi extends REST_Controller {
                 }
             }
         }
+        elseif ($menu=='getdecaiss_valideByconvention') 
+        {   $data = array();
+            $tmp = $this->Decaiss_fonct_feffiManager->findvalideByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $convention_entete = array();
+                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['montant'] = $value->montant;
+                    $data[$key]['date_decaissement'] = $value->date_decaissement;
+                    $data[$key]['observation'] = $value->observation;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['convention_entete'] = $convention_entete;
+                }
+            }
+        }
         elseif ($menu=='getdecaiss_invalideByconvention') 
         {   $data = array();
             $tmp = $this->Decaiss_fonct_feffiManager->findinvalideByconvention($id_convention_entete);

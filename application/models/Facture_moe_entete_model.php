@@ -61,10 +61,57 @@ class Facture_moe_entete_model extends CI_Model {
             return $q->row();
         }
     }
+    public function getfacturedisponibleBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_contrat_bureau_etude',$id_contrat_bureau_etude)
+                        ->where('validation >',0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function getfacture_moe_enteteBycontrat($id_contrat_bureau_etude) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where('id_contrat_bureau_etude',$id_contrat_bureau_etude)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getfacture_moe_enteteinvalideBycontrat($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_contrat_bureau_etude',$id_contrat_bureau_etude)
+                        ->where('validation',0)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+
+    public function getfactureemidpfiBycontrat($id_contrat_bureau_etude) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)                        
+                        ->where("validation IN(1,2,3)")
                         ->order_by('id')
                         ->get()
                         ->result();

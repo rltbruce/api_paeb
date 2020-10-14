@@ -207,10 +207,10 @@ class Excel_bdd_construction_detail extends REST_Controller
 
         //SUIVI FINANCIER FEFFI -PRESTATAIRE
 
-                $data[$key]['montant_decaiss_feffi_pre']= $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe;
+                $data[$key]['montant_decaiss_feffi_pre']= $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe;
 
                 if ($value->soustotaldepense) {
-                    $data[$key]['pourcentage_decaiss_feffi_pre']= (($value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe)*100)/$value->soustotaldepense;
+                    $data[$key]['pourcentage_decaiss_feffi_pre']= (($value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe)*100)/$value->soustotaldepense;
                 }
                 
 
@@ -225,9 +225,9 @@ class Excel_bdd_construction_detail extends REST_Controller
                 
 
 
-                $data[$key]['total_convention_decaiss']= $value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe;
+                $data[$key]['total_convention_decaiss']= $value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe;
 
-                $data[$key]['reliqua_fond']= $value->montant_convention - ($value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe);
+                $data[$key]['reliqua_fond']= $value->montant_convention - ($value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe);
 
         //Suivi Passation des marchés PR
 
@@ -461,10 +461,10 @@ class Excel_bdd_construction_detail extends REST_Controller
 
                 $data[$key]['date_livraison_mg']= $value->date_livraison_mg;
 
-                $data[$key]['cumule_paiement_be']= $value->montant_paiement_debut_moe +$value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe;
+                $data[$key]['cumule_paiement_be']= $value->montant_paiement_moe;
 
                 if ($value->montant_contrat_moe) {
-                    $data[$key]['pourcentage_paiement_be']= (($value->montant_paiement_debut_moe +$value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe)*100)/$value->montant_contrat_moe;
+                    $data[$key]['pourcentage_paiement_be']= (($value->montant_paiement_moe)*100)/$value->montant_contrat_moe;
                 }
                 
 
@@ -3353,12 +3353,12 @@ class Excel_bdd_construction_detail extends REST_Controller
             {
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+1).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AB".$ligne)->getAlignment()->setWrapText(true);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+1).$ligne, $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+1).$ligne, $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe);
 
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+2).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AB".$ligne)->getAlignment()->setWrapText(true);
                 if ($value->soustotaldepense) {
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+2).$ligne, (($value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe)*100)/$value->soustotaldepense);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+2).$ligne, (($value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe)*100)/$value->soustotaldepense);
                 }
                 
 
@@ -3400,7 +3400,7 @@ class Excel_bdd_construction_detail extends REST_Controller
 
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+1).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AG".$ligne)->getAlignment()->setWrapText(true);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+1).$ligne, $value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+1).$ligne, $value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe);
 
                 $colonne_value = $colonne_value + 1;
             }
@@ -3409,7 +3409,7 @@ class Excel_bdd_construction_detail extends REST_Controller
             {
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+1).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AG".$ligne)->getAlignment()->setWrapText(true);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+1).$ligne, $value->montant_convention - ($value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_debut_moe + $value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe));
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+1).$ligne, $value->montant_convention - ($value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe));
 
                 $colonne_value = $colonne_value + 1;
             }
@@ -3914,12 +3914,12 @@ class Excel_bdd_construction_detail extends REST_Controller
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+1).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
                    /* $this->db ->select("(select sum(paiement_batiment_moe.montant_paiement) from paiement_batiment_moe,demande_batiment_moe, contrat_bureau_etude, convention_cisco_feffi_entete where paiement_batiment_moe.id_demande_batiment_moe=demande_batiment_moe.id and demande_batiment_moe.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and paiement_batiment_moe.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_batiment_moe",FALSE);*/
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+1).$ligne, $value->montant_paiement_debut_moe +$value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+1).$ligne, $value->montant_paiement_moe);
 
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+2).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
                 if ($value->montant_contrat_moe) {
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+2).$ligne, (($value->montant_paiement_debut_moe +$value->montant_paiement_batiment_moe + $value->montant_paiement_latrine_moe + $value->montant_paiement_fin_moe)*100)/$value->montant_contrat_moe);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+2).$ligne, (($value->montant_paiement_moe)*100)/$value->montant_contrat_moe);
                 }
                 $colonne_value = $colonne_value + 2;
 

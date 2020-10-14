@@ -94,6 +94,23 @@ class Avance_demarrage_model extends CI_Model {
             return null;
         }                 
     }
+    public function getavancevalideBycontrat($id_contrat_prestataire) 
+    {               
+        $result =  $this->db->select('avance_demarrage.*, contrat_prestataire.cout_batiment as cout_batiment, contrat_prestataire.cout_latrine as cout_latrine, contrat_prestataire.cout_mobilier as cout_mobilier')
+                        ->from($this->table)
+                        ->join('contrat_prestataire','contrat_prestataire.id=avance_demarrage.id_contrat_prestataire')
+                        ->where("avance_demarrage.id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("avance_demarrage.validation", 4)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
         
 
 }

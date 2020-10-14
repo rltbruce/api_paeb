@@ -278,14 +278,30 @@ class Contrat_be extends REST_Controller {
                     $status_calendrier = false;
                     $tmp_calendrier = $this->Divers_sousrubrique_calendrier_paie_moe_detailManager->findAll();                       
                     foreach ($tmp_calendrier as $key => $value)
-                    {      
-                        $data_calendrier_paie = array(
+                    {   
+
+                    $tmp_calendrier_prevu = $this->Divers_calendrier_paie_moe_prevuManager->finddetailcontrat($id,$value->id); 
+                    if (count($tmp_calendrier_prevu)>0) 
+                    {
+                          $data_calendrier_paie = array(
                                         'id_contrat_bureau_etude' => $id,
                                         'id_sousrubrique_detail' => $value->id,
                                         'montant_prevu'    => ($this->post('montant_contrat')*$value->pourcentage)/100
                                 );
 
                         $dataId_calendrier[$key] = $this->Divers_calendrier_paie_moe_prevuManager->update($id,$value->id,$data_calendrier_paie);
+                    }
+                    else
+                    {
+                        $data_calendrier_paie = array(
+                                        'id_contrat_bureau_etude' => $id,
+                                        'id_sousrubrique_detail' => $value->id,
+                                        'montant_prevu'    => ($this->post('montant_contrat')*$value->pourcentage)/100
+                                );
+
+                        $dataId_calendrier[$key] = $this->Divers_calendrier_paie_moe_prevuManager->add($data_calendrier_paie);
+                    }  
+                        
                             
                             
                     }

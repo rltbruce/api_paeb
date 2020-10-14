@@ -80,11 +80,11 @@ class Decaiss_fonct_feffi_model extends CI_Model {
         }                 
     }
 
-    public function findvalideByconvention($id_convention_entete) {               
+    public function findinvalideByconvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
-                        ->where("validation", 1)
+                        ->where("validation", 0)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -96,11 +96,11 @@ class Decaiss_fonct_feffi_model extends CI_Model {
         }                 
     }
 
-    public function findinvalideByconvention($id_convention_entete) {               
+    public function findvalideByconvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_entete", $id_convention_entete)
-                        ->where("validation", 0)
+                        ->where("validation", 1)
                         ->order_by('id')
                         ->get()
                         ->result();

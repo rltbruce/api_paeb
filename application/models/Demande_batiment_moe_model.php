@@ -228,67 +228,16 @@ class Demande_batiment_moe_model extends CI_Model {
     public function avancement_financiereBycontrat($id_contrat)
     {
         $sql=" select 
-                       (sum(detail.montant_debu) + sum( detail.montant_bat) + sum(detail.montant_lat)
-                        + sum( detail.montant_fin)) as montant_facture_total
-               from (
-               
-                (
-                    select 
                         contrat_moe.id as id,
-                        sum(demande_debu.montant) as montant_debu,
-                        0 as montant_bat,
-                        0 as montant_lat,
-                        0 as montant_fin
+                        sum(fact_detail.montant_periode) as montant_facture_total
 
-                        from demande_debut_travaux_moe as demande_debu
-                        inner join contrat_bureau_etude as contrat_moe on contrat_moe.id=demande_debu.id_contrat_bureau_etude
-                        where 
-                            demande_debu.validation= 4 and contrat_moe.id= '".$id_contrat."'
-                )
-                UNION
-                (
-                    select 
-                        contrat_moe.id as id,
-                        0 as montant_debu,                        
-                        sum(demande_bat.montant) as montant_bat,
-                        0 as montant_lat,
-                        0 as montant_fin
-
-                        from demande_batiment_moe as demande_bat
-                        inner join contrat_bureau_etude as contrat_moe on contrat_moe.id=demande_bat.id_contrat_bureau_etude
-                        where 
-                            demande_bat.validation= 4 and contrat_moe.id= '".$id_contrat."'
-                )
-                UNION
-                (
-                    select 
-                        contrat_moe.id as id,
-                        0 as montant_debu,                        
-                        0 as montant_bat,                        
-                        sum(demande_lat.montant) as montant_lat,
-                        0 as montant_fin
-
-                        from demande_latrine_moe as demande_lat
-                        inner join contrat_bureau_etude as contrat_moe on contrat_moe.id=demande_lat.id_contrat_bureau_etude
-                        where 
-                            demande_lat.validation= 4 and contrat_moe.id= '".$id_contrat."'
-                )
-                UNION
-                (
-                    select 
-                        contrat_moe.id as id,
-                        0 as montant_debu,                        
-                        0 as montant_bat,                        
-                        0 as montant_lat,                        
-                        sum(demande_fin.montant) as montant_fin
-
-                        from demande_fin_travaux_moe as demande_fin
-                        inner join contrat_bureau_etude as contrat_moe on contrat_moe.id=demande_fin.id_contrat_bureau_etude
-                        where 
-                            demande_fin.validation= 4 and contrat_moe.id= '".$id_contrat."'
-                )
-
-                )detail
+                        from facture_moe_detail as fact_detail
+                        inner join divers_calendrier_paie_moe_prevu as calendrier_paie_moe_prevu on calendrier_paie_moe_prevu.id = fact_detail.id_calendrier_paie_moe_prevu
+                        inner join divers_sousrubrique_calendrier_paie_moe_detail as sousrubrique_calendrier_detail on sousrubrique_calendrier_detail.id = calendrier_paie_moe_prevu.id_sousrubrique_detail
+     
+                        inner join facture_moe_entete as fact_entete on fact_entete.id=fact_detail.id_facture_moe_entete
+                        inner join contrat_bureau_etude as contrat_moe on contrat_moe.id=fact_entete.id_contrat_bureau_etude
+                        where fact_entete.validation= 4 and contrat_moe.id= '".$id_contrat."'
 
             ";
             return $this->db->query($sql)->result();                  
