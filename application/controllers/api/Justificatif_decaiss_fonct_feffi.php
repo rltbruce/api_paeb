@@ -5,117 +5,63 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class District extends REST_Controller {
+class Justificatif_decaiss_fonct_feffi extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('district_model', 'DistrictManager');
-        $this->load->model('region_model', 'RegionManager');
+        $this->load->model('justificatif_decaiss_fonct_feffi_model', 'Justificatif_decaiss_fonct_feffiManager');
+       $this->load->model('decaiss_fonct_feffi_model', 'Decaiss_fonct_feffiManager');
     }
 
     public function index_get() 
-    {   
-        set_time_limit(0);
-        ini_set ('memory_limit', '40000M');
+    {
         $id = $this->get('id');
-        $id_region = $this->get('id_region');
-        $menu = $this->get('menu');
-        $now = date('yy');
-        $datearray= $date_t     = explode('-', $now);
+        $id_decaiss_fonct_feffi = $this->get('id_decaiss_fonct_feffi');
             
-        if ($menu=="reportingvuecarte2") 
-        {   
-            $tmp = $this->DistrictManager->findByregion($id_region);
+        if ($id_decaiss_fonct_feffi)
+        {
+            $tmp = $this->Justificatif_decaiss_fonct_feffiManager->findAllBytransfert($id_decaiss_fonct_feffi);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    //$reporting = array();
-                    //$reporting = $this->DistrictManager->findreporting($now, $value->id);
-                    $coordonnees=null;                
+                    $decaiss_fonct_feffi= array();
+                    $decaiss_fonct_feffi = $this->Decaiss_fonct_feffiManager->findById($value->id_decaiss_fonct_feffi);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['code'] = $now;
-                    $data[$key]['nom'] = $value->nom;
-                    if (!is_null($value->coordonnees) && $value->coordonnees!='')
-                    {
-                        $coordonnees=unserialize($value->coordonnees);
-                    }
-                    $data[$key]['coordonnees'] = $coordonnees;
-                    
-                    //$data[$key]['reporting'] =$reporting;
-                    
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['fichier'] = $value->fichier;
+                    //$data[$key]['date'] = $value->date;
+                    $data[$key]['decaiss_fonct_feffi'] = $decaiss_fonct_feffi;
                 }
-
-               // $data = $tmp ;
-            }
-            else 
-                $data = array();
-        }
-        elseif ($menu=="reportingvuecarte") 
-        {   
-            $tmp = $this->DistrictManager->findAll();
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $coordonnees=null;                
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['code'] = $value->code;
-                    $data[$key]['nom'] = $value->nom;
-                    if (!is_null($value->coordonnees) && $value->coordonnees!='')
-                    {
-                        $coordonnees=unserialize($value->coordonnees);
-                    }
-                    $data[$key]['coordonnees'] = unserialize($value->coordonnees);
-
-                    
-                    
-                }
-
-               // $data = $tmp ;
-            }
-            else 
-                $data = array();
-        }
-        elseif ($id_region) 
-        {   $data = array();
-            $tmp = $this->DistrictManager->findByregion($id_region);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $region = array();
-                    $region = $this->RegionManager->findById($value->id_region);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['code'] = $value->code;
-                    $data[$key]['nom'] = $value->nom;
-                    $data[$key]['region'] = $region;
-                }
-            }
+            } 
+                else
+                    $data = array();
         }
         elseif ($id)
         {
             $data = array();
-            $district = $this->DistrictManager->findById($id);
-            $region = $this->RegionManager->findById($district->id_region);
-            $data['id'] = $district->id;
-            $data['code'] = $district->code;
-            $data['nom'] = $district->nom;
-            $data['region'] = $region;
+            $justificatif_decaiss_fonct_feffi = $this->Justificatif_decaiss_fonct_feffiManager->findById($id);
+            $decaiss_fonct_feffi = $this->Decaiss_fonct_feffiManager->findById($justificatif_decaiss_fonct_feffi->id_decaiss_fonct_feffi);
+            $data['id'] = $justificatif_decaiss_fonct_feffi->id;
+            $data['description'] = $justificatif_decaiss_fonct_feffi->description;
+            $data['fichier'] = $justificatif_decaiss_fonct_feffi->fichier;
+            //$data['date'] = $justificatif_decaiss_fonct_feffi->date;
+            $data['decaiss_fonct_feffi'] = $decaiss_fonct_feffi;
         } 
         else 
         {
-            $menu = $this->DistrictManager->findAll();
+            $menu = $this->Justificatif_decaiss_fonct_feffiManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $region = array();
-                    $region = $this->RegionManager->findById($value->id_region);
+                    $decaiss_fonct_feffi= array();
+                    $decaiss_fonct_feffi = $this->Decaiss_fonct_feffiManager->findById($value->id_decaiss_fonct_feffi);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['code'] = $value->code;
-                    $data[$key]['nom'] = $value->nom;
-                    $data[$key]['region'] = $region;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['fichier'] = $value->fichier;
+                    //$data[$key]['date'] = $value->date;
+                    $data[$key]['decaiss_fonct_feffi'] = $decaiss_fonct_feffi;
                 }
             } 
                 else
@@ -144,9 +90,9 @@ class District extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'code' => $this->post('code'),
-                    'nom' => $this->post('nom'),
-                    'id_region' => $this->post('id_region')
+                    'description' => $this->post('description'),
+                    'fichier' => $this->post('fichier'),
+                    'id_decaiss_fonct_feffi' => $this->post('id_decaiss_fonct_feffi')
                 );
                 if (!$data) {
                     $this->response([
@@ -155,7 +101,7 @@ class District extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->DistrictManager->add($data);
+                $dataId = $this->Justificatif_decaiss_fonct_feffiManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -171,9 +117,9 @@ class District extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'code' => $this->post('code'),
-                    'nom' => $this->post('nom'),
-                    'id_region' => $this->post('id_region')
+                    'description' => $this->post('description'),
+                    'fichier' => $this->post('fichier'),
+                    'id_decaiss_fonct_feffi' => $this->post('id_decaiss_fonct_feffi')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -182,7 +128,7 @@ class District extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->DistrictManager->update($id, $data);
+                $update = $this->Justificatif_decaiss_fonct_feffiManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -204,7 +150,7 @@ class District extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->DistrictManager->delete($id);         
+            $delete = $this->Justificatif_decaiss_fonct_feffiManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

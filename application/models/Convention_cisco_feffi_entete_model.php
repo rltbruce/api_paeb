@@ -1730,4 +1730,92 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             return $this->db->query($sql)->result();                  
     }
 
+    public function findreporting($now, $id_district)
+    {               
+        $this->db->select("convention_cisco_feffi_entete.id as id_conv, convention_cisco_feffi_entete.ref_convention as ref_convention");
+        
+            $this->db ->select("(
+                select max(avanc_bat.pourcentage) from avancement_physi_batiment as avanc_bat
+                    inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_bat.id_contrat_prestataire
+            where cont_prest.id_convention_entete = id_conv ) as avancement_batiment",FALSE);
+        
+        $this->db ->select("(
+                select max(avanc_lat.pourcentage) from avancement_physi_latrine as avanc_lat
+                    inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_lat.id_contrat_prestataire
+            where cont_prest.id_convention_entete = id_conv ) as avancement_latrine",FALSE);
+
+         $this->db ->select("(
+                select max(avanc_mob.pourcentage) from avancement_physi_mobilier as avanc_mob
+                    inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_mob.id_contrat_prestataire
+            where cont_prest.id_convention_entete = id_conv ) as avancement_mobilier",FALSE);        
+
+       /* $this->db ->select("(
+                select (sum(detail.avancement_mob) + sum(detail.avancement_lat) + sum(detail.avancement_bat))/3  
+
+                    from (
+               
+                (
+                    select 
+                         max(avanc_bat.pourcentage) as avancement_bat,
+                         0 as avancement_lat,
+                         0 as avancement_mob
+
+                        from avancement_physi_batiment as avanc_bat
+
+                            inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_bat.id_contrat_prestataire
+
+                        where cont_prest.id_convention_entete = id_conv
+                )
+                UNION
+                (
+                    select 
+                        0 as avancement_bat,
+                        max(avanc_lat.pourcentage) as avancement_lat,
+                        0 as avancement_mob
+
+                        from avancement_physi_latrine as avanc_lat
+
+                            inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_lat.id_contrat_prestataire
+
+                        where  cont_prest.id_convention_entete = id_conv
+                )
+                UNION
+                (
+                    select  
+                        0 as avancement_bat,
+                        0 as avancement_lat,
+                        max(avanc_mob.pourcentage) as avancement_mob
+
+                        from avancement_physi_mobilier as avanc_mob
+
+                            inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_mob.id_contrat_prestataire
+
+                        where cont_prest.id_convention_entete = id_conv
+                ) 
+
+                )detail ) as avancement_tot",FALSE); */
+        $result =  $this->db->from('convention_cisco_feffi_entete,convention_cisco_feffi_detail,cisco')
+                    
+                    ->where('convention_cisco_feffi_entete.id_cisco=cisco.id')
+                    ->where('cisco.id_district',$id_district)
+                    ->where('convention_cisco_feffi_detail.id_convention_entete=convention_cisco_feffi_entete.id')
+                    ->where("DATE_FORMAT(convention_cisco_feffi_detail.date_signature,'%Y')",$now)
+                    ->where('convention_cisco_feffi_entete.validation',2)
+                    ->group_by('id_conv')
+                                       
+                    ->get()
+                    ->result();
+
+
+        if($result)
+        {   
+            return $result;
+        }
+        else
+        {
+            return $data=array();
+        }               
+    
+    } 
+
 }

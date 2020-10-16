@@ -56,7 +56,29 @@ class Convention_cisco_feffi_entete extends REST_Controller {
         $annee = $this->get('annee');
         $id_utilisateur = $this->get('id_utilisateur');
         $id_cisco_user = $this->get('id_cisco_user');
-        if ($menu=='getdonneeexporter') //mande       
+        $id_district = $this->get('id_district');
+
+        $now = date('yy');
+        if ($menu=='reportingvuecarte') //mande       
+         {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->findreporting($now, $id_district);
+            if ($tmp) 
+            {   
+                foreach ($tmp as $key => $value) 
+                {
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['avancement_batiment'] = $value->avancement_batiment;
+                    $data[$key]['avancement_latrine'] = $value->avancement_latrine;                   
+                    $data[$key]['avancement_mobilier'] = $value->avancement_mobilier;                  
+                    $data[$key]['avancement_tot'] = $value->avancement_mobilier+$value->avancement_latrine+$value->avancement_batiment;
+                }
+                //$data =$tmp;
+            } 
+            else
+                    $data = array();
+        }
+        elseif ($menu=='getdonneeexporter') //mande       
          {
                     
             $tmp = $this->Convention_cisco_feffi_enteteManager->finddonneeexporter($this->generer_requete($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot));

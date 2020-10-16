@@ -105,7 +105,7 @@ class District_model extends CI_Model {
             'coordonnees'     =>      $district['coordonnees']                       
         );
     }
-    public function findreporting($now, $id_district)
+    public function findreportingtsmande($now, $id_district)
     {               
         $sql=" select 
                        detail.id_conv as id_conv,
@@ -130,11 +130,11 @@ class District_model extends CI_Model {
 
                         from avancement_physi_batiment as avanc_bat
 
-                            inner join contrat_prestataire as cont_prest on cont_prest.id=avanc_bat.id_contrat_prestataire
-                            inner join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
-                            inner join convention_cisco_feffi_detail as conv_d on conv_d.id_convention_entete = conv.id
-                            inner join cisco as cis on cis.id = conv.id_cisco
-                            inner join district as dist on dist.id = cis.id_district
+                            left join contrat_prestataire as cont_prest on cont_prest.id=avanc_bat.id_contrat_prestataire
+                            left join convention_cisco_feffi_entete as conv on conv.id = cont_prest.id_convention_entete
+                            left join convention_cisco_feffi_detail as conv_d on conv_d.id_convention_entete = conv.id
+                            left join cisco as cis on cis.id = conv.id_cisco
+                            left join district as dist on dist.id = cis.id_district
 
                         where 
                             conv.validation= 2 and DATE_FORMAT(conv_d.date_signature,'%Y')= '".$now."' and dist.id= '".$id_district."'
@@ -198,6 +198,7 @@ class District_model extends CI_Model {
 
             ";
             return $this->db->query($sql)->result();             
-    } 
+    }
+
 
 }
