@@ -21,7 +21,17 @@ class transfert_reliquat extends REST_Controller {
         $id_cisco = $this->get('id_cisco');
         $id_convention_entete = $this->get('id_convention_entete');
 
-        if ($menu=="gettransfertByconvention")
+        if ($menu=="getmontantatransfererByconvention")
+        {
+            $tmp = $this->Transfert_reliquatManager->getmontantatransfererByconvention($id_convention_entete);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="gettransfertByconvention")
         {
             $tmp = $this->Transfert_reliquatManager->findtransfertByconvention($id_convention_entete);
             if ($tmp) 

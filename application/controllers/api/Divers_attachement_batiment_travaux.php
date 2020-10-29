@@ -80,25 +80,31 @@ class Divers_attachement_batiment_travaux extends REST_Controller {
             $tmp = $this->Divers_attachement_batiment_travauxManager->finddivers_attachementByDemande($id_contrat_prestataire,$id_demande_batiment_mpe,$id_attachement_batiment);
             if ($tmp) 
             {   
-                $data=$tmp;
-              /* foreach ($tmp as $key => $value)
-                {   
-
-                    $divers_attachement_batiment_prevu = $this->Divers_attachement_batiment_prevuManager->findByIdlibelle($value->id_attachement_batiment_prevu);                 
+                //$data=$tmp;
+               foreach ($tmp as $key => $value)
+                {                 
                     $data[$key]['id'] = $value->id;                  
-                    $data[$key]['id_demande_batiment_mpe'] = $value->id_demande_batiment_mpe;                  
-                    //$data[$key]['montant_prevu'] = $value->montant_prevu;
+                    $data[$key]['libelle'] = $value->libelle;                  
+                    $data[$key]['numero'] = $value->numero;                 
+                    $data[$key]['id_attachement_batiment_detail'] = $value->id_attache_batiment_detail;                
+                    $data[$key]['id_attachement_batiment_prevu'] = $value->id_attachement_batiment_prevu;                
+                    $data[$key]['montant_prevu'] = $value->montant_prevu;                
+                    $data[$key]['prix_unitaire'] = $value->prix_unitaire;                
+                    $data[$key]['quantite_prevu'] = $value->quantite_prevu;               
+                    $data[$key]['unite'] = $value->unite;
 
                     $data[$key]['quantite_periode'] = $value->quantite_periode;                  
                     $data[$key]['quantite_anterieur'] = $value->quantite_anterieur;                  
-                    $data[$key]['quantite_cumul'] = $value->quantite_cumul;                  
+                    $data[$key]['quantite_cumul'] = $value->quantite_periode + $value->quantite_anterieur; 
+
                     $data[$key]['montant_periode'] = $value->montant_periode;                  
                     $data[$key]['montant_anterieur'] = $value->montant_anterieur;                  
-                    $data[$key]['montant_cumul'] = $value->montant_cumul;                 
-                    $data[$key]['pourcentage'] = $value->pourcentage;                 
-                    $data[$key]['attachement_batiment_prevu'] = $divers_attachement_batiment_prevu;
-                }*/
-               // $data=$tmp;
+                    $data[$key]['montant_cumul'] = $value->montant_periode + $value->montant_anterieur;
+
+                    $data[$key]['pourcentage_periode'] = ($value->montant_periode * 100)/$value->montant_prevu;
+                    $data[$key]['pourcentage_anterieur'] = ($value->montant_anterieur * 100)/$value->montant_prevu;
+                    $data[$key]['pourcentage_cumul'] = (($value->montant_periode + $value->montant_anterieur)*100)/$value->montant_prevu; 
+                }
             } 
                 else
                     $data = array();

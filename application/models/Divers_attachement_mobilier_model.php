@@ -169,9 +169,7 @@ class Divers_attachement_mobilier_model extends CI_Model {
                         inner join divers_attachement_mobilier as attache_mobilier on attache_mobilier.id = attache_mobilier_detail.id_attachement_mobilier 
                         inner join attachement_travaux as atta_tra on atta_tra.id=demande.id_attachement_travaux
                         inner join facture_mpe as fact_mpe on fact_mpe.id_attachement_travaux=atta_tra.id
-                        where attache_mobilier_prevu.id_contrat_prestataire = ".$id_contrat_prestataire." and fact_mpe.validation=4 and demande.id= (select max(dem_mobilier.id) from demande_mobilier_presta as dem_mobilier 
-                            inner join attachement_travaux as atta_tra on atta_tra.id=dem_mobilier.id_attachement_travaux
-                            inner join facture_mpe as fact_mpe on fact_mpe.id_attachement_travaux=atta_tra.id where attache_mobilier_prevu.id_contrat_prestataire = ".$id_contrat_prestataire." and fact_mpe.validation=4 and dem_mobilier.id<".$id_demande_mobilier.") 
+                        where attache_mobilier_prevu.id_contrat_prestataire = ".$id_contrat_prestataire." and fact_mpe.validation=4 and demande.id<".$id_demande_mobilier." 
             
                         group by attache_mobilier.id
                 UNION

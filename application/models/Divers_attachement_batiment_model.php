@@ -118,6 +118,94 @@ class Divers_attachement_batiment_model extends CI_Model {
                         attache_batiment.libelle as libelle,
                         sum(attache_batiment_prevu.montant_prevu) as montant_prevu,
                         0 as montant_periode,
+                        0 as montant_anterieur  
+
+                    from divers_attachement_batiment_prevu as attache_batiment_prevu
+            
+                        inner join divers_attachement_batiment_detail as attache_batiment_detail on attache_batiment_detail.id = attache_batiment_prevu.id_attachement_batiment_detail
+                        inner join divers_attachement_batiment as attache_batiment on attache_batiment.id = attache_batiment_detail.id_attachement_batiment 
+            
+                        where attache_batiment_prevu.id_contrat_prestataire = ".$id_contrat_prestataire."
+            
+                        group by attache_batiment.id
+                UNION 
+
+                select 
+                        attache_batiment_ma.id as id, 
+                        attache_batiment_ma.numero as numero, 
+                        attache_batiment_ma.libelle as libelle,
+                        0 as montant_prevu,
+                        sum(attache_batiment_travaux_ma.montant_periode) as montant_periode,
+                        0 as montant_anterieur  
+
+                    from demande_batiment_presta as demande_ma
+            
+                        inner join divers_attachement_batiment_travaux as attache_batiment_travaux_ma  on demande_ma.id = attache_batiment_travaux_ma .id_demande_batiment_mpe
+                        inner join divers_attachement_batiment_prevu as attache_batiment_prevu_ma on attache_batiment_prevu_ma.id = attache_batiment_travaux_ma.id_attachement_batiment_prevu
+                        inner join divers_attachement_batiment_detail as attache_batiment_detail_ma on attache_batiment_detail_ma.id = attache_batiment_prevu_ma.id_attachement_batiment_detail
+                        inner join divers_attachement_batiment as attache_batiment_ma on attache_batiment_ma.id = attache_batiment_detail_ma.id_attachement_batiment 
+            
+                        where attache_batiment_prevu_ma.id_contrat_prestataire = ".$id_contrat_prestataire." and demande_ma.id = ".$id_demande_batiment."
+            
+                        group by attache_batiment_ma.id
+                UNION
+
+                select 
+                        attache_batiment_ma.id as id, 
+                        attache_batiment_ma.numero as numero, 
+                        attache_batiment_ma.libelle as libelle,
+                        0 as montant_prevu,
+                        0 as montant_periode,
+                        sum(attache_batiment_travaux_ma.montant_periode) as montant_anterieur  
+
+                    from demande_batiment_presta as demande_ma
+            
+                        inner join divers_attachement_batiment_travaux as attache_batiment_travaux_ma  on demande_ma.id = attache_batiment_travaux_ma .id_demande_batiment_mpe
+                        inner join divers_attachement_batiment_prevu as attache_batiment_prevu_ma on attache_batiment_prevu_ma.id = attache_batiment_travaux_ma.id_attachement_batiment_prevu
+                        inner join divers_attachement_batiment_detail as attache_batiment_detail_ma on attache_batiment_detail_ma.id = attache_batiment_prevu_ma.id_attachement_batiment_detail
+                        inner join divers_attachement_batiment as attache_batiment_ma on attache_batiment_ma.id = attache_batiment_detail_ma.id_attachement_batiment 
+                        inner join attachement_travaux as atta_tra_ma on atta_tra_ma.id=demande_ma.id_attachement_travaux
+                        inner join facture_mpe as fact_mpe_ma on fact_mpe_ma.id_attachement_travaux=atta_tra_ma.id
+                        where attache_batiment_prevu_ma.id_contrat_prestataire = ".$id_contrat_prestataire." and fact_mpe_ma.validation=4 and demande_ma.id<".$id_demande_batiment." 
+            
+                        group by attache_batiment_ma.id
+                UNION
+
+                select 
+                        attache_batiment.id as id, 
+                        attache_batiment.numero as numero, 
+                        attache_batiment.libelle as libelle,
+                        0 as montant_prevu,
+                        0 as montant_periode,
+                        0 as montant_anterieur  
+
+                    from divers_attachement_batiment as attache_batiment
+            
+                        group by attache_batiment.id) detail
+                group by detail.id  ";
+        return $this->db->query($sql)->result();                
+    }
+    /* public function getrubrique_attachement_withmontantbycontrat($id_contrat_prestataire,$id_demande_batiment) {
+        $sql="
+                select detail.id as id, 
+                        detail.numero as numero, 
+                        detail.libelle as libelle,
+                        sum(detail.montant_prevu) as montant_prevu,
+                        sum(detail.montant_periode) as montant_periode,
+                        sum(detail.montant_anterieur) as montant_anterieur,
+                        (sum(detail.montant_anterieur)+sum(detail.montant_periode)) as montant_cumul,
+                        (((sum(detail.montant_anterieur)+sum(detail.montant_periode))*100)/sum(detail.montant_prevu)) as pourcentage,
+                        ((sum(detail.montant_periode)*100)/sum(detail.montant_prevu)) as pourcentage_periode,
+                        ((sum(detail.montant_anterieur)*100)/sum(detail.montant_prevu)) as pourcentage_anterieur 
+
+                    from
+                (
+                select 
+                        attache_batiment.id as id, 
+                        attache_batiment.numero as numero, 
+                        attache_batiment.libelle as libelle,
+                        sum(attache_batiment_prevu.montant_prevu) as montant_prevu,
+                        0 as montant_periode,
                         0 as montant_anterieur,
                         0 as montant_cumul   
 
@@ -190,7 +278,7 @@ class Divers_attachement_batiment_model extends CI_Model {
                         group by attache_batiment.id) detail
                 group by detail.id  ";
         return $this->db->query($sql)->result();                
-    }
+    }*/
      public function findattachementBycontrat($id_contrat_prestataire,$id_type_batiment) {
         $sql="
                 select detail.id as id, 

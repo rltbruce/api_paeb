@@ -171,9 +171,7 @@ class Divers_attachement_latrine_model extends CI_Model {
                         inner join divers_attachement_latrine as attache_latrine on attache_latrine.id = attache_latrine_detail.id_attachement_latrine 
                         inner join attachement_travaux as atta_tra on atta_tra.id=demande.id_attachement_travaux
                         inner join facture_mpe as fact_mpe on fact_mpe.id_attachement_travaux=atta_tra.id
-                        where attache_latrine_prevu.id_contrat_prestataire = ".$id_contrat_prestataire." and fact_mpe.validation=4 and demande.id= (select max(dem_latrine.id) from demande_latrine_presta as dem_latrine 
-                            inner join attachement_travaux as atta_tra on atta_tra.id=dem_latrine.id_attachement_travaux
-                            inner join facture_mpe as fact_mpe on fact_mpe.id_attachement_travaux=atta_tra.id where attache_latrine_prevu.id_contrat_prestataire = ".$id_contrat_prestataire." and fact_mpe.validation=4 and dem_latrine.id<".$id_demande_latrine.") 
+                        where attache_latrine_prevu.id_contrat_prestataire = ".$id_contrat_prestataire." and fact_mpe.validation=4 and demande.id<".$id_demande_latrine." 
             
                         group by attache_latrine.id
                 UNION

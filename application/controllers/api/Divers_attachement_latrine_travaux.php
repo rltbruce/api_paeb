@@ -81,7 +81,31 @@ class Divers_attachement_latrine_travaux extends REST_Controller {
             $tmp = $this->Divers_attachement_latrine_travauxManager->finddivers_attachementByDemande($id_contrat_prestataire,$id_demande_latrine_mpe,$id_attachement_latrine);
             if ($tmp) 
             {   
-                 $data=$tmp;
+                 //$data=$tmp;
+                foreach ($tmp as $key => $value)
+                {                 
+                    $data[$key]['id'] = $value->id;                  
+                    $data[$key]['libelle'] = $value->libelle;                  
+                    $data[$key]['numero'] = $value->numero;                 
+                    $data[$key]['id_attachement_latrine_detail'] = $value->id_attache_latrine_detail;                
+                    $data[$key]['id_attachement_latrine_prevu'] = $value->id_attachement_latrine_prevu;                
+                    $data[$key]['montant_prevu'] = $value->montant_prevu;                
+                    $data[$key]['prix_unitaire'] = $value->prix_unitaire;                
+                    $data[$key]['quantite_prevu'] = $value->quantite_prevu;               
+                    $data[$key]['unite'] = $value->unite;
+
+                    $data[$key]['quantite_periode'] = $value->quantite_periode;                  
+                    $data[$key]['quantite_anterieur'] = $value->quantite_anterieur;                  
+                    $data[$key]['quantite_cumul'] = $value->quantite_periode + $value->quantite_anterieur; 
+
+                    $data[$key]['montant_periode'] = $value->montant_periode;                  
+                    $data[$key]['montant_anterieur'] = $value->montant_anterieur;                  
+                    $data[$key]['montant_cumul'] = $value->montant_periode + $value->montant_anterieur;
+
+                    $data[$key]['pourcentage_periode'] = ($value->montant_periode * 100)/$value->montant_prevu;
+                    $data[$key]['pourcentage_anterieur'] = ($value->montant_anterieur * 100)/$value->montant_prevu;
+                    $data[$key]['pourcentage_cumul'] = (($value->montant_periode + $value->montant_anterieur)*100)/$value->montant_prevu; 
+                }
             } 
                 else
                     $data = array();

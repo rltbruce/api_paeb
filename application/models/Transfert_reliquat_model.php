@@ -142,4 +142,34 @@ class transfert_reliquat_model extends CI_Model {
         }                 
     }
 
+
+    public function getmontantatransfererByconvention($id_convention_entete) {
+    $this->db->select("convention_cisco_feffi_entete.id as id_conv");
+
+            $this->db ->select("(select (cout_maitrise_construction.cout + mobilier_construction.cout_unitaire + latrine_construction.cout_unitaire + batiment_construction.cout_unitaire + cout_sousprojet_construction.cout) from cout_maitrise_construction, mobilier_construction, latrine_construction, batiment_construction, cout_sousprojet_construction where cout_maitrise_construction.id_convention_entete= convention_cisco_feffi_entete.id and mobilier_construction.id_convention_entete= convention_cisco_feffi_entete.id and latrine_construction.id_convention_entete= convention_cisco_feffi_entete.id and batiment_construction.id_convention_entete= convention_cisco_feffi_entete.id and cout_sousprojet_construction.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as montant_convention",FALSE);
+
+           
+
+            $this->db ->select("(select sum(decaiss_fonct_feffi.montant) from decaiss_fonct_feffi, convention_cisco_feffi_entete where decaiss_fonct_feffi.id_convention_entete= convention_cisco_feffi_entete.id and decaiss_fonct_feffi.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as montant_decaiss_fonct_feffi",FALSE); 
+
+
+
+//PAIEMENT MPE
+            $this->db ->select("(select sum(facture_mpe.net_payer) from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_mpe",FALSE);
+//PAIEMENT MOE
+            $this->db ->select("(select sum(facture_moe_detail.montant_periode) from facture_moe_detail,facture_moe_entete, contrat_bureau_etude, convention_cisco_feffi_entete where facture_moe_detail.id_facture_moe_entete= facture_moe_entete.id and facture_moe_entete.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and facture_moe_entete.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_moe",FALSE);
+
+    $result =  $this->db->from('convention_cisco_feffi_entete')
+                        
+                        ->where("convention_cisco_feffi_entete.id",$id_convention_entete)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }
