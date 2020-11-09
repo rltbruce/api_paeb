@@ -45,6 +45,7 @@ class Facture_mpe extends REST_Controller {
                             $data[$key]['penalite_retard_to'] = $value->penalite_retard_to ;
                             $data[$key]['retenue_garantie_to'] = $value->retenue_garantie_to ;
                             $data[$key]['remboursement_plaque_to'] = $value->remboursement_plaque_to;
+                            $data[$key]['taxe_marche_public_to'] = $value->taxe_marche_public_to;
                             $data[$key]['net_payer_to'] = $value->net_payer_to + $value->net_payer_avanc ;
                             $data[$key]['net_payer_avanc_to'] = $value->net_payer_avanc ;
 
@@ -57,6 +58,7 @@ class Facture_mpe extends REST_Controller {
                             $data[$key]['penalite_retard_pe'] = $value->penalite_retard_pe ;
                             $data[$key]['retenue_garantie_pe'] = $value->retenue_garantie_pe;
                             $data[$key]['remboursement_plaque_pe'] = $value->remboursement_plaque_pe;
+                            $data[$key]['taxe_marche_public_pe'] = $value->taxe_marche_public_pe;
                             $data[$key]['net_payer_pe'] = $value->net_payer_pe ;
                             $data[$key]['net_payer_avanc_pe'] = 0;
 
@@ -69,6 +71,7 @@ class Facture_mpe extends REST_Controller {
                             $data[$key]['penalite_retard_ante'] = $value->penalite_retard_ante ;
                             $data[$key]['retenue_garantie_ante'] = $value->retenue_garantie_ante;
                             $data[$key]['remboursement_plaque_ante'] = $value->remboursement_plaque_ante;
+                            $data[$key]['taxe_marche_public_ante'] = $value->taxe_marche_public_ante;
                             $data[$key]['net_payer_ante'] = $value->net_payer_ante + $value->net_payer_avanc;
                             $data[$key]['net_payer_avanc_ante'] = $value->net_payer_avanc ;
                         
@@ -84,6 +87,7 @@ class Facture_mpe extends REST_Controller {
                             $data[$key]['penalite_retard_to'] = $value->penalite_retard_to ;
                             $data[$key]['retenue_garantie_to'] = $value->retenue_garantie_to ;
                             $data[$key]['remboursement_plaque_to'] = $value->remboursement_plaque_to;
+                            $data[$key]['taxe_marche_public_to'] = $value->taxe_marche_public_to;
                             $data[$key]['net_payer_to'] = $value->net_payer_to + $value->net_payer_avanc ;
                             $data[$key]['net_payer_avanc_to'] = $value->net_payer_avanc ;
 
@@ -96,6 +100,7 @@ class Facture_mpe extends REST_Controller {
                             $data[$key]['penalite_retard_pe'] = $value->penalite_retard_pe ;
                             $data[$key]['retenue_garantie_pe'] = $value->retenue_garantie_pe;
                             $data[$key]['remboursement_plaque_pe'] = $value->remboursement_plaque_pe;
+                            $data[$key]['taxe_marche_public_pe'] = $value->taxe_marche_public_pe;
                             $data[$key]['net_payer_pe'] = $value->net_payer_pe ;
                             $data[$key]['net_payer_avanc_pe'] = 0;
 
@@ -108,6 +113,7 @@ class Facture_mpe extends REST_Controller {
                             $data[$key]['penalite_retard_ante'] = $value->penalite_retard_ante ;
                             $data[$key]['retenue_garantie_ante'] = $value->retenue_garantie_ante;
                             $data[$key]['remboursement_plaque_ante'] = $value->remboursement_plaque_ante;
+                            $data[$key]['taxe_marche_public_ante'] = $value->taxe_marche_public_ante;
                             $data[$key]['net_payer_ante'] = $value->net_payer_ante ;
                             $data[$key]['net_payer_avanc_ante'] = 0 ;
                     }
@@ -136,6 +142,7 @@ class Facture_mpe extends REST_Controller {
                             $data[$key]['penalite_retard_to'] = $value->penalite_retard_to ;
                             $data[$key]['retenue_garantie_to'] = $value->retenue_garantie_to ;
                             $data[$key]['remboursement_plaque_to'] = $value->remboursement_plaque_to;
+                            $data[$key]['taxe_marche_public_to'] = $value->taxe_marche_public_to;
                             $data[$key]['net_payer_to'] = $value->net_payer_to + $value->net_payer_avanc ;
                             $data[$key]['net_payer_avanc_to'] = $value->net_payer_avanc ;
 
@@ -148,6 +155,7 @@ class Facture_mpe extends REST_Controller {
                             $data[$key]['penalite_retard_pe'] = $value->penalite_retard_pe ;
                             $data[$key]['retenue_garantie_pe'] = $value->retenue_garantie_pe;
                             $data[$key]['remboursement_plaque_pe'] = $value->remboursement_plaque_pe;
+                            $data[$key]['taxe_marche_public_pe'] = $value->taxe_marche_public_pe;
                             $data[$key]['net_payer_pe'] = $value->net_payer_pe ;
                             $data[$key]['net_payer_avanc_pe'] = 0;
 
@@ -160,6 +168,7 @@ class Facture_mpe extends REST_Controller {
                             $data[$key]['penalite_retard_ante'] = $value->penalite_retard_ante ;
                             $data[$key]['retenue_garantie_ante'] = $value->retenue_garantie_ante;
                             $data[$key]['remboursement_plaque_ante'] = $value->remboursement_plaque_ante;
+                            $data[$key]['taxe_marche_public_ante'] = $value->taxe_marche_public_ante;
                             $data[$key]['net_payer_ante'] = $value->net_payer_ante + $value->net_payer_avanc;
                             $data[$key]['net_payer_avanc_ante'] = $value->net_payer_avanc ;
                         
@@ -175,6 +184,7 @@ class Facture_mpe extends REST_Controller {
                             $data[$key]['penalite_retard_to'] = $value->penalite_retard_to ;
                             $data[$key]['retenue_garantie_to'] = $value->retenue_garantie_to ;
                             $data[$key]['remboursement_plaque_to'] = $value->remboursement_plaque_to;
+                            $data[$key]['taxe_marche_public_to'] = $value->taxe_marche_public_to;
                             $data[$key]['net_payer_to'] = $value->net_payer_to + $value->net_payer_avanc ;
                             $data[$key]['net_payer_avanc_to'] = $value->net_payer_avanc ;
 
@@ -187,6 +197,7 @@ class Facture_mpe extends REST_Controller {
                             $data[$key]['penalite_retard_pe'] = $value->penalite_retard_pe ;
                             $data[$key]['retenue_garantie_pe'] = $value->retenue_garantie_pe;
                             $data[$key]['remboursement_plaque_pe'] = $value->remboursement_plaque_pe;
+                            $data[$key]['taxe_marche_public_pe'] = $value->taxe_marche_public_pe;
                             $data[$key]['net_payer_pe'] = $value->net_payer_pe ;
                             $data[$key]['net_payer_avanc_pe'] = 0;
 
@@ -253,6 +264,7 @@ class Facture_mpe extends REST_Controller {
             $data['penalite_retard'] = $facture_mpe->penalite_retard ;
             $data['retenue_garantie'] = $facture_mpe->retenue_garantie ;
             $data['remboursement_plaque'] = $facture_mpe->remboursement_plaque;
+            $data['taxe_marche_public'] = $facture_mpe->taxe_marche_public;
             $data['net_payer'] = $facture_mpe->net_payer ;
             $data['date_signature'] = $facture_mpe->date_signature ;
             $data['id_contrat_prestataire'] = $facture_mpe->id_contrat_prestataire;
@@ -302,6 +314,7 @@ class Facture_mpe extends REST_Controller {
                     'penalite_retard' => $this->post('penalite_retard'),
                     'retenue_garantie' => $this->post('retenue_garantie'),
                     'remboursement_plaque' => $this->post('remboursement_plaque'),
+                    'taxe_marche_public' => $this->post('taxe_marche_public'),
                     'net_payer' => $this->post('net_payer'),
                     'date_signature' => $this->post('date_signature'),
                     'id_attachement_travaux' => $this->post('id_attachement_travaux'),
@@ -341,6 +354,7 @@ class Facture_mpe extends REST_Controller {
                     'penalite_retard' => $this->post('penalite_retard'),
                     'retenue_garantie' => $this->post('retenue_garantie'),
                     'remboursement_plaque' => $this->post('remboursement_plaque'),
+                    'taxe_marche_public' => $this->post('taxe_marche_public'),
                     'net_payer' => $this->post('net_payer'),
                     'date_signature' => $this->post('date_signature'),
                     'id_attachement_travaux' => $this->post('id_attachement_travaux'),

@@ -40,6 +40,15 @@ class Divers_calendrier_paie_moe_prevu_model extends CI_Model {
             return null;
         }  
     }
+    public function deletebycontrat($id) {
+        $this->db->where('id_contrat_bureau_etude', (int) $id)->delete($this->table);
+        if($this->db->affected_rows() === 1)
+        {
+            return true;
+        }else{
+            return null;
+        }  
+    }
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)

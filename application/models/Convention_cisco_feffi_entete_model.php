@@ -553,6 +553,30 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             return null;
         }                 
     }
+    public function findconventioninvalideufpBydateutilisateur($requete,$id_utilisateur) {               
+        $result =  $this->db->select('convention_cisco_feffi_entete.*')
+                        ->from($this->table)
+                        ->where("convention_cisco_feffi_entete.validation",0)
+                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete = convention_cisco_feffi_entete.id')
+                        ->join('site','site.id = convention_cisco_feffi_entete.id_site')
+                        ->join('ecole','ecole.id = site.id_ecole')
+                        ->join('fokontany','fokontany.id = ecole.id_fokontany')
+                        ->join('commune','commune.id = fokontany.id_commune')
+                        ->join('district','district.id = commune.id_district')
+                        ->join('region','region.id = district.id_region')
+                        ->join('cisco','cisco.id_district = district.id')
+                        ->where($requete)
+                        ->where('convention_cisco_feffi_entete.id_user',$id_utilisateur)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function finddonneeexporter($requete) {
     $this->db->select("convention_cisco_feffi_entete.*,convention_cisco_feffi_entete.id as id_conv,
         agence_acc.nom as nom_agence,ecole.description as nom_ecole, ecole.code as code_ecole, fokontany.nom as nom_fokontany,commune.nom as nom_commune,cisco.description as nom_cisco,region.nom as nom_region,zone_subvention.libelle as libelle_zone,acces_zone.libelle as libelle_acces,feffi.denomination as nom_feffi");
@@ -1381,7 +1405,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                             detail.ref_financement as ref_financement,
                             detail.id_user as id_user,
                             detail.date_creation as date_creation,
-                            (sum(detail.nbr_fact_moe)+sum(detail.nbr_fact_mpe)) as nbrdemande
+                            (sum(detail.nbr_fact_moe)+sum(detail.nbr_fact_mpe)+sum(detail.avance_dem)) as nbrdemande
                        
                        from (
                        
@@ -1399,7 +1423,8 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                                 convention.id_user as id_user,
                                 convention.date_creation as date_creation,
                                 count(fact_moe.id) as nbr_fact_moe,
-                                0 as nbr_fact_mpe
+                                0 as nbr_fact_mpe,
+                                0 as avance_dem
 
                                 from convention_cisco_feffi_entete as convention
                                 inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
@@ -1422,7 +1447,8 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                                 convention.id_user as id_user,
                                 convention.date_creation as date_creation,
                                 0 as nbr_fact_moe,
-                                count(fact_mpe.id) as nbr_fact_mpe
+                                count(fact_mpe.id) as nbr_fact_mpe,
+                                0 as avance_dem
 
                                 from convention_cisco_feffi_entete as convention
                                 inner join contrat_prestataire as contrat_mpe on contrat_mpe.id_convention_entete = convention.id
@@ -1446,7 +1472,32 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                                 convention.id_user as id_user,
                                 convention.date_creation as date_creation,
                                 0 as nbr_fact_moe,
-                                0 as nbr_fact_mpe
+                                0 as nbr_fact_mpe,
+                                count(avance.id) as avance_dem
+
+                                from convention_cisco_feffi_entete as convention
+                                inner join contrat_prestataire as contrat_mpe on contrat_mpe.id_convention_entete = convention.id
+                                inner join avance_demarrage as avance on avance.id_contrat_prestataire = contrat_mpe.id
+                                where 
+                                    avance.validation= 0 and convention.id_cisco='".$id_cisco."'
+                                    group by convention.id
+                        )
+                        UNION
+                        (
+                            select 
+                                 convention.id as id,
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                0 as nbr_fact_moe,
+                                0 as nbr_fact_mpe,
+                                0 as avance_dem
 
                                 from convention_cisco_feffi_entete as convention
                                 where 
@@ -1491,7 +1542,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                             detail.ref_financement as ref_financement,
                             detail.id_user as id_user,
                             detail.date_creation as date_creation,
-                            (sum(detail.nbr_fact_moe)+sum(detail.nbr_fact_mpe)) as nbrdemande
+                            (sum(detail.nbr_fact_moe)+sum(detail.nbr_fact_mpe)+sum(detail.avance_dem)) as nbrdemande
                        
                        from (
                        
@@ -1509,7 +1560,8 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                                 convention.id_user as id_user,
                                 convention.date_creation as date_creation,
                                 count(fact_moe.id) as nbr_fact_moe,
-                                0 as nbr_fact_mpe
+                                0 as nbr_fact_mpe,
+                                0 as avance_dem
 
                                 from convention_cisco_feffi_entete as convention
                                 inner join contrat_bureau_etude as contrat_moe on contrat_moe.id_convention_entete = convention.id
@@ -1532,7 +1584,8 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                                 convention.id_user as id_user,
                                 convention.date_creation as date_creation,
                                 0 as nbr_fact_moe,
-                                count(fact_mpe.id) as nbr_fact_mpe
+                                count(fact_mpe.id) as nbr_fact_mpe,
+                                0 as avance_dem
 
                                 from convention_cisco_feffi_entete as convention
                                 inner join contrat_prestataire as contrat_mpe on contrat_mpe.id_convention_entete = convention.id
@@ -1556,7 +1609,31 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                                 convention.id_user as id_user,
                                 convention.date_creation as date_creation,
                                 0 as nbr_fact_moe,
-                                0 as nbr_fact_mpe
+                                0 as nbr_fact_mpe,
+                                count(avance.id) as avance_dem
+
+                                from convention_cisco_feffi_entete as convention
+                                inner join contrat_prestataire as contrat_mpe on contrat_mpe.id_convention_entete = convention.id
+                                inner join avance_demarrage as avance on avance.id_contrat_prestataire = contrat_mpe.id
+
+                                    group by convention.id
+                        )
+                        UNION
+                        (
+                            select 
+                                 convention.id as id,
+                                convention.id_feffi as id_feffi,
+                                convention.id_site as id_site,
+                                convention.id_cisco as id_cisco,
+                                convention.type_convention as type_convention,
+                                convention.ref_convention as ref_convention,
+                                convention.objet as objet,
+                                convention.ref_financement as ref_financement,
+                                convention.id_user as id_user,
+                                convention.date_creation as date_creation,
+                                0 as nbr_fact_moe,
+                                0 as nbr_fact_mpe,
+                                0 as avance_dem
 
                                 from convention_cisco_feffi_entete as convention
                                 
@@ -1665,7 +1742,8 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         $sql=" select 
                        convention.*,
                        count(fact_mpe.id),
-                       count(fact_moe_entete.id)
+                       count(fact_moe_entete.id),
+                       count(avance.id)
                from convention_cisco_feffi_entete as convention
 
                inner join contrat_prestataire as contrat_p on contrat_p.id_convention_entete = convention.id
@@ -1673,11 +1751,12 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                left join attachement_travaux as atta_mpe on atta_mpe.id_contrat_prestataire = contrat_p.id
                left join facture_mpe as fact_mpe on fact_mpe.id_attachement_travaux = atta_mpe.id
                left join facture_moe_entete as fact_moe_entete on fact_moe_entete.id_contrat_bureau_etude = contrat_b.id
+               left join avance_demarrage as avance on avance.id_contrat_prestataire = contrat_p.id
 
                         where 
-                            fact_mpe.validation= 1 OR fact_moe_entete.validation=1
+                            fact_mpe.validation= 1 OR fact_moe_entete.validation=1 OR avance.validation=1
                             group by convention.id
-                            having (count(fact_mpe.id)>0 OR count(fact_moe_entete.id)>0)
+                            having (count(fact_mpe.id)>0 OR count(fact_moe_entete.id)>0) OR count(avance.id)>0
              
 
             ";

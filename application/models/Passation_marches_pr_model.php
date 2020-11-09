@@ -31,6 +31,7 @@ class Passation_marches_pr_model extends CI_Model {
             'nbr_offre_recu'    => $passation_marches_pr['nbr_offre_recu'],            
             'date_os' => $passation_marches_pr['date_os'],
             'date_manifestation' => $passation_marches_pr['date_manifestation'],
+            'date_signature_contrat' => $passation_marches_pr['date_signature_contrat'],
             'id_convention_entete' => $passation_marches_pr['id_convention_entete'],
             'validation' => $passation_marches_pr['validation']                       
         );

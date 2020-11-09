@@ -51,6 +51,8 @@ class Passation_marches_pr extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
 
                     $data[$key]['date_manifestation']   = $value->date_manifestation;
+
+                    $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
                    
 
                     $data[$key]['convention_entete'] = $convention_entete;
@@ -80,6 +82,8 @@ class Passation_marches_pr extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
 
                     $data[$key]['date_manifestation']   = $value->date_manifestation;
+
+                    $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
                    
 
                     $data[$key]['convention_entete'] = $convention_entete;
@@ -108,6 +112,8 @@ class Passation_marches_pr extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
 
                     $data[$key]['date_manifestation']   = $value->date_manifestation;
+
+                    $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
                    
 
                     $data[$key]['convention_entete'] = $convention_entete;
@@ -136,6 +142,8 @@ class Passation_marches_pr extends REST_Controller {
                     //$data[$key]['observation'] = $value->observation;
 
                     $data[$key]['date_manifestation']   = $value->date_manifestation;
+
+                    $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
                    
 
                     $data[$key]['convention_entete'] = $convention_entete;
@@ -163,6 +171,8 @@ class Passation_marches_pr extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
 
                     $data[$key]['date_manifestation']   = $value->date_manifestation;
+
+                    $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
                    
 
                     $data[$key]['convention_entete'] = $convention_entete;
@@ -187,6 +197,7 @@ class Passation_marches_pr extends REST_Controller {
             $data['date_os'] = $passation_marches_pr->date_os;          
 
             $data['date_manifestation']   = $passation_marches_pr->date_manifestation;
+            $data['date_signature_contrat']   = $passation_marches_pr->date_signature_contrat;
             
 
             $data['convention_entete'] = $convention_entete;
@@ -209,7 +220,8 @@ class Passation_marches_pr extends REST_Controller {
                    
                     $data[$key]['date_os'] = $value->date_os;                   
 
-                    $data[$key]['date_manifestation']   = $value->date_manifestation;                   
+                    $data[$key]['date_manifestation']   = $value->date_manifestation;
+                    $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;                   
 
                     $data[$key]['convention_entete'] = $convention_entete;
                     //$data[$key]['partenaire_relai'] = $partenaire_relai;

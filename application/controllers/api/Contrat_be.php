@@ -331,7 +331,8 @@ class Contrat_be extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Contrat_beManager->delete($id);         
+            $delete = $this->Contrat_beManager->delete($id);
+            $deletecalendrier = $this->Divers_calendrier_paie_moe_prevuManager->deletebycontrat($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

@@ -37,6 +37,7 @@ class Facture_mpe_model extends CI_Model {
             'penalite_retard' => $facture_mpe['penalite_retard'],
             'retenue_garantie' => $facture_mpe['retenue_garantie'],
             'remboursement_plaque' => $facture_mpe['remboursement_plaque'],
+            'taxe_marche_public' => $facture_mpe['taxe_marche_public'],
             'net_payer' => $facture_mpe['net_payer'],
             'date_signature' => $facture_mpe['date_signature'],
             'id_attachement_travaux' => $facture_mpe['id_attachement_travaux'],
@@ -222,6 +223,7 @@ class Facture_mpe_model extends CI_Model {
                          (sum(detail.penalite_retard_to)+sum(detail.penalite_retard_pe)) as penalite_retard_to,
                          (sum(detail.retenue_garantie_to)+sum(detail.retenue_garantie_pe)) as retenue_garantie_to,
                          (sum(detail.remboursement_plaque_to)+sum(detail.remboursement_plaque_pe)) as remboursement_plaque_to,
+                         (sum(detail.taxe_marche_public_to)+sum(detail.taxe_marche_public_pe)) as taxe_marche_public_to,
                          (sum(detail.net_payer_to)+sum(detail.net_payer_pe)) as net_payer_to,
 
                          sum(detail.montant_travaux_pe) as montant_travaux_pe,
@@ -233,6 +235,7 @@ class Facture_mpe_model extends CI_Model {
                          sum(detail.penalite_retard_pe) as penalite_retard_pe,
                          sum(detail.retenue_garantie_pe) as retenue_garantie_pe,
                          sum(detail.remboursement_plaque_pe) as remboursement_plaque_pe,
+                         sum(detail.taxe_marche_public_pe) as taxe_marche_public_pe,
                          sum(detail.net_payer_pe) as net_payer_pe,
 
                          sum(detail.montant_travaux_ante) as montant_travaux_ante,
@@ -244,6 +247,7 @@ class Facture_mpe_model extends CI_Model {
                          sum(detail.penalite_retard_ante) as penalite_retard_ante,
                          sum(detail.retenue_garantie_ante) as retenue_garantie_ante,
                          sum(detail.remboursement_plaque_ante) as remboursement_plaque_ante,
+                         sum(detail.taxe_marche_public_ante) as taxe_marche_public_ante,
                          sum(detail.net_payer_ante) as net_payer_ante,
                          
                          sum(detail.nbr_fact) as nbr_fact,
@@ -263,6 +267,7 @@ class Facture_mpe_model extends CI_Model {
                          sum(fact_mpe.penalite_retard) as penalite_retard_to,
                          sum(fact_mpe.retenue_garantie) as retenue_garantie_to,
                          sum(fact_mpe.remboursement_plaque) as remboursement_plaque_to,
+                         sum(fact_mpe.taxe_marche_public) as taxe_marche_public_to,
                          sum(fact_mpe.net_payer) as net_payer_to,
                          0 as montant_travaux_pe,
                          0 as montant_rabais_pe,
@@ -273,6 +278,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_pe,
                          0 as retenue_garantie_pe,
                          0 as remboursement_plaque_pe,
+                         0 as taxe_marche_public_pe,
                          0 as net_payer_pe,
                          0 as montant_travaux_ante,
                          0 as montant_rabais_ante,
@@ -283,6 +289,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_ante,
                          0 as retenue_garantie_ante,
                          0 as remboursement_plaque_ante,
+                         0 as taxe_marche_public_ante,
                          0 as net_payer_ante,                         
                          0 as nbr_fact,
                          0 as net_payer_avanc
@@ -290,7 +297,7 @@ class Facture_mpe_model extends CI_Model {
                         from facture_mpe as fact_mpe
 
                         inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
-                        where fact_mpe.id<= '".$id_facture_mpe."' and
+                        where fact_mpe.id< '".$id_facture_mpe."' and
                         atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4
 
                             group by id_contrat
@@ -308,6 +315,7 @@ class Facture_mpe_model extends CI_Model {
                         0 as penalite_retard_to,
                         0 as retenue_garantie_to,
                         0 as remboursement_plaque_to,
+                        0 as taxe_marche_public_to,
                         0 as net_payer_to,
                          sum(fact_mpe.montant_travaux) as montant_travaux_pe,
                          sum(fact_mpe.montant_rabais) as montant_rabais_pe,
@@ -318,6 +326,7 @@ class Facture_mpe_model extends CI_Model {
                          sum(fact_mpe.penalite_retard) as penalite_retard_pe,
                          sum(fact_mpe.retenue_garantie) as retenue_garantie_pe,
                          sum(fact_mpe.remboursement_plaque) as remboursement_plaque_pe,
+                         sum(fact_mpe.taxe_marche_public) as axe_marche_public_pe,
                          sum(fact_mpe.net_payer) as net_payer_pe,
                          0 as montant_travaux_ante,
                          0 as montant_rabais_ante,
@@ -328,6 +337,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_ante,
                          0 as retenue_garantie_ante,
                          0 as remboursement_plaque_ante,
+                         0 as taxe_marche_public_ante,
                          0 as net_payer_ante,                         
                          0 as nbr_fact,
                          0 as net_payer_avanc
@@ -352,6 +362,7 @@ class Facture_mpe_model extends CI_Model {
                         0 as penalite_retard_to,
                         0 as retenue_garantie_to,
                         0 as remboursement_plaque_to,
+                        0 as taxe_marche_public_to,
                         0 as net_payer_to,
                          0 as montant_travaux_pe,
                          0 as montant_rabais_pe,
@@ -362,6 +373,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_pe,
                          0 as retenue_garantie_pe,
                          0 as remboursement_plaque_pe,
+                         0 as taxe_marche_public_pe,
                          0 as net_payer_pe,
                          sum(fact_mpe.montant_travaux) as montant_travaux_ante,
                          sum(fact_mpe.montant_rabais) as montant_rabais_ante,
@@ -372,6 +384,7 @@ class Facture_mpe_model extends CI_Model {
                          sum(fact_mpe.penalite_retard) as penalite_retard_ante,
                          sum(fact_mpe.retenue_garantie) as retenue_garantie_ante,
                          sum(fact_mpe.remboursement_plaque) as remboursement_plaque_ante,
+                         sum(fact_mpe.taxe_marche_public) as taxe_marche_public_ante,
                          sum(fact_mpe.net_payer) as net_payer_ante,                         
                          0 as nbr_fact,
                          0 as net_payer_avanc
@@ -402,6 +415,7 @@ class Facture_mpe_model extends CI_Model {
                         0 as penalite_retard_to,
                         0 as retenue_garantie_to,
                         0 as remboursement_plaque_to,
+                        0 as taxe_marche_public_to,
                         0 as net_payer_to,
                          0 as montant_travaux_pe,
                          0 as montant_rabais_pe,
@@ -412,6 +426,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_pe,
                          0 as retenue_garantie_pe,
                          0 as remboursement_plaque_pe,
+                         0 as taxe_marche_public_pe,
                          0 as net_payer_pe,
                          0 as montant_travaux_ante,
                          0 as montant_rabais_ante,
@@ -422,6 +437,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_ante,
                          0 as retenue_garantie_ante,
                          0 as remboursement_plaque_ante,
+                         0 as taxe_marche_public_ante,
                          0 as net_payer_ante,
                          count(fact_mpe.id) as nbr_fact,
                          0 as net_payer_avanc
@@ -447,6 +463,7 @@ class Facture_mpe_model extends CI_Model {
                         0 as penalite_retard_to,
                         0 as retenue_garantie_to,
                         0 as remboursement_plaque_to,
+                        0 as taxe_marche_public_to,
                         0 as net_payer_to,
                          0 as montant_travaux_pe,
                          0 as montant_rabais_pe,
@@ -457,6 +474,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_pe,
                          0 as retenue_garantie_pe,
                          0 as remboursement_plaque_pe,
+                         0 as taxe_marche_public_pe,
                          0 as net_payer_pe,
                          0 as montant_travaux_ante,
                          0 as montant_rabais_ante,
@@ -467,6 +485,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_ante,
                          0 as retenue_garantie_ante,
                          0 as remboursement_plaque_ante,
+                         0 as taxe_marche_public_ante,
                          0 as net_payer_ante,
                          0 as nbr_fact,
                          sum(avance_dem.net_payer) as net_payer_avanc
@@ -500,6 +519,7 @@ class Facture_mpe_model extends CI_Model {
                          sum(detail.penalite_retard_to) as penalite_retard_to,
                          sum(detail.retenue_garantie_to) as retenue_garantie_to,
                          sum(detail.remboursement_plaque_to) as remboursement_plaque_to,
+                         sum(detail.taxe_marche_public_to) as taxe_marche_public_to,
                          sum(detail.net_payer_to) as net_payer_to,
 
                          sum(detail.montant_travaux_pe) as montant_travaux_pe,
@@ -511,6 +531,7 @@ class Facture_mpe_model extends CI_Model {
                          sum(detail.penalite_retard_pe) as penalite_retard_pe,
                          sum(detail.retenue_garantie_pe) as retenue_garantie_pe,
                          sum(detail.remboursement_plaque_pe) as remboursement_plaque_pe,
+                         sum(detail.taxe_marche_public_pe) as taxe_marche_public_pe,
                          sum(detail.net_payer_pe) as net_payer_pe,
 
                          sum(detail.montant_travaux_ante) as montant_travaux_ante,
@@ -522,6 +543,7 @@ class Facture_mpe_model extends CI_Model {
                          sum(detail.penalite_retard_ante) as penalite_retard_ante,
                          sum(detail.retenue_garantie_ante) as retenue_garantie_ante,
                          sum(detail.remboursement_plaque_ante) as remboursement_plaque_ante,
+                         sum(detail.taxe_marche_public_ante) as taxe_marche_public_ante,
                          sum(detail.net_payer_ante) as net_payer_ante,
                          
                          sum(detail.nbr_fact) as nbr_fact,
@@ -541,6 +563,7 @@ class Facture_mpe_model extends CI_Model {
                          sum(fact_mpe.penalite_retard) as penalite_retard_to,
                          sum(fact_mpe.retenue_garantie) as retenue_garantie_to,
                          sum(fact_mpe.remboursement_plaque) as remboursement_plaque_to,
+                         sum(fact_mpe.taxe_marche_public) as taxe_marche_public_to,
                          sum(fact_mpe.net_payer) as net_payer_to,
                          0 as montant_travaux_pe,
                          0 as montant_rabais_pe,
@@ -551,6 +574,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_pe,
                          0 as retenue_garantie_pe,
                          0 as remboursement_plaque_pe,
+                         0 as taxe_marche_public_pe,
                          0 as net_payer_pe,
                          0 as montant_travaux_ante,
                          0 as montant_rabais_ante,
@@ -561,6 +585,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_ante,
                          0 as retenue_garantie_ante,
                          0 as remboursement_plaque_ante,
+                         0 as taxe_marche_public_ante,
                          0 as net_payer_ante,                         
                          0 as nbr_fact,
                          0 as net_payer_avanc
@@ -586,6 +611,7 @@ class Facture_mpe_model extends CI_Model {
                         0 as penalite_retard_to,
                         0 as retenue_garantie_to,
                         0 as remboursement_plaque_to,
+                        0 as taxe_marche_public_to,
                         0 as net_payer_to,
                          sum(fact_mpe.montant_travaux) as montant_travaux_pe,
                          sum(fact_mpe.montant_rabais) as montant_rabais_pe,
@@ -596,6 +622,7 @@ class Facture_mpe_model extends CI_Model {
                          sum(fact_mpe.penalite_retard) as penalite_retard_pe,
                          sum(fact_mpe.retenue_garantie) as retenue_garantie_pe,
                          sum(fact_mpe.remboursement_plaque) as remboursement_plaque_pe,
+                         sum(fact_mpe.taxe_marche_public) as taxe_marche_public_pe,
                          sum(fact_mpe.net_payer) as net_payer_pe,
                          0 as montant_travaux_ante,
                          0 as montant_rabais_ante,
@@ -606,6 +633,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_ante,
                          0 as retenue_garantie_ante,
                          0 as remboursement_plaque_ante,
+                         0 as taxe_marche_public_ante,
                          0 as net_payer_ante,                         
                          0 as nbr_fact,
                          0 as net_payer_avanc
@@ -630,6 +658,7 @@ class Facture_mpe_model extends CI_Model {
                         0 as penalite_retard_to,
                         0 as retenue_garantie_to,
                         0 as remboursement_plaque_to,
+                        0 as taxe_marche_public_to,
                         0 as net_payer_to,
                          0 as montant_travaux_pe,
                          0 as montant_rabais_pe,
@@ -640,6 +669,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_pe,
                          0 as retenue_garantie_pe,
                          0 as remboursement_plaque_pe,
+                         0 as taxe_marche_public_pe,
                          0 as net_payer_pe,
                          sum(fact_mpe.montant_travaux) as montant_travaux_ante,
                          sum(fact_mpe.montant_rabais) as montant_rabais_ante,
@@ -650,6 +680,7 @@ class Facture_mpe_model extends CI_Model {
                          sum(fact_mpe.penalite_retard) as penalite_retard_ante,
                          sum(fact_mpe.retenue_garantie) as retenue_garantie_ante,
                          sum(fact_mpe.remboursement_plaque) as remboursement_plaque_ante,
+                         sum(fact_mpe.taxe_marche_public) as taxe_marche_public_ante,
                          sum(fact_mpe.net_payer) as net_payer_ante,                         
                          0 as nbr_fact,
                          0 as net_payer_avanc
@@ -680,6 +711,7 @@ class Facture_mpe_model extends CI_Model {
                         0 as penalite_retard_to,
                         0 as retenue_garantie_to,
                         0 as remboursement_plaque_to,
+                        0 as taxe_marche_public_to,
                         0 as net_payer_to,
                          0 as montant_travaux_pe,
                          0 as montant_rabais_pe,
@@ -690,6 +722,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_pe,
                          0 as retenue_garantie_pe,
                          0 as remboursement_plaque_pe,
+                         0 as taxe_marche_public_pe,
                          0 as net_payer_pe,
                          0 as montant_travaux_ante,
                          0 as montant_rabais_ante,
@@ -699,6 +732,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as remboursement_acompte_ante,
                          0 as penalite_retard_ante,
                          0 as retenue_garantie_ante,
+                         0 as remboursement_plaque_ante,
                          0 as remboursement_plaque_ante,
                          0 as net_payer_ante,
                          count(fact_mpe.id) as nbr_fact,
@@ -725,6 +759,7 @@ class Facture_mpe_model extends CI_Model {
                         0 as penalite_retard_to,
                         0 as retenue_garantie_to,
                         0 as remboursement_plaque_to,
+                        0 as taxe_marche_public_to,
                         0 as net_payer_to,
                          0 as montant_travaux_pe,
                          0 as montant_rabais_pe,
@@ -735,6 +770,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_pe,
                          0 as retenue_garantie_pe,
                          0 as remboursement_plaque_pe,
+                         0 as taxe_marche_public_pe,
                          0 as net_payer_pe,
                          0 as montant_travaux_ante,
                          0 as montant_rabais_ante,
@@ -745,6 +781,7 @@ class Facture_mpe_model extends CI_Model {
                          0 as penalite_retard_ante,
                          0 as retenue_garantie_ante,
                          0 as remboursement_plaque_ante,
+                         0 as taxe_marche_public_ante,
                          0 as net_payer_ante,
                          0 as nbr_fact,
                          sum(avance_dem.net_payer) as net_payer_avanc

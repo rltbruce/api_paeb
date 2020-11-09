@@ -156,13 +156,14 @@ class Demande_batiment_prestataire_model extends CI_Model {
     public function countAllfactureByvalidation($validation)
     {
         $sql=" select 
-                       sum(detail.nbr_facture_mpe) + sum( detail.nbr_facture_moe) as nombre
+                       sum(detail.nbr_facture_mpe) + sum( detail.nbr_facture_moe) + sum( detail.avance_dem) as nombre
                from (
                
                 (
                     select 
                         count(fact_mpe.id) as nbr_facture_mpe,
-                        0 as nbr_facture_moe
+                        0 as nbr_facture_moe,
+                        0 as avance_dem
 
                         from facture_mpe as fact_mpe
                         where 
@@ -172,12 +173,25 @@ class Demande_batiment_prestataire_model extends CI_Model {
                 (
                     select 
                         0 as nbr_facture_mpe,
-                        count(fact_moe.id) as nbr_facture_moe
+                        count(fact_moe.id) as nbr_facture_moe,
+                        0 as avance_dem
 
                         from facture_moe_entete as fact_moe
 
                         where 
                             fact_moe.validation= '".$validation."'
+                )
+                UNION
+                (
+                    select 
+                        0 as nbr_facture_mpe,
+                        0 as nbr_facture_moe,
+                        count(avance.id) as avance_dem
+
+                        from avance_demarrage as avance
+
+                        where 
+                            avance.validation= '".$validation."'
                 )
 
                 )detail
