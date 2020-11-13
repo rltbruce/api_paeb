@@ -32,7 +32,7 @@ class Site extends REST_Controller {
         $id_feffi = $this->get('id_feffi');
         $menu = $this->get('menu');
             
-        if ($menu=='getsite_disponible') 
+      /*  if ($menu=='getsite_disponible') 
         {   $data = array();
             $tmp = $this->SiteManager->findsite_disponible($this->generer_requete2($id_region,$id_cisco,$id_commune,$id_ecole,$id_zap));
             if ($tmp) 
@@ -137,7 +137,8 @@ class Site extends REST_Controller {
                 }
             }else $data[0]=$this->generer_requete($id_region,$id_cisco,$id_commune,$id_ecole,$lot,$id_zap);
         }
-        elseif ($menu=='getsiteByenpreparationinvalide') 
+        else*/
+        if ($menu=='getsiteByenpreparationandinvalide') 
         {   $data = array();
             $tmp = $this->SiteManager->findsiteByenpreparationinvalide();
             if ($tmp) 
@@ -172,7 +173,7 @@ class Site extends REST_Controller {
                 }
             }
         }
-        elseif ($menu=='getsiteInvalide') 
+      /*  elseif ($menu=='getsiteInvalide') 
         {   $data = array();
             $tmp = $this->SiteManager->findsiteInvalide();
             if ($tmp) 
@@ -246,34 +247,9 @@ class Site extends REST_Controller {
         {   $data = array();
             $tmp = $this->SiteManager->findsitecreeByfeffi($id_feffi);
             if ($tmp) 
-            {$data=$tmp;
-                /*foreach ($tmp as $key => $value) 
-                {
-                    $ecole = $this->EcoleManager->findById($value->id_ecole);
-                    $classification_site = $this->Classification_siteManager->findById($value->id_classification_site);
-                    $agence_acc = $this->Agence_accManager->findById($value->id_agence_acc);
-                    $region = $this->RegionManager->findById($value->id_region);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
-                    $commune = $this->CommuneManager->findById($value->id_commune);
-                    $zap = $this->ZapManager->findById($value->id_zap);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['code_sous_projet'] = $value->code_sous_projet;
-                    $data[$key]['objet_sous_projet'] = $value->objet_sous_projet;
-                    //$data[$key]['denomination_epp'] = $value->denomination_epp;
-                    $data[$key]['lot'] = $value->lot;
-                    $data[$key]['statu_convention'] = $value->statu_convention;
-                    $data[$key]['observation'] = $value->observation;
-                    $data[$key]['ecole'] = $ecole;
-                    $data[$key]['classification_site'] = $classification_site;
-                    $data[$key]['lot'] = $value->lot;
-                    $data[$key]['validation'] = $value->validation;
-                    $data[$key]['agence_acc'] = $agence_acc;
-                    $data[$key]['region'] = $region;
-                    $data[$key]['cisco'] = $cisco;
-                    $data[$key]['commune'] = $commune;
-                    $data[$key]['zap'] = $zap;
+            {
+                $data=$tmp;
                 
-                }*/
             }
         }
         elseif ($id_ecole) 
@@ -309,7 +285,7 @@ class Site extends REST_Controller {
                     $data[$key]['zap'] = $zap;
                 }
             }
-        }
+        }*/
         elseif ($id)
         {
             $data = array();
