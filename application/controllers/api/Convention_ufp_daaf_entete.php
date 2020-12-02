@@ -294,6 +294,16 @@ class Convention_ufp_daaf_entete extends REST_Controller {
             } 
                 else
                     $data = array();
+        } 
+        elseif ($menu=='testconventionByIfvalide') //mande
+        {
+            $tmp = $this->Convention_ufp_daaf_enteteManager->findtestconventionByIfvalide($id_convention_ufp_daaf_entete);
+            if ($tmp) 
+            {
+                $data = $tmp;
+            } 
+                else
+                    $data = array();
         }
         elseif ($id)
         {

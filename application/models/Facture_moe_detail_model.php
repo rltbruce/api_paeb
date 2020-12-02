@@ -334,6 +334,25 @@ class Facture_moe_detail_model extends CI_Model {
             return null;
         }               
     }
+
+    public function getmontant_anterieurbycontratbyid($id_contrat_bureau_etude,$code,$id_facture_detail_moe)
+     {
+        $result =  $this->db->select("sum(facture_moe_detail.montant_periode )as montant_periode,divers_calendrier_paie_moe_prevu.montant_prevu ")
+                        ->from($this->table)
+                        ->join("divers_calendrier_paie_moe_prevu", "divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu")
+                        ->join("divers_sousrubrique_calendrier_paie_moe_detail", "divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail")
+                        ->where("divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("facture_moe_detail.id<", $id_facture_detail_moe)
+                        ->where("code", $code)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }               
+    }
     public function getmontant_anterieur_p8bycontrat($id_contrat_bureau_etude)
      {
         $result =  $this->db->select("sum(facture_moe_detail.montant_periode )as montant_periode, sum(divers_calendrier_paie_moe_prevu.montant_prevu) as montant_prevu")

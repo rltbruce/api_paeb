@@ -16,17 +16,18 @@ class Avenant_prestataire extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_avenant_mpe = $this->get('id_avenant_mpe');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $menu = $this->get('menu');
 
          if ($menu=='getavenantvalideBycontrat')
          {
-            $menu = $this->Avenant_prestataireManager->findavenantvalideBycontrat($id_contrat_prestataire);
-            if ($menu) 
+            $tmp = $this->Avenant_prestataireManager->findavenantvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
@@ -39,7 +40,33 @@ class Avenant_prestataire extends REST_Controller {
                     $data[$key]['cout_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
                     $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
 
-                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    //$data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                        }
+            } 
+                else
+                    $data = array();
+        }   
+        elseif ($menu=='getavenant_mpevalideById')
+         {
+            $tmp = $this->Avenant_prestataireManager->findavenantvalideById($id_avenant_mpe);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['cout_batiment']    = $value->cout_batiment;
+                    $data[$key]['cout_latrine']   = $value->cout_latrine;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['ref_avenant'] = $value->ref_avenant;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['cout_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
+                    $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
+
+                    //$data[$key]['contrat_prestataire'] = $contrat_prestataire;
                         }
             } 
                 else
@@ -47,12 +74,12 @@ class Avenant_prestataire extends REST_Controller {
         }   
         elseif ($menu=='getavenantinvalideBycontrat')
          {
-            $menu = $this->Avenant_prestataireManager->findavenantinvalideBycontrat($id_contrat_prestataire);
-            if ($menu) 
+            $tmp = $this->Avenant_prestataireManager->findavenantinvalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
@@ -65,7 +92,7 @@ class Avenant_prestataire extends REST_Controller {
                     $data[$key]['cout_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
                     $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
 
-                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                   // $data[$key]['contrat_prestataire'] = $contrat_prestataire;
                         }
             } 
                 else
@@ -73,12 +100,12 @@ class Avenant_prestataire extends REST_Controller {
         }   
         elseif ($menu=='getavenantBycontrat')
          {
-            $menu = $this->Avenant_prestataireManager->findavenantBycontrat($id_contrat_prestataire);
-            if ($menu) 
+            $tmp = $this->Avenant_prestataireManager->findavenantBycontrat($id_contrat_prestataire);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
@@ -91,7 +118,7 @@ class Avenant_prestataire extends REST_Controller {
                     $data[$key]['cout_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
                     $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
 
-                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    //$data[$key]['contrat_prestataire'] = $contrat_prestataire;
                         }
             } 
                 else
@@ -99,12 +126,12 @@ class Avenant_prestataire extends REST_Controller {
         }   
         elseif ($menu=='getpassationByconvention')
          {
-            $menu = $this->Avenant_prestataireManager->findAllByContrat_prestataire($id_contrat_prestataire);
-            if ($menu) 
+            $tmp = $this->Avenant_prestataireManager->findAllByContrat_prestataire($id_contrat_prestataire);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
@@ -115,7 +142,7 @@ class Avenant_prestataire extends REST_Controller {
                     $data[$key]['cout_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
                     $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
 
-                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    //$data[$key]['contrat_prestataire'] = $contrat_prestataire;
                         }
             } 
                 else
@@ -125,7 +152,7 @@ class Avenant_prestataire extends REST_Controller {
         {
             $data = array();
             $avenant_prestataire = $this->Avenant_prestataireManager->findById($id);
-            $contrat_prestataire = $this->Contrat_prestataireManager->findById($avenant_prestataire->id_contrat_prestataire);
+            //$contrat_prestataire = $this->Contrat_prestataireManager->findById($avenant_prestataire->id_contrat_prestataire);
 
             $data['id'] = $avenant_prestataire->id;
             $data['description'] = $avenant_prestataire->description;
@@ -136,17 +163,17 @@ class Avenant_prestataire extends REST_Controller {
             $data['cout_total_ttc'] = $avenant_prestataire->cout_mobilier + $avenant_prestataire->cout_latrine + $avenant_prestataire->cout_batiment;
             $data['cout_total_ht'] = ($avenant_prestataire->cout_mobilier + $avenant_prestataire->cout_latrine + $avenant_prestataire->cout_batiment)/1;
 
-            $data['contrat_prestataire'] = $contrat_prestataire;
+            //$data['contrat_prestataire'] = $contrat_prestataire;
         } 
         else 
         {
-            $menu = $this->Avenant_prestataireManager->findAll();
-            if ($menu) 
+            $tmp = $this->Avenant_prestataireManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
-                    $contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    //$prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['description'] = $value->description;
@@ -157,8 +184,8 @@ class Avenant_prestataire extends REST_Controller {
                     $data[$key]['cout_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
                     $data[$key]['cout_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
                     
-                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
-                        }
+                    //$data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                    }
             } 
                 else
                     $data = array();

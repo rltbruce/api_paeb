@@ -89,6 +89,20 @@ class Delai_travaux_model extends CI_Model {
             return null;
         }                 
     }
+    public function finddelai_travauxvalideById($id_delai_travaux) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_delai_travaux)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function finddelai_travauxinvalideBycontrat($id_contrat_prestataire) {               
         $result =  $this->db->select('delai_travaux.*')
                         ->from($this->table)

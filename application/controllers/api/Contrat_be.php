@@ -21,6 +21,7 @@ class Contrat_be extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_contrat_moe = $this->get('id_contrat_moe');
         $id_convention_entete = $this->get('id_convention_entete');
         $id_bureau_etude = $this->get('id_bureau_etude');
         $id_cisco = $this->get('id_cisco');
@@ -102,6 +103,32 @@ class Contrat_be extends REST_Controller {
                     $data[$key]['date_signature'] = $value->date_signature;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['convention_entete'] = $convention_entete;
+                    $data[$key]['bureau_etude'] = $bureau_etude;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menus=='getcontratvalideById')
+         {
+            $menu = $this->Contrat_beManager->findcontratvalideById($id_contrat_moe);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
+                    //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    $passation = $this->Passation_marches_beManager->findpassationarrayByconvention($value->id_convention_entete);
+
+                    $data[$key]['passation'] = $passation;
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['ref_contrat']   = $value->ref_contrat;
+                    $data[$key]['montant_contrat']    = $value->montant_contrat;
+                    $data[$key]['date_signature'] = $value->date_signature;
+                    $data[$key]['validation'] = $value->validation;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['bureau_etude'] = $bureau_etude;
                         }
             } 

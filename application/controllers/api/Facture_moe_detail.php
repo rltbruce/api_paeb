@@ -19,6 +19,7 @@ class Facture_moe_detail extends REST_Controller {
         $id = $this->get('id');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $id_facture_moe_entete = $this->get('id_facture_moe_entete');
+        $id_facture_detail_moe = $this->get('id_facture_detail_moe');
         $id_sousrubrique = $this->get('id_sousrubrique');
         $code_pai = $this->get('code_pai');
         $menu = $this->get('menu');
@@ -50,6 +51,18 @@ class Facture_moe_detail extends REST_Controller {
         elseif ($menu == "getmontant_anterieurbycontrat")
         {
             $tmp = $this->Facture_moe_detailManager->getmontant_anterieurbycontrat($id_contrat_bureau_etude,$code_pai);
+            if ($tmp)
+            {
+                $data=$tmp;
+            }
+            else
+            {
+                $data=array();
+            }
+        }
+        elseif ($menu == "getmontant_anterieurbycontratbyid")
+        {
+            $tmp = $this->Facture_moe_detailManager->getmontant_anterieurbycontratbyid($id_contrat_bureau_etude,$code_pai,$id_facture_detail_moe);
             if ($tmp)
             {
                 $data=$tmp;

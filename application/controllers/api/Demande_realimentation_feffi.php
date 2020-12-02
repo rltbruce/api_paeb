@@ -19,6 +19,7 @@ class Demande_realimentation_feffi extends REST_Controller {
     {
         $id = $this->get('id');
         $id_convention_cife_entete = $this->get('id_convention_cife_entete');
+        $id_demande_realimentation = $this->get('id_demande_realimentation');
         //$id_convention_entete = $this->get('id_convention_entete');
         $menu = $this->get('menu');
         $invalide = $this->get('invalide');
@@ -27,15 +28,15 @@ class Demande_realimentation_feffi extends REST_Controller {
 
         if ($menu=='getdemandevalidedaafByconvention') //mande
         {
-            $menu = $this->Demande_realimentation_feffiManager->finddemandevalidedaafByIdconvention_cife_entete($id_convention_cife_entete);
-            if ($menu) 
+            $tmp = $this->Demande_realimentation_feffiManager->finddemandevalidedaafByIdconvention_cife_entete($id_convention_cife_entete);
+            if ($tmp) 
             { 
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
+                    //$convention_cife_entete= array();
+                    //$convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
                     $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['compte_feffi'] = $compte_feffi;
                     $data[$key]['tranche'] = $tranche_deblocage_feffi;
@@ -46,7 +47,7 @@ class Demande_realimentation_feffi extends REST_Controller {
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
+                    //$data[$key]['convention_cife_entete'] = $convention_cife_entete;
                 }
             } 
                 else
@@ -54,15 +55,15 @@ class Demande_realimentation_feffi extends REST_Controller {
         }
         elseif ($menu=='getdemandedisponibleByconvention') //mande
         {
-            $menu = $this->Demande_realimentation_feffiManager->finddemandedisponibleByconvention($id_convention_cife_entete);
-            if ($menu) 
+            $tmp = $this->Demande_realimentation_feffiManager->finddemandedisponibleByconvention($id_convention_cife_entete);
+            if ($tmp) 
             { 
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
+                    //$convention_cife_entete= array();
+                    //$convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
                     $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['compte_feffi'] = $compte_feffi;
                     $data[$key]['tranche'] = $tranche_deblocage_feffi;
@@ -73,7 +74,7 @@ class Demande_realimentation_feffi extends REST_Controller {
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
+                    //$data[$key]['convention_cife_entete'] = $convention_cife_entete;
                 }
             } 
                 else
@@ -82,15 +83,15 @@ class Demande_realimentation_feffi extends REST_Controller {
 
         elseif ($menu=='getdemandeemidaafByconvention') //mande
         {
-            $menu = $this->Demande_realimentation_feffiManager->finddemandeemidaafByIdconvention_cife_entete($id_convention_cife_entete);
-            if ($menu) 
+            $tmp = $this->Demande_realimentation_feffiManager->finddemandeemidaafByIdconvention_cife_entete($id_convention_cife_entete);
+            if ($tmp) 
             { 
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
+                    //$convention_cife_entete= array();
+                    //$convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
                     $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['compte_feffi'] = $compte_feffi;
                     $data[$key]['tranche'] = $tranche_deblocage_feffi;
@@ -101,7 +102,7 @@ class Demande_realimentation_feffi extends REST_Controller {
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
+                    //$data[$key]['convention_cife_entete'] = $convention_cife_entete;
                 }
             } 
                 else
@@ -110,15 +111,15 @@ class Demande_realimentation_feffi extends REST_Controller {
 
         elseif ($menu=='getdemandeemiufpByconvention') //mande
         {
-            $menu = $this->Demande_realimentation_feffiManager->finddemandeemiufpByIdconvention_cife_entete($id_convention_cife_entete);
-            if ($menu) 
+            $tmp = $this->Demande_realimentation_feffiManager->finddemandeemiufpByIdconvention_cife_entete($id_convention_cife_entete);
+            if ($tmp) 
             { 
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
+                    //$convention_cife_entete= array();
+                    //$convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
                     $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['compte_feffi'] = $compte_feffi;
                     $data[$key]['tranche'] = $tranche_deblocage_feffi;
@@ -129,7 +130,7 @@ class Demande_realimentation_feffi extends REST_Controller {
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
+                    //$data[$key]['convention_cife_entete'] = $convention_cife_entete;
                 }
             } 
                 else
@@ -138,15 +139,15 @@ class Demande_realimentation_feffi extends REST_Controller {
 
         elseif ($menu=='getdemandeemidpfiByconvention') //mande
         {
-            $menu = $this->Demande_realimentation_feffiManager->finddemandeemidpfiByIdconvention_cife_entete($id_convention_cife_entete);
-            if ($menu) 
+            $tmp = $this->Demande_realimentation_feffiManager->finddemandeemidpfiByIdconvention_cife_entete($id_convention_cife_entete);
+            if ($tmp) 
             { 
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
+                    //$convention_cife_entete= array();
+                    //$convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
                     $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['compte_feffi'] = $compte_feffi;
                     $data[$key]['tranche'] = $tranche_deblocage_feffi;
@@ -157,7 +158,7 @@ class Demande_realimentation_feffi extends REST_Controller {
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
+                    //$data[$key]['convention_cife_entete'] = $convention_cife_entete;
                 }
             } 
                 else
@@ -166,15 +167,15 @@ class Demande_realimentation_feffi extends REST_Controller {
 
         elseif ($menu=='getdemandeByconvention') //mande
         {
-            $menu = $this->Demande_realimentation_feffiManager->findallByIdconvention_cife_entete($id_convention_cife_entete);
-            if ($menu) 
+            $tmp = $this->Demande_realimentation_feffiManager->findallByIdconvention_cife_entete($id_convention_cife_entete);
+            if ($tmp) 
             { 
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
+                    //$convention_cife_entete= array();
+                    //$convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
                     $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['compte_feffi'] = $compte_feffi;
                     $data[$key]['tranche'] = $tranche_deblocage_feffi;
@@ -185,24 +186,21 @@ class Demande_realimentation_feffi extends REST_Controller {
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
+                    //$data[$key]['convention_cife_entete'] = $convention_cife_entete;
                 }
             } 
                 else
                     $data = array();
         }
-
         elseif ($menu=='getdemandecreerByconvention') //mande
         {
-            $menu = $this->Demande_realimentation_feffiManager->findcreerByIdconvention_cife_entete($id_convention_cife_entete);
-            if ($menu) 
+            $tmp = $this->Demande_realimentation_feffiManager->findcreerByIdconvention_cife_entete($id_convention_cife_entete);
+            if ($tmp) 
             { 
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
                     $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['compte_feffi'] = $compte_feffi;
                     $data[$key]['tranche'] = $tranche_deblocage_feffi;
@@ -213,8 +211,52 @@ class Demande_realimentation_feffi extends REST_Controller {
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['date_approbation'] = $value->date_approbation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
                 }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getdemandecreer2Byconvention') //mande
+        {
+            $tmp = $this->Demande_realimentation_feffiManager->findcreer2ByIdconvention_cife_entete($id_convention_cife_entete);
+            if ($tmp) 
+            { 
+                foreach ($tmp as $key => $value) 
+                {
+                    $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_tranche_deblocage_feffi);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['compte_feffi'] = $compte_feffi;
+                    $data[$key]['tranche'] = $tranche_deblocage_feffi;
+                    $data[$key]['prevu'] = $value->prevu;
+                    $data[$key]['cumul'] = $value->cumul;
+                    $data[$key]['anterieur'] = $value->anterieur;
+                    $data[$key]['reste'] = $value->reste;
+                    $data[$key]['date'] = $value->date;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_approbation'] = $value->date_approbation;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getdemande_realimentationvalide2ById') //mande
+        {
+            $tmp = $this->Demande_realimentation_feffiManager->getdemande_realimentationvalide2ById($id_demande_realimentation);
+            if ($tmp) 
+            { 
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getdemande_realimentationvalideById') //mande
+        {
+            $tmp = $this->Demande_realimentation_feffiManager->getdemande_realimentationvalideById($id_demande_realimentation);
+            if ($tmp) 
+            { 
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -223,9 +265,9 @@ class Demande_realimentation_feffi extends REST_Controller {
         {
             $data = array();
             $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->findById($id);
-            $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($demande_realimentation_feffi->id_convention_cife_entete);
+            //$convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($demande_realimentation_feffi->id_convention_cife_entete);
             $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($demande_realimentation_feffi->id_convention_cife_entete);
-            $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
+            $compte_feffi = $this->Compte_feffiManager->findById($demande_realimentation_feffi->id_compte_feffi);
 
             $data['id'] = $demande_realimentation_feffi->id;
             $data['tranche_deblocage_feffi'] = $tranche_deblocage_feffi;
@@ -237,19 +279,19 @@ class Demande_realimentation_feffi extends REST_Controller {
             $data['date_approbation'] = $demande_realimentation_feffi->date_approbation;
             $data['date'] = $demande_realimentation_feffi->date;
             $data['validation'] = $demande_realimentation_feffi->validation;
-            $data['convention_cife_entete'] = $convention_cife_entete;
+            //$data['convention_cife_entete'] = $convention_cife_entete;
         } 
         else 
         {
-            $menu = $this->Demande_realimentation_feffiManager->findAll();
-            if ($men) 
+            $tmp = $this->Demande_realimentation_feffiManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
-                    $convention_cife_entete= array();
-                    $convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
+                    //$convention_cife_entete= array();
+                    //$convention_cife_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_cife_entete);
                     $tranche_deblocage_feffi = $this->Tranche_deblocage_feffiManager->findById($value->id_convention_cife_entete);
-                    $compte_feffi = $this->Compte_feffiManager->findByfeffiobjet($convention_cife_entete->id_feffi);
+                    $compte_feffi = $this->Compte_feffiManager->findById($value->id_compte_feffi);
                     
                     $data[$key]['id'] = $value->id;
                     $data[$key]['compte_feffi'] = $compte_feffi;
@@ -261,7 +303,7 @@ class Demande_realimentation_feffi extends REST_Controller {
                     $data[$key]['date_approbation'] = $value->date_approbation;
                     $data[$key]['date'] = $value->date;
                     $data[$key]['validation'] = $value->validation;
-                    $data[$key]['convention_cife_entete'] = $convention_cife_entete;
+                    //$data[$key]['convention_cife_entete'] = $convention_cife_entete;
                 }
             } 
                 else
@@ -298,7 +340,8 @@ class Demande_realimentation_feffi extends REST_Controller {
                     'date_approbation' => $this->post('date_approbation'),
                     'date' => $this->post('date'),
                     'validation' => $this->post('validation'),
-                    'id_convention_cife_entete' => $this->post('id_convention_cife_entete')
+                    'id_convention_cife_entete' => $this->post('id_convention_cife_entete'),
+                    'id_compte_feffi' => $this->post('id_compte_feffi')
                 );
                 if (!$data) {
                     $this->response([
@@ -331,7 +374,8 @@ class Demande_realimentation_feffi extends REST_Controller {
                     'date_approbation' => $this->post('date_approbation'),
                     'date' => $this->post('date'),
                     'validation' => $this->post('validation'),
-                    'id_convention_cife_entete' => $this->post('id_convention_cife_entete')
+                    'id_convention_cife_entete' => $this->post('id_convention_cife_entete'),
+                    'id_compte_feffi' => $this->post('id_compte_feffi')
                 );
                 if (!$data || !$id) {
                     $this->response([

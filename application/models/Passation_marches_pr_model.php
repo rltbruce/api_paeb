@@ -193,6 +193,22 @@ class Passation_marches_pr_model extends CI_Model {
         }
 
     }
+    public function getpassationvalideById($id_passation_pr) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_passation_pr)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }
+
+    }
     public function getpassationByconventionarray($id_convention_entete)
     {               
         $this->db->select('*')

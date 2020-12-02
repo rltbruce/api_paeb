@@ -34,7 +34,8 @@ class Demande_realimentation_feffi_model extends CI_Model {
             //'date_approbation' => $demande_realimentation_feffi['date_approbation'],
             'date' => $demande_realimentation_feffi['date'],
             'validation' => $demande_realimentation_feffi['validation'],
-            'id_convention_cife_entete'=> $demande_realimentation_feffi['id_convention_cife_entete']                       
+            'id_convention_cife_entete'=> $demande_realimentation_feffi['id_convention_cife_entete'],
+            'id_compte_feffi'=> $demande_realimentation_feffi['id_compte_feffi']                       
         );
     }
     public function delete($id) {
@@ -101,7 +102,7 @@ class Demande_realimentation_feffi_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_cife_entete", $id_convention_cife_entete)                        
-                        ->where("validation IN(1,8,7)")
+                        ->where("validation IN(1,3)")
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -156,6 +157,49 @@ class Demande_realimentation_feffi_model extends CI_Model {
             return null;
         }                 
     }
+    public function findcreer2ByIdconvention_cife_entete($id_convention_cife_entete) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_cife_entete", $id_convention_cife_entete)                        
+                        ->where("validation", 4)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getdemande_realimentationvalideById($id_demande_realimentation) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_demande_realimentation)                        
+                        ->where("validation !=", 0)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getdemande_realimentationvalide2ById($id_demande_realimentation) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_demande_realimentation)                        
+                        ->where("validation !=", 4)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function countdemandeByconvention($id_convention_cife_entete,$validation) {           //mande    
         $result =  $this->db->select('count(demande_realimentation_feffi.id) as nbr_demande_feffi')
                         ->from($this->table)
@@ -189,7 +233,7 @@ class Demande_realimentation_feffi_model extends CI_Model {
     }
 
     
-    public function countAllByInvalide($invalide)
+    public function countAllByvalidation($invalide)
     {
         $result = $this->db->select('COUNT(*) as nombre')
                         ->from($this->table)

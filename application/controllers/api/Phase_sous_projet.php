@@ -19,10 +19,29 @@ class Phase_sous_projet extends REST_Controller {
         $id = $this->get('id');
         $menu = $this->get('menu');
         $id_delai_travaux = $this->get('id_delai_travaux');
+        $id_phase_sous_projet = $this->get('id_phase_sous_projet');
         
         if ($menu=='getphasesousprojetvalideBycontrat')
          {
             $tmp = $this->Phase_sous_projetManager->findphasesousprojetvalideBydelai($id_delai_travaux);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $etape_sousprojet = $this->Etape_sousprojetManager->findById($value->id_etape_sousprojet);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['date_travaux'] = $value->date_travaux;
+                    $data[$key]['etape_sousprojet'] = $etape_sousprojet;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getphase_sous_projetvalideById')
+         {
+            $tmp = $this->Phase_sous_projetManager->getphase_sous_projetvalideById($id_phase_sous_projet);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 

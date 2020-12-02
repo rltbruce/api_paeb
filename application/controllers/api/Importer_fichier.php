@@ -13,6 +13,10 @@ class Importer_fichier extends CI_Controller {
     }
 	public function save_upload_file() {
 
+		ini_set('upload_max_filesize', '20M');  
+		ini_set('post_max_size', '20M');
+//ini_set('max_input_time', 3000);
+//ini_set('max_execution_time', 3000);
 		$erreur="aucun";
 		$replace=array('e','e','e','a','o','c','_');
 		$search= array('é','è','ê','à','ö','ç',' ');
@@ -36,8 +40,10 @@ class Importer_fichier extends CI_Controller {
 		$rapport=array();
 		//$rapport['repertoire']=dirname(__FILE__) ."/../../../../../../assets/ddb/" .$repertoire;
 		$config['upload_path']          = dirname(__FILE__) ."/../../../../../../assets/".$repertoire;
-		$config['allowed_types'] = 'gif|jpg|png|xls|xlsx|doc|docx|pdf';
-		$config['max_size'] = 2000;
+		$config['allowed_types'] = 'gif|jpg|png|xls|xlsx|doc|docx|pdf|txt';
+		$config['max_size'] = 10000;
+		$config['max_width'] = 2000;
+		$config['max_height'] = 2000;  
 		$config['overwrite'] = TRUE;
 		if (isset($_FILES['file']['tmp_name']))
 		{

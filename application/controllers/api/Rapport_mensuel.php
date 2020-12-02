@@ -19,14 +19,16 @@ class Rapport_mensuel extends REST_Controller {
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $validation = $this->get('validation');
         $id_cisco = $this->get('id_cisco');
+        $id_rapport_mensuel = $this->get('id_rapport_mensuel');
         $menu = $this->get('menu');
             
         if ($menu == "getrapportBycontrat")
         {
             $tmp = $this->Rapport_mensuelManager->findrapportBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
+            {   
+                $data = $tmp;
+               /* foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -37,7 +39,18 @@ class Rapport_mensuel extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['numero'] = $value->numero;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu == "getrapportvalideById")
+        {
+            $tmp = $this->Rapport_mensuelManager->getrapportvalideById($id_rapport_mensuel);
+            if ($tmp) 
+            {
+                $data = $tmp;
             } 
                 else
                     $data = array();
@@ -48,7 +61,8 @@ class Rapport_mensuel extends REST_Controller {
             $tmp = $this->Rapport_mensuelManager->findrapportvalideBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data = $tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -59,7 +73,7 @@ class Rapport_mensuel extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['numero'] = $value->numero;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
             } 
                 else
                     $data = array();
@@ -69,7 +83,8 @@ class Rapport_mensuel extends REST_Controller {
             $tmp = $this->Rapport_mensuelManager->findrapportinvalideBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data = $tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -80,7 +95,7 @@ class Rapport_mensuel extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['numero'] = $value->numero;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
             } 
                 else
                     $data = array();

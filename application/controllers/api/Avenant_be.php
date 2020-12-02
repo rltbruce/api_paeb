@@ -16,15 +16,17 @@ class Avenant_be extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_avenant_moe = $this->get('id_avenant_moe');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $menu = $this->get('menu');
 
          if ($menu=='getavenantinvalideBycontrat')
          {
-            $menu = $this->Avenant_beManager->findavenantinvalideBycontrat($id_contrat_bureau_etude);
-            if ($menu) 
+            $tmp = $this->Avenant_beManager->findavenantinvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
 
@@ -36,17 +38,18 @@ class Avenant_be extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
 
                     $data[$key]['contrat_be'] = $contrat_be;
-                        }
+                        }*/
             } 
                 else
                     $data = array();
         }   
         elseif ($menu=='getavenantvalideBycontrat')
          {
-            $menu = $this->Avenant_beManager->findavenantvalideBycontrat($id_contrat_bureau_etude);
-            if ($menu) 
+            $tmp = $this->Avenant_beManager->findavenantvalideBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
 
@@ -58,17 +61,18 @@ class Avenant_be extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
 
                     $data[$key]['contrat_be'] = $contrat_be;
-                        }
+                        }*/
             } 
                 else
                     $data = array();
         }   
         elseif ($menu=='getavenantBycontrat')
          {
-            $menu = $this->Avenant_beManager->findavenantBycontrat($id_contrat_bureau_etude);
-            if ($menu) 
+            $tmp = $this->Avenant_beManager->findavenantBycontrat($id_contrat_bureau_etude);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
 
@@ -80,28 +84,17 @@ class Avenant_be extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
 
                     $data[$key]['contrat_be'] = $contrat_be;
-                        }
+                        }*/
             } 
                 else
                     $data = array();
         }   
-        elseif ($menu=='getavenantBycontrat')
+        elseif ($menu=='getavenantvalideById')
          {
-            $menu = $this->Avenant_beManager->findAllByContrat_be($id_contrat_bureau_etude);
-            if ($menu) 
+            $tmp = $this->Avenant_beManager->getavenantvalideById($id_avenant_moe);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
-                {
-                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
-
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ref_avenant']    = $value->ref_avenant;
-                    $data[$key]['montant']   = $value->montant;
-                    $data[$key]['date_signature'] = $value->date_signature;
-
-                    $data[$key]['contrat_be'] = $contrat_be;
-                        }
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -122,10 +115,10 @@ class Avenant_be extends REST_Controller {
         } 
         else 
         {
-            $menu = $this->Avenant_beManager->findAll();
-            if ($menu) 
+            $tmp = $this->Avenant_beManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {                   
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
 
@@ -136,7 +129,7 @@ class Avenant_be extends REST_Controller {
                     $data[$key]['date_signature'] = $value->date_signature;
 
                     $data[$key]['contrat_be'] = $contrat_be;
-                        }
+                }
             } 
                 else
                     $data = array();

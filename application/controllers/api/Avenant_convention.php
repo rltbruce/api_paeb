@@ -17,14 +17,17 @@ class Avenant_convention extends REST_Controller {
     {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
+        $id_document_feffi = $this->get('id_document_feffi');
+        $id_avenant_convention = $this->get('id_avenant_convention');
         $menu = $this->get('menu');
 
          if ($menu=='getavenantByconvention')
          {
-            $menu = $this->Avenant_conventionManager->findavenantByconvention($id_convention_entete);
-            if ($menu) 
+            $tmp = $this->Avenant_conventionManager->findavenantByconvention($id_convention_entete);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
@@ -36,17 +39,18 @@ class Avenant_convention extends REST_Controller {
                     $data[$key]['validation']    = $value->validation;
 
                     $data[$key]['convention_entete'] = $convention_entete;
-                        }
+                        }*/
             } 
                 else
                     $data = array();
         } 
         elseif ($menu=='getavenantvalideByconvention')
          {
-            $menu = $this->Avenant_conventionManager->findavenantvalideByconvention($id_convention_entete);
-            if ($menu) 
+            $tmp = $this->Avenant_conventionManager->findavenantvalideByconvention($id_convention_entete);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
@@ -58,17 +62,38 @@ class Avenant_convention extends REST_Controller {
                     $data[$key]['validation']    = $value->validation;
 
                     $data[$key]['convention_entete'] = $convention_entete;
-                        }
+                        }*/
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getavenant_conventionvalideById')
+         {
+            $tmp = $this->Avenant_conventionManager->getavenant_conventionvalideById($id_avenant_convention);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getdocumentByconventiondossier_prevu')
+         {
+            $tmp = $this->Avenant_conventionManager->getdocumentByconventiondossier_prevu($id_document_feffi,$id_convention_entete);
+            if ($tmp) 
+            {
+                $data=$tmp;
             } 
                 else
                     $data = array();
         }   
         elseif ($menu=='getavenantinvalideByconvention')
          {
-            $menu = $this->Avenant_conventionManager->findavenantinvalideByconvention($id_convention_entete);
-            if ($menu) 
+            $tmp = $this->Avenant_conventionManager->findavenantinvalideByconvention($id_convention_entete);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
@@ -80,17 +105,17 @@ class Avenant_convention extends REST_Controller {
                     $data[$key]['validation']    = $value->validation;
 
                     $data[$key]['convention_entete'] = $convention_entete;
-                        }
+                        }*/
             } 
                 else
                     $data = array();
         }   
-        elseif ($menu=='getavenantByconvention')
+        /*elseif ($menu=='getavenantByconvention')
          {
-            $menu = $this->Avenant_conventionManager->findavenantvalideByconvention($id_convention_entete);
-            if ($menu) 
+            $tmp = $this->Avenant_conventionManager->findavenantvalideByconvention($id_convention_entete);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
@@ -106,12 +131,12 @@ class Avenant_convention extends REST_Controller {
             } 
                 else
                     $data = array();
-        }   
+        }  */ 
         elseif ($id)
         {
             $data = array();
             $avenant_convention = $this->Avenant_conventionManager->findById($id);
-            $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($avenant_convention->id_contrat_convention);
+            //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($avenant_convention->id_contrat_convention);
 
             $data['id'] = $avenant_convention->id;
             $data['ref_avenant'] = $avenant_convention->ref_avenant;
@@ -120,14 +145,15 @@ class Avenant_convention extends REST_Controller {
             $data['date_signature']    = $avenant_convention->date_signature;
             $data['validation']    = $avenant_convention->validation;
 
-            $data['convention_entete'] = $convention_entete;
+            //$data['convention_entete'] = $convention_entete;
         } 
         else 
         {
-            $menu = $this->Avenant_conventionManager->findAll();
-            if ($menu) 
+            $tmp = $this->Avenant_conventionManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_contrat_convention);
 
@@ -139,7 +165,7 @@ class Avenant_convention extends REST_Controller {
                     $data[$key]['validation']    = $value->validation;
 
                     $data[$key]['convention_entete'] = $convention_entete;
-                        }
+                        }*/
             } 
                 else
                     $data = array();

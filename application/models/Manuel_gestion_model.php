@@ -89,6 +89,20 @@ class Manuel_gestion_model extends CI_Model {
             return null;
         }                 
     }
+    function findmanuelvalideById($id_manuel_gestion) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_manuel_gestion)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     function findmanuelinvalideBycontrat($id_contrat_bureau_etude) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

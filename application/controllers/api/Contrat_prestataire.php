@@ -19,6 +19,7 @@ class Contrat_prestataire extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_contrat_mpe= $this->get('id_contrat_mpe');
         $id_convention_entete = $this->get('id_convention_entete');
         $menus = $this->get('menus');
         $id_demande_batiment_pre = $this->get('id_demande_batiment_pre');
@@ -78,6 +79,35 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['date_signature'] = $value->date_signature;
                     //$data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
                     //$data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
+                    $data[$key]['delai_execution'] = $value->delai_execution;
+                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['prestataire'] = $prestataire;
+                    $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
+                    $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menus=='getcontrat_mpevalideById')
+         {
+            $menu = $this->Contrat_prestataireManager->findcontratvalideById($id_contrat_mpe);
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
+                    $passation = $this->Passation_marchesManager->findpassationarrayByconvention($value->id_convention_entete);
+
+                    $data[$key]['passation'] = $passation;
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['num_contrat']   = $value->num_contrat;
+                    $data[$key]['cout_batiment']    = $value->cout_batiment;
+                    $data[$key]['cout_latrine']   = $value->cout_latrine;
+                    $data[$key]['cout_mobilier'] = $value->cout_mobilier;
+                    $data[$key]['date_signature'] = $value->date_signature;
                     $data[$key]['delai_execution'] = $value->delai_execution;
                     $data[$key]['paiement_recu'] = $value->paiement_recu;
                     $data[$key]['validation'] = $value->validation;

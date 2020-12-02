@@ -122,6 +122,21 @@ class Facture_moe_entete_model extends CI_Model {
             return null;
         }                 
     }
+
+    public function getfacture_moevalideById($id_facture_moe) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id',$id_facture_moe)
+                        ->where('validation >',0)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
         
 
 }

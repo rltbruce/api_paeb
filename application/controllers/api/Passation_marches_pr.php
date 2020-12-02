@@ -20,6 +20,7 @@ class Passation_marches_pr extends REST_Controller {
         $id_convention_entete = $this->get('id_convention_entete');
         $id_partenaire_relai = $this->get('id_partenaire_relai');
         $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
+        $id_passation_pr = $this->get('id_passation_pr');
         $menu = $this->get('menu');
 
          if ($menu=='getdate_contratByconvention')
@@ -37,10 +38,11 @@ class Passation_marches_pr extends REST_Controller {
             $tmp = $this->Passation_marches_prManager->getpassationByconvention($id_convention_entete);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     //$partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                   // $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['date_lancement_dp'] = $value->date_lancement_dp;
@@ -55,9 +57,9 @@ class Passation_marches_pr extends REST_Controller {
                     $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
                    
 
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                    
-                        }
+                        }*/
             } 
                 else
                     $data = array();
@@ -68,10 +70,11 @@ class Passation_marches_pr extends REST_Controller {
             $tmp = $this->Passation_marches_prManager->getpassationvalideByconvention($id_convention_entete);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     //$partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                   // $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['date_lancement_dp'] = $value->date_lancement_dp;
@@ -86,9 +89,20 @@ class Passation_marches_pr extends REST_Controller {
                     $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
                    
 
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                    
-                        }
+                        }*/
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getpassationvalideById')
+         {
+            $tmp = $this->Passation_marches_prManager->getpassationvalideById($id_passation_pr);
+            if ($tmp) 
+            {
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -98,10 +112,11 @@ class Passation_marches_pr extends REST_Controller {
             $tmp = $this->Passation_marches_prManager->getpassationinvalideByconvention($id_convention_entete);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     //$partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['date_lancement_dp'] = $value->date_lancement_dp;
@@ -116,9 +131,9 @@ class Passation_marches_pr extends REST_Controller {
                     $data[$key]['date_signature_contrat']   = $value->date_signature_contrat;
                    
 
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                    
-                        }
+                        }*/
             } 
                 else
                     $data = array();
@@ -128,7 +143,8 @@ class Passation_marches_pr extends REST_Controller {
             $tmp = $this->Passation_marches_prManager->findpassationBycontrat_partenaire_relai($id_contrat_partenaire_relai);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     //$partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -148,7 +164,7 @@ class Passation_marches_pr extends REST_Controller {
 
                     $data[$key]['convention_entete'] = $convention_entete;
                    
-                        }
+                        }*/
             } 
                 else
                     $data = array();
@@ -157,7 +173,8 @@ class Passation_marches_pr extends REST_Controller {
             $tmp = $this->Passation_marches_prManager->findAllBypartenaire_relai($id_partenaire_relai);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     //$partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -177,7 +194,7 @@ class Passation_marches_pr extends REST_Controller {
 
                     $data[$key]['convention_entete'] = $convention_entete;
                    
-                        }
+                        }*/
             } 
                 else
                     $data = array();
@@ -208,7 +225,8 @@ class Passation_marches_pr extends REST_Controller {
             $tmp = $this->Passation_marches_prManager->findAll();
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     //$partenaire_relai = $this->Partenaire_relaiManager->findById($value->id_partenaire_relai);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -225,7 +243,7 @@ class Passation_marches_pr extends REST_Controller {
 
                     $data[$key]['convention_entete'] = $convention_entete;
                     //$data[$key]['partenaire_relai'] = $partenaire_relai;
-                        }
+                        }*/
             } 
                 else
                     $data = array();

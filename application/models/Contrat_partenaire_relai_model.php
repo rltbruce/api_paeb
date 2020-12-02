@@ -94,6 +94,20 @@ class Contrat_partenaire_relai_model extends CI_Model {
             return null;
         }                 
     }
+    public function findvalideById($id_contrat_partenaire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_contrat_partenaire)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findcontratByConvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

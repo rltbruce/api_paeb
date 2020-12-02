@@ -17,6 +17,7 @@ class Indicateur extends REST_Controller {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
         $menu = $this->get('menu');
+        $id_indicateur = $this->get('id_indicateur');
          
          if ($menu=='getindicateurinvalideByconvention')
          {
@@ -31,6 +32,16 @@ class Indicateur extends REST_Controller {
         elseif ($menu=='getindicateurvalideByconvention')
          {
             $tmp = $this->IndicateurManager->findindicateurvalideByConvention($id_convention_entete);
+            if ($tmp) 
+            {
+                $data = $tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getindicateurvalideById')
+         {
+            $tmp = $this->IndicateurManager->findindicateurvalideById($id_indicateur);
             if ($tmp) 
             {
                 $data = $tmp;

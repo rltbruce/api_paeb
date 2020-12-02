@@ -96,6 +96,20 @@ class Reception_mpe_model extends CI_Model {
             return null;
         }                 
     }
+    public function findreception_mpevalideById($id_reception_mpe) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_reception_mpe)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findreception_mpeinvalideBycontrat($id_contrat_prestataire) {               
         $result =  $this->db->select('reception_mpe.*')
                         ->from($this->table)

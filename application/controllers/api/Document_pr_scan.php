@@ -19,11 +19,23 @@ class Document_pr_scan extends REST_Controller {
     {
         $id = $this->get('id');
         $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
+        $id_document_pr = $this->get('id_document_pr');
         $id_convention_entete = $this->get('id_convention_entete');
         $validation = $this->get('validation');
         $menu = $this->get('menu');
+        $id_document_pr_scan = $this->get('id_document_pr_scan');
             
-        if ($menu == "getdocument_pr_scanByConvention")
+        if ($menu == "getdocumentvalideById")
+        {
+            $tmp = $this->Document_pr_scanManager->getdocumentvalideById($id_document_pr_scan);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getdocument_pr_scanByConvention")
         {
             $tmp = $this->Document_pr_scanManager->findAllByconvention($id_convention_entete,$validation);
             if ($tmp) 
@@ -43,6 +55,16 @@ class Document_pr_scan extends REST_Controller {
                     //$data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
 
                 }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getdocumentBycontratdossier_prevu")
+        {
+            $tmp = $this->Document_pr_scanManager->getdocumentBycontratdossier_prevu($id_document_pr,$id_contrat_partenaire_relai);
+            if ($tmp) 
+            {
+                $data=$tmp;
             } 
                 else
                     $data = array();

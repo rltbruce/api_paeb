@@ -17,8 +17,20 @@ class Transfert_ufp extends REST_Controller {
     {
         $id = $this->get('id');
         $id_demande_deblocage_daaf = $this->get('id_demande_deblocage_daaf');
+        $id_transfert_ufp = $this->get('id_transfert_ufp');
+        $menu = $this->get('menu');
             
-        if ($id_demande_deblocage_daaf) 
+        if ($menu=='gettransfert_ufpvalideById') 
+        {   
+            $tmp = $this->Transfert_ufpManager->gettransfert_ufpvalideById($id_transfert_ufp);
+            if ($tmp) 
+            {
+                $data = $tmp;
+            }
+            else
+                $data = array();
+        }
+        elseif ($id_demande_deblocage_daaf) 
         {   $data = array();
             $tmp = $this->Transfert_ufpManager->findBydemande_deblocage_daaf($id_demande_deblocage_daaf);
             if ($tmp) 

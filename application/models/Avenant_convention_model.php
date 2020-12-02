@@ -110,6 +110,37 @@ class Avenant_convention_model extends CI_Model {
             return null;
         }                 
     }
+
+    public function getavenant_conventionvalideById($id_avenant_convention) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_avenant_convention)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getdocumentByconventiondossier_prevu($id_document_feffi,$id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_document_feffi", $id_document_feffi)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function countAvenantByIdconvention($id_convention_entete)  {
         $this->db->select('count(id) as nbr')
                     ->where("id_convention_entete", $id_convention_entete)

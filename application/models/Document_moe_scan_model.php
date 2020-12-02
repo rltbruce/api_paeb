@@ -79,7 +79,7 @@ class Document_moe_scan_model extends CI_Model {
         }                 
     } */
 
-    public function findAllByvalidation($validation)
+    /*public function findAllByvalidation($validation)
     {               
         $result =  $this->db->select('*')
                         ->from($this->table)
@@ -93,8 +93,38 @@ class Document_moe_scan_model extends CI_Model {
         }else{
             return null;
         }                 
+    }*/
+    public function getdocumentvalideById($id_document_moe_scan)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table) 
+                        ->where("id", $id_document_moe_scan)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     }
-    public function finddocumentinvalideBycisco($id_cisco)
+    public function getdocumentBycontratdossier_prevu($id_document_moe,$id_contrat_bureau_etude)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table) 
+                        ->where("id_document_moe", $id_document_moe)
+                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    /*public function finddocumentinvalideBycisco($id_cisco)
     {               
         $result =  $this->db->select('document_moe_scan.*')
                         ->from($this->table)                        
@@ -131,6 +161,6 @@ class Document_moe_scan_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
 
 }

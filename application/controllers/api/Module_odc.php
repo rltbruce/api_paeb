@@ -21,6 +21,7 @@ class Module_odc extends REST_Controller {
         $id_classification_site = $this->get('id_classification_site');
         $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
         $menu = $this->get('menu');
+        $id_module = $this->get('id_module');
 
         if ($menu=='getmoduleBycontrat')
          {
@@ -29,7 +30,7 @@ class Module_odc extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+                    //$contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
 
                     $nbr_parti= $this->Participant_odcManager->count_participantbyId($value->id);
                     $nbr_feminin= $this->Participant_odcManager->count_femininbyId($value->id);
@@ -48,7 +49,7 @@ class Module_odc extends REST_Controller {
                     $data[$key]['lieu_formation'] = $value->lieu_formation;
                     $data[$key]['observation']   = $value->observation;
                     $data[$key]['validation']   = $value->validation;
-                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                    //$data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
                         }
             } 
                 else
@@ -61,7 +62,7 @@ class Module_odc extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+                    //$contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
 
                     $nbr_parti= $this->Participant_odcManager->count_participantbyId($value->id);
                     $nbr_feminin= $this->Participant_odcManager->count_femininbyId($value->id);
@@ -80,7 +81,39 @@ class Module_odc extends REST_Controller {
                     $data[$key]['lieu_formation'] = $value->lieu_formation;
                     $data[$key]['observation']   = $value->observation;
                     $data[$key]['validation']   = $value->validation;
-                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                    //$data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getmodulevalideById')
+         {
+            $tmp = $this->Module_odcManager->findvalideById($id_module);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+
+                    $nbr_parti= $this->Participant_odcManager->count_participantbyId($value->id);
+                    $nbr_feminin= $this->Participant_odcManager->count_femininbyId($value->id);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_debut_previ_form'] = $value->date_debut_previ_form;
+                    $data[$key]['date_fin_previ_form']   = $value->date_fin_previ_form;
+                    $data[$key]['date_previ_resti']    = $value->date_previ_resti;
+                    $data[$key]['date_debut_reel_form'] = $value->date_debut_reel_form;
+                    $data[$key]['date_fin_reel_form'] = $value->date_fin_reel_form;
+                    $data[$key]['date_reel_resti'] = $value->date_reel_resti;
+                    $data[$key]['nbr_previ_parti']   = $value->nbr_previ_parti;
+                    $data[$key]['nbr_parti']    = $nbr_parti->nbr_participant;
+                    $data[$key]['nbr_previ_fem_parti']   = $value->nbr_previ_fem_parti;
+                    $data[$key]['nbr_reel_fem_parti'] = $nbr_feminin->nbr_feminin;
+                    $data[$key]['lieu_formation'] = $value->lieu_formation;
+                    $data[$key]['observation']   = $value->observation;
+                    $data[$key]['validation']   = $value->validation;
+                    //$data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
                         }
             } 
                 else
@@ -93,7 +126,7 @@ class Module_odc extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+                    //$contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
 
                     $nbr_parti= $this->Participant_odcManager->count_participantbyId($value->id);
                     $nbr_feminin= $this->Participant_odcManager->count_femininbyId($value->id);
@@ -112,7 +145,7 @@ class Module_odc extends REST_Controller {
                     $data[$key]['lieu_formation'] = $value->lieu_formation;
                     $data[$key]['observation']   = $value->observation;
                     $data[$key]['validation']   = $value->validation;
-                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                    //$data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
                         }
             } 
                 else
@@ -221,8 +254,8 @@ class Module_odc extends REST_Controller {
             $data = array();
             $module_odc = $this->Module_odcManager->findById($id);
 
-            $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($module_odc->id_contrat_partenaire_relai);
-            $classification_site = $this->Classification_siteManager->findById($module_odc->id_classification_site);
+            //$contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($module_odc->id_contrat_partenaire_relai);
+            //$classification_site = $this->Classification_siteManager->findById($module_odc->id_classification_site);
             $nbr_parti= $this->Participant_odcManager->count_participantbyId($module_odc->id);
             $nbr_feminin= $this->Participant_odcManager->count_femininbyId($module_odc->id);
 
@@ -239,8 +272,8 @@ class Module_odc extends REST_Controller {
             $data['nbr_reel_fem_parti'] = $nbr_feminin->nbr_feminin;
             $data['lieu_formation'] = $module_odc->lieu_formation;
             $data['observation']   = $module_odc->observation;
-            $data['classification_site'] = $classification_site;
-            $data['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+            //$data['classification_site'] = $classification_site;
+            //$data['contrat_partenaire_relai'] = $contrat_partenaire_relai;
             $data['validation']   = $module_odc->validation;
         } 
         else 
@@ -250,8 +283,8 @@ class Module_odc extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
-                    $classification_site = $this->Classification_siteManager->findById($value->id_classification_site);
+                    //$contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+                    //$classification_site = $this->Classification_siteManager->findById($value->id_classification_site);
                     $nbr_parti= $this->Participant_odcManager->count_participantbyId($value->id);
                     $nbr_feminin= $this->Participant_odcManager->count_femininbyId($value->id);
 
@@ -268,8 +301,8 @@ class Module_odc extends REST_Controller {
                     $data[$key]['nbr_reel_fem_parti'] = $nbr_feminin->nbr_feminin;
                     $data[$key]['lieu_formation'] = $value->lieu_formation;
                     $data[$key]['observation']   = $value->observation;
-                    $data[$key]['classification_site'] = $classification_site;
-                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                    //$data[$key]['classification_site'] = $classification_site;
+                    //$data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
                     $data[$key]['validation']   = $value->validation;
                         }
             } 
@@ -312,7 +345,7 @@ class Module_odc extends REST_Controller {
                     'validation' => $this->post('validation'),
                     'lieu_formation' => $this->post('lieu_formation'),
                     'observation' => $this->post('observation'),
-                    'id_classification_site' => $this->post('id_classification_site'),
+                    //'id_classification_site' => $this->post('id_classification_site'),
                     'id_contrat_partenaire_relai' => $this->post('id_contrat_partenaire_relai'),
                 );
                 if (!$data) {
@@ -351,7 +384,7 @@ class Module_odc extends REST_Controller {
                     'validation' => $this->post('validation'),
                     'lieu_formation' => $this->post('lieu_formation'),
                     'observation' => $this->post('observation'),
-                    'id_classification_site' => $this->post('id_classification_site'),
+                    //'id_classification_site' => $this->post('id_classification_site'),
                     'id_contrat_partenaire_relai' => $this->post('id_contrat_partenaire_relai'),
                 );
                 if (!$data || !$id) {

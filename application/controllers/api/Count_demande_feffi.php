@@ -15,20 +15,20 @@ class Count_demande_feffi extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
-        $invalide = $this->get('invalide');
-        if ($invalide==1)
+        $validation = $this->get('invalide');
+        if ($validation==1)
         {
-           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByInvalide(0);          
+           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByvalidation(1);          
             $data = $demande_realimentation_feffi;
         }
-        if ($invalide==2)
+        if ($validation==5)
         {
-           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByInvalide(1);          
+           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByvalidation(5);          
             $data = $demande_realimentation_feffi;
         }
-        if ($invalide==3)
+        if ($validation==3)
         {
-           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByInvalide(4);          
+           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByvalidation(4);          
             $data = $demande_realimentation_feffi;
         }
     

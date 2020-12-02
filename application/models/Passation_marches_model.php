@@ -138,6 +138,20 @@ class Passation_marches_model extends CI_Model {
             return null;
         }                 
     }
+    public function findpassationvalideById($id_passation_mpe) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_passation_mpe)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findpassationinvalidevalideByconvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

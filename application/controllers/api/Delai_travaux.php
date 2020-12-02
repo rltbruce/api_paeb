@@ -18,13 +18,15 @@ class Delai_travaux extends REST_Controller {
         $id = $this->get('id');
         $menu = $this->get('menu');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_delai_travaux = $this->get('id_delai_travaux');
 
          if ($menu=='getdelai_travauxBycontrat')
          {
             $tmp = $this->Delai_travauxManager->finddelai_travauxBycontrat($id_contrat_prestataire);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data = $tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_prestataire = $this->Contrat_prestatireManager->findById($value->id_contrat_prestataire);
                     
@@ -35,7 +37,7 @@ class Delai_travaux extends REST_Controller {
                     $data[$key]['date_expiration_police']   = $value->date_expiration_police;
                     $data[$key]['validation']   = $value->validation;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
-                        }
+                        }*/
             } 
                 else
                     $data = array();
@@ -45,7 +47,8 @@ class Delai_travaux extends REST_Controller {
             $tmp = $this->Delai_travauxManager->finddelai_travauxinvalideBycontrat($id_contrat_prestataire);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data = $tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_prestataire = $this->Contrat_prestatireManager->findById($value->id_contrat_prestataire);
                     
@@ -56,16 +59,40 @@ class Delai_travaux extends REST_Controller {
                     $data[$key]['date_expiration_police']   = $value->date_expiration_police;
                     $data[$key]['validation']   = $value->validation;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
-                }
+                }*/
             } 
                 else
                     $data = array();
-        }elseif ($menu=='getdelai_travauxvalideBycontrat')
+        }
+        elseif ($menu=='getdelai_travauxvalideById')
+         {
+            $tmp = $this->Delai_travauxManager->finddelai_travauxvalideById($id_delai_travaux);
+            if ($tmp) 
+            {
+               $data = $tmp;
+               /* foreach ($tmp as $key => $value) 
+                {
+                    $contrat_prestataire = $this->Contrat_prestatireManager->findById($value->id_contrat_prestataire);
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_prev_debu_travau'] = $value->date_prev_debu_travau;
+                    $data[$key]['date_reel_debu_travau']= $value->date_reel_debu_travau;
+                    $data[$key]['delai_execution']    = $value->delai_execution;
+                    $data[$key]['date_expiration_police']   = $value->date_expiration_police;
+                    $data[$key]['validation']   = $value->validation;
+                    $data[$key]['contrat_prestataire'] = $contrat_prestataire;
+                        }*/
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getdelai_travauxvalideBycontrat')
          {
             $tmp = $this->Delai_travauxManager->finddelai_travauxvalideBycontrat($id_contrat_prestataire);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+               $data = $tmp;
+               /* foreach ($tmp as $key => $value) 
                 {
                     $contrat_prestataire = $this->Contrat_prestatireManager->findById($value->id_contrat_prestataire);
                     
@@ -76,7 +103,7 @@ class Delai_travaux extends REST_Controller {
                     $data[$key]['date_expiration_police']   = $value->date_expiration_police;
                     $data[$key]['validation']   = $value->validation;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
-                        }
+                        }*/
             } 
                 else
                     $data = array();
@@ -101,7 +128,8 @@ class Delai_travaux extends REST_Controller {
             $tmp = $this->Delai_travauxManager->findAll();
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data = $tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_prestataire = $this->Contrat_prestatireManager->findById($value->id_contrat_prestataire);
                     
@@ -112,7 +140,7 @@ class Delai_travaux extends REST_Controller {
                     $data[$key]['date_expiration_police']   = $value->date_expiration_police;
                     $data[$key]['validation']   = $value->validation;
                     $data[$key]['contrat_prestataire'] = $contrat_prestataire;
-                        }
+                        }*/
             } 
                 else
                     $data = array();

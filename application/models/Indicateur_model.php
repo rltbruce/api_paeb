@@ -100,6 +100,21 @@ class Indicateur_model extends CI_Model {
             return null;
         }                 
     }
+    public function findindicateurvalideById($id_indicateur) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_indicateur)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findindicateurByConvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

@@ -75,6 +75,20 @@ class Rapport_mensuel_model extends CI_Model {
             return null;
         }                 
     }
+    function getrapportvalideById($id_rapport_mensuel) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_rapport_mensuel)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     function findrapportvalideBycontrat($id_contrat_bureau_etude) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

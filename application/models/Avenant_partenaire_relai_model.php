@@ -125,6 +125,21 @@ class Avenant_partenaire_relai_model extends CI_Model {
         }                 
     }
 
+    public function findavenantvalideById($id_avenant_partenaire) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_avenant_partenaire)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
     public function findavenantinvalideByContrat($id_contrat_partenaire_relai) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

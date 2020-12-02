@@ -28,6 +28,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         return array(
             'ref_convention' => $convention['ref_convention'],
             'objet' =>    $convention['objet'],
+            'id_region' => $convention['id_region'],
             'id_cisco' => $convention['id_cisco'],
             'id_feffi' => $convention['id_feffi'],
             'id_site' => $convention['id_site'],
@@ -82,12 +83,40 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             return null;
         }                 
     }
+    public function findcreerInvalideByutilisateurnow($id_utilisateur,$annee) {             //mande  
+        
+        $sql=" select 
+                       convention.*
+               from convention_cisco_feffi_entete as convention
+
+                where 
+                            convention.validation= 0 and DATE_FORMAT(convention.date_creation,'%Y')= '".$annee."' and id_user ='".$id_utilisateur."'
+             
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }
 
     public function findcreerInvalidenow($annee) {             //mande  
         $result =  $this->db->select('convention_cisco_feffi_entete.*')
                         ->from($this->table)
                         ->where("DATE_FORMAT(date_creation,'%Y')",$annee)
                         ->where("validation",0)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function testconventionByIfvalide($id_convention_entete) { 
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id",$id_convention_entete)
+                        ->where("validation!=",0)
                         ->order_by('ref_convention')
                         ->get()
                         ->result();
@@ -345,19 +374,6 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         }                 
     }
 
-    public function findcreerInvalideByutilisateurnow($id_utilisateur,$annee) {             //mande  
-        
-        $sql=" select 
-                       convention.*
-               from convention_cisco_feffi_entete as convention
-
-                where 
-                            convention.validation= 0 and DATE_FORMAT(convention.date_creation,'%Y')= '".$annee."' and id_user ='".$id_utilisateur."'
-             
-
-            ";
-            return $this->db->query($sql)->result();                  
-    }
 
     public function findAllInvalideByutilisateurnow($id_utilisateur,$annee) {             //mande  
         
@@ -388,7 +404,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             return null;
         }                 
     }
-    public function findAllByufpdaaf($id_convention_ufpdaaf) {       //mande        
+    public function findconventionFeffiByconvention_ufpdaaf($id_convention_ufpdaaf) {       //mande        
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("validation",2)
@@ -1336,6 +1352,22 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             ";
             return $this->db->query($sql)->result();                  
     }
+    public function getconventionNeeddemandefeffivalidationdpfi()
+    {
+        $sql=" select 
+                       convention.*
+               from convention_cisco_feffi_entete as convention
+
+               inner join demande_realimentation_feffi as demande on demande.id_convention_cife_entete = convention.id
+
+                where 
+                        demande.validation= 4
+                            group by convention.id
+             
+
+            ";
+            return $this->db->query($sql)->result();                  
+    }
     public function getconventionNeeddecaissfeffivalidationbcaf()
     {
         $sql=" select 
@@ -1692,7 +1724,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                inner join demande_realimentation_feffi as demande on demande.id_convention_cife_entete = convention.id
 
                 where 
-                        demande.validation= 4
+                        demande.validation= 5
                             group by convention.id
                             having count(demande.id)>0
              
@@ -1718,7 +1750,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             ";
             return $this->db->query($sql)->result();                  
     }
-    public function getconventionNeeddemandefeffivalidationpdfi()
+  /*  public function getconventionNeeddemandefeffivalidationufp()
     {
         $sql=" select 
                        convention.*,
@@ -1735,7 +1767,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
             ";
             return $this->db->query($sql)->result();                  
-    }
+    }*/
 
     public function getconventionNeedvalidationpdfi()
     {

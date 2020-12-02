@@ -34,6 +34,7 @@ class Demande_deblocage_daaf_model extends CI_Model {
             'reste' =>$demande_deblocage_daaf['reste'],
             'date'  =>$demande_deblocage_daaf['date'],
             'id_convention_ufp_daaf_entete'    =>  $demande_deblocage_daaf['id_convention_ufp_daaf_entete'],
+            'id_compte_daaf'    =>  $demande_deblocage_daaf['id_compte_daaf'],
             'validation'    =>  $demande_deblocage_daaf['validation']                         
         );
     }
@@ -87,6 +88,21 @@ class Demande_deblocage_daaf_model extends CI_Model {
                         ->from($this->table)
                         ->where("id_convention_ufp_daaf_entete", $id_convention_ufpdaaf)
                         ->where("validation", $validation)
+                        ->order_by('objet')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getdemande_deblocageById($id_demande_deblocage_daaf) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_demande_deblocage_daaf)
+                        ->where("validation !=", 0)
                         ->order_by('objet')
                         ->get()
                         ->result();
@@ -166,6 +182,20 @@ class Demande_deblocage_daaf_model extends CI_Model {
         return $this->db->query($sql)->result();                  
     }
 
- 
+       public function getdemandeinvalideufp($id_convention_ufp_daaf_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_ufp_daaf_entete",$id_convention_ufp_daaf_entete )
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 }

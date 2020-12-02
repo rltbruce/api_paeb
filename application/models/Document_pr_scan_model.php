@@ -95,4 +95,35 @@ class Document_pr_scan_model extends CI_Model {
         }                 
     }
 
+    public function getdocumentBycontratdossier_prevu($id_document_pr,$id_contrat_partenaire_relai)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table) 
+                        ->where("id_document_pr", $id_document_pr)
+                        ->where("id_contrat_partenaire_relai", $id_contrat_partenaire_relai)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getdocumentvalideById($id_document_pr_scan)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table) 
+                        ->where("id", $id_document_pr_scan)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

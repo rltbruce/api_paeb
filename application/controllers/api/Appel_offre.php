@@ -16,6 +16,7 @@ class Appel_offre extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_appel_offre = $this->get('id_appel_offre');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $id_cisco = $this->get('id_cisco');
         $validation = $this->get('validation');
@@ -26,7 +27,8 @@ class Appel_offre extends REST_Controller {
             $tmp = $this->Appel_offreManager->findappelBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data = $tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -37,7 +39,7 @@ class Appel_offre extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
             } 
                 else
                     $data = array();
@@ -47,7 +49,8 @@ class Appel_offre extends REST_Controller {
             $tmp = $this->Appel_offreManager->findappelvalideBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+               $data = $tmp;
+               /* foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -58,7 +61,17 @@ class Appel_offre extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getappelvalideById")
+        {
+            $tmp = $this->Appel_offreManager->findappelvalideById($id_appel_offre);
+            if ($tmp) 
+            {
+               $data = $tmp;
             } 
                 else
                     $data = array();
@@ -68,7 +81,8 @@ class Appel_offre extends REST_Controller {
             $tmp = $this->Appel_offreManager->findappelinvalideBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data = $tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -79,7 +93,7 @@ class Appel_offre extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
             } 
                 else
                     $data = array();

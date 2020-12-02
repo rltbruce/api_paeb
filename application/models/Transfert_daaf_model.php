@@ -123,6 +123,20 @@ class Transfert_daaf_model extends CI_Model {
             return null;
         }                 
     }
+    public function gettransfert_daafvalideById($id_transfert_daaf) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_transfert_daaf)
+                        ->where("validation",1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
     public function getpaiementByconvention($id_convention_entete)
     {               

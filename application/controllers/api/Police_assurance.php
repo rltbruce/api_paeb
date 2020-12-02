@@ -16,6 +16,7 @@ class Police_assurance extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_police_assurance_moe = $this->get('id_police_assurance_moe');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $validation = $this->get('validation');
         $id_cisco = $this->get('id_cisco');
@@ -26,7 +27,8 @@ class Police_assurance extends REST_Controller {
             $tmp = $this->Police_assuranceManager->findpoliceBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data = $tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -36,7 +38,7 @@ class Police_assurance extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
             } 
                 else
                     $data = array();
@@ -46,7 +48,8 @@ class Police_assurance extends REST_Controller {
             $tmp = $this->Police_assuranceManager->findpolicevalideBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data = $tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -56,7 +59,17 @@ class Police_assurance extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getpolicevalideById")
+        {
+            $tmp = $this->Police_assuranceManager->findpolicevalideById($id_police_assurance_moe);
+            if ($tmp) 
+            {
+                $data = $tmp;
             } 
                 else
                     $data = array();
@@ -66,7 +79,8 @@ class Police_assurance extends REST_Controller {
             $tmp = $this->Police_assuranceManager->findpoliceinvalideBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data = $tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -76,7 +90,7 @@ class Police_assurance extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
             } 
                 else
                     $data = array();

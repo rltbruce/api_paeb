@@ -78,6 +78,35 @@ class Document_feffi_scan_model extends CI_Model {
         }else{
             return null;
         }                 
+    }
+    public function getdocument_feffi_scanvalideById($id_document_feffi_scan) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_document_feffi_scan)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getdocumentByconventiondossier_prevu($id_document_feffi,$id_convention_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_document_feffi", $id_document_feffi)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
     } 
 
         public function findAllByvalidation($validation) {               

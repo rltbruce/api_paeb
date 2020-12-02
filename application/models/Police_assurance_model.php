@@ -89,6 +89,20 @@ class Police_assurance_model extends CI_Model {
             return null;
         }                 
     }
+    function findpolicevalideById($id_police_assurance_moe) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_police_assurance_moe)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     function findpoliceinvalideBycontrat($id_contrat_bureau_etude) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

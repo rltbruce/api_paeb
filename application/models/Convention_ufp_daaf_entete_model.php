@@ -230,6 +230,23 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
         }                 
     }
 
+    public function findtestconventionByIfvalide($id_convention_ufp_daaf_entete)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('validation',1)
+                        ->where('id',$id_convention_ufp_daaf_entete)
+                        ->order_by('ref_convention')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
     public function findConvention_creerinvalide_now($annee)
     {               
         $result =  $this->db->select('convention_ufp_daaf_entete.*')

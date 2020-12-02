@@ -91,6 +91,20 @@ class Memoire_technique_model extends CI_Model {
             return null;
         }                 
     }
+    function findmemoirevalideById($id_memoire_technique) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_memoire_technique)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     function findmemoireinvalideBycontrat($id_contrat_bureau_etude) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

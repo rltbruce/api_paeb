@@ -78,4 +78,18 @@ class Transfert_ufp_model extends CI_Model {
             return null;
         }                 
     }
+    public function gettransfert_ufpvalideById($id_transfert_ufp) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_transfert_ufp)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 }

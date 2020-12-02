@@ -20,6 +20,7 @@ class Reception_mpe extends REST_Controller {
     {
         $id = $this->get('id');
         $menu = $this->get('menu');
+        $id_reception_mpe = $this->get('id_reception_mpe');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $id_cisco = $this->get('id_cisco');
        
@@ -36,6 +37,16 @@ class Reception_mpe extends REST_Controller {
         elseif ($menu=='getreception_mpevalideBycontrat')
          {
             $tmp = $this->Reception_mpeManager->findreception_mpevalideBycontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data = $tmp;
+            }
+                else
+                    $data = array();
+        }  
+        elseif ($menu=='getreception_mpevalideById')
+         {
+            $tmp = $this->Reception_mpeManager->findreception_mpevalideById($id_reception_mpe);
             if ($tmp) 
             {
                 $data = $tmp;

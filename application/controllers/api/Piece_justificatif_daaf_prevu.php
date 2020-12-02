@@ -30,32 +30,34 @@ class Piece_justificatif_daaf_prevu extends REST_Controller {
         
         if ($menu == "getpieceBytranche") 
         {
-            $menu = $this->Piece_justificatif_daaf_prevuManager->findpieceBytranche($id_tranche);
-            if ($menu) 
+            $tmp = $this->Piece_justificatif_daaf_prevuManager->findpieceBytranche($id_tranche);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['intitule'] = $value->intitule;
                     $data[$key]['id_tranche'] = $value->id_tranche;
-                }
+                }*/
             } 
                 else
                     $data = array();
         } 
         else 
         {
-            $menu = $this->Piece_justificatif_daaf_prevuManager->findAll();
-            if ($menu) 
+            $tmp = $this->Piece_justificatif_daaf_prevuManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['intitule'] = $value->intitule;
                     $data[$key]['id_tranche'] = $value->id_tranche;
-                }
+                }*/
             } 
                 else
                     $data = array();

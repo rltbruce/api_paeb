@@ -17,55 +17,35 @@ class Document_moe_scan extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_document_moe_scan = $this->get('id_document_moe_scan');
+        $id_document_moe = $this->get('id_document_moe');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $validation = $this->get('validation');
         $id_cisco = $this->get('id_cisco');
         $menu = $this->get('menu');
             
-       /* if ($menu == "getmemoireBycontrat")
+
+        if ($menu == "getdocumentvalideById")
         {
-            $tmp = $this->Document_moe_scanManager->findAllBycontrat($id_contrat_bureau_etude,$validation);
+            $tmp = $this->Document_moe_scanManager->getdocumentvalideById($id_document_moe_scan);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
-                {
-                    $contrat_be = array();
-                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
-                    $data[$key]['date_livraison'] = $value->date_livraison;
-                    $data[$key]['date_elaboration'] = $value->date_elaboration;
-                    $data[$key]['observation'] = $value->observation;
-                    $data[$key]['contrat_be'] = $contrat_be;
-                }
-            } 
-                else
-                    $data = array();
-        }*/
-       /* if ($menu == "getmemoireByvalidation")
-        {
-            $tmp = $this->Document_moe_scanManager->findAllByvalidation($validation);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $contrat_be = array();
-                    $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
-                    $data[$key]['date_livraison'] = $value->date_livraison;
-                    $data[$key]['date_elaboration'] = $value->date_elaboration;
-                    $data[$key]['observation'] = $value->observation;
-                    $data[$key]['contrat_be'] = $contrat_be;
-                }
+                $data=$tmp;
             } 
                 else
                     $data = array();
         }
-        else*/
-        if ($menu == "getalldocumentvalideBycisco")
+        elseif ($menu == "getdocumentBycontratdossier_prevu")
+        {
+            $tmp = $this->Document_moe_scanManager->getdocumentBycontratdossier_prevu($id_document_moe,$id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        /*if ($menu == "getalldocumentvalideBycisco")
         {
             $tmp = $this->Document_moe_scanManager->finddocumentvalideBycisco($id_cisco);
             if ($tmp) 
@@ -106,7 +86,7 @@ class Document_moe_scan extends REST_Controller {
             } 
                 else
                     $data = array();
-        }
+        }*/
         elseif ($id)
         {
             $data = array();

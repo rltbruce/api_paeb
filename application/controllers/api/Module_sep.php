@@ -19,6 +19,7 @@ class Module_sep extends REST_Controller {
         $id = $this->get('id');
         $id_contrat_partenaire_relai = $this->get('id_contrat_partenaire_relai');
         $menu = $this->get('menu');
+        $id_module = $this->get('id_module');
 
         if ($menu=='getmoduleBycontrat')
          {
@@ -27,7 +28,7 @@ class Module_sep extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+                    //$contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
 
                     $nbr_parti= $this->Participant_sepManager->count_participantbyId($value->id);
                     $nbr_feminin= $this->Participant_sepManager->count_femininbyId($value->id);
@@ -46,7 +47,7 @@ class Module_sep extends REST_Controller {
                     $data[$key]['lieu_formation'] = $value->lieu_formation;
                     $data[$key]['observation']   = $value->observation;
                     $data[$key]['validation']   = $value->validation;
-                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                    //$data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
                         }
             } 
                 else
@@ -59,7 +60,7 @@ class Module_sep extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+                    //$contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
 
                     $nbr_parti= $this->Participant_sepManager->count_participantbyId($value->id);
                     $nbr_feminin= $this->Participant_sepManager->count_femininbyId($value->id);
@@ -78,7 +79,39 @@ class Module_sep extends REST_Controller {
                     $data[$key]['lieu_formation'] = $value->lieu_formation;
                     $data[$key]['observation']   = $value->observation;
                     $data[$key]['validation']   = $value->validation;
-                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                    //$data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                        }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getmodulevalideById')
+         {
+            $tmp = $this->Module_sepManager->findvalideById($id_module);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    //$contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+
+                    $nbr_parti= $this->Participant_sepManager->count_participantbyId($value->id);
+                    $nbr_feminin= $this->Participant_sepManager->count_femininbyId($value->id);
+
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['date_debut_previ_form'] = $value->date_debut_previ_form;
+                    $data[$key]['date_fin_previ_form']   = $value->date_fin_previ_form;
+                    $data[$key]['date_previ_resti']    = $value->date_previ_resti;
+                    $data[$key]['date_debut_reel_form'] = $value->date_debut_reel_form;
+                    $data[$key]['date_fin_reel_form'] = $value->date_fin_reel_form;
+                    $data[$key]['date_reel_resti'] = $value->date_reel_resti;
+                    $data[$key]['nbr_previ_parti']   = $value->nbr_previ_parti;
+                    $data[$key]['nbr_parti']    = $nbr_parti->nbr_participant;
+                    $data[$key]['nbr_previ_fem_parti']   = $value->nbr_previ_fem_parti;
+                    $data[$key]['nbr_reel_fem_parti'] = $nbr_feminin->nbr_feminin;
+                    $data[$key]['lieu_formation'] = $value->lieu_formation;
+                    $data[$key]['observation']   = $value->observation;
+                    $data[$key]['validation']   = $value->validation;
+                    //$data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
                         }
             } 
                 else
@@ -91,7 +124,7 @@ class Module_sep extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+                    //$contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
 
                     $nbr_parti= $this->Participant_sepManager->count_participantbyId($value->id);
                     $nbr_feminin= $this->Participant_sepManager->count_femininbyId($value->id);
@@ -110,7 +143,7 @@ class Module_sep extends REST_Controller {
                     $data[$key]['lieu_formation'] = $value->lieu_formation;
                     $data[$key]['observation']   = $value->observation;
                     $data[$key]['validation']   = $value->validation;
-                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                    //$data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
                         }
             } 
                 else
@@ -217,7 +250,7 @@ class Module_sep extends REST_Controller {
             $data = array();
             $module_sep = $this->Module_sepManager->findById($id);
 
-            $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($module_sep->id_contrat_partenaire_relai);
+            //$contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($module_sep->id_contrat_partenaire_relai);
             $nbr_parti= $this->Participant_sepManager->count_participantbyId($module_sep->id);
             $nbr_feminin= $this->Participant_sepManager->count_femininbyId($module_sep->id);
 
@@ -234,7 +267,7 @@ class Module_sep extends REST_Controller {
             $data['nbr_reel_fem_parti'] = $nbr_feminin->nbr_feminin;
             $data['lieu_formation'] = $module_sep->lieu_formation;
             $data['observation']   = $module_sep->observation;
-            $data['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+            //$data['contrat_partenaire_relai'] = $contrat_partenaire_relai;
                     $data['validation']   = $module_sep->validation;
         } 
         else 
@@ -244,7 +277,7 @@ class Module_sep extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
+                    //$contrat_partenaire_relai = $this->Contrat_partenaire_relaiManager->findById($value->id_contrat_partenaire_relai);
                     $nbr_parti= $this->Participant_sepManager->count_participantbyId($value->id);
                     $nbr_feminin= $this->Participant_sepManager->count_femininbyId($value->id);
 
@@ -261,7 +294,7 @@ class Module_sep extends REST_Controller {
                     $data[$key]['nbr_reel_fem_parti'] = $nbr_feminin->nbr_feminin;
                     $data[$key]['lieu_formation'] = $value->lieu_formation;
                     $data[$key]['observation']   = $value->observation;
-                    $data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
+                    //$data[$key]['contrat_partenaire_relai'] = $contrat_partenaire_relai;
                     $data[$key]['validation']   = $value->validation;
                         }
             } 

@@ -90,6 +90,20 @@ class Phase_sous_projet_model extends CI_Model {
             return null;
         }                 
     }
+    public function getphase_sous_projetvalideById($id_phase_sous_projet) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_phase_sous_projet)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findphasesousprojetinvalideBydelai($id_delai_travaux) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

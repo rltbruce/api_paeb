@@ -100,6 +100,21 @@ class Module_pmc_model extends CI_Model {
             return null;
         }                 
     }
+    public function findvalideById($id_module)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id',$id_module)
+                        ->where('validation',1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findmoduleBycontrat($id_contrat_partenaire_relai)
     {               
         $result =  $this->db->select('*')

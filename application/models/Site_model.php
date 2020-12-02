@@ -73,6 +73,37 @@ class Site_model extends CI_Model {
         }
     }
 
+    public function findsiteByenpreparationandinvalide() {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('statu_convention',0)
+                        ->where('validation',0)
+                        ->order_by('code_sous_projet')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findsiteByIdandvalide($id_site) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id',$id_site)
+                        ->where('validation',1)
+                        ->order_by('code_sous_projet')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
     public function findsitecreeByfeffi($id_feffi) {               
         $result =  $this->db->select('site.*')
                         ->from($this->table)
@@ -90,23 +121,7 @@ class Site_model extends CI_Model {
             return null;
         }                 
     }
-
-    public function findsiteByenpreparationinvalide() {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where('statu_convention',0)
-                        ->where('validation',0)
-                        ->order_by('code_sous_projet')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-    public function findsiteInvalide() {               
+   /* public function findsiteInvalide() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where('validation',0)
@@ -175,7 +190,7 @@ class Site_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
+    }*/
    /* public function findsiteByfiltre($requete) {               
         $result =  $this->db->select('site.*')
                         ->from($this->table)
@@ -197,10 +212,10 @@ class Site_model extends CI_Model {
             return null;
         }                 
     }*/
-    public function findByCode($nom) {
+   /* public function findByCode($nom) {
         $requete="select * from site where lower(code_sous_projet)='".$nom."'";
         $query = $this->db->query($requete);
         return $query->result();                
-    }
+    }*/
 
 }

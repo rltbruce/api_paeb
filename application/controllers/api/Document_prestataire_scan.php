@@ -18,6 +18,8 @@ class Document_prestataire_scan extends REST_Controller {
     {
         $id = $this->get('id');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_document_prestataire = $this->get('id_document_prestataire');
+        $id_document_prestataire_scan = $this->get('id_document_prestataire_scan');
         $validation = $this->get('validation');
         $menu = $this->get('menu');
         $id_cisco = $this->get('id_cisco');
@@ -63,8 +65,27 @@ class Document_prestataire_scan extends REST_Controller {
             } 
                 else
                     $data = array();
-        }*/
-        if ($menu == "getdocument_valideBycisco")
+        }*/if ($menu == "getdocumentvalideById")
+        {
+            $tmp = $this->Document_prestataire_scanManager->getdocumentvalideById($id_document_prestataire_scan);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getdocumentBycontratdossier_prevu")
+        {
+            $tmp = $this->Document_prestataire_scanManager->getdocumentBycontratdossier_prevu($id_document_prestataire,$id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getdocument_valideBycisco")
         {
             $menu = $this->Document_prestataire_scanManager->finddocument_valideBycisco($id_cisco);
             if ($menu) 

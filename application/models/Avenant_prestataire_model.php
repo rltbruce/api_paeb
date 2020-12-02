@@ -143,4 +143,19 @@ class Avenant_prestataire_model extends CI_Model {
         }                 
     }
 
+    public function findavenantvalideById($id_avenant_mpe) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_avenant_mpe)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

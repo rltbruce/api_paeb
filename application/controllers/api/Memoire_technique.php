@@ -16,6 +16,7 @@ class Memoire_technique extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_memoire_technique = $this->get('id_memoire_technique');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
         $validation = $this->get('validation');
         $id_cisco = $this->get('id_cisco');
@@ -26,7 +27,8 @@ class Memoire_technique extends REST_Controller {
             $tmp = $this->Memoire_techniqueManager->findmemoireBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -37,7 +39,7 @@ class Memoire_technique extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
             } 
                 else
                     $data = array();
@@ -47,7 +49,8 @@ class Memoire_technique extends REST_Controller {
             $tmp = $this->Memoire_techniqueManager->findmemoirevalideBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -58,7 +61,17 @@ class Memoire_technique extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getmemoirevalideById")
+        {
+            $tmp = $this->Memoire_techniqueManager->findmemoirevalideById($id_memoire_technique);
+            if ($tmp) 
+            {
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -68,7 +81,8 @@ class Memoire_technique extends REST_Controller {
             $tmp = $this->Memoire_techniqueManager->findmemoireinvalideBycontrat($id_contrat_bureau_etude);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -79,7 +93,7 @@ class Memoire_technique extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
             } 
                 else
                     $data = array();
@@ -131,7 +145,8 @@ class Memoire_technique extends REST_Controller {
             $tmp = $this->Memoire_techniqueManager->findAllvalidationBycisco($validation,$id_cisco);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+               $data=$tmp;
+               /* foreach ($tmp as $key => $value) 
                 {
                     $contrat_be = array();
                     $contrat_be = $this->Contrat_beManager->findById($value->id_contrat_bureau_etude);
@@ -142,7 +157,7 @@ class Memoire_technique extends REST_Controller {
                     $data[$key]['date_approbation'] = $value->date_approbation;
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['contrat_be'] = $contrat_be;
-                }
+                }*/
             } 
                 else
                     $data = array();

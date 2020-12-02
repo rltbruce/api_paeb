@@ -17,6 +17,7 @@ class Passation_marches_be extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_passation_moe = $this->get('id_passation_moe');
         $id_convention_entete = $this->get('id_convention_entete');
         $id_bureau_etude = $this->get('id_bureau_etude');
         $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
@@ -37,7 +38,8 @@ class Passation_marches_be extends REST_Controller {
             $tmp = $this->Passation_marches_beManager->getpassationByconvention($id_convention_entete);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+               $data=$tmp;
+               /* foreach ($tmp as $key => $value) 
                 {
                     //$bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -61,7 +63,7 @@ class Passation_marches_be extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
 
                     $data[$key]['convention_entete'] = $convention_entete;
-                        }
+                        }*/
             } 
                 else
                     $data = array();
@@ -71,7 +73,8 @@ class Passation_marches_be extends REST_Controller {
             $tmp = $this->Passation_marches_beManager->getpassationvalideByconvention($id_convention_entete);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     //$bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -95,7 +98,17 @@ class Passation_marches_be extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
 
                     $data[$key]['convention_entete'] = $convention_entete;
-                        }
+                        }*/
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getpassationvalideById')
+         {
+            $tmp = $this->Passation_marches_beManager->getpassationvalideById($id_passation_moe);
+            if ($tmp) 
+            {
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -105,7 +118,8 @@ class Passation_marches_be extends REST_Controller {
             $tmp = $this->Passation_marches_beManager->getpassationvalidationByconvention($id_convention_entete);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+               $data=$tmp;
+               /* foreach ($tmp as $key => $value) 
                 {
                     //$bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -129,7 +143,7 @@ class Passation_marches_be extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
 
                     $data[$key]['convention_entete'] = $convention_entete;
-                        }
+                        }*/
             } 
                 else
                     $data = array();
@@ -139,7 +153,8 @@ class Passation_marches_be extends REST_Controller {
             $tmp = $this->Passation_marches_beManager->getpassationinvalidationByconvention($id_convention_entete);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
                 {
                     //$bureau_etude = $this->Bureau_etudeManager->findById($value->id_bureau_etude);
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -163,7 +178,7 @@ class Passation_marches_be extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
 
                     $data[$key]['convention_entete'] = $convention_entete;
-                        }
+                        }*/
             } 
                 else
                     $data = array();

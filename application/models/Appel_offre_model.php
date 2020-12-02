@@ -90,6 +90,20 @@ class Appel_offre_model extends CI_Model {
             return null;
         }                 
     }
+    function findappelvalideById($id_appel_offre) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_appel_offre)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     function findappelinvalideBycontrat($id_contrat_bureau_etude) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

@@ -42,6 +42,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
         $id_convention_ufpdaaf = $this->get('id_convention_ufpdaaf');
         $id_feffi = $this->get('id_feffi');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_region = $this->get('id_region');
         $id_cisco = $this->get('id_cisco');
         $id_ecole = $this->get('id_ecole');
         $id_convention_entete = $this->get('id_convention_entete');
@@ -59,7 +60,806 @@ class Convention_cisco_feffi_entete extends REST_Controller {
         $id_district = $this->get('id_district');
 
         $now = date('yy');
-        if ($menu=='reportingvuecarte') //mande       
+
+        if ($menu=='getconventioncreerinvalideByutilisateurnow') //mande       
+        {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->findcreerInvalideByutilisateurnow($id_utilisateur,$annee);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $region = array();
+                    $cisco = array();
+                    $feffi = array();
+                    $site = array();
+                    $montant_detail = array();
+                    $avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob = 0;
+                    $montant_divers = 0;
+
+                    $user = $this->UserManager->findById($value->id_user);
+                    $region = $this->RegionManager->findById($value->id_region);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                   /* if (count($avancement_detail)>0)
+                   {
+       
+                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
+                    }*/
+                     
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['region'] = $region;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                   
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['ecole'] = $ecole;
+                    //$data[$key]['avancement'] = $avancement ;
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;                   
+                    $data[$key]['date_creation'] = $value->date_creation;
+
+                    $data[$key]['type_convention'] = $value->type_convention;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['user'] = $user;
+
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getconventioncreerinvalidenow') //mande       
+         {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->findcreerInvalidenow($annee);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $region = array();
+                    $cisco = array();
+                    $feffi = array();
+                    $site = array();
+                    $montant_detail = array();
+                    $avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob = 0;
+                    $montant_divers = 0;
+
+                    $user = $this->UserManager->findById($value->id_user);
+                    $region = $this->RegionManager->findById($value->id_region);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                   /* if (count($avancement_detail)>0)
+                   {
+       
+                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
+                    }*/
+                     
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['region'] = $region;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                   
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['ecole'] = $ecole;
+                    //$data[$key]['avancement'] = $avancement ;
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;                   
+                    $data[$key]['validation'] = $value->validation;                   
+                    $data[$key]['date_creation'] = $value->date_creation;
+
+                    $data[$key]['type_convention'] = $value->type_convention;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['user'] = $user;
+
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getconventioncreerinvalideByutilisateurfiltre') //mande       
+        {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->findcreerInvalideByutilisateurfiltre($id_utilisateur,$this->generer_requete_convention_creer($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap));
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $region = array();
+                    $cisco = array();
+                    $feffi = array();
+                    $site = array();
+                    $montant_detail = array();
+                    $avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob = 0;
+                    $montant_divers = 0;
+
+                    $user = $this->UserManager->findById($value->id_user);
+                    $region = $this->RegionManager->findById($value->id_region);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                   /* if (count($avancement_detail)>0)
+                   {
+       
+                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
+                    }*/
+                     
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['region'] = $region;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                   
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['ecole'] = $ecole;
+                    //$data[$key]['avancement'] = $avancement ;
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;                   
+                    $data[$key]['date_creation'] = $value->date_creation;
+
+                    $data[$key]['type_convention'] = $value->type_convention;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['user'] = $user;
+
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getconventioncreerinvalidefiltre') //mande       
+        {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->findconventioncreerinvalidefiltre($this->generer_requete_convention_creer($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap));
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $region = array();
+                    $cisco = array();
+                    $feffi = array();
+                    $site = array();
+                    $montant_detail = array();
+                    $avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob = 0;
+                    $montant_divers = 0;
+
+                    $user = $this->UserManager->findById($value->id_user);
+                    $region = $this->RegionManager->findById($value->id_region);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                   /* if (count($avancement_detail)>0)
+                   {
+       
+                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
+                    }*/
+                     
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['region'] = $region;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                   
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['ecole'] = $ecole;
+                    //$data[$key]['avancement'] = $avancement ;
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;                   
+                    $data[$key]['date_creation'] = $value->date_creation;
+
+                    $data[$key]['type_convention'] = $value->type_convention;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['user'] = $user;
+
+
+                }
+            } 
+                else
+                    $data = array();
+                   //$data['user'] = $this->generer_requete2($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap);
+        }
+        elseif ($menu=='testconventionByIfvalide')       
+         {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->testconventionByIfvalide($id_convention_entete);
+            if ($tmp) 
+            {
+                $data=$tmp;                
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getconventionvalidedaaf')
+        {
+            $tmp = $this->Convention_cisco_feffi_enteteManager->findAllValidedaaf();
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $region = array();
+                    $cisco = array();
+                    $feffi = array();
+                    $site = array();
+                    $montant_detail = array();
+                    $avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob = 0;
+                    $montant_divers = 0;
+
+                    $user = $this->UserManager->findById($value->id_user);
+                    $region = $this->RegionManager->findById($value->id_region);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                   // $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                   /* if (count($avancement_detail)>0)
+                   {
+       
+                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
+                    }*/
+                     
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['region'] = $region;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                   
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['ecole'] = $ecole;
+                   // $data[$key]['avancement'] = $avancement ;
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;                   
+                    $data[$key]['date_creation'] = $value->date_creation;
+
+                    $data[$key]['type_convention'] = $value->type_convention;
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['user'] = $user;
+                   
+                }
+            } 
+                else
+                    $data = array();
+        }
+
+         elseif ($menu=='getconventionFeffiByconvention_ufpdaaf')     //mande
+        {
+            $tmp = $this->Convention_cisco_feffi_enteteManager->findconventionFeffiByconvention_ufpdaaf($id_convention_ufpdaaf);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $cisco = array();
+                    $region = array();
+                    $feffi = array();
+                    $site = array();
+                    $avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob =0;
+                    $montant_divers =0;
+                    
+                    $user = $this->UserManager->findById($value->id_user);
+                    $region = $this->RegionManager->findById($value->id_region);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                   // $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                   /* if (count($avancement_detail)>0)
+                   {
+                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
+                    }*/
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['region'] = $region;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                    
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;
+                    //$data[$key]['avancement'] = $avancement ; 
+                    $data[$key]['ecole'] = $ecole;
+                    $data[$key]['user'] = $user;                   
+                    $data[$key]['date_creation'] = $value->date_creation;
+                    $data[$key]['validation'] = $value->validation;
+                    if($value->id_convention_ufpdaaf)
+                    {
+                      $convention_ufp_daaf_entete = $this->Convention_ufp_daaf_enteteManager->findById($value->id_convention_ufpdaaf);
+                      $data[$key]['convention_ufp_daaf_entete'] = $convention_ufp_daaf_entete;
+
+                    }
+                }
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getconventionvalideufpBydateutilisateur') //mande       
+        {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->findconventionvalideufpBydateutilisateur($this->generer_requete_date_signature($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap),$id_utilisateur);
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $region = array();
+                    $cisco = array();
+                    $feffi = array();
+                    $site = array();
+                    $montant_detail = array();
+                    $avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob = 0;
+                    $montant_divers = 0;
+
+                    $user = $this->UserManager->findById($value->id_user);
+                    $region = $this->RegionManager->findById($value->id_region);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                   /* if (count($avancement_detail)>0)
+                   {
+       
+                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
+                    }*/
+                     
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['region'] = $region;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                   
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['ecole'] = $ecole;
+                   // $data[$key]['avancement'] = $avancement ;
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;                   
+                    $data[$key]['date_creation'] = $value->date_creation;
+
+                    $data[$key]['type_convention'] = $value->type_convention;
+                    $data[$key]['user'] = $user;
+
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getconventionNeeddemandefeffivalidationbcaf') //mande       
+        {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->getconventionNeeddemandefeffivalidationbcaf();
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $cisco = array();
+                    $feffi = array();
+                    $site = array();
+                    $montant_detail = array();
+                    $avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob = 0;
+                    $montant_divers = 0;
+
+                    $user = $this->UserManager->findById($value->id_user);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                    
+                   // $countdemande_feffi_creer = $this->Facture_mpeManager->countdemandeByconvention($value->id,0);
+
+                     
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                   
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['ecole'] = $ecole;
+                    //$data[$key]['avancement'] = $avancement ;
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;                   
+                    $data[$key]['date_creation'] = $value->date_creation;
+
+                    $data[$key]['type_convention'] = $value->type_convention;
+                    $data[$key]['user'] = $user;
+
+                    //$data[$key]['nbr_demande_feffi_creer'] = $countdemande_feffi_creer[0]->nbr_demande_feffi;
+
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getconventionNeeddemandefeffivalidationdpfi') //mande       
+        {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->getconventionNeeddemandefeffivalidationdpfi();
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $cisco = array();
+                    $feffi = array();
+                    $site = array();
+                    $montant_detail = array();
+                    $avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob = 0;
+                    $montant_divers = 0;
+
+                    $user = $this->UserManager->findById($value->id_user);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                    
+                   // $countdemande_feffi_creer = $this->Facture_mpeManager->countdemandeByconvention($value->id,0);
+
+                     
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                   
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['ecole'] = $ecole;
+                    //$data[$key]['avancement'] = $avancement ;
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;                   
+                    $data[$key]['date_creation'] = $value->date_creation;
+
+                    $data[$key]['type_convention'] = $value->type_convention;
+                    $data[$key]['user'] = $user;
+
+                    //$data[$key]['nbr_demande_feffi_creer'] = $countdemande_feffi_creer[0]->nbr_demande_feffi;
+
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getconventionNeeddemandefeffivalidationufp') //mande       
+        {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->getconventionNeeddemandefeffivalidationufp();
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $cisco = array();
+                    $feffi = array();
+                    $site = array();
+                    $montant_detail = array();
+                    //$avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob = 0;
+                    $montant_divers = 0;
+
+                    $user = $this->UserManager->findById($value->id_user);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                    
+                   // $countdemande_feffi_creer = $this->Facture_mpeManager->countdemandeByconvention($value->id,0);
+                     
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                   
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['ecole'] = $ecole;
+                    //$data[$key]['avancement'] = $avancement ;
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;                   
+                    $data[$key]['date_creation'] = $value->date_creation;
+
+                    $data[$key]['type_convention'] = $value->type_convention;
+                    $data[$key]['user'] = $user;
+
+                    //$data[$key]['nbr_demande_feffi_creer'] = $countdemande_feffi_creer[0]->nbr_demande_feffi;
+
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+
+        elseif ($menu=='getconventionNeeddemandefeffivalidationdaaf') //mande       
+        {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->getconventionNeeddemandefeffivalidationdaaf();
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $cisco = array();
+                    $feffi = array();
+                    $site = array();
+                    $montant_detail = array();
+                    $avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob = 0;
+                    $montant_divers = 0;
+
+                    $user = $this->UserManager->findById($value->id_user);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                    
+                   // $countdemande_feffi_creer = $this->Facture_mpeManager->countdemandeByconvention($value->id,0);
+
+                    /*if (count($avancement_detail)>0)
+                   {
+       
+                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
+                    }*/
+                     
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                   
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['ecole'] = $ecole;
+                    //$data[$key]['avancement'] = $avancement ;
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;                   
+                    $data[$key]['date_creation'] = $value->date_creation;
+
+                    $data[$key]['type_convention'] = $value->type_convention;
+                    $data[$key]['user'] = $user;
+
+                    //$data[$key]['nbr_demande_feffi_creer'] = $countdemande_feffi_creer[0]->nbr_demande_feffi;
+
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getconventionneedfacturevalidation') //mande       
+        {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->getconventionneedfacturevalidation();
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $cisco = array();
+                    $feffi = array();
+                    $site = array();
+                    $montant_detail = array();
+                    $avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob = 0;
+                    $montant_divers = 0;
+
+                    $user = $this->UserManager->findById($value->id_user);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                    
+                   // $countdemande_feffi_creer = $this->Facture_mpeManager->countdemandeByconvention($value->id,0);
+
+                    /*if (count($avancement_detail)>0)
+                   {
+       
+                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
+                    }*/
+                     
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                   
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['ecole'] = $ecole;
+                    //$data[$key]['avancement'] = $avancement ;
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;                   
+                    $data[$key]['date_creation'] = $value->date_creation;
+
+                    $data[$key]['type_convention'] = $value->type_convention;
+                    $data[$key]['user'] = $user;
+
+                    //$data[$key]['nbr_demande_feffi_creer'] = $countdemande_feffi_creer[0]->nbr_demande_feffi;
+
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+      /*  elseif ($menu=='reportingvuecarte') //mande       
          {
                     
             $tmp = $this->Convention_cisco_feffi_enteteManager->findreporting($now, $id_district);
@@ -87,73 +887,6 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                 $data =$tmp;
             } 
             else
-                    $data = array();
-        }
-        elseif ($menu=='getconventionNeeddemandefeffivalidationbcaf') //mande       
-        {
-                    
-            $tmp = $this->Convention_cisco_feffi_enteteManager->getconventionNeeddemandefeffivalidationbcaf();
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $cisco = array();
-                    $feffi = array();
-                    $site = array();
-                    $montant_detail = array();
-                    $avancement = 0;
-                    $montant = 0;
-                    $montant_trav_mob = 0;
-                    $montant_divers = 0;
-
-                    $user = $this->UserManager->findById($value->id_user);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
-                    $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
-                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
-                    
-                   // $countdemande_feffi_creer = $this->Facture_mpeManager->countdemandeByconvention($value->id,0);
-
-                    if (count($avancement_detail)>0)
-                   {
-       
-                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
-                    }
-                     
-                    if (count($montant_detail)>0)
-                    {
-                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
-                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
-                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
-                    }
-
-                    
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['cisco'] = $cisco;
-                    $data[$key]['feffi'] = $feffi;
-
-                    $data[$key]['site'] = $site;
-                    $data[$key]['ref_convention'] = $value->ref_convention;
-                    $data[$key]['objet'] = $value->objet;                   
-                    $data[$key]['ref_financement'] = $value->ref_financement;
-                    $data[$key]['ecole'] = $ecole;
-                    $data[$key]['avancement'] = $avancement ;
-                    $data[$key]['montant_total'] = $montant;
-                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
-                    $data[$key]['montant_divers'] = $montant_divers;                   
-                    $data[$key]['date_creation'] = $value->date_creation;
-
-                    $data[$key]['type_convention'] = $value->type_convention;
-                    $data[$key]['user'] = $user;
-
-                    //$data[$key]['nbr_demande_feffi_creer'] = $countdemande_feffi_creer[0]->nbr_demande_feffi;
-
-
-                }
-            } 
-                else
                     $data = array();
         }
         elseif ($menu=='getconventionNeeddecaissfeffivalidationbcaf') //mande       
@@ -294,73 +1027,6 @@ class Convention_cisco_feffi_entete extends REST_Controller {
         {
                     
             $tmp = $this->Convention_cisco_feffi_enteteManager->getconventionNeeddecaissfeffivalidationbcafwithcisco($id_cisco_user);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $cisco = array();
-                    $feffi = array();
-                    $site = array();
-                    $montant_detail = array();
-                    $avancement = 0;
-                    $montant = 0;
-                    $montant_trav_mob = 0;
-                    $montant_divers = 0;
-
-                    $user = $this->UserManager->findById($value->id_user);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
-                    $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
-                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
-                    
-                   // $countdemande_feffi_creer = $this->Facture_mpeManager->countdemandeByconvention($value->id,0);
-
-                    if (count($avancement_detail)>0)
-                   {
-       
-                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
-                    }
-                     
-                    if (count($montant_detail)>0)
-                    {
-                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
-                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
-                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
-                    }
-
-                    
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['cisco'] = $cisco;
-                    $data[$key]['feffi'] = $feffi;
-
-                    $data[$key]['site'] = $site;
-                    $data[$key]['ref_convention'] = $value->ref_convention;
-                    $data[$key]['objet'] = $value->objet;                   
-                    $data[$key]['ref_financement'] = $value->ref_financement;
-                    $data[$key]['ecole'] = $ecole;
-                    $data[$key]['avancement'] = $avancement ;
-                    $data[$key]['montant_total'] = $montant;
-                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
-                    $data[$key]['montant_divers'] = $montant_divers;                   
-                    $data[$key]['date_creation'] = $value->date_creation;
-
-                    $data[$key]['type_convention'] = $value->type_convention;
-                    $data[$key]['user'] = $user;
-
-                    //$data[$key]['nbr_demande_feffi_creer'] = $countdemande_feffi_creer[0]->nbr_demande_feffi;
-
-
-                }
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($menu=='getconventionNeeddemandefeffivalidationdaaf') //mande       
-        {
-                    
-            $tmp = $this->Convention_cisco_feffi_enteteManager->getconventionNeeddemandefeffivalidationdaaf();
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -630,74 +1296,6 @@ class Convention_cisco_feffi_entete extends REST_Controller {
         {
                     
             $tmp = $this->Convention_cisco_feffi_enteteManager->getconventionneedfacturevalidationBycisco($id_cisco);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $cisco = array();
-                    $feffi = array();
-                    $site = array();
-                    $montant_detail = array();
-                    $avancement = 0;
-                    $montant = 0;
-                    $montant_trav_mob = 0;
-                    $montant_divers = 0;
-
-                    $user = $this->UserManager->findById($value->id_user);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
-                    $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
-                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
-                    
-                   // $countdemande_feffi_creer = $this->Facture_mpeManager->countdemandeByconvention($value->id,0);
-
-                    if (count($avancement_detail)>0)
-                   {
-       
-                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
-                    }
-                     
-                    if (count($montant_detail)>0)
-                    {
-                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
-                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
-                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
-                    }
-
-                    
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['cisco'] = $cisco;
-                    $data[$key]['feffi'] = $feffi;
-
-                    $data[$key]['site'] = $site;
-                    $data[$key]['ref_convention'] = $value->ref_convention;
-                    $data[$key]['objet'] = $value->objet;                   
-                    $data[$key]['ref_financement'] = $value->ref_financement;
-                    $data[$key]['ecole'] = $ecole;
-                    $data[$key]['avancement'] = $avancement ;
-                    $data[$key]['montant_total'] = $montant;
-                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
-                    $data[$key]['montant_divers'] = $montant_divers;                   
-                    $data[$key]['date_creation'] = $value->date_creation;
-
-                    $data[$key]['type_convention'] = $value->type_convention;
-                    $data[$key]['user'] = $user;
-
-                    //$data[$key]['nbr_demande_feffi_creer'] = $countdemande_feffi_creer[0]->nbr_demande_feffi;
-
-
-                }
-            } 
-                else
-                    $data = array();
-        }
-
-        elseif ($menu=='getconventionneedfacturevalidation') //mande       
-        {
-                    
-            $tmp = $this->Convention_cisco_feffi_enteteManager->getconventionneedfacturevalidation();
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
@@ -1147,86 +1745,6 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($menu=='getconventionvalideufpBydateutilisateur') //mande       
-        {
-                    
-            $tmp = $this->Convention_cisco_feffi_enteteManager->findconventionvalideufpBydateutilisateur($this->generer_requete_date_signature($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap),$id_utilisateur);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $cisco = array();
-                    $feffi = array();
-                    $site = array();
-                    $montant_detail = array();
-                    $avancement = 0;
-                    $montant = 0;
-                    $montant_trav_mob = 0;
-                    $montant_divers = 0;
-
-                    $user = $this->UserManager->findById($value->id_user);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
-                    $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
-                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
-                    
-                    $countdemande_feffi_creer = $this->Demande_realimentation_feffiManager->countdemandeByconvention($value->id,0);
-                    $countdemande_feffi_emidpfi = $this->Demande_realimentation_feffiManager->countdemandeByconvention($value->id,1);
-                    $countdemande_feffi_encourdpfi = $this->Demande_realimentation_feffiManager->countdemandeByconvention($value->id,2);
-
-                    $countdemande_feffi_emidaaf = $this->Demande_realimentation_feffiManager->countdemandeByconvention($value->id,4);
-                    $countdemande_feffi_encourdaaf = $this->Demande_realimentation_feffiManager->countdemandeByconvention($value->id,5);
-                    $countdecai_fonct_feffi = $this->Decaiss_fonct_feffiManager->countdecaissByconvention($value->id);
-                    $countdecai_fonct_feffi = $this->Decaiss_fonct_feffiManager->countdecaissByconvention($value->id);
-                    if (count($avancement_detail)>0)
-                   {
-       
-                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
-                    }
-                     
-                    if (count($montant_detail)>0)
-                    {
-                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
-                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
-                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
-                    }
-
-                    
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['cisco'] = $cisco;
-                    $data[$key]['feffi'] = $feffi;
-
-                    $data[$key]['site'] = $site;
-                    $data[$key]['ref_convention'] = $value->ref_convention;
-                    $data[$key]['objet'] = $value->objet;                   
-                    $data[$key]['ref_financement'] = $value->ref_financement;
-                    $data[$key]['ecole'] = $ecole;
-                    $data[$key]['avancement'] = $avancement ;
-                    $data[$key]['montant_total'] = $montant;
-                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
-                    $data[$key]['montant_divers'] = $montant_divers;                   
-                    $data[$key]['date_creation'] = $value->date_creation;
-
-                    $data[$key]['type_convention'] = $value->type_convention;
-                    $data[$key]['user'] = $user;
-
-                    $data[$key]['nbr_demande_feffi_creer'] = $countdemande_feffi_creer[0]->nbr_demande_feffi;
-                    $data[$key]['nbr_demande_feffi_emidpfi'] = $countdemande_feffi_emidpfi[0]->nbr_demande_feffi;
-                    $data[$key]['nbr_demande_feffi_encourdpfi'] = $countdemande_feffi_encourdpfi[0]->nbr_demande_feffi;
-                    $data[$key]['nbr_demande_feffi_emidaaf'] = $countdemande_feffi_emidaaf[0]->nbr_demande_feffi;
-                    $data[$key]['nbr_demande_feffi_encourdaaf'] = $countdemande_feffi_encourdaaf[0]->nbr_demande_feffi;
-
-                    $data[$key]['nbr_decaiss_feffi'] = $countdecai_fonct_feffi[0]->nbr_decaiss;
-                    $data[$key]['ato'] = $avancement_detail;
-
-
-                }
-            } 
-                else
-                    $data = array();
-        }
         elseif ($menu=='getconventioncreerfiltre') //mande       
         {
                     
@@ -1353,69 +1871,6 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data = array();
                    //$data['user'] = $this->generer_requete2($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap);
         }
-        elseif ($menu=='getconventioncreerinvalidefiltre') //mande       
-        {
-                    
-            $tmp = $this->Convention_cisco_feffi_enteteManager->findconventioncreerinvalidefiltre($this->generer_requete_convention_creer($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap));
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $cisco = array();
-                    $feffi = array();
-                    $site = array();
-                    $montant_detail = array();
-                    $avancement = 0;
-                    $montant = 0;
-                    $montant_trav_mob = 0;
-                    $montant_divers = 0;
-
-                    $user = $this->UserManager->findById($value->id_user);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
-                    $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
-                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
-                    if (count($avancement_detail)>0)
-                   {
-       
-                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
-                    }
-                     
-                    if (count($montant_detail)>0)
-                    {
-                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
-                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
-                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
-                    }
-
-                    
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['cisco'] = $cisco;
-                    $data[$key]['feffi'] = $feffi;
-
-                    $data[$key]['site'] = $site;
-                    $data[$key]['ref_convention'] = $value->ref_convention;
-                    $data[$key]['objet'] = $value->objet;                   
-                    $data[$key]['ref_financement'] = $value->ref_financement;
-                    $data[$key]['ecole'] = $ecole;
-                    $data[$key]['avancement'] = $avancement ;
-                    $data[$key]['montant_total'] = $montant;
-                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
-                    $data[$key]['montant_divers'] = $montant_divers;                   
-                    $data[$key]['date_creation'] = $value->date_creation;
-
-                    $data[$key]['type_convention'] = $value->type_convention;
-                    $data[$key]['user'] = $user;
-
-
-                }
-            } 
-                else
-                    $data = array();
-                   //$data['user'] = $this->generer_requete2($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap);
-        }
         elseif ($menu=='getconventioninvalidefiltre') //mande       
         {
                     
@@ -1533,68 +1988,6 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['type_convention'] = $value->type_convention;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-                    $data[$key]['user'] = $user;
-
-
-                }
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($menu=='getconventioncreerinvalideByutilisateurfiltre') //mande       
-        {
-                    
-            $tmp = $this->Convention_cisco_feffi_enteteManager->findcreerInvalideByutilisateurfiltre($id_utilisateur,$this->generer_requete_convention_creer($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap));
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $cisco = array();
-                    $feffi = array();
-                    $site = array();
-                    $montant_detail = array();
-                    $avancement = 0;
-                    $montant = 0;
-                    $montant_trav_mob = 0;
-                    $montant_divers = 0;
-
-                    $user = $this->UserManager->findById($value->id_user);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
-                    $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
-                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
-                    if (count($avancement_detail)>0)
-                   {
-       
-                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
-                    }
-                     
-                    if (count($montant_detail)>0)
-                    {
-                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
-                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
-                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
-                    }
-
-                    
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['cisco'] = $cisco;
-                    $data[$key]['feffi'] = $feffi;
-
-                    $data[$key]['site'] = $site;
-                    $data[$key]['ref_convention'] = $value->ref_convention;
-                    $data[$key]['objet'] = $value->objet;                   
-                    $data[$key]['ref_financement'] = $value->ref_financement;
-                    $data[$key]['ecole'] = $ecole;
-                    $data[$key]['avancement'] = $avancement ;
-                    $data[$key]['montant_total'] = $montant;
-                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
-                    $data[$key]['montant_divers'] = $montant_divers;                   
-                    $data[$key]['date_creation'] = $value->date_creation;
-
-                    $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['user'] = $user;
 
 
@@ -1914,68 +2307,6 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($menu=='getconventioncreerinvalideByutilisateurnow') //mande       
-        {
-                    
-            $tmp = $this->Convention_cisco_feffi_enteteManager->findcreerInvalideByutilisateurnow($id_utilisateur,$annee);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $cisco = array();
-                    $feffi = array();
-                    $site = array();
-                    $montant_detail = array();
-                    $avancement = 0;
-                    $montant = 0;
-                    $montant_trav_mob = 0;
-                    $montant_divers = 0;
-
-                    $user = $this->UserManager->findById($value->id_user);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
-                    $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
-                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
-                    if (count($avancement_detail)>0)
-                   {
-       
-                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
-                    }
-                     
-                    if (count($montant_detail)>0)
-                    {
-                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
-                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
-                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
-                    }
-
-                    
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['cisco'] = $cisco;
-                    $data[$key]['feffi'] = $feffi;
-
-                    $data[$key]['site'] = $site;
-                    $data[$key]['ref_convention'] = $value->ref_convention;
-                    $data[$key]['objet'] = $value->objet;                   
-                    $data[$key]['ref_financement'] = $value->ref_financement;
-                    $data[$key]['ecole'] = $ecole;
-                    $data[$key]['avancement'] = $avancement ;
-                    $data[$key]['montant_total'] = $montant;
-                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
-                    $data[$key]['montant_divers'] = $montant_divers;                   
-                    $data[$key]['date_creation'] = $value->date_creation;
-
-                    $data[$key]['type_convention'] = $value->type_convention;
-                    $data[$key]['user'] = $user;
-
-
-                }
-            } 
-                else
-                    $data = array();
-        }
         elseif ($menu=='getconventioninvalideByutilisateurnow') //mande       
         {
                     
@@ -2100,69 +2431,6 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($menu=='getconventioncreerinvalidenow') //mande       
-         {
-                    
-            $tmp = $this->Convention_cisco_feffi_enteteManager->findcreerInvalidenow($annee);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $cisco = array();
-                    $feffi = array();
-                    $site = array();
-                    $montant_detail = array();
-                    $avancement = 0;
-                    $montant = 0;
-                    $montant_trav_mob = 0;
-                    $montant_divers = 0;
-
-                    $user = $this->UserManager->findById($value->id_user);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
-                    $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
-                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
-                    if (count($avancement_detail)>0)
-                   {
-       
-                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
-                    }
-                     
-                    if (count($montant_detail)>0)
-                    {
-                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
-                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
-                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
-                    }
-
-                    
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['cisco'] = $cisco;
-                    $data[$key]['feffi'] = $feffi;
-
-                    $data[$key]['site'] = $site;
-                    $data[$key]['ref_convention'] = $value->ref_convention;
-                    $data[$key]['objet'] = $value->objet;                   
-                    $data[$key]['ref_financement'] = $value->ref_financement;
-                    $data[$key]['ecole'] = $ecole;
-                    $data[$key]['avancement'] = $avancement ;
-                    $data[$key]['montant_total'] = $montant;
-                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
-                    $data[$key]['montant_divers'] = $montant_divers;                   
-                    $data[$key]['validation'] = $value->validation;                   
-                    $data[$key]['date_creation'] = $value->date_creation;
-
-                    $data[$key]['type_convention'] = $value->type_convention;
-                    $data[$key]['user'] = $user;
-
-
-                }
-            } 
-                else
-                    $data = array();
-        }
         elseif ($menu=='getconventioninvalidenow')      
          {
                     
@@ -2221,125 +2489,6 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['user'] = $user;
 
 
-                }
-            } 
-                else
-                    $data = array();
-        }
-         elseif ($id_convention_ufpdaaf)     //mande
-        {
-            $tmp = $this->Convention_cisco_feffi_enteteManager->findAllByufpdaaf($id_convention_ufpdaaf);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $cisco = array();
-                    $feffi = array();
-                    $site = array();
-                    $avancement = 0;
-                    $montant = 0;
-                    $montant_trav_mob =0;
-                    $montant_divers =0;
-                    
-                    $user = $this->UserManager->findById($value->id_user);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
-                    $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
-                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
-                    if (count($avancement_detail)>0)
-                   {
-                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
-                    }
-                    if (count($montant_detail)>0)
-                    {
-                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
-                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
-                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
-                    }
-                    
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['cisco'] = $cisco;
-                    $data[$key]['feffi'] = $feffi;
-
-                    $data[$key]['site'] = $site;
-                    $data[$key]['ref_convention'] = $value->ref_convention;
-                    $data[$key]['objet'] = $value->objet;                    
-                    $data[$key]['ref_financement'] = $value->ref_financement;
-                    $data[$key]['montant_total'] = $montant;
-                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
-                    $data[$key]['montant_divers'] = $montant_divers;
-                    $data[$key]['avancement'] = $avancement ; 
-                    $data[$key]['ecole'] = $ecole;
-                    $data[$key]['user'] = $user;                   
-                    $data[$key]['date_creation'] = $value->date_creation;
-                    if($value->id_convention_ufpdaaf)
-                    {
-                      $convention_ufp_daaf_entete = $this->Convention_ufp_daaf_enteteManager->findById($value->id_convention_ufpdaaf);
-                      $data[$key]['convention_ufp_daaf_entete'] = $convention_ufp_daaf_entete;
-
-                    }
-                }
-            } 
-                else
-                    $data = array();
-        } 
-        elseif ($menu=='getconventionvalidedaaf')
-        {
-            $tmp = $this->Convention_cisco_feffi_enteteManager->findAllValidedaaf();
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $cisco = array();
-                    $feffi = array();
-                    $site = array();
-                    $montant_detail = array();
-                    $avancement = 0;
-                    $montant = 0;
-                    $montant_trav_mob = 0;
-                    $montant_divers = 0;
-
-                    $user = $this->UserManager->findById($value->id_user);
-                    $cisco = $this->CiscoManager->findById($value->id_cisco);
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
-                    $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
-                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
-                    if (count($avancement_detail)>0)
-                   {
-       
-                      $avancement =  round((($avancement_detail[0]->avancement_physi_batiment+$avancement_detail[0]->avancement_physi_latrine+$avancement_detail[0]->avancement_physi_mobilier)/3),4) ; 
-                    }
-                     
-                    if (count($montant_detail)>0)
-                    {
-                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
-                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
-                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
-                    }
-
-                    
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['cisco'] = $cisco;
-                    $data[$key]['feffi'] = $feffi;
-
-                    $data[$key]['site'] = $site;
-                    $data[$key]['ref_convention'] = $value->ref_convention;
-                    $data[$key]['objet'] = $value->objet;                   
-                    $data[$key]['ref_financement'] = $value->ref_financement;
-                    $data[$key]['ecole'] = $ecole;
-                    $data[$key]['avancement'] = $avancement ;
-                    $data[$key]['montant_total'] = $montant;
-                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
-                    $data[$key]['montant_divers'] = $montant_divers;                   
-                    $data[$key]['date_creation'] = $value->date_creation;
-
-                    $data[$key]['type_convention'] = $value->type_convention;
-                    $data[$key]['user'] = $user;
-                   
                 }
             } 
                 else
@@ -2502,7 +2651,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
             } 
                 else
                     $data = array();
-        } 
+        } */
         else 
         {
             $tmp = $this->Convention_cisco_feffi_enteteManager->findAll();
@@ -2510,6 +2659,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
+                    $region = array();
                     $cisco = array();
                     $feffi = array();
                     $site = array();
@@ -2518,6 +2668,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $montant_trav_mob =0;
                     $montant_divers =0;
 
+                    $region = $this->RegionManager->findById($value->id_region);
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
                     $site = $this->SiteManager->findById($value->id_site);
@@ -2536,6 +2687,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     }
                     
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['region'] = $region;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
 
@@ -2580,6 +2732,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                 $data = array(
                     'ref_convention' => $this->post('ref_convention'),
                     'objet' => $this->post('objet'),
+                    'id_region' => $this->post('id_region'),
                     'id_cisco' => $this->post('id_cisco'),
                     'id_feffi' => $this->post('id_feffi'),
                     'id_site' => $this->post('id_site'),
@@ -2616,6 +2769,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                 $data = array(
                     'ref_convention' => $this->post('ref_convention'),
                     'objet' => $this->post('objet'),
+                    'id_region' => $this->post('id_region'),
                     'id_cisco' => $this->post('id_cisco'),
                     'id_feffi' => $this->post('id_feffi'), 
                     'id_site' => $this->post('id_site'),

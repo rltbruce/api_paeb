@@ -100,6 +100,20 @@ class Contrat_prestataire_model extends CI_Model {
             return null;
         }                 
     }
+    public function findcontratvalideById($id_contrat_mpe) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_contrat_mpe)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findcontratByConvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

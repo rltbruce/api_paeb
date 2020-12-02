@@ -38,7 +38,7 @@ class Module_odc_model extends CI_Model {
             //'nbr_reel_fem_parti' => $module_odc['nbr_reel_fem_parti'],
             'lieu_formation' => $module_odc['lieu_formation'],
             'observation' => $module_odc['observation'],
-            'id_classification_site' => $module_odc['id_classification_site'],
+            //'id_classification_site' => $module_odc['id_classification_site'],
             'id_contrat_partenaire_relai' => $module_odc['id_contrat_partenaire_relai'],
             'validation' => $module_odc['validation'],
 
@@ -93,6 +93,21 @@ class Module_odc_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where('id_contrat_partenaire_relai',$id_contrat_partenaire_relai)
+                        ->where('validation',1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function findvalideById($id_module)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id',$id_module)
                         ->where('validation',1)
                         ->get()
                         ->result();

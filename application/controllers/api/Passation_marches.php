@@ -19,6 +19,7 @@ class Passation_marches extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_passation_mpe = $this->get('id_passation_mpe');
         $id_convention_entete = $this->get('id_convention_entete');
         $menu = $this->get('menu');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
@@ -41,7 +42,7 @@ class Passation_marches extends REST_Controller {
                 foreach ($tmp as $key => $value) 
                 {
                     //$prestataire = $this->PrestataireManager->findById($value->id_prestataire);
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $countmpe_soumissionaire = $this->Mpe_soumissionaireManager->countAllBympe_soumissionnaire($value->id);
 
                     $data[$key]['id'] = $value->id;
@@ -59,9 +60,19 @@ class Passation_marches extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation']   = $value->validation;
 
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                     //$data[$key]['prestataire'] = $prestataire;
                         }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getpassationvalideById')
+         {
+            $tmp = $this->Passation_marchesManager->findpassationvalideById($id_passation_mpe);
+            if ($tmp) 
+            {
+                $data = $tmp;
             } 
                 else
                     $data = array();
@@ -74,7 +85,7 @@ class Passation_marches extends REST_Controller {
                 foreach ($tmp as $key => $value) 
                 {
                     //$prestataire = $this->PrestataireManager->findById($value->id_prestataire);
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $countmpe_soumissionaire = $this->Mpe_soumissionaireManager->countAllBympe_soumissionnaire($value->id);
 
                     $data[$key]['id'] = $value->id;
@@ -92,7 +103,7 @@ class Passation_marches extends REST_Controller {
                     $data[$key]['date_os'] = $value->date_os;
                     $data[$key]['observation'] = $value->observation;
 
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                     //$data[$key]['prestataire'] = $prestataire;
                         }
             } 
@@ -107,7 +118,7 @@ class Passation_marches extends REST_Controller {
                 foreach ($tmp as $key => $value) 
                 {
                     //$prestataire = $this->PrestataireManager->findById($value->id_prestataire);
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $countmpe_soumissionaire = $this->Mpe_soumissionaireManager->countAllBympe_soumissionnaire($value->id);
 
                     $data[$key]['id'] = $value->id;
@@ -125,7 +136,7 @@ class Passation_marches extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation']   = $value->validation;
 
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                     //$data[$key]['prestataire'] = $prestataire;
                         }
             } 
@@ -138,7 +149,7 @@ class Passation_marches extends REST_Controller {
             $passation_marches = $this->Passation_marchesManager->findById($id);
 
             //$prestataire = $this->PrestataireManager->findById($passation_marches->id_prestataire);
-            $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($passation_marches->id_convention_entete);
+            //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($passation_marches->id_convention_entete);
             $countmpe_soumissionaire = $this->Mpe_soumissionaireManager->countAllBympe_soumissionnaire($passation_marches->id);
 
             $data['id'] = $passation_marches->id;
@@ -155,7 +166,7 @@ class Passation_marches extends REST_Controller {
             $data['date_os'] = $passation_marches->date_os;
             $data['observation'] = $passation_marches->observation;
 
-            $data['convention_entete'] = $convention_entete;
+            //$data['convention_entete'] = $convention_entete;
             //$data['prestataire'] = $prestataire;
         } 
         else 
@@ -166,7 +177,7 @@ class Passation_marches extends REST_Controller {
                 foreach ($tmp as $key => $value) 
                 {
                     //$prestataire = $this->PrestataireManager->findById($value->id_prestataire);
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $countmpe_soumissionaire = $this->Mpe_soumissionaireManager->countAllBympe_soumissionnaire($value->id);
 
                     $data[$key]['id'] = $value->id;
@@ -183,7 +194,7 @@ class Passation_marches extends REST_Controller {
                     $data[$key]['date_os'] = $value->date_os;
                     $data[$key]['observation'] = $value->observation;
 
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                     //$data[$key]['prestataire'] = $prestataire;
                         }
             } 

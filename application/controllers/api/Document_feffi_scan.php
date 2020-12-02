@@ -21,28 +21,50 @@ class Document_feffi_scan extends REST_Controller {
         $id_convention_entete = $this->get('id_convention_entete');
         $validation = $this->get('validation');
         $id_cisco = $this->get('id_cisco');
+        $id_document_feffi_scan = $this->get('id_document_feffi_scan');
+        $id_document_feffi = $this->get('id_document_feffi');
         $menu = $this->get('menu');
             
-        if ($menu == "getdocument_valideBycisco")
+        if ($menu == "getdocumentByconventiondossier_prevu")
+        {
+            $tmp = $this->Document_feffi_scanManager->getdocumentByconventiondossier_prevu($id_document_feffi,$id_convention_entete);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getdocument_feffi_scanvalideById")
+        {
+            $tmp = $this->Document_feffi_scanManager->getdocument_feffi_scanvalideById($id_document_feffi_scan);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu == "getdocument_valideBycisco")
         {
             $tmp = $this->Document_feffi_scanManager->findAllvalideBycisco($id_cisco);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $convention_entete= array();
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
-                    $convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
-                    $feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
+                    //$convention_entete= array();
+                    //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
                     $document_feffi = $this->Document_feffiManager->findById($value->id_document_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_elaboration'] = $value->date_elaboration;
                     $data[$key]['observation'] = $value->observation;
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['document_feffi'] = $document_feffi;
-                    $data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
-                    $data[$key]['feffi'] = $feffi;
+                    //$data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
+                    //$data[$key]['feffi'] = $feffi;
 
                 }
             } 
@@ -56,19 +78,19 @@ class Document_feffi_scan extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $convention_entete= array();
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
-                    $convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
-                    $feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
+                    //$convention_entete= array();
+                    //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
                     $document_feffi = $this->Document_feffiManager->findById($value->id_document_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_elaboration'] = $value->date_elaboration;
                     $data[$key]['observation'] = $value->observation;
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['document_feffi'] = $document_feffi;
-                    $data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
-                    $data[$key]['feffi'] = $feffi;
+                    //$data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
+                    //$data[$key]['feffi'] = $feffi;
 
                 }
             } 
@@ -82,19 +104,19 @@ class Document_feffi_scan extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $convention_entete= array();
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
-                    $convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
-                    $feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
+                    //$convention_entete= array();
+                    //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
                     $document_feffi = $this->Document_feffiManager->findById($value->id_document_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_elaboration'] = $value->date_elaboration;
                     $data[$key]['observation'] = $value->observation;
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['document_feffi'] = $document_feffi;
-                    $data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
-                    $data[$key]['feffi'] = $feffi;
+                    //$data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
+                    //$data[$key]['feffi'] = $feffi;
 
                 }
             } 
@@ -108,19 +130,19 @@ class Document_feffi_scan extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $convention_entete= array();
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
-                    $convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
-                    $feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
+                    //$convention_entete= array();
+                    //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
                     $document_feffi = $this->Document_feffiManager->findById($value->id_document_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_elaboration'] = $value->date_elaboration;
                     $data[$key]['observation'] = $value->observation;
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['document_feffi'] = $document_feffi;
-                    $data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
-                    $data[$key]['feffi'] = $feffi;
+                    //$data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
+                    //$data[$key]['feffi'] = $feffi;
 
                 }
             } 
@@ -152,18 +174,18 @@ class Document_feffi_scan extends REST_Controller {
         {
             $data = array();
             $document_feffi_scan = $this->Document_feffi_scanManager->findById($id);
-            $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($document_feffi_scan->id_convention_entete);
-            $convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($document_feffi_scan->id_convention_entete);
+            //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($document_feffi_scan->id_convention_entete);
+            //$convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($document_feffi_scan->id_convention_entete);
             $document_feffi = $this->Document_feffiManager->findById($document_feffi_scan->id_document_feffi);
-            $feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
+            //$feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
             $data['id'] = $document_feffi_scan->id;
             $data['fichier'] = $document_feffi_scan->fichier;
             $data['date_elaboration'] = $document_feffi_scan->date_elaboration;
             $data['observation'] = $document_feffi_scan->observation;
-            $data['convention_entete'] = $convention_entete;
+            //$data['convention_entete'] = $convention_entete;
             $data['document_feffi'] = $document_feffi;
-            $data['convention_entete'] = $convention_cisco_feffi_entete;
-            $data['feffi'] = $feffi;
+            //$data['convention_entete'] = $convention_cisco_feffi_entete;
+            //$data['feffi'] = $feffi;
         } 
         else 
         {
@@ -172,19 +194,19 @@ class Document_feffi_scan extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $convention_entete= array();
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
-                    $convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_entete= array();
+                    //$convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                    //$convention_cisco_feffi_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
                     $document_feffi = $this->Document_feffiManager->findById($value->id_document_feffi);
-                    $feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
+                    //$feffi = $this->FeffiManager->findById($convention_cisco_feffi_entete->id_feffi);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['fichier'] = $value->fichier;
                     $data[$key]['date_elaboration'] = $value->date_elaboration;
                     $data[$key]['observation'] = $value->observation;
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['document_feffi'] = $document_feffi;
-                    $data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
-                    $data[$key]['feffi'] = $feffi;
+                    //$data[$key]['convention_entete'] = $convention_cisco_feffi_entete;
+                    //$data[$key]['feffi'] = $feffi;
                 }
             } 
                 else

@@ -62,6 +62,36 @@ class Document_prestataire_scan_model extends CI_Model {
             return $q->row();
         }
     }
+    public function getdocumentvalideById($id_document_prestataire_scan)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table) 
+                        ->where("id", $id_document_prestataire_scan)
+                        ->where("validation", 1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getdocumentBycontratdossier_prevu($id_document_prestataire,$id_contrat_prestataire)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table) 
+                        ->where("id_document_prestataire", $id_document_prestataire)
+                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
         public function finddocument_invalideBycisco($id_cisco) {               
         $result =  $this->db->select('document_prestataire_scan.*')
                         ->from($this->table)

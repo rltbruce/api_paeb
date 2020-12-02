@@ -64,11 +64,11 @@ class Avenant_be_model extends CI_Model {
         }
     }
 
-    public function findAllByContrat_be($id_contrat_bureau_etude) {               
+    public function getavenantvalideById($id_avenant_moe) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_contrat_bureau_etude", $id_contrat_bureau_etude)
-                        ->order_by('id')
+                        ->where("id", $id_avenant_moe)
+                        ->where("validation",1)
                         ->get()
                         ->result();
         if($result)
