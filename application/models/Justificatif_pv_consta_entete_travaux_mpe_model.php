@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Attachement_latrine_model extends CI_Model {
-    protected $table = 'attachement_latrine';
+class Justificatif_pv_consta_entete_travaux_mpe_model extends CI_Model {
+    protected $table = 'justificatif_pv_consta_entete_travaux_mpe';
 
-    public function add($attachement) {
-        $this->db->set($this->_set($attachement))
+    public function add($justificatif_pv_consta_entete_travaux_mpe) {
+        $this->db->set($this->_set($justificatif_pv_consta_entete_travaux_mpe))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Attachement_latrine_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $attachement) {
-        $this->db->set($this->_set($attachement))
+    public function update($id, $justificatif_pv_consta_entete_travaux_mpe) {
+        $this->db->set($this->_set($justificatif_pv_consta_entete_travaux_mpe))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,12 +23,11 @@ class Attachement_latrine_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($attachement) {
+    public function _set($justificatif_pv_consta_entete_travaux_mpe) {
         return array(
-            'libelle'       =>      $attachement['libelle'],
-            'description'   =>      $attachement['description'],
-            'ponderation_latrine'   =>      $attachement['ponderation_latrine'],
-            'id_type_latrine'    => $attachement['id_type_latrine']                       
+            'description'   =>      $justificatif_pv_consta_entete_travaux_mpe['description'],
+            'fichier'   =>      $justificatif_pv_consta_entete_travaux_mpe['fichier'],
+            'id_pv_consta_entete_travaux'    =>  $justificatif_pv_consta_entete_travaux_mpe['id_pv_consta_entete_travaux']                       
         );
     }
     public function delete($id) {
@@ -60,11 +59,11 @@ class Attachement_latrine_model extends CI_Model {
             return $q->row();
         }
     }
-    public function findBytype_latrine($id_type_latrine)
-    {               
+
+    public function findAllBydemande($id_pv_consta_entete_travaux) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where('id_type_latrine',$id_type_latrine)
+                        ->where("id_pv_consta_entete_travaux", $id_pv_consta_entete_travaux)
                         ->order_by('description')
                         ->get()
                         ->result();
@@ -74,26 +73,6 @@ class Attachement_latrine_model extends CI_Model {
         }else{
             return null;
         }                 
-    }
-
-    public function findBycontrat($id_contrat_prestataire)
-    {               
-        $result =  $this->db->select('attachement_latrine.*')
-                        ->from($this->table)
-                        ->join('type_latrine','type_latrine.id= attachement_latrine.id_type_latrine')
-                        ->join('latrine_construction','latrine_construction.id_type_latrine= type_latrine.id')
-                        ->join('convention_cisco_feffi_entete','convention_cisco_feffi_entete.id= latrine_construction.id_convention_entete')
-                        ->join('contrat_prestataire','contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id')
-                        ->where('contrat_prestataire.id',$id_contrat_prestataire)
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-
+    } 
 
 }

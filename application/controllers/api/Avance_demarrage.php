@@ -17,9 +17,20 @@ class Avance_demarrage extends REST_Controller {
     {
         $id = $this->get('id');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_avance_demarrage = $this->get('id_avance_demarr$id_avance_demarrage');
         $menu = $this->get('menu');
 
-        if ($menu=="getavancevalideBycontrat")
+        if ($menu=="getavancevalideById")
+        {
+            $tmp = $this->Avance_demarrageManager->getavancevalideById($id_avance_demarrage);
+            if ($tmp) 
+            {
+                $data = $tmp;           
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getavancevalideBycontrat")
         {
             $tmp = $this->Avance_demarrageManager->getavancevalideBycontrat($id_contrat_prestataire);
             if ($tmp) 
@@ -33,6 +44,7 @@ class Avance_demarrage extends REST_Controller {
                     $data[$key]['date_signature'] = $value->date_signature;
                     $data[$key]['pourcentage_rabais'] = $value->pourcentage_rabais;
                     $data[$key]['montant_rabais'] = $value->montant_rabais;
+                    $data[$key]['taxe_marche_public'] = $value->taxe_marche_public;
                     $data[$key]['net_payer'] = $value->net_payer;
                     $data[$key]['reste_payer'] = ($value->cout_batiment+$value->cout_latrine+$value->cout_mobilier)-$value->montant_avance;
                 }           
@@ -67,6 +79,7 @@ class Avance_demarrage extends REST_Controller {
             $data['date_signature'] = $avance_demarrage->date_signature;
             $data['pourcentage_rabais'] = $avance_demarrage->pourcentage_rabais;
             $data['montant_rabais'] = $avance_demarrage->montant_rabais;
+            $data['taxe_marche_public'] = $avance_demarrage->taxe_marche_public;
             $data['net_payer'] = $avance_demarrage->net_payer;
             $data['id_contrat_prestataire'] = $avance_demarrage->id_contrat_prestataire;
         } 
@@ -108,6 +121,7 @@ class Avance_demarrage extends REST_Controller {
                     'date_signature' => $this->post('date_signature'),
                     'pourcentage_rabais' => $this->post('pourcentage_rabais'),
                     'montant_rabais' => $this->post('montant_rabais'),
+                    'taxe_marche_public' => $this->post('taxe_marche_public'),
                     'net_payer' => $this->post('net_payer'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),
                     'validation' => $this->post('validation')
@@ -139,6 +153,7 @@ class Avance_demarrage extends REST_Controller {
                     'montant_avance' => $this->post('montant_avance'),
                     'date_signature' => $this->post('date_signature'),
                     'pourcentage_rabais' => $this->post('pourcentage_rabais'),
+                    'taxe_marche_public' => $this->post('taxe_marche_public'),
                     'montant_rabais' => $this->post('montant_rabais'),
                     'net_payer' => $this->post('net_payer'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire'),

@@ -31,13 +31,13 @@ class Contrat_prestataire_model extends CI_Model {
             'cout_batiment'    => $contrat_prestataire['cout_batiment'],
             'cout_latrine'   => $contrat_prestataire['cout_latrine'],
             'cout_mobilier' => $contrat_prestataire['cout_mobilier'],
-            'date_signature' => $contrat_prestataire['date_signature'],
+            //'date_signature' => $contrat_prestataire['date_signature'],
             //'date_prev_deb_trav' => $contrat_prestataire['date_prev_deb_trav'],
             //'date_reel_deb_trav' => $contrat_prestataire['date_reel_deb_trav'],
-            'delai_execution' => $contrat_prestataire['delai_execution'],
+            //'delai_execution' => $contrat_prestataire['delai_execution'],
             'id_convention_entete' => $contrat_prestataire['id_convention_entete'],
             'id_prestataire' => $contrat_prestataire['id_prestataire'],
-            'paiement_recu' => $contrat_prestataire['paiement_recu'],
+            //'paiement_recu' => $contrat_prestataire['paiement_recu'],
             'validation' => $contrat_prestataire['validation']                      
         );
     }
@@ -128,6 +128,44 @@ class Contrat_prestataire_model extends CI_Model {
             return null;
         }                 
     }
+
+   /* public function findcontratByConvention($id_convention_entete)
+    {               
+        $this->db->select("contrat_prestataire.*,contrat_prestataire.id_convention_entete as id_conv");
+        
+            $this->db ->select("(
+                select passation.date_signature_contrat from passation_marches as passation
+            where passation.id_convention_entete = id_conv ) as date_signature_contrat",FALSE);        
+        
+            $this->db ->select("(
+                select passation.notification_intention from passation_marches as passation
+            where passation.id_convention_entete = id_conv ) as notification_intention",FALSE);
+
+            $this->db ->select("(
+                select passation.date_notification_attribution from passation_marches as passation
+            where passation.id_convention_entete = id_conv ) as date_notification_attribution",FALSE);
+
+            $this->db ->select("(
+                select passation_marches.date_os from passation_marches as passation
+            where passation.id_convention_entete = id_conv ) as date_os",FALSE);    
+
+        $result =  $this->db->from('contrat_prestataire')
+                    
+                    ->where('contrat_prestataire.id_convention_entete',$id_convention_entete)                                       
+                    ->get()
+                    ->result();
+
+
+        if($result)
+        {   
+            return $result;
+        }
+        else
+        {
+            return $data=array();
+        }               
+    
+    } */
     public function getcontratByconvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

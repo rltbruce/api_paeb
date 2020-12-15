@@ -121,6 +121,21 @@ class Site_model extends CI_Model {
             return null;
         }                 
     }
+    
+    public function findsite_etat($requete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where($requete)
+                        ->where('validation',1)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
    /* public function findsiteInvalide() {               
         $result =  $this->db->select('*')
                         ->from($this->table)

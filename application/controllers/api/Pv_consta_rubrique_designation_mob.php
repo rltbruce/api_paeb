@@ -5,79 +5,80 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Attachement_batiment extends REST_Controller {
+class Pv_consta_rubrique_designation_mob extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('attachement_batiment_model', 'Attachement_batimentManager');
-        $this->load->model('type_batiment_model', 'Type_batimentManager');
+        $this->load->model('pv_consta_rubrique_designation_mob_model', 'Pv_consta_rubrique_designation_mobManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_type_batiment = $this->get('id_type_batiment');
+        $id_rubrique_phase = $this->get('id_rubrique_phase');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
-            
-        if ($id_contrat_prestataire) 
+        $id_pv_consta_entete_travaux = $this->get('id_pv_consta_entete_travaux');
+        $menu = $this->get('menu');
+
+        if ($menu == 'getpv_consta_statutravauxbyphasecontrat') 
         {   $data = array();
-            $tmp = $this->Attachement_batimentManager->findBycontrat($id_contrat_prestataire);
+            $tmp = $this->Pv_consta_rubrique_designation_mobManager->getpv_consta_statutravauxbyphasecontrat($id_rubrique_phase,$id_pv_consta_entete_travaux,$id_contrat_prestataire);
+           
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                //$data = $tmp;
+                foreach ($tmp as $key => $value)
                 {
-                    $type_batiment = array();
-                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
                     $data[$key]['id'] = $value->id;
+                    $data[$key]['numero'] = $value->numero;
                     $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation_batiment'] = $value->ponderation_batiment;
-                    $data[$key]['type_batiment'] = $type_batiment;
+                    $data[$key]['id_designation'] = $value->id_designation;
+                   // $data[$key]['id_pv_consta_entete_travaux'] = $value->id_pv_consta_entete_travaux;
+                    if ($value->periode==1)
+                    {
+                        $data[$key]['periode'] = true;
+                    }
+                    else
+                    {
+                        $data[$key]['periode'] = false;
+                    }
+                    if ($value->anterieur==1)
+                    {
+                        $data[$key]['anterieur'] = true;
+                    }
+                    else
+                    {
+                        $data[$key]['anterieur'] = false;
+                    }
                 }
             }
+            else
+            $data=array();
         }
-        elseif ($id_type_batiment) 
+        elseif ($menu == 'getrubrique_designation_mob') 
         {   $data = array();
-            $tmp = $this->Attachement_batimentManager->findBytype_batiment($id_type_batiment);
+            $tmp = $this->Pv_consta_rubrique_designation_mobManager->getrubrique_designation_mob($id_rubrique_phase);
+           
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
-                {
-                    $type_batiment = array();
-                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation_batiment'] = $value->ponderation_batiment;
-                    $data[$key]['type_batiment'] = $type_batiment;
-                }
+                $data = $tmp;
             }
         }
         elseif ($id)
         {
             $data = array();
-            $attachement_batiment = $this->Attachement_batimentManager->findById($id);
-            $type_batiment = $this->Type_batimentManager->findById($attachement_batiment->id_type_batiment);
-            $data['id'] = $attachement_batiment->id;
-            $data['libelle'] = $attachement_batiment->libelle;
-            $data['description'] = $attachement_batiment->description;
-            $data['ponderation_batiment'] = $attachement_batiment->ponderation_batiment;
-            $data['type_batiment'] = $type_batiment;
+            $pv_consta_rubrique_designation_mob = $this->Pv_consta_rubrique_designation_mobManager->findById($id);
+            $data['id'] = $pv_consta_rubrique_designation_mob->id;
+            $data['libelle'] = $pv_consta_rubrique_designation_mob->libelle;
+            $data['description'] = $pv_consta_rubrique_designation_mob->description;
+            $data['numero'] = $pv_consta_rubrique_designation_mob->numero;
         } 
         else 
         {
-            $menu = $this->Attachement_batimentManager->findAll();
-            if ($menu) 
+            $tmp = $this->Pv_consta_rubrique_designation_mobManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
-                {
-                    $type_batiment = $this->Type_batimentManager->findById($value->id_type_batiment);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation_batiment'] = $value->ponderation_batiment;
-                    $data[$key]['type_batiment'] = $type_batiment;
-                }
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -107,8 +108,8 @@ class Attachement_batiment extends REST_Controller {
                 $data = array(
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'ponderation_batiment' => $this->post('ponderation_batiment'),
-                    'id_type_batiment' => $this->post('id_type_batiment')
+                    'numero' => $this->post('numero'),
+                    'id_rubrique_phase' => $this->post('id_rubrique_phase')
                 );
                 if (!$data) {
                     $this->response([
@@ -117,7 +118,7 @@ class Attachement_batiment extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Attachement_batimentManager->add($data);
+                $dataId = $this->Pv_consta_rubrique_designation_mobManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -135,8 +136,8 @@ class Attachement_batiment extends REST_Controller {
                 $data = array(
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'ponderation_batiment' => $this->post('ponderation_batiment'),
-                    'id_type_batiment' => $this->post('id_type_batiment')
+                    'numero' => $this->post('numero'),
+                    'id_rubrique_phase' => $this->post('id_rubrique_phase')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -145,7 +146,7 @@ class Attachement_batiment extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Attachement_batimentManager->update($id, $data);
+                $update = $this->Pv_consta_rubrique_designation_mobManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -167,7 +168,7 @@ class Attachement_batiment extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Attachement_batimentManager->delete($id);         
+            $delete = $this->Pv_consta_rubrique_designation_mobManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

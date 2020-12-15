@@ -41,7 +41,7 @@ class Ecole extends REST_Controller {
                     $fokontany = $this->FokontanyManager->findById($value->id_fokontany);
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $commune = $this->CommuneManager->findById($value->id_commune);
-                    //$region = $this->RegionManager->findByIdcisco($value->id_cisco);
+                    $region = $this->RegionManager->findById($value->id_region);
                     $zap = $this->ZapManager->findById($value->id_zap);
                     $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
                     $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
@@ -58,9 +58,9 @@ class Ecole extends REST_Controller {
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['commune'] = $commune;
                     $data[$key]['zap'] = $zap;
-                    //$data[$key]['region'] = $region;
+                    $data[$key]['region'] = $region;
                 }
-            }
+            } 
         }
         elseif ($menus=='getecoleByzap') 
         {   $data = array();
@@ -115,7 +115,7 @@ class Ecole extends REST_Controller {
                     $fokontany = $this->FokontanyManager->findById($value->id_fokontany);
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $commune = $this->CommuneManager->findById($value->id_commune);
-                    $region = $this->RegionManager->findByIdcisco($value->id_cisco);
+                    $region = $this->RegionManager->findById($value->id_region);
                     $zap = $this->ZapManager->findById($value->id_zap);
                     $zone_subvention = $this->Zone_subventionManager->findById($value->id_zone_subvention);
                     $acces_zone = $this->Acces_zoneManager->findById($value->id_acces_zone);
@@ -150,6 +150,7 @@ class Ecole extends REST_Controller {
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $commune = $this->CommuneManager->findById($value->id_commune);
                     $zap = $this->ZapManager->findById($value->id_zap);
+                    $region = $this->RegionManager->findById($value->id_region);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['lieu'] = $value->lieu;
@@ -163,6 +164,7 @@ class Ecole extends REST_Controller {
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['commune'] = $commune;
                     $data[$key]['zap'] = $zap;
+                    $data[$key]['region'] = $region;
                 }
             }
         }
@@ -176,6 +178,7 @@ class Ecole extends REST_Controller {
             $cisco = $this->CiscoManager->findById($ecole->id_cisco);
             $commune = $this->CommuneManager->findById($ecole->id_commune);
             $zap = $this->ZapManager->findById($ecole->id_zap);
+            $region = $this->RegionManager->findById($value->id_region);
             $data['id'] = $ecole->id;
             $data['code'] = $ecole->code;
             $data['lieu'] = $ecole->lieu;
@@ -189,6 +192,7 @@ class Ecole extends REST_Controller {
             $data['cisco'] = $cisco;
             $data['commune'] = $commune;
             $data['zap'] = $zap;
+            $data['region'] = $region;
         } 
         else 
         {
@@ -204,6 +208,7 @@ class Ecole extends REST_Controller {
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $commune = $this->CommuneManager->findById($value->id_commune);
                     $zap = $this->ZapManager->findById($value->id_zap);
+                    $region = $this->RegionManager->findById($value->id_region);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['code'] = $value->code;
                     $data[$key]['lieu'] = $value->lieu;
@@ -217,6 +222,7 @@ class Ecole extends REST_Controller {
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['commune'] = $commune;
                     $data[$key]['zap'] = $zap;
+                    $data[$key]['region'] = $region;
                 }
             } 
                 else
@@ -256,7 +262,8 @@ class Ecole extends REST_Controller {
                     'id_fokontany' => $this->post('id_fokontany'),
                     'id_cisco' => $this->post('id_cisco'),
                     'id_commune' => $this->post('id_commune'),
-                    'id_zap' => $this->post('id_zap')
+                    'id_zap' => $this->post('id_zap'),
+                    'id_region' => $this->post('id_region')
                 );
                 if (!$data) {
                     $this->response([
@@ -292,7 +299,8 @@ class Ecole extends REST_Controller {
                     'id_fokontany' => $this->post('id_fokontany'),
                     'id_cisco' => $this->post('id_cisco'),
                     'id_commune' => $this->post('id_commune'),
-                    'id_zap' => $this->post('id_zap')
+                    'id_zap' => $this->post('id_zap'),
+                    'id_region' => $this->post('id_region')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -342,27 +350,25 @@ class Ecole extends REST_Controller {
 
 
     public function generer_requete($id_region,$id_cisco,$id_commune,$id_ecole,$id_zap)
-    {            
-        
-            $requete = "region.id='".$id_region."'" ;
-           
+    {
+        $requete = "region.id='".$id_region."'" ;           
 
-            if (($id_cisco!='*')&&($id_cisco!='undefined')&&($id_cisco!='null')) 
+            if (($id_cisco!='*')&&($id_cisco!='undefined')&&($id_cisco!='null')&&($id_cisco!='')) 
             {
                 $requete = $requete." AND ecole.id_cisco='".$id_cisco."'" ;
             }
 
-            if (($id_commune!='*')&&($id_commune!='undefined')&&($id_commune!='null')) 
+            if (($id_commune!='*')&&($id_commune!='undefined')&&($id_commune!='null')&&($id_commune!='')) 
             {
                 $requete = $requete." AND ecole.id_commune='".$id_commune."'" ;
             }
 
-            if (($id_ecole!='*')&&($id_ecole!='undefined')&&($id_ecole!='null')) 
+            if (($id_ecole!='*')&&($id_ecole!='undefined')&&($id_ecole!='null')&&($id_ecole!='')) 
             {
                 $requete = $requete." AND ecole.id='".$id_ecole."'" ;
             }
 
-            if (($id_zap!='*')&&($id_zap!='undefined')&&($id_zap!='null')) 
+            if (($id_zap!='*')&&($id_zap!='undefined')&&($id_zap!='null')&&($id_zap!='')) 
             {
                 $requete = $requete." AND ecole.id_zap='".$id_zap."'" ;
             }

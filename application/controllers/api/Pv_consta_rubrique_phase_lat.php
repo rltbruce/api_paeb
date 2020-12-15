@@ -5,43 +5,46 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Divers_attachement_batiment_detail extends REST_Controller {
+class Pv_consta_rubrique_phase_lat extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('divers_attachement_batiment_detail_model', 'Divers_attachement_batiment_detailManager');
+        $this->load->model('pv_consta_rubrique_phase_lat_model', 'Pv_consta_rubrique_phase_latManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_attachement_batiment = $this->get('id_attachement_batiment');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_pv_consta_entete_travaux = $this->get('id_pv_consta_entete_travaux');
         $menu = $this->get('menu');
 
-        if ($menu == 'getdetailbyattachement_batiment') 
-        {   $data = array();
-            $tmp = $this->Divers_attachement_batiment_detailManager->getdetailbyattachement_batiment($id_attachement_batiment);
-           
+        if ($menu=='getpv_consta_rubrique_phase_pourcentagebycontrat')
+        {
+            $tmp = $this->Pv_consta_rubrique_phase_latManager->getpv_consta_rubrique_phase_pourcentagebycontrat($id_contrat_prestataire,$id_pv_consta_entete_travaux);
             if ($tmp) 
             {
                 $data = $tmp;
-            }
-        }
+            } 
+                else
+                    $data = array();
+        } 
         elseif ($id)
         {
             $data = array();
-            $divers_attachement_batiment_detail = $this->Divers_attachement_batiment_detailManager->findById($id);
-            $data['id'] = $divers_attachement_batiment_detail->id;
-            $data['libelle'] = $divers_attachement_batiment_detail->libelle;
-            $data['description'] = $divers_attachement_batiment_detail->description;
-            $data['numero'] = $divers_attachement_batiment_detail->numero;
+            $pv_consta_rubrique_phase_lat = $this->Pv_consta_rubrique_phase_latManager->findById($id);
+            $data['id'] = $pv_consta_rubrique_phase_lat->id;
+            $data['libelle'] = $pv_consta_rubrique_phase_lat->libelle;
+            $data['description'] = $pv_consta_rubrique_phase_lat->description;
+            $data['numero'] = $pv_consta_rubrique_phase_lat->numero;
+            $data['pourcentage_prevu'] = $pv_consta_rubrique_phase_lat->pourcentage_prevu;
         } 
         else 
         {
-            $tmp = $this->Divers_attachement_batiment_detailManager->findAll();
+            $tmp = $this->Pv_consta_rubrique_phase_latManager->findAll();
             if ($tmp) 
             {
-                $data=$tmp;
+                $data = $tmp;
             } 
                 else
                     $data = array();
@@ -72,7 +75,7 @@ class Divers_attachement_batiment_detail extends REST_Controller {
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
                     'numero' => $this->post('numero'),
-                    'id_attachement_batiment' => $this->post('id_attachement_batiment')
+                    'pourcentage_prevu' => $this->post('pourcentage_prevu')
                 );
                 if (!$data) {
                     $this->response([
@@ -81,7 +84,7 @@ class Divers_attachement_batiment_detail extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Divers_attachement_batiment_detailManager->add($data);
+                $dataId = $this->Pv_consta_rubrique_phase_latManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -100,7 +103,7 @@ class Divers_attachement_batiment_detail extends REST_Controller {
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
                     'numero' => $this->post('numero'),
-                    'id_attachement_batiment' => $this->post('id_attachement_batiment')
+                    'pourcentage_prevu' => $this->post('pourcentage_prevu')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -109,7 +112,7 @@ class Divers_attachement_batiment_detail extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Divers_attachement_batiment_detailManager->update($id, $data);
+                $update = $this->Pv_consta_rubrique_phase_latManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -131,7 +134,7 @@ class Divers_attachement_batiment_detail extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Divers_attachement_batiment_detailManager->delete($id);         
+            $delete = $this->Pv_consta_rubrique_phase_latManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

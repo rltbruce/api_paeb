@@ -80,6 +80,21 @@ class Decaiss_fonct_feffi_model extends CI_Model {
         }                 
     }
 
+    public function getddecaiss_fonct_feffiById($id_decaiss_fonct_feffi) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_decaiss_fonct_feffi)
+                        ->where("validation", 1)
+                        //->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findinvalideByconvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

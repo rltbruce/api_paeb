@@ -11,7 +11,7 @@ class Facture_mpe extends REST_Controller {
         parent::__construct();
         $this->load->model('facture_mpe_model', 'Facture_mpeManager');
         $this->load->model('contrat_prestataire_model', 'Contrat_prestataireManager');
-        $this->load->model('attachement_travaux_model', 'Attachement_travauxManager');
+        //$this->load->model('attachement_travaux_model', 'Attachement_travauxManager');
         $this->load->model('avancement_physi_batiment_model', 'Avancement_physi_batimentManager');
         $this->load->model('avancement_physi_latrine_model', 'Avancement_physi_latrineManager');
         $this->load->model('avancement_physi_mobilier_model', 'Avancement_physi_mobilierManager');
@@ -21,7 +21,7 @@ class Facture_mpe extends REST_Controller {
     {
         $id = $this->get('id');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');        
-        $id_attachement_travaux = $this->get('id_attachement_travaux');
+        $id_pv_consta_entete_travaux = $this->get('id_pv_consta_entete_travaux');
         $id_facture_mpe = $this->get('id_facture_mpe');
         $menu = $this->get('menu');
 
@@ -121,7 +121,7 @@ class Facture_mpe extends REST_Controller {
             } 
                 else
                     $data = array();
-        }
+        }/*
         elseif ($menu=="getdecompte_mpeBycontrat")
         {
             $tmp = $this->Facture_mpeManager->finddecompte_mpeBycontrat($id_contrat_prestataire,$id_facture_mpe);
@@ -218,16 +218,6 @@ class Facture_mpe extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($menu=="getfacture_mpevalideBycontrat")
-        {
-            $tmp = $this->Facture_mpeManager->getfacture_mpevalideBycontrat($id_contrat_prestataire);
-            if ($tmp) 
-            {
-                $data = $tmp;            
-            } 
-                else
-                    $data = array();
-        }
         elseif ($menu=="getfacture_mpevalidebcafBycontrat")
         {
             $tmp = $this->Facture_mpeManager->findfacture_mpevalidebcafBycontrat($id_contrat_prestataire);
@@ -238,12 +228,35 @@ class Facture_mpe extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($menu=="getfacture_mpeByattachement")
+        else*/
+        
+        elseif ($menu=="getfacture_mpevalideBycontrat")
         {
-            $tmp = $this->Facture_mpeManager->findfacture_mpeByattachement($id_attachement_travaux);
+            $tmp = $this->Facture_mpeManager->getfacture_mpevalideBycontrat($id_contrat_prestataire);
             if ($tmp) 
             {
-                $data = $tmp;            } 
+                $data = $tmp;            
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getfacturevalideById")
+        {
+            $tmp = $this->Facture_mpeManager->getfacturevalideById($id_facture_mpe);
+            if ($tmp) 
+            {
+                $data = $tmp;            
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getfacture_mpeBypv_consta_entete")
+        {
+            $tmp = $this->Facture_mpeManager->findfacture_mpeBypv_consta_entete($id_pv_consta_entete_travaux);
+            if ($tmp) 
+            {
+                $data = $tmp;           
+            } 
                 else
                     $data = array();
         }
@@ -317,7 +330,7 @@ class Facture_mpe extends REST_Controller {
                     'taxe_marche_public' => $this->post('taxe_marche_public'),
                     'net_payer' => $this->post('net_payer'),
                     'date_signature' => $this->post('date_signature'),
-                    'id_attachement_travaux' => $this->post('id_attachement_travaux'),
+                    'id_pv_consta_entete_travaux' => $this->post('id_pv_consta_entete_travaux'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data) {
@@ -357,7 +370,7 @@ class Facture_mpe extends REST_Controller {
                     'taxe_marche_public' => $this->post('taxe_marche_public'),
                     'net_payer' => $this->post('net_payer'),
                     'date_signature' => $this->post('date_signature'),
-                    'id_attachement_travaux' => $this->post('id_attachement_travaux'),
+                    'id_pv_consta_entete_travaux' => $this->post('id_pv_consta_entete_travaux'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {

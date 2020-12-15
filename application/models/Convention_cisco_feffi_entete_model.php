@@ -595,7 +595,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
     }
     public function finddonneeexporter($requete) {
     $this->db->select("convention_cisco_feffi_entete.*,convention_cisco_feffi_entete.id as id_conv,
-        agence_acc.nom as nom_agence,ecole.description as nom_ecole, ecole.code as code_ecole, fokontany.nom as nom_fokontany,commune.nom as nom_commune,cisco.description as nom_cisco,region.nom as nom_region,zone_subvention.libelle as libelle_zone,acces_zone.libelle as libelle_acces,feffi.denomination as nom_feffi");
+        agence_acc.nom as nom_agence,ecole.description as nom_ecole, ecole.code as code_ecole,ecole.lieu as village, fokontany.nom as nom_fokontany,commune.nom as nom_commune,cisco.description as nom_cisco,region.nom as nom_region,zone_subvention.libelle as libelle_zone,acces_zone.libelle as libelle_acces,feffi.denomination as nom_feffi");
 
             $this->db ->select("(select batiment_construction.cout_unitaire from batiment_construction where batiment_construction.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as cout_batiment",FALSE);
 
@@ -841,7 +841,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             $this->db ->select("(select passation_marches_be.observation from passation_marches_be, convention_cisco_feffi_entete where passation_marches_be.id_convention_entete= convention_cisco_feffi_entete.id and passation_marches_be.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as observation_moe",FALSE);
 //paiement moe
 
-            $this->db ->select("(select sum(facture_moe_detail.montant_periode) from facture_moe_detail,facture_moe_entete, contrat_bureau_etude, convention_cisco_feffi_entete where facture_moe_detail.id_facture_moe_entete= facture_moe_entete.id and facture_moe_entete.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and facture_moe_entete.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_moe",FALSE);
+            $this->db ->select("(select sum(facture_moe_detail.montant_periode) from facture_moe_detail,facture_moe_entete, contrat_bureau_etude, convention_cisco_feffi_entete where facture_moe_detail.id_facture_moe_entete= facture_moe_entete.id and facture_moe_entete.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and facture_moe_entete.validation = '2' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_moe",FALSE);
 
             /*$this->db ->select("(select sum(demande_debut_travaux_moe.montant) from demande_debut_travaux_moe, contrat_bureau_etude, convention_cisco_feffi_entete where  demande_debut_travaux_moe.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and demande_debut_travaux_moe.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_debut_moe",FALSE);
 
@@ -907,6 +907,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             $this->db ->select("(select passation_marches.observation from passation_marches, convention_cisco_feffi_entete where passation_marches.id_convention_entete= convention_cisco_feffi_entete.id and passation_marches.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as observation_passation_pme",FALSE);
 
             $this->db ->select("(select count(mpe_soumissionaire.id) from mpe_soumissionaire, passation_marches, convention_cisco_feffi_entete where mpe_soumissionaire.id_passation_marches=passation_marches.id and passation_marches.id_convention_entete= convention_cisco_feffi_entete.id and passation_marches.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as nbr_mpe_soumissionaire_pme",FALSE);
+            $this->db ->select("(select GROUP_CONCAT(prestataire.nom SEPARATOR ',') from prestataire,mpe_soumissionaire, passation_marches, convention_cisco_feffi_entete where mpe_soumissionaire.id_prestataire=prestataire.id and mpe_soumissionaire.id_passation_marches=passation_marches.id and passation_marches.id_convention_entete= convention_cisco_feffi_entete.id and passation_marches.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as liste_mpe_soumissionaire",FALSE);
 
 //contrat mpe
 
@@ -1621,8 +1622,8 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
                                 from convention_cisco_feffi_entete as convention
                                 inner join contrat_prestataire as contrat_mpe on contrat_mpe.id_convention_entete = convention.id
-                                inner join attachement_travaux as atta_tra on atta_tra.id_contrat_prestataire = contrat_mpe.id
-                                inner join facture_mpe as fact_mpe on fact_mpe.id_attachement_travaux = atta_tra.id
+                                inner join pv_consta_entete_travaux as atta_tra on atta_tra.id_contrat_prestataire = contrat_mpe.id
+                                inner join facture_mpe as fact_mpe on fact_mpe.id_pv_consta_entete_travaux = atta_tra.id
                                 where 
                                     fact_mpe.validation= 0
                                     group by convention.id

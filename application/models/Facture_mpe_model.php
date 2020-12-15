@@ -40,7 +40,7 @@ class Facture_mpe_model extends CI_Model {
             'taxe_marche_public' => $facture_mpe['taxe_marche_public'],
             'net_payer' => $facture_mpe['net_payer'],
             'date_signature' => $facture_mpe['date_signature'],
-            'id_attachement_travaux' => $facture_mpe['id_attachement_travaux'],
+            'id_pv_consta_entete_travaux' => $facture_mpe['id_pv_consta_entete_travaux'],
             'validation' => $facture_mpe['validation']                     
         );
     }
@@ -66,18 +66,11 @@ class Facture_mpe_model extends CI_Model {
             return null;
         }                 
     }
-    public function findById($id)  {
-        $this->db->where("id", $id);
-        $q = $this->db->get($this->table);
-        if ($q->num_rows() > 0) {
-            return $q->row();
-        }
-    }
-    public function findfacture_mpeByattachement($id_attachement_travaux) {               
+    public function getfacturevalideById($id_facture_mpe) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_attachement_travaux", $id_attachement_travaux)
-                        ->order_by('id')
+                        ->where('id',$id_facture_mpe)
+                        ->where('facture_mpe.validation IN(1,2)')
                         ->get()
                         ->result();
         if($result)
@@ -85,6 +78,20 @@ class Facture_mpe_model extends CI_Model {
             return $result;
         }else{
             return null;
+        }                 
+    }
+    public function findById($id)  {
+        $this->db->where("id", $id);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+    }
+    public function findfacture_mpeBypv_consta_entete($id_pv_consta_entete_travaux) {
+        $this->db->where("id_pv_consta_entete_travaux", $id_pv_consta_entete_travaux);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
         }                 
     }
     public function avancement_financiereBycontrat($id_contrat)
@@ -100,10 +107,10 @@ class Facture_mpe_model extends CI_Model {
                         0 as montant_avance
 
                         from facture_mpe as fact_mpe
-                        inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
+                        inner join pv_consta_entete_travaux as atta_tra on atta_tra.id=fact_mpe.id_pv_consta_entete_travaux
                         inner join contrat_prestataire as contrat_mpe on contrat_mpe.id=atta_tra.id_contrat_prestataire
                         where 
-                            fact_mpe.validation= 4 and contrat_mpe.id= '".$id_contrat."'
+                            fact_mpe.validation= 2 and contrat_mpe.id= '".$id_contrat."'
                 )
                 UNION
                 (
@@ -115,7 +122,7 @@ class Facture_mpe_model extends CI_Model {
                         from avance_demarrage as avance_dem
                         inner join contrat_prestataire as contrat_mpe on contrat_mpe.id=avance_dem.id_contrat_prestataire
                         where 
-                            avance_dem.validation= 4 and contrat_mpe.id= '".$id_contrat."'
+                            avance_dem.validation= 2 and contrat_mpe.id= '".$id_contrat."'
                 )
 
                 )detail
@@ -189,15 +196,15 @@ class Facture_mpe_model extends CI_Model {
         
             $this->db ->select("(
                 select cout_contrat-sum(facture_mpe.net_payer) from facture_mpe
-            where facture_mpe.id<= id_fact and facture_mpe.validation=4 ) as reste_payer",FALSE);        
+            where facture_mpe.id<= id_fact and facture_mpe.validation=2 ) as reste_payer",FALSE);        
 
         $result =  $this->db->from('facture_mpe')
                     
                     
-                        ->join('attachement_travaux','attachement_travaux.id=facture_mpe.id_attachement_travaux')
-                        ->join('contrat_prestataire','contrat_prestataire.id=attachement_travaux.id_contrat_prestataire')
-                        ->where("attachement_travaux.id_contrat_prestataire", $id_contrat_prestataire)
-                        ->where("facture_mpe.validation", 4)
+                        ->join('pv_consta_entete_travaux','pv_consta_entete_travaux.id=facture_mpe.id_pv_consta_entete_travaux')
+                        ->join('contrat_prestataire','contrat_prestataire.id=pv_consta_entete_travaux.id_contrat_prestataire')
+                        ->where("pv_consta_entete_travaux.id_contrat_prestataire", $id_contrat_prestataire)
+                        ->where("facture_mpe.validation", 2)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -289,7 +296,7 @@ class Facture_mpe_model extends CI_Model {
                
                 (
                     select 
-                        atta_tra.id_contrat_prestataire as id_contrat,
+                        entete_trav.id_contrat_prestataire as id_contrat,
                          sum(fact_mpe.montant_travaux) as montant_travaux_to,
                          sum(fact_mpe.montant_rabais) as montant_rabais_to,
                          sum(fact_mpe.montant_ht) as montant_ht_to,
@@ -328,16 +335,16 @@ class Facture_mpe_model extends CI_Model {
 
                         from facture_mpe as fact_mpe
 
-                        inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
+                        inner join pv_consta_entete_travaux as entete_trav on entete_trav.id=fact_mpe.id_pv_consta_entete_travaux
                         where fact_mpe.id< '".$id_facture_mpe."' and
-                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4
+                        entete_trav.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4
 
                             group by id_contrat
                 )
                 UNION
                 (
                     select 
-                        atta_tra.id_contrat_prestataire as id_contrat,
+                        entete_trav.id_contrat_prestataire as id_contrat,
                         0 as montant_travaux_to,
                         0 as montant_rabais_to,
                         0 as montant_ht_to,
@@ -376,15 +383,15 @@ class Facture_mpe_model extends CI_Model {
 
                         from facture_mpe as fact_mpe
 
-                        inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
+                        inner join pv_consta_entete_travaux as entete_trav on entete_trav.id=fact_mpe.id_pv_consta_entete_travaux
                         where 
-                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.id='".$id_facture_mpe."'
+                        entete_trav.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.id='".$id_facture_mpe."'
                             group by id_contrat
                 )
                 UNION
                 (
                     select 
-                        atta_tra.id_contrat_prestataire as id_contrat,
+                        entete_trav.id_contrat_prestataire as id_contrat,
                         0 as montant_travaux_to,
                         0 as montant_rabais_to,
                         0 as montant_ht_to,
@@ -423,13 +430,13 @@ class Facture_mpe_model extends CI_Model {
 
                         from facture_mpe as fact_mpe
 
-                        inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
+                        inner join pv_consta_entete_travaux as entete_trav on entete_trav.id=fact_mpe.id_pv_consta_entete_travaux
                         where 
-                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id=(
+                        entete_trav.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id=(
                                     select max(factu_mpe.id) 
                                         from facture_mpe as factu_mpe
-                                        inner join attachement_travaux as atta_trav on atta_trav.id=factu_mpe.id_attachement_travaux
-                                            where factu_mpe.id < '".$id_facture_mpe."' and atta_trav.id_contrat_prestataire = '".$id_contrat_prestataire."')
+                                        inner join pv_consta_entete_travaux as entete_travv on entete_travv.id=factu_mpe.id_pv_consta_entete_travaux
+                                            where factu_mpe.id < '".$id_facture_mpe."' and entete_travv.id_contrat_prestataire = '".$id_contrat_prestataire."')
 
                             group by id_contrat
                 )
@@ -437,7 +444,7 @@ class Facture_mpe_model extends CI_Model {
                 UNION
                 (
                     select 
-                        atta_tra.id_contrat_prestataire as id_contrat,
+                        entete_trav.id_contrat_prestataire as id_contrat,
                         0 as montant_travaux_to,
                         0 as montant_rabais_to,
                         0 as montant_ht_to,
@@ -475,9 +482,9 @@ class Facture_mpe_model extends CI_Model {
                          0 as net_payer_avanc
                             
                             from facture_mpe as fact_mpe
-                         inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux   
+                         inner join pv_consta_entete_travaux as entete_trav on entete_trav.id=fact_mpe.id_pv_consta_entete_travaux   
                         where 
-                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id<= '".$id_facture_mpe."'
+                        entete_trav.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id<= '".$id_facture_mpe."'
 
                             group by id_contrat
                 )

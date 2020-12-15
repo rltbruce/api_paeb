@@ -17,10 +17,19 @@ class Decaiss_fonct_feffi extends REST_Controller {
     {
         $id = $this->get('id');
         $id_convention_entete = $this->get('id_convention_entete');
+        $id_decaiss_fonct_feffi = $this->get('id_decaiss_fonct_feffi');
         $menu = $this->get('menu');        
         $id_cisco = $this->get('id_cisco');
             
-        if ($menu=='getdecaissByconvention') 
+        if ($menu=='getddecaiss_fonct_feffiById') 
+        {   $data = array();
+            $tmp = $this->Decaiss_fonct_feffiManager->getddecaiss_fonct_feffiById($id_decaiss_fonct_feffi);
+            if ($tmp) 
+            {
+                $data = $tmp;
+            }
+        }
+        elseif ($menu=='getdecaissByconvention') 
         {   $data = array();
             $tmp = $this->Decaiss_fonct_feffiManager->findallByconvention($id_convention_entete);
             if ($tmp) 
@@ -61,7 +70,8 @@ class Decaiss_fonct_feffi extends REST_Controller {
             $tmp = $this->Decaiss_fonct_feffiManager->findinvalideByconvention($id_convention_entete);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                $data = $tmp;
+                /* foreach ($tmp as $key => $value) 
                 {
                     $convention_entete = array();
                     $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
@@ -71,7 +81,7 @@ class Decaiss_fonct_feffi extends REST_Controller {
                     $data[$key]['observation'] = $value->observation;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['convention_entete'] = $convention_entete;
-                }
+                }*/
             }
         }
         elseif ($menu=='getdecaiss_invalideBycisco') 

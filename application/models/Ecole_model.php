@@ -36,7 +36,8 @@ class Ecole_model extends CI_Model {
             'id_fokontany'    =>    $ecole['id_fokontany'] ,
             'id_cisco'    =>    $ecole['id_cisco'],
             'id_commune'    =>    $ecole['id_commune'],
-            'id_zap'    =>    $ecole['id_zap']                         
+            'id_zap'    =>    $ecole['id_zap'],
+            'id_region'    =>    $ecole['id_region']                         
         );
     }
     public function delete($id) {
@@ -72,9 +73,9 @@ class Ecole_model extends CI_Model {
     public function findBycommune($id_commune) {               
         $result =  $this->db->select('ecole.*')
                         ->from($this->table)
-                        ->join('fokontany','fokontany.id=ecole.id_fokontany')
-                        ->join('commune','commune.id=fokontany.id_commune')
-                        ->where('commune.id',$id_commune)
+                        //->join('fokontany','fokontany.id=ecole.id_fokontany')
+                        //->join('commune','commune.id=fokontany.id_commune')
+                        ->where('id_commune',$id_commune)
                         ->order_by('ecole.description')
                         ->get()
                         ->result();
@@ -88,10 +89,10 @@ class Ecole_model extends CI_Model {
     public function findByzap($id_zap) {               
         $result =  $this->db->select('ecole.*')
                         ->from($this->table)
-                        ->join('fokontany','fokontany.id=ecole.id_fokontany')
-                        ->join('commune','commune.id=fokontany.id_commune')
-                        ->join('zap_commune','zap_commune.id_commune=commune.id')
-                        ->where('zap_commune.id_zap',$id_zap)
+                        //->join('fokontany','fokontany.id=ecole.id_fokontany')
+                        //->join('commune','commune.id=fokontany.id_commune')
+                        //->join('zap_commune','zap_commune.id_commune=commune.id')
+                        ->where('id_zap',$id_zap)
                         ->order_by('ecole.description')
                         ->get()
                         ->result();
@@ -117,11 +118,11 @@ class Ecole_model extends CI_Model {
     {               
         $result =  $this->db->select('ecole.*')
                         ->from($this->table)
-                        ->join('fokontany','fokontany.id=ecole.id_fokontany')
-                        ->join('commune','commune.id=fokontany.id_commune')
-                        ->join('district','district.id=commune.id_district')
-                        ->join('cisco','cisco.id_district=district.id')
-                        ->where('cisco.id',$id_cisco)
+                        //->join('fokontany','fokontany.id=ecole.id_fokontany')
+                        //->join('commune','commune.id=fokontany.id_commune')
+                        //->join('district','district.id=commune.id_district')
+                        //->join('cisco','cisco.id_district=district.id')
+                        ->where('id_cisco',$id_cisco)
                         ->order_by('ecole.code')
                         ->get()
                         ->result();

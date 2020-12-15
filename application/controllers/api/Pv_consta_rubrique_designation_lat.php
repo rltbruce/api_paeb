@@ -5,43 +5,59 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Divers_attachement_latrine extends REST_Controller {
+class Pv_consta_rubrique_designation_lat extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('divers_attachement_latrine_model', 'Divers_attachement_latrineManager');
+        $this->load->model('pv_consta_rubrique_designation_lat_model', 'Pv_consta_rubrique_designation_latManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_rubrique_phase = $this->get('id_rubrique_phase');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
-        $id_demande_latrine_mpe = $this->get('id_demande_latrine_mpe');
+        $id_pv_consta_entete_travaux = $this->get('id_pv_consta_entete_travaux');
         $menu = $this->get('menu');
 
-        if ($menu == 'getrubrique_attachement_withmontant_prevu') 
-        {   
-            $data = array();
-            $tmp = $this->Divers_attachement_latrineManager->getrubrique_attachement_withmontant_prevu($id_contrat_prestataire);
-           
-            if ($tmp) 
-            {
-                $data = $tmp;
-            }
-        }
-        elseif ($menu == 'getrubrique_attachement_withmontantbycontrat') 
-        {   
-            $data = array();
-            $tmp = $this->Divers_attachement_latrineManager->getrubrique_attachement_withmontantbycontrat($id_contrat_prestataire,$id_demande_latrine_mpe);
-           
-            if ($tmp) 
-            {
-                $data = $tmp;
-            }
-        }
-        elseif ($menu == 'getattachement_latrine_prevu') 
+        if ($menu == 'getpv_consta_statutravauxbyphasecontrat') 
         {   $data = array();
-            $tmp = $this->Divers_attachement_latrineManager->findattachementBycontrat($id_contrat_prestataire);
+            $tmp = $this->Pv_consta_rubrique_designation_latManager->getpv_consta_statutravauxbyphasecontrat($id_rubrique_phase,$id_pv_consta_entete_travaux,$id_contrat_prestataire);
+           
+            if ($tmp) 
+            {
+                //$data = $tmp;
+                foreach ($tmp as $key => $value)
+                {
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['numero'] = $value->numero;
+                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['id_designation'] = $value->id_designation;
+                   // $data[$key]['id_pv_consta_entete_travaux'] = $value->id_pv_consta_entete_travaux;
+                    if ($value->periode==1)
+                    {
+                        $data[$key]['periode'] = true;
+                    }
+                    else
+                    {
+                        $data[$key]['periode'] = false;
+                    }
+                    if ($value->anterieur==1)
+                    {
+                        $data[$key]['anterieur'] = true;
+                    }
+                    else
+                    {
+                        $data[$key]['anterieur'] = false;
+                    }
+                }
+            }
+            else
+            $data=array();
+        }
+        elseif ($menu == 'getrubrique_designation_lat') 
+        {   $data = array();
+            $tmp = $this->Pv_consta_rubrique_designation_latManager->getrubrique_designation_lat($id_rubrique_phase);
            
             if ($tmp) 
             {
@@ -51,24 +67,18 @@ class Divers_attachement_latrine extends REST_Controller {
         elseif ($id)
         {
             $data = array();
-            $divers_attachement_latrine = $this->Divers_attachement_latrineManager->findById($id);
-            $data['id'] = $divers_attachement_latrine->id;
-            $data['libelle'] = $divers_attachement_latrine->libelle;
-            $data['description'] = $divers_attachement_latrine->description;
-            $data['numero'] = $divers_attachement_latrine->numero;
+            $pv_consta_rubrique_designation_lat = $this->Pv_consta_rubrique_designation_latManager->findById($id);
+            $data['id'] = $pv_consta_rubrique_designation_lat->id;
+            $data['libelle'] = $pv_consta_rubrique_designation_lat->libelle;
+            $data['description'] = $pv_consta_rubrique_designation_lat->description;
+            $data['numero'] = $pv_consta_rubrique_designation_lat->numero;
         } 
         else 
         {
-            $menu = $this->Divers_attachement_latrineManager->findAll();
-            if ($menu) 
+            $tmp = $this->Pv_consta_rubrique_designation_latManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
-                {
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['numero'] = $value->numero;
-                }
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -98,7 +108,8 @@ class Divers_attachement_latrine extends REST_Controller {
                 $data = array(
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'numero' => $this->post('numero')
+                    'numero' => $this->post('numero'),
+                    'id_rubrique_phase' => $this->post('id_rubrique_phase')
                 );
                 if (!$data) {
                     $this->response([
@@ -107,7 +118,7 @@ class Divers_attachement_latrine extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Divers_attachement_latrineManager->add($data);
+                $dataId = $this->Pv_consta_rubrique_designation_latManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -125,7 +136,8 @@ class Divers_attachement_latrine extends REST_Controller {
                 $data = array(
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'numero' => $this->post('numero')
+                    'numero' => $this->post('numero'),
+                    'id_rubrique_phase' => $this->post('id_rubrique_phase')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -134,7 +146,7 @@ class Divers_attachement_latrine extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Divers_attachement_latrineManager->update($id, $data);
+                $update = $this->Pv_consta_rubrique_designation_latManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -156,7 +168,7 @@ class Divers_attachement_latrine extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Divers_attachement_latrineManager->delete($id);         
+            $delete = $this->Pv_consta_rubrique_designation_latManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

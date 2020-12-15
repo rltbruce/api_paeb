@@ -5,80 +5,45 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Attachement_mobilier extends REST_Controller {
+class Pv_consta_statu_mob_travaux extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('attachement_mobilier_model', 'Attachement_mobilierManager');
-        $this->load->model('type_mobilier_model', 'Type_mobilierManager');
+        $this->load->model('pv_consta_statu_mob_travaux_model', 'Pv_consta_statu_mob_travauxManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_type_mobilier = $this->get('id_type_mobilier');
-            
+        $id_rubrique_phase = $this->get('id_rubrique_phase');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
-            
-        if ($id_contrat_prestataire) 
+        $id_pv_consta_entete_travaux = $this->get('id_pv_consta_entete_travaux');
+        $menu = $this->get('menu');
+
+        if ($menu == 'getcount_desination_statubyphasecontrat') 
         {   $data = array();
-            $tmp = $this->Attachement_mobilierManager->findBycontrat($id_contrat_prestataire);
+            $tmp = $this->Pv_consta_statu_mob_travauxManager->getcount_desination_statubyphasecontrat($id_rubrique_phase,$id_pv_consta_entete_travaux,$id_contrat_prestataire);
+           
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
-                {
-                    $type_mobilier = array();
-                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation_mobilier'] = $value->ponderation_mobilier;
-                    $data[$key]['type_mobilier'] = $type_mobilier;
-                }
-            }
-        }
-        elseif ($id_type_mobilier) 
-        {   $data = array();
-            $tmp = $this->Attachement_mobilierManager->findBytype_mobilier($id_type_mobilier);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $type_mobilier = array();
-                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation_mobilier'] = $value->ponderation_mobilier;
-                    $data[$key]['type_mobilier'] = $type_mobilier;
-                }
+                $data = $tmp;
             }
         }
         elseif ($id)
         {
             $data = array();
-            $attachement_mobilier = $this->Attachement_mobilierManager->findById($id);
-            $type_mobilier = $this->Type_mobilierManager->findById($attachement_mobilier->id_type_mobilier);
-            $data['id'] = $attachement_mobilier->id;
-            $data['libelle'] = $attachement_mobilier->libelle;
-            $data['description'] = $attachement_mobilier->description;
-            $data['ponderation_mobilier'] = $attachement_mobilier->ponderation_mobilier;
-            $data['type_mobilier'] = $type_mobilier;
+            $pv_consta_statu_mob_travaux = $this->Pv_consta_statu_mob_travauxManager->findById($id);
+            $data['id'] = $pv_consta_statu_mob_travaux->id;
+            $data['id_pv_consta_entete_travaux'] = $pv_consta_statu_mob_travaux->id_pv_consta_entete_travaux;
+            $data['id_rubrique_designation'] = $pv_consta_statu_mob_travaux->id_rubrique_designation;
+            $data['status'] = $pv_consta_statu_mob_travaux->status;
         } 
         else 
         {
-            $menu = $this->Attachement_mobilierManager->findAll();
-            if ($menu) 
+            $tmp = $this->Pv_consta_statu_mob_travauxManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
-                {
-                    $type_mobilier = $this->Type_mobilierManager->findById($value->id_type_mobilier);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation_mobilier'] = $value->ponderation_mobilier;
-                    $data[$key]['type_mobilier'] = $type_mobilier;
-                }
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -106,10 +71,9 @@ class Attachement_mobilier extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description'),
-                    'ponderation_mobilier' => $this->post('ponderation_mobilier'),
-                    'id_type_mobilier' => $this->post('id_type_mobilier')
+                    'id_pv_consta_entete_travaux' => $this->post('id_pv_consta_entete_travaux'),
+                    'id_rubrique_designation' => $this->post('id_rubrique_designation'),
+                    'status' => $this->post('status')
                 );
                 if (!$data) {
                     $this->response([
@@ -118,7 +82,7 @@ class Attachement_mobilier extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Attachement_mobilierManager->add($data);
+                $dataId = $this->Pv_consta_statu_mob_travauxManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -134,10 +98,9 @@ class Attachement_mobilier extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description'),
-                    'ponderation_mobilier' => $this->post('ponderation_mobilier'),
-                    'id_type_mobilier' => $this->post('id_type_mobilier')
+                    'id_pv_consta_entete_travaux' => $this->post('id_pv_consta_entete_travaux'),
+                    'id_rubrique_designation' => $this->post('id_rubrique_designation'),
+                    'status' => $this->post('status')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -146,7 +109,7 @@ class Attachement_mobilier extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Attachement_mobilierManager->update($id, $data);
+                $update = $this->Pv_consta_statu_mob_travauxManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -168,7 +131,7 @@ class Attachement_mobilier extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Attachement_mobilierManager->delete($id);         
+            $delete = $this->Pv_consta_statu_mob_travauxManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

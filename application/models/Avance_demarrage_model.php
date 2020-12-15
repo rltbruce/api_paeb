@@ -31,6 +31,7 @@ class Avance_demarrage_model extends CI_Model {
             'date_signature' => $avance_demarrage['date_signature'],
             'pourcentage_rabais' => $avance_demarrage['pourcentage_rabais'],
             'montant_rabais' => $avance_demarrage['montant_rabais'],
+            'taxe_marche_public' => $avance_demarrage['taxe_marche_public'],
             'net_payer' => $avance_demarrage['net_payer'],
             'id_contrat_prestataire' => $avance_demarrage['id_contrat_prestataire'], 
             'validation'    =>  $avance_demarrage['validation']                     
@@ -79,6 +80,20 @@ class Avance_demarrage_model extends CI_Model {
             return null;
         }                 
     }
+    public function getavancevalideById($id_avance_demarrage) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id", $id_avance_demarrage)
+                        ->where("validation IN(1,2)")
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
          public function findavance_demarragevalidebcafBycontrat($id_contrat_prestataire) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
@@ -100,7 +115,7 @@ class Avance_demarrage_model extends CI_Model {
                         ->from($this->table)
                         ->join('contrat_prestataire','contrat_prestataire.id=avance_demarrage.id_contrat_prestataire')
                         ->where("avance_demarrage.id_contrat_prestataire", $id_contrat_prestataire)
-                        ->where("avance_demarrage.validation", 4)
+                        ->where("avance_demarrage.validation", 2)
                         ->order_by('id')
                         ->get()
                         ->result();

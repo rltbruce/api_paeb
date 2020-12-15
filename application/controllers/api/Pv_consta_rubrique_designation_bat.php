@@ -5,64 +5,80 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Justificatif_attachement_mpe extends REST_Controller {
+class Pv_consta_rubrique_designation_bat extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('justificatif_attachement_mpe_model', 'Justificatif_attachement_mpeManager');
-       $this->load->model('attachement_travaux_model', 'Attachement_travauxManager');
+        $this->load->model('pv_consta_rubrique_designation_bat_model', 'Pv_consta_rubrique_designation_batManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_attachement_travaux = $this->get('id_attachement_travaux');
-            
-        if ($id_attachement_travaux)
-        {
-            $tmp = $this->Justificatif_attachement_mpeManager->findAllBydemande($id_attachement_travaux);
+        $id_rubrique_phase = $this->get('id_rubrique_phase');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_pv_consta_entete_travaux = $this->get('id_pv_consta_entete_travaux');
+        $menu = $this->get('menu');
+
+        if ($menu == 'getpv_consta_statutravauxbyphasecontrat') 
+        {   $data = array();
+            $tmp = $this->Pv_consta_rubrique_designation_batManager->getpv_consta_statutravauxbyphasecontrat($id_rubrique_phase,$id_pv_consta_entete_travaux,$id_contrat_prestataire);
+           
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
+                //$data = $tmp;
+                foreach ($tmp as $key => $value)
                 {
-                    $attachement_travaux= array();
-                    $attachement_travaux = $this->Attachement_travauxManager->findById($value->id_attachement_travaux);
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
-                    //$data[$key]['date'] = $value->date;
-                    $data[$key]['attachement_travaux'] = $attachement_travaux;
+                    $data[$key]['numero'] = $value->numero;
+                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['id_designation'] = $value->id_designation;
+                   // $data[$key]['id_pv_consta_entete_travaux'] = $value->id_pv_consta_entete_travaux;
+                    if ($value->periode==1)
+                    {
+                        $data[$key]['periode'] = true;
+                    }
+                    else
+                    {
+                        $data[$key]['periode'] = false;
+                    }
+                    if ($value->anterieur==1)
+                    {
+                        $data[$key]['anterieur'] = true;
+                    }
+                    else
+                    {
+                        $data[$key]['anterieur'] = false;
+                    }
                 }
-            } 
-                else
-                    $data = array();
+            }
+            else
+            $data=array();
+        }
+        elseif ($menu == 'getrubrique_designation_bat') 
+        {   $data = array();
+            $tmp = $this->Pv_consta_rubrique_designation_batManager->getrubrique_designation_bat($id_rubrique_phase);
+           
+            if ($tmp) 
+            {
+                $data = $tmp;
+            }
         }
         elseif ($id)
         {
             $data = array();
-            $justificatif_attachement_mpe = $this->Justificatif_attachement_mpeManager->findById($id);
-            $attachement_travaux = $this->Attachement_travauxManager->findById($justificatif_attachement_mpe->id_attachement_travaux);
-            $data['id'] = $justificatif_attachement_mpe->id;
-            $data['description'] = $justificatif_attachement_mpe->description;
-            $data['fichier'] = $justificatif_attachement_mpe->fichier;
-            //$data['date'] = $justificatif_attachement_mpe->date;
-            $data['attachement_travaux'] = $attachement_travaux;
+            $pv_consta_rubrique_designation_bat = $this->Pv_consta_rubrique_designation_batManager->findById($id);
+            $data['id'] = $pv_consta_rubrique_designation_bat->id;
+            $data['libelle'] = $pv_consta_rubrique_designation_bat->libelle;
+            $data['description'] = $pv_consta_rubrique_designation_bat->description;
+            $data['numero'] = $pv_consta_rubrique_designation_bat->numero;
         } 
         else 
         {
-            $menu = $this->Justificatif_attachement_mpeManager->findAll();
-            if ($menu) 
+            $tmp = $this->Pv_consta_rubrique_designation_batManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
-                {
-                    $attachement_travaux= array();
-                    $attachement_travaux = $this->Attachement_travauxManager->findById($value->id_attachement_travaux);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['fichier'] = $value->fichier;
-                    //$data[$key]['date'] = $value->date;
-                    $data[$key]['attachement_travaux'] = $attachement_travaux;
-                }
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -90,9 +106,10 @@ class Justificatif_attachement_mpe extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
+                    'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'fichier' => $this->post('fichier'),
-                    'id_attachement_travaux' => $this->post('id_attachement_travaux')
+                    'numero' => $this->post('numero'),
+                    'id_rubrique_phase' => $this->post('id_rubrique_phase')
                 );
                 if (!$data) {
                     $this->response([
@@ -101,7 +118,7 @@ class Justificatif_attachement_mpe extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Justificatif_attachement_mpeManager->add($data);
+                $dataId = $this->Pv_consta_rubrique_designation_batManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -117,9 +134,10 @@ class Justificatif_attachement_mpe extends REST_Controller {
                 }
             } else {
                 $data = array(
+                    'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
-                    'fichier' => $this->post('fichier'),
-                    'id_attachement_travaux' => $this->post('id_attachement_travaux')
+                    'numero' => $this->post('numero'),
+                    'id_rubrique_phase' => $this->post('id_rubrique_phase')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -128,7 +146,7 @@ class Justificatif_attachement_mpe extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Justificatif_attachement_mpeManager->update($id, $data);
+                $update = $this->Pv_consta_rubrique_designation_batManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -150,7 +168,7 @@ class Justificatif_attachement_mpe extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Justificatif_attachement_mpeManager->delete($id);         
+            $delete = $this->Pv_consta_rubrique_designation_batManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

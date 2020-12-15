@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Demande_batiment_prestataire_model extends CI_Model {
-    protected $table = 'demande_batiment_presta';
+class Demande_batiment_mpe_model extends CI_Model {
+    protected $table = 'demande_batiment_mpe';
 
-    public function add($demande_batiment_prestataire) {
-        $this->db->set($this->_set($demande_batiment_prestataire))                
+    public function add($demande_batiment_mpe) {
+        $this->db->set($this->_set($demande_batiment_mpe))                
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Demande_batiment_prestataire_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $demande_batiment_prestataire) {
-        $this->db->set($this->_set($demande_batiment_prestataire))
+    public function update($id, $demande_batiment_mpe) {
+        $this->db->set($this->_set($demande_batiment_mpe))
                 //->set('date_approbation', 'NOW()', false)
                             ->where('id', (int) $id)
                             ->update($this->table);
@@ -24,14 +24,11 @@ class Demande_batiment_prestataire_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($demande_batiment_prestataire) {
+    public function _set($demande_batiment_mpe) {
         return array(
-            'montant'   =>      $demande_batiment_prestataire['montant'],
-            'id_tranche_demande_mpe' => $demande_batiment_prestataire['id_tranche_demande_mpe'],
-            'anterieur' => $demande_batiment_prestataire['anterieur'],
-            'cumul' => $demande_batiment_prestataire['cumul'],
-            'reste' => $demande_batiment_prestataire['reste'],
-            'id_attachement_travaux'    =>  $demande_batiment_prestataire['id_attachement_travaux']                       
+            'montant'   =>      $demande_batiment_mpe['montant'],
+            'id_tranche_demande_mpe' => $demande_batiment_mpe['id_tranche_demande_mpe'],
+            'id_pv_consta_entete_travaux'    =>  $demande_batiment_mpe['id_pv_consta_entete_travaux']                       
         );
     }
     public function delete($id) {
@@ -63,10 +60,10 @@ class Demande_batiment_prestataire_model extends CI_Model {
             return $q->row();
         }
     }
-    public function finddemandeByattachement($id_attachement_travaux) {               
+    public function finddemandeBypv_consta_entete($id_pv_consta_entete_travaux) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where("id_attachement_travaux", $id_attachement_travaux)
+                        ->where("id_pv_consta_entete_travaux", $id_pv_consta_entete_travaux)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -77,14 +74,44 @@ class Demande_batiment_prestataire_model extends CI_Model {
             return null;
         }                 
     }
-    public function finddemandeBycontrat($id_contrat_prestataire) {               
-        $result =  $this->db->select('demande_batiment_presta.*')
+    public function getdemandeByContratTranche($id_tranche_demande_mpe,$id_contrat_prestataire) {               
+        $result =  $this->db->select('demande_batiment_mpe.*')
                         ->from($this->table)
-                        ->join('attachement_travaux','attachement_travaux.id = demande_batiment_presta.id_attachement_travaux')                        
-                        ->join('facture_mpe','facture_mpe.id_attachement_travaux = attachement_travaux.id')
-                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
-                        ->where("facture_mpe.validation", 4)
-                        ->order_by('demande_batiment_presta.id')
+                        ->join('pv_consta_entete_travaux','pv_consta_entete_travaux.id = demande_batiment_mpe.id_pv_consta_entete_travaux')
+                        ->where("demande_batiment_mpe.id_tranche_demande_mpe", $id_tranche_demande_mpe)
+                        ->where("pv_consta_entete_travaux.id_contrat_prestataire", $id_contrat_prestataire)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getdemandeByContratTranchenumero($tranche_numero,$id_contrat_prestataire) {               
+        $result =  $this->db->select('demande_batiment_mpe.*')
+                        ->from($this->table)
+                        ->join('pv_consta_entete_travaux','pv_consta_entete_travaux.id = demande_batiment_mpe.id_pv_consta_entete_travaux')
+                        ->join('tranche_demande_mpe','tranche_demande_mpe.id = demande_batiment_mpe.id_tranche_demande_mpe')
+                        ->where("tranche_demande_mpe.code", $tranche_numero)
+                        ->where("pv_consta_entete_travaux.id_contrat_prestataire", $id_contrat_prestataire)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getdemandevalideById($id_demande_batiment_mpe) {               
+        $result =  $this->db->select('demande_batiment_mpe.*')
+                        ->from($this->table)
+                        ->join('pv_consta_entete_travaux','pv_consta_entete_travaux.id = demande_batiment_mpe.id_pv_consta_entete_travaux')                        
+                        ->join('facture_mpe','facture_mpe.id_pv_consta_entete_travaux = pv_consta_entete_travaux.id')
+                        ->where("demande_batiment_mpe.id", $id_demande_batiment_mpe)
+                        ->where("facture_mpe.validation", 2)
                         ->get()
                         ->result();
         if($result)
@@ -287,12 +314,12 @@ class Demande_batiment_prestataire_model extends CI_Model {
     }*/
 
    /* public function findAllInvalideBycisco($id_cisco) {               
-        $result =  $this->db->select('demande_batiment_presta.*')
+        $result =  $this->db->select('demande_batiment_mpe.*')
                         ->from($this->table)
-                        ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_presta.id_contrat_prestataire')
+                        ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_mpe.id_contrat_prestataire')
                         ->join('convention_cisco_feffi_entete','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
                         
-                        ->where("demande_batiment_presta.validation", 0)
+                        ->where("demande_batiment_mpe.validation", 0)
                         ->where("convention_cisco_feffi_entete.id_cisco", $id_cisco)
                         ->order_by('id')
                         ->get()
@@ -306,12 +333,12 @@ class Demande_batiment_prestataire_model extends CI_Model {
     }
 
         public function findAllValideBycisco($id_cisco) {               
-        $result =  $this->db->select('demande_batiment_presta.*, contrat_prestataire.id as id_contrat')
+        $result =  $this->db->select('demande_batiment_mpe.*, contrat_prestataire.id as id_contrat')
                         ->from($this->table)
-                        ->join('batiment_construction','batiment_construction.id = demande_batiment_presta.id_batiment_construction')
+                        ->join('batiment_construction','batiment_construction.id = demande_batiment_mpe.id_batiment_construction')
                         ->join('convention_cisco_feffi_entete','batiment_construction.id_convention_entete = convention_cisco_feffi_entete.id')
                         ->join('contrat_prestataire','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
-                        ->where("demande_batiment_presta.validation", 3)
+                        ->where("demande_batiment_mpe.validation", 3)
                         ->where("convention_cisco_feffi_entete.id_cisco", $id_cisco)
                         ->order_by('id')
                         ->get()
@@ -324,12 +351,12 @@ class Demande_batiment_prestataire_model extends CI_Model {
         }                 
     }
             public function findValideBycisco($id_cisco) {               
-        $result =  $this->db->select('demande_batiment_presta.*, contrat_prestataire.id as id_contrat')
+        $result =  $this->db->select('demande_batiment_mpe.*, contrat_prestataire.id as id_contrat')
                         ->from($this->table)
-                        ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_presta.id_contrat_prestataire')
+                        ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_mpe.id_contrat_prestataire')
                         ->join('convention_cisco_feffi_entete','contrat_prestataire.id_convention_entete = convention_cisco_feffi_entete.id')
                         
-                        ->where("demande_batiment_presta.validation", 3)
+                        ->where("demande_batiment_mpe.validation", 3)
                         ->where("convention_cisco_feffi_entete.id_cisco", $id_cisco)
                         ->order_by('id')
                         ->get()
@@ -389,9 +416,9 @@ class Demande_batiment_prestataire_model extends CI_Model {
 
    
     /*public function findAlldemandeBycontrat($id_contrat_prestataire) {               
-        $result =  $this->db->select('demande_batiment_presta.*')
+        $result =  $this->db->select('demande_batiment_mpe.*')
                         ->from($this->table)
-                        ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_presta.id_contrat_prestataire')
+                        ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_mpe.id_contrat_prestataire')
                         ->where("contrat_prestataire.id", $id_contrat_prestataire)
                         ->order_by('id')
                         ->get()
@@ -405,11 +432,11 @@ class Demande_batiment_prestataire_model extends CI_Model {
     }
 
     public function finddemandedisponibleBycontrat($id_contrat_prestataire) {               
-        $result =  $this->db->select('demande_batiment_presta.*')
+        $result =  $this->db->select('demande_batiment_mpe.*')
                         ->from($this->table)
-                        ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_presta.id_contrat_prestataire')
+                        ->join('contrat_prestataire','contrat_prestataire.id = demande_batiment_mpe.id_contrat_prestataire')
                         ->where("contrat_prestataire.id", $id_contrat_prestataire)
-                        ->where("demande_batiment_presta.validation >", 0)
+                        ->where("demande_batiment_mpe.validation >", 0)
                         ->order_by('id')
                         ->get()
                         ->result();

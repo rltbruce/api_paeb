@@ -5,70 +5,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Divers_attachement_mobilier extends REST_Controller {
+class Pv_consta_detail_mob_travaux extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('divers_attachement_mobilier_model', 'Divers_attachement_mobilierManager');
+        $this->load->model('pv_consta_detail_mob_travaux_model', 'Pv_consta_detail_mob_travauxManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
+        $id_rubrique_phase = $this->get('id_rubrique_phase');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
-        $id_demande_mobilier_mpe = $this->get('id_demande_mobilier_mpe');
+        $id_pv_consta_entete_travaux = $this->get('id_pv_consta_entete_travaux');
         $menu = $this->get('menu');
 
-        if ($menu == 'getrubrique_attachement_withmontant_prevu') 
-        {   
-            $data = array();
-            $tmp = $this->Divers_attachement_mobilierManager->getrubrique_attachement_withmontant_prevu($id_contrat_prestataire);
-           
-            if ($tmp) 
-            {
-                $data = $tmp;
-            }
-        }
-        elseif ($menu == 'getrubrique_attachement_withmontantbycontrat') 
-        {   
-            $data = array();
-            $tmp = $this->Divers_attachement_mobilierManager->getrubrique_attachement_withmontantbycontrat($id_contrat_prestataire,$id_demande_mobilier_mpe);
-           
-            if ($tmp) 
-            {
-                $data = $tmp;
-            }
-        }
-        elseif ($menu == 'getattachement_mobilier_prevu') 
-        {   $data = array();
-            $tmp = $this->Divers_attachement_mobilierManager->findattachementBycontrat($id_contrat_prestataire);
-           
-            if ($tmp) 
-            {
-                $data = $tmp;
-            }
-        }
-        elseif ($id)
+        if ($id)
         {
             $data = array();
-            $divers_attachement_mobilier = $this->Divers_attachement_mobilierManager->findById($id);
-            $data['id'] = $divers_attachement_mobilier->id;
-            $data['libelle'] = $divers_attachement_mobilier->libelle;
-            $data['description'] = $divers_attachement_mobilier->description;
-            $data['numero'] = $divers_attachement_mobilier->numero;
+            $pv_consta_detail_mob_travaux = $this->Pv_consta_detail_mob_travauxManager->findById($id);
+            $data['id'] = $pv_consta_detail_mob_travaux->id;
+            $data['id_pv_consta_entete_travaux'] = $pv_consta_detail_mob_travaux->id_pv_consta_entete_travaux;
+            $data['id_rubrique_phase'] = $pv_consta_detail_mob_travaux->id_rubrique_phase;
+            $data['periode'] = $pv_consta_detail_mob_travaux->periode;
+            $data['observation'] = $pv_consta_detail_mob_travaux->observation;
         } 
         else 
         {
-            $menu = $this->Divers_attachement_mobilierManager->findAll();
-            if ($menu) 
+            $tmp = $this->Pv_consta_detail_mob_travauxManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
-                {
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['numero'] = $value->numero;
-                }
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -77,13 +44,13 @@ class Divers_attachement_mobilier extends REST_Controller {
         
         if (count($data)>0) {
             $this->response([
-                'status' => TRUE,
+                'statu' => TRUE,
                 'response' => $data,
                 'message' => 'Get data success',
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => FALSE,
+                'statu' => FALSE,
                 'response' => array(),
                 'message' => 'No data were found'
             ], REST_Controller::HTTP_OK);
@@ -96,54 +63,56 @@ class Divers_attachement_mobilier extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description'),
-                    'numero' => $this->post('numero')
+                    'id_pv_consta_entete_travaux' => $this->post('id_pv_consta_entete_travaux'),
+                    'id_rubrique_phase' => $this->post('id_rubrique_phase'),
+                    'periode' => $this->post('periode'),
+                    'observation' => $this->post('observation')
                 );
                 if (!$data) {
                     $this->response([
-                        'status' => FALSE,
+                        'periode' => FALSE,
                         'response' => 0,
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Divers_attachement_mobilierManager->add($data);
+                $dataId = $this->Pv_consta_detail_mob_travauxManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
-                        'status' => TRUE,
+                        'periode' => TRUE,
                         'response' => $dataId,
                         'message' => 'Data insert success'
                             ], REST_Controller::HTTP_OK);
                 } else {
                     $this->response([
-                        'status' => FALSE,
+                        'periode' => FALSE,
                         'response' => 0,
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
             } else {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description'),
-                    'numero' => $this->post('numero')
+                    'id_pv_consta_entete_travaux' => $this->post('id_pv_consta_entete_travaux'),
+                    'id_rubrique_phase' => $this->post('id_rubrique_phase'),
+                    'periode' => $this->post('periode'),
+                    'observation' => $this->post('observation')
                 );
                 if (!$data || !$id) {
                     $this->response([
-                        'status' => FALSE,
+                        'periode' => FALSE,
                         'response' => 0,
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Divers_attachement_mobilierManager->update($id, $data);
+                $update = $this->Pv_consta_detail_mob_travauxManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
-                        'status' => TRUE,
+                        'periode' => TRUE,
                         'response' => 1,
                         'message' => 'Update data success'
                     ], REST_Controller::HTTP_OK);
                 } else {
                     $this->response([
-                        'status' => FALSE,
+                        'periode' => FALSE,
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_OK);
                 }
@@ -151,21 +120,21 @@ class Divers_attachement_mobilier extends REST_Controller {
         } else {
             if (!$id) {
                 $this->response([
-                    'status' => FALSE,
+                    'periode' => FALSE,
                     'response' => 0,
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Divers_attachement_mobilierManager->delete($id);         
+            $delete = $this->Pv_consta_detail_mob_travauxManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
-                    'status' => TRUE,
+                    'periode' => TRUE,
                     'response' => 1,
                     'message' => "Delete data success"
                         ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
-                    'status' => FALSE,
+                    'periode' => FALSE,
                     'response' => 0,
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_OK);

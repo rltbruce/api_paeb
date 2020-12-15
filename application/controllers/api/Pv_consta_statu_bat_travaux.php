@@ -5,79 +5,45 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Attachement_latrine extends REST_Controller {
+class Pv_consta_statu_bat_travaux extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('attachement_latrine_model', 'Attachement_latrineManager');
-        $this->load->model('type_latrine_model', 'Type_latrineManager');
+        $this->load->model('pv_consta_statu_bat_travaux_model', 'Pv_consta_statu_bat_travauxManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_type_latrine = $this->get('id_type_latrine');
+        $id_rubrique_phase = $this->get('id_rubrique_phase');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
-            
-        if ($id_contrat_prestataire) 
+        $id_pv_consta_entete_travaux = $this->get('id_pv_consta_entete_travaux');
+        $menu = $this->get('menu');
+
+        if ($menu == 'getcount_desination_statubyphasecontrat') 
         {   $data = array();
-            $tmp = $this->Attachement_latrineManager->findBycontrat($id_contrat_prestataire);
+            $tmp = $this->Pv_consta_statu_bat_travauxManager->getcount_desination_statubyphasecontrat($id_rubrique_phase,$id_pv_consta_entete_travaux,$id_contrat_prestataire);
+           
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
-                {
-                    $type_latrine = array();
-                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation_latrine'] = $value->ponderation_latrine;
-                    $data[$key]['type_latrine'] = $type_latrine;
-                }
-            }
-        }
-        elseif ($id_type_latrine) 
-        {   $data = array();
-            $tmp = $this->Attachement_latrineManager->findBytype_latrine($id_type_latrine);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    $type_latrine = array();
-                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation_latrine'] = $value->ponderation_latrine;
-                    $data[$key]['type_latrine'] = $type_latrine;
-                }
+                $data = $tmp;
             }
         }
         elseif ($id)
         {
             $data = array();
-            $attachement_latrine = $this->Attachement_latrineManager->findById($id);
-            $type_latrine = $this->Type_latrineManager->findById($attachement_latrine->id_type_latrine);
-            $data['id'] = $attachement_latrine->id;
-            $data['libelle'] = $attachement_latrine->libelle;
-            $data['description'] = $attachement_latrine->description;
-            $data['ponderation_latrine'] = $attachement_latrine->ponderation_latrine;
-            $data['type_latrine'] = $type_latrine;
+            $pv_consta_statu_bat_travaux = $this->Pv_consta_statu_bat_travauxManager->findById($id);
+            $data['id'] = $pv_consta_statu_bat_travaux->id;
+            $data['id_pv_consta_entete_travaux'] = $pv_consta_statu_bat_travaux->id_pv_consta_entete_travaux;
+            $data['id_rubrique_designation'] = $pv_consta_statu_bat_travaux->id_rubrique_designation;
+            $data['status'] = $pv_consta_statu_bat_travaux->status;
         } 
         else 
         {
-            $menu = $this->Attachement_latrineManager->findAll();
-            if ($menu) 
+            $tmp = $this->Pv_consta_statu_bat_travauxManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
-                {
-                    $type_latrine = $this->Type_latrineManager->findById($value->id_type_latrine);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['libelle'] = $value->libelle;
-                    $data[$key]['description'] = $value->description;
-                    $data[$key]['ponderation_latrine'] = $value->ponderation_latrine;
-                    $data[$key]['type_latrine'] = $type_latrine;
-                }
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -105,10 +71,9 @@ class Attachement_latrine extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description'),
-                    'ponderation_latrine' => $this->post('ponderation_latrine'),
-                    'id_type_latrine' => $this->post('id_type_latrine')
+                    'id_pv_consta_entete_travaux' => $this->post('id_pv_consta_entete_travaux'),
+                    'id_rubrique_designation' => $this->post('id_rubrique_designation'),
+                    'status' => $this->post('status')
                 );
                 if (!$data) {
                     $this->response([
@@ -117,7 +82,7 @@ class Attachement_latrine extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Attachement_latrineManager->add($data);
+                $dataId = $this->Pv_consta_statu_bat_travauxManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -133,10 +98,9 @@ class Attachement_latrine extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'libelle' => $this->post('libelle'),
-                    'description' => $this->post('description'),
-                    'ponderation_latrine' => $this->post('ponderation_latrine'),
-                    'id_type_latrine' => $this->post('id_type_latrine')
+                    'id_pv_consta_entete_travaux' => $this->post('id_pv_consta_entete_travaux'),
+                    'id_rubrique_designation' => $this->post('id_rubrique_designation'),
+                    'status' => $this->post('status')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -145,7 +109,7 @@ class Attachement_latrine extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Attachement_latrineManager->update($id, $data);
+                $update = $this->Pv_consta_statu_bat_travauxManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -167,7 +131,7 @@ class Attachement_latrine extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Attachement_latrineManager->delete($id);         
+            $delete = $this->Pv_consta_statu_bat_travauxManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

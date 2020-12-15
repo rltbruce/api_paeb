@@ -5,43 +5,46 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Divers_attachement_mobilier_detail extends REST_Controller {
+class Pv_consta_rubrique_phase_mob extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('divers_attachement_mobilier_detail_model', 'Divers_attachement_mobilier_detailManager');
+        $this->load->model('pv_consta_rubrique_phase_mob_model', 'Pv_consta_rubrique_phase_mobManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_attachement_mobilier = $this->get('id_attachement_mobilier');
+        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
+        $id_pv_consta_entete_travaux = $this->get('id_pv_consta_entete_travaux');
         $menu = $this->get('menu');
 
-        if ($menu == 'getdetailbyattachement_mobilier') 
-        {   $data = array();
-            $tmp = $this->Divers_attachement_mobilier_detailManager->getdetailbyattachement_mobilier($id_attachement_mobilier);
-           
+        if ($menu=='getpv_consta_rubrique_phase_pourcentagebycontrat')
+        {
+            $tmp = $this->Pv_consta_rubrique_phase_mobManager->getpv_consta_rubrique_phase_pourcentagebycontrat($id_contrat_prestataire,$id_pv_consta_entete_travaux);
             if ($tmp) 
             {
                 $data = $tmp;
-            }
-        }
+            } 
+                else
+                    $data = array();
+        } 
         elseif ($id)
         {
             $data = array();
-            $divers_attachement_mobilier_detail = $this->Divers_attachement_mobilier_detailManager->findById($id);
-            $data['id'] = $divers_attachement_mobilier_detail->id;
-            $data['libelle'] = $divers_attachement_mobilier_detail->libelle;
-            $data['description'] = $divers_attachement_mobilier_detail->description;
-            $data['numero'] = $divers_attachement_mobilier_detail->numero;
+            $pv_consta_rubrique_phase_mob = $this->Pv_consta_rubrique_phase_mobManager->findById($id);
+            $data['id'] = $pv_consta_rubrique_phase_mob->id;
+            $data['libelle'] = $pv_consta_rubrique_phase_mob->libelle;
+            $data['description'] = $pv_consta_rubrique_phase_mob->description;
+            $data['numero'] = $pv_consta_rubrique_phase_mob->numero;
+            $data['pourcentage_prevu'] = $pv_consta_rubrique_phase_mob->pourcentage_prevu;
         } 
         else 
         {
-            $tmp = $this->Divers_attachement_mobilier_detailManager->findAll();
+            $tmp = $this->Pv_consta_rubrique_phase_mobManager->findAll();
             if ($tmp) 
             {
-                $data=$tmp;
+                $data = $tmp;
             } 
                 else
                     $data = array();
@@ -72,7 +75,7 @@ class Divers_attachement_mobilier_detail extends REST_Controller {
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
                     'numero' => $this->post('numero'),
-                    'id_attachement_mobilier' => $this->post('id_attachement_mobilier')
+                    'pourcentage_prevu' => $this->post('pourcentage_prevu')
                 );
                 if (!$data) {
                     $this->response([
@@ -81,7 +84,7 @@ class Divers_attachement_mobilier_detail extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Divers_attachement_mobilier_detailManager->add($data);
+                $dataId = $this->Pv_consta_rubrique_phase_mobManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -100,7 +103,7 @@ class Divers_attachement_mobilier_detail extends REST_Controller {
                     'libelle' => $this->post('libelle'),
                     'description' => $this->post('description'),
                     'numero' => $this->post('numero'),
-                    'id_attachement_mobilier' => $this->post('id_attachement_mobilier')
+                    'pourcentage_prevu' => $this->post('pourcentage_prevu')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -109,7 +112,7 @@ class Divers_attachement_mobilier_detail extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Divers_attachement_mobilier_detailManager->update($id, $data);
+                $update = $this->Pv_consta_rubrique_phase_mobManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -131,7 +134,7 @@ class Divers_attachement_mobilier_detail extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Divers_attachement_mobilier_detailManager->delete($id);         
+            $delete = $this->Pv_consta_rubrique_phase_mobManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

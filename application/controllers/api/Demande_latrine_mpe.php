@@ -5,13 +5,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Demande_latrine_prestataire extends REST_Controller {
+class Demande_latrine_mpe extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('demande_latrine_prestataire_model', 'Demande_latrine_prestataireManager');
-        $this->load->model('latrine_construction_model', 'latrine_constructionManager');
-        $this->load->model('tranche_demande_latrine_mpe_model', 'Tranche_demande_latrine_mpeManager');
+        $this->load->model('demande_latrine_mpe_model', 'Demande_latrine_mpeManager');
+        $this->load->model('latrine_construction_model', 'Batiment_constructionManager');
+        $this->load->model('tranche_demande_mpe_model', 'Tranche_demande_mpeManager');
         $this->load->model('contrat_prestataire_model', 'Contrat_prestataireManager');
         $this->load->model('type_latrine_model', 'Type_latrineManager');
         $this->load->model('facture_mpe_model', 'Facture_mpeManager');
@@ -21,53 +21,57 @@ class Demande_latrine_prestataire extends REST_Controller {
     {
         $id = $this->get('id');
         $id_latrine_construction = $this->get('id_latrine_construction');
-        $id_attachement_travaux = $this->get('id_attachement_travaux');
+        $id_demande_latrine_mpe = $this->get('id_demande_latrine_mpe');
+        $id_tranche_demande_mpe = $this->get('id_tranche_demande_mpe');
+        $tranche_numero = $this->get('tranche_numero');
+        $id_pv_consta_entete_travaux = $this->get('id_pv_consta_entete_travaux');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $menu = $this->get('menu');
 
-        if ($menu=="getdemandeByattachement")
+        if ($menu=="getdemandeBypv_consta_entete")
         {
-            $tmp = $this->Demande_latrine_prestataireManager->finddemandeByattachement($id_attachement_travaux);
+            $tmp = $this->Demande_latrine_mpeManager->finddemandeBypv_consta_entete($id_pv_consta_entete_travaux);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $tranche_demande_mpe = $this->Tranche_demande_latrine_mpeManager->findById($value->id_tranche_demande_mpe);
-
-                    //$contrat_prestataire = $this->Contrat_prestataireManager->findById($value->id_contrat_prestataire);
+                    $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['montant'] = $value->montant;
                     $data[$key]['tranche'] = $tranche_demande_mpe;
-                    $data[$key]['cumul'] = $value->cumul;
-                    $data[$key]['anterieur'] = $value->anterieur;
-                    $data[$key]['reste'] = $value->reste;
-                    $data[$key]['id_attachement_travaux'] = $value->id_attachement_travaux;
+                    $data[$key]['id_pv_consta_entete_travaux'] = $value->id_pv_consta_entete_travaux;
 
                 }
             } 
                 else
                     $data = array();
         }
-        elseif ($menu=="getdemandeBycontrat")
+        elseif ($menu=="getdemandevalideById")
         {
-            $tmp = $this->Demande_latrine_prestataireManager->finddemandeBycontrat($id_contrat_prestataire);
+            $tmp = $this->Demande_latrine_mpeManager->getdemandevalideById($id_demande_latrine_mpe);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value) 
-                {
-                    $tranche_demande_mpe = $this->Tranche_demande_latrine_mpeManager->findById($value->id_tranche_demande_mpe);
-
-                    //$facture_mpe = $this->Facture_mpeManager->findByAttachement_travaux($value->id_attachement_travaux);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['montant'] = $value->montant;
-                    $data[$key]['tranche'] = $tranche_demande_mpe;
-                    $data[$key]['cumul'] = $value->cumul;
-                    $data[$key]['anterieur'] = $value->anterieur;
-                    $data[$key]['reste'] = $value->reste;
-                    $data[$key]['id_attachement_travaux'] = $value->id_attachement_travaux;
-                    $data[$key]['tranche_demande_mpe'] = $tranche_demande_mpe;
-
-                }
+                $data = $tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandeByContratTranche")
+        {
+            $tmp = $this->Demande_latrine_mpeManager->getdemandeByContratTranche($id_tranche_demande_mpe,$id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data = $tmp;
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getdemandeByContratTranchenumero")
+        {
+            $tmp = $this->Demande_latrine_mpeManager->getdemandeByContratTranchenumero($tranche_numero,$id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data = $tmp;
             } 
                 else
                     $data = array();
@@ -75,9 +79,9 @@ class Demande_latrine_prestataire extends REST_Controller {
         elseif ($id)
         {
             $data = array();
-            $demande_latrine_prestataire = $this->Demande_latrine_prestataireManager->findById($id);
-            $latrine_construction = $this->latrine_constructionManager->findById($demande_latrine_prestataire->id_latrine_construction);
-            $tranche_demande_mpe = $this->Tranche_demande_latrine_mpeManager->findById($demande_latrine_prestataire->id_tranche_demande_mpe);
+            $demande_latrine_prestataire = $this->Demande_latrine_mpeManager->findById($id);
+            $latrine_construction = $this->Batiment_constructionManager->findById($demande_latrine_prestataire->id_latrine_construction);
+            $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($demande_latrine_prestataire->id_tranche_demande_mpe);
             $data['id'] = $demande_latrine_prestataire->id;
             $data['montant'] = $demande_latrine_prestataire->montant;
             $data['tranche_demande_mpe'] = $tranche_demande_mpe;
@@ -87,14 +91,14 @@ class Demande_latrine_prestataire extends REST_Controller {
         } 
         else 
         {
-            $menu = $this->Demande_latrine_prestataireManager->findAll();
+            $menu = $this->Demande_latrine_mpeManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
                     $latrine_construction= array();
-                    $latrine_construction = $this->latrine_constructionManager->findById($value->id_latrine_construction);
-                    $tranche_demande_mpe = $this->Tranche_demande_latrine_mpeManager->findById($value->id_tranche_demande_mpe);
+                    $latrine_construction = $this->Batiment_constructionManager->findById($value->id_latrine_construction);
+                    $tranche_demande_mpe = $this->Tranche_demande_mpeManager->findById($value->id_tranche_demande_mpe);
                     $data[$key]['id'] = $value->id;
                     $data[$key]['montant'] = $value->montant;
                     $data[$key]['tranche'] = $tranche_demande_mpe;
@@ -132,10 +136,7 @@ class Demande_latrine_prestataire extends REST_Controller {
                 $data = array(
                     'montant' => $this->post('montant'),
                     'id_tranche_demande_mpe' => $this->post('id_tranche_demande_mpe'),
-                    'anterieur' => $this->post('anterieur'),
-                    'cumul' => $this->post('cumul'),
-                    'reste' => $this->post('reste'),
-                    'id_attachement_travaux' => $this->post('id_attachement_travaux')
+                    'id_pv_consta_entete_travaux' => $this->post('id_pv_consta_entete_travaux')
                 );
                 if (!$data) {
                     $this->response([
@@ -144,7 +145,7 @@ class Demande_latrine_prestataire extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Demande_latrine_prestataireManager->add($data);
+                $dataId = $this->Demande_latrine_mpeManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -162,10 +163,7 @@ class Demande_latrine_prestataire extends REST_Controller {
                 $data = array(
                     'montant' => $this->post('montant'),
                     'id_tranche_demande_mpe' => $this->post('id_tranche_demande_mpe'),
-                    'anterieur' => $this->post('anterieur'),
-                    'cumul' => $this->post('cumul'),
-                    'reste' => $this->post('reste'),
-                    'id_attachement_travaux' => $this->post('id_attachement_travaux')
+                    'id_pv_consta_entete_travaux' => $this->post('id_pv_consta_entete_travaux')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -174,7 +172,7 @@ class Demande_latrine_prestataire extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Demande_latrine_prestataireManager->update($id, $data);
+                $update = $this->Demande_latrine_mpeManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -196,7 +194,7 @@ class Demande_latrine_prestataire extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Demande_latrine_prestataireManager->delete($id);         
+            $delete = $this->Demande_latrine_mpeManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

@@ -151,10 +151,14 @@ class Excel_bdd_construction_detail extends REST_Controller
         //donnee globale             
                     $data[$key]['nom_agence']= $value->nom_agence;
                     $data[$key]['nom_ecole']= $value->nom_ecole;
+                    $data[$key]['code_ecole']= $value->code_ecole;                    
+                    $data[$key]['village']= $value->village;
+                    $data[$key]['nom_fokontany']= $value->nom_fokontany;
                     $data[$key]['nom_commune']= $value->nom_commune;
                     $data[$key]['nom_cisco']= $value->nom_cisco;
                     $data[$key]['nom_region']= $value->nom_region;
                     $data[$key]['type_convention']= $value->libelle_zone.$value->libelle_acces;
+                    $data[$key]['ref_convention']= $value->ref_convention;
 
         //estimation convention
 
@@ -227,8 +231,8 @@ class Excel_bdd_construction_detail extends REST_Controller
 
                 $data[$key]['total_convention_decaiss']= $value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe;
 
-                $data[$key]['reliqua_fond']= $value->montant_convention - ($value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe);
-
+                //$data[$key]['reliqua_fond']= $value->montant_convention - ($value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe);
+                $data[$key]['reliqua_fond']= ($value->montant_convention + $value->cout_avenant) - ($value->montant_contrat_moe + $value->cout_mobilier_pme + $value->cout_latrine_pme + $value->cout_batiment_pme);
         //Suivi Passation des marchés PR
 
                 $data[$key]['date_manifestation_pr']= $value->date_manifestation_pr;
@@ -478,7 +482,7 @@ class Excel_bdd_construction_detail extends REST_Controller
 
                 $data[$key]['nbr_mpe_soumissionaire_pme']= $value->nbr_mpe_soumissionaire_pme;
                 
-                $data[$key]['nbr_mpe_soumissionaire_pme']= $value->nbr_mpe_soumissionaire_pme;
+                $data[$key]['liste_mpe_soumissionaire']= $value->liste_mpe_soumissionaire;
 
                 $data[$key]['montant_moin_chere_pme']= $value->montant_moin_chere_pme;
 
@@ -1175,11 +1179,11 @@ class Excel_bdd_construction_detail extends REST_Controller
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$ligne, "TABLEAU DE SUIVI ");
 
         $ligne=$ligne+2;
-        $objPHPExcel->getActiveSheet()->mergeCells("A".$ligne.":F".($ligne+1));
-        $objPHPExcel->getActiveSheet()->getStyle("A".$ligne.":F".($ligne+1))->applyFromArray($styleTitre);
+        $objPHPExcel->getActiveSheet()->mergeCells("A".$ligne.":J".($ligne+1));
+        $objPHPExcel->getActiveSheet()->getStyle("A".$ligne.":J".($ligne+1))->applyFromArray($styleTitre);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$ligne, "(1) DONNEES GLOBALES");
 
-        $colonne = 70;
+        $colonne = 74;
         $col_convetion_feffi= 11;
 
         if ($params['suivi_financier_daaf_feffi']=="true")
@@ -1368,13 +1372,13 @@ class Excel_bdd_construction_detail extends REST_Controller
             
         }
 //GLOBAL
-        $objPHPExcel->getActiveSheet()->getStyle("A".$ligne.":F".($ligne+1))->applyFromArray(array(
+        $objPHPExcel->getActiveSheet()->getStyle("A".$ligne.":J".($ligne+1))->applyFromArray(array(
         'fill' => array(
             'type' => PHPExcel_Style_Fill::FILL_SOLID,
             'color' => array('rgb' => 'bed4ed')
         )
         ));
-        $objPHPExcel->getActiveSheet()->getStyle("A".($ligne+2).":F".($ligne+3))->applyFromArray(array(
+        $objPHPExcel->getActiveSheet()->getStyle("A".($ligne+2).":J".($ligne+3))->applyFromArray(array(
         'fill' => array(
             'type' => PHPExcel_Style_Fill::FILL_SOLID,
             'color' => array('rgb' => 'dce6f1')
@@ -1446,12 +1450,12 @@ class Excel_bdd_construction_detail extends REST_Controller
 
         $ligne++;
 
-        $objPHPExcel->getActiveSheet()->mergeCells("G".$ligne.":Q".$ligne);
-        $objPHPExcel->getActiveSheet()->getStyle("G".$ligne.":Q".$ligne)->applyFromArray($styleTitre);
+        $objPHPExcel->getActiveSheet()->mergeCells("K".$ligne.":U".$ligne);
+        $objPHPExcel->getActiveSheet()->getStyle("K".$ligne.":U".$ligne)->applyFromArray($styleTitre);
         //$objPHPExcel->getActiveSheet()->setColor(rgb(200,200,200));
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$ligne, "ESTIMATION DE LA CONVENTION");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$ligne, "ESTIMATION DE LA CONVENTION");
 
-        $colonne_soustitre = 70;
+        $colonne_soustitre = 74;
         $col_convetion_feffi_soustitre= 11;
         
         if ($params['suivi_financier_daaf_feffi']=="true")
@@ -1943,85 +1947,101 @@ class Excel_bdd_construction_detail extends REST_Controller
 
         $objPHPExcel->getActiveSheet()->mergeCells("C".$ligne.":C".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("C".$ligne.":C".($ligne+1))->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$ligne, "COMMUNE");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$ligne, "CODE ETABLISSEMENT");
 
         $objPHPExcel->getActiveSheet()->mergeCells("D".$ligne.":D".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("D".$ligne.":D".($ligne+1))->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$ligne, "CISCO");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$ligne, "CODE CONVENTION");
 
         $objPHPExcel->getActiveSheet()->mergeCells("E".$ligne.":E".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("E".$ligne.":E".($ligne+1))->applyFromArray($stylesousTitre);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$ligne, "REGION");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$ligne, "VILLAGE");
 
-
-        //$objPHPExcel->getActiveSheet()->mergeCells("F".$ligne.":F".$ligne);
-        $objPHPExcel->getActiveSheet()->getStyle("F".$ligne)->applyFromArray($stylesousTitre);
-        //$objPHPExcel->getActiveSheet()->getStyle("F".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$ligne, "TYPE DE CONVENTION");
+        $objPHPExcel->getActiveSheet()->mergeCells("F".$ligne.":F".($ligne+1));
+        $objPHPExcel->getActiveSheet()->getStyle("F".$ligne.":F".($ligne+1))->applyFromArray($stylesousTitre);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$ligne, "FOKONTANY");
 
         $objPHPExcel->getActiveSheet()->mergeCells("G".$ligne.":G".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("G".$ligne.":G".($ligne+1))->applyFromArray($stylesousTitre);
-        $objPHPExcel->getActiveSheet()->getStyle("G".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$ligne, "NOM FEFFI");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$ligne, "COMMUNE");
 
         $objPHPExcel->getActiveSheet()->mergeCells("H".$ligne.":H".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("H".$ligne.":H".($ligne+1))->applyFromArray($stylesousTitre);
-        $objPHPExcel->getActiveSheet()->getStyle("H".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$ligne, "Date de signature convention CISCO FEFFI");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$ligne, "CISCO");
 
         $objPHPExcel->getActiveSheet()->mergeCells("I".$ligne.":I".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("I".$ligne.":I".($ligne+1))->applyFromArray($stylesousTitre);
-        //$objPHPExcel->getActiveSheet()->getStyle("I".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$ligne, "Bâtiment");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$ligne, "REGION");
 
-        $objPHPExcel->getActiveSheet()->mergeCells("J".$ligne.":J".($ligne+1));
-        $objPHPExcel->getActiveSheet()->getStyle("J".$ligne.":J".($ligne+1))->applyFromArray($stylesousTitre);
-       // $objPHPExcel->getActiveSheet()->getStyle("J".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$ligne, "Latrine");
+
+        //$objPHPExcel->getActiveSheet()->mergeCells("F".$ligne.":F".$ligne);
+        $objPHPExcel->getActiveSheet()->getStyle("J".$ligne)->applyFromArray($stylesousTitre);
+        //$objPHPExcel->getActiveSheet()->getStyle("F".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$ligne, "TYPE DE CONVENTION");
 
         $objPHPExcel->getActiveSheet()->mergeCells("K".$ligne.":K".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("K".$ligne.":K".($ligne+1))->applyFromArray($stylesousTitre);
-        //$objPHPExcel->getActiveSheet()->getStyle("K".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$ligne, "Mobilier scolaire");
+        $objPHPExcel->getActiveSheet()->getStyle("K".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$ligne, "NOM FEFFI");
 
         $objPHPExcel->getActiveSheet()->mergeCells("L".$ligne.":L".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("L".$ligne.":L".($ligne+1))->applyFromArray($stylesousTitre);
-       // $objPHPExcel->getActiveSheet()->getStyle("L".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$ligne, "Maitrise d'œuvre");
+        $objPHPExcel->getActiveSheet()->getStyle("L".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$ligne, "Date de signature convention CISCO FEFFI");
 
         $objPHPExcel->getActiveSheet()->mergeCells("M".$ligne.":M".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("M".$ligne.":M".($ligne+1))->applyFromArray($stylesousTitre);
-        //$objPHPExcel->getActiveSheet()->getStyle("M".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.$ligne, "Sous total Dépenses TAVAUX");
+        //$objPHPExcel->getActiveSheet()->getStyle("I".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.$ligne, "Bâtiment");
 
         $objPHPExcel->getActiveSheet()->mergeCells("N".$ligne.":N".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("N".$ligne.":N".($ligne+1))->applyFromArray($stylesousTitre);
-        //$objPHPExcel->getActiveSheet()->getStyle("N".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N'.$ligne, "Frais de fonctionnement FEFFI");
+       // $objPHPExcel->getActiveSheet()->getStyle("J".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N'.$ligne, "Latrine");
 
         $objPHPExcel->getActiveSheet()->mergeCells("O".$ligne.":O".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("O".$ligne.":O".($ligne+1))->applyFromArray($stylesousTitre);
-        //$objPHPExcel->getActiveSheet()->getStyle("O".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O'.$ligne, "Montant convention");
+        //$objPHPExcel->getActiveSheet()->getStyle("K".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O'.$ligne, "Mobilier scolaire");
 
         $objPHPExcel->getActiveSheet()->mergeCells("P".$ligne.":P".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("P".$ligne.":P".($ligne+1))->applyFromArray($stylesousTitre);
-        //$objPHPExcel->getActiveSheet()->getStyle("P".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P'.$ligne, "AVENANT A LA CONVENTION");
+       // $objPHPExcel->getActiveSheet()->getStyle("L".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P'.$ligne, "Maitrise d'œuvre");
 
         $objPHPExcel->getActiveSheet()->mergeCells("Q".$ligne.":Q".($ligne+1));
         $objPHPExcel->getActiveSheet()->getStyle("Q".$ligne.":Q".($ligne+1))->applyFromArray($stylesousTitre);
-        //$objPHPExcel->getActiveSheet()->getStyle("Q".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q'.$ligne, "MONTANT CONVENTION APRES AVENANT");
+        //$objPHPExcel->getActiveSheet()->getStyle("M".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q'.$ligne, "Sous total Dépenses TAVAUX");
 
-        $objPHPExcel->getActiveSheet()->getStyle("G".($ligne).":Q".($ligne+1))->applyFromArray(array(
+        $objPHPExcel->getActiveSheet()->mergeCells("R".$ligne.":R".($ligne+1));
+        $objPHPExcel->getActiveSheet()->getStyle("R".$ligne.":R".($ligne+1))->applyFromArray($stylesousTitre);
+        //$objPHPExcel->getActiveSheet()->getStyle("N".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('R'.$ligne, "Frais de fonctionnement FEFFI");
+
+        $objPHPExcel->getActiveSheet()->mergeCells("S".$ligne.":S".($ligne+1));
+        $objPHPExcel->getActiveSheet()->getStyle("S".$ligne.":S".($ligne+1))->applyFromArray($stylesousTitre);
+        //$objPHPExcel->getActiveSheet()->getStyle("O".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S'.$ligne, "Montant convention");
+
+        $objPHPExcel->getActiveSheet()->mergeCells("T".$ligne.":T".($ligne+1));
+        $objPHPExcel->getActiveSheet()->getStyle("T".$ligne.":T".($ligne+1))->applyFromArray($stylesousTitre);
+        //$objPHPExcel->getActiveSheet()->getStyle("T".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T'.$ligne, "AVENANT A LA CONVENTION");
+
+        $objPHPExcel->getActiveSheet()->mergeCells("U".$ligne.":U".($ligne+1));
+        $objPHPExcel->getActiveSheet()->getStyle("U".$ligne.":U".($ligne+1))->applyFromArray($stylesousTitre);
+        //$objPHPExcel->getActiveSheet()->getStyle("Q".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$ligne, "MONTANT CONVENTION APRES AVENANT");
+
+        $objPHPExcel->getActiveSheet()->getStyle("K".($ligne).":U".($ligne+1))->applyFromArray(array(
             'fill' => array(
                 'type' => PHPExcel_Style_Fill::FILL_SOLID,
                 'color' => array('rgb' => 'e2efda')
             )
             ));
 
-        $colonne_soustitre2 = 81;
+        $colonne_soustitre2 = 85;
 
         if ($params['suivi_financier_daaf_feffi']=="true")
         {
@@ -2583,11 +2603,11 @@ class Excel_bdd_construction_detail extends REST_Controller
         $ligne++;
         //$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(FALSE);
 
-        $objPHPExcel->getActiveSheet()->getStyle("F".$ligne)->applyFromArray($stylesousTitre);
-       $objPHPExcel->getActiveSheet()->getStyle("F".$ligne)->getAlignment()->setWrapText(true);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$ligne, "Zone Côtière:C01/C02/C03/ ou Zone Hauts plateaux Rurale HPR1/HPR2/HPR3/ ou Zone Hauts plateaux Urbaine:HPU1/HPU2/HPU3");
+        $objPHPExcel->getActiveSheet()->getStyle("J".$ligne)->applyFromArray($stylesousTitre);
+       $objPHPExcel->getActiveSheet()->getStyle("J".$ligne)->getAlignment()->setWrapText(true);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$ligne, "Zone Côtière:C01/C02/C03/ ou Zone Hauts plateaux Rurale HPR1/HPR2/HPR3/ ou Zone Hauts plateaux Urbaine:HPU1/HPU2/HPU3");
 
-        $colonne_soustitre3 = 81;
+        $colonne_soustitre3 = 85;
 
         if ($params['suivi_financier_daaf_feffi']=="true")
         {
@@ -3226,6 +3246,7 @@ class Excel_bdd_construction_detail extends REST_Controller
         //$objPHPExcel->setActiveSheetIndex(0)->setCellValue('GZ'.$ligne, "% decaissement");
 
         $ligne++;
+        
         foreach ($data as $key => $value)
         {  
 
@@ -3235,62 +3256,70 @@ class Excel_bdd_construction_detail extends REST_Controller
             $objPHPExcel->getActiveSheet()->getStyle("B".$ligne)->applyFromArray($stylecontenu);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$ligne, $value->nom_ecole);
             $objPHPExcel->getActiveSheet()->getStyle("C".$ligne)->applyFromArray($stylecontenu);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$ligne, $value->nom_commune);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$ligne, $value->code_ecole);
             $objPHPExcel->getActiveSheet()->getStyle("D".$ligne)->applyFromArray($stylecontenu);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$ligne, $value->nom_cisco);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$ligne, $value->ref_convention);
             $objPHPExcel->getActiveSheet()->getStyle("E".$ligne)->applyFromArray($stylecontenu);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$ligne, $value->nom_region);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$ligne, $value->village);
             $objPHPExcel->getActiveSheet()->getStyle("F".$ligne)->applyFromArray($stylecontenu);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$ligne, $value->libelle_zone.$value->libelle_acces);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$ligne, $value->nom_fokontany);
+            $objPHPExcel->getActiveSheet()->getStyle("G".$ligne)->applyFromArray($stylecontenu);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$ligne, $value->nom_commune);
+            $objPHPExcel->getActiveSheet()->getStyle("H".$ligne)->applyFromArray($stylecontenu);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$ligne, $value->nom_cisco);
+            $objPHPExcel->getActiveSheet()->getStyle("I".$ligne)->applyFromArray($stylecontenu);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$ligne, $value->nom_region);
+            $objPHPExcel->getActiveSheet()->getStyle("J".$ligne)->applyFromArray($stylecontenu);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$ligne, $value->libelle_zone.$value->libelle_acces);
 
 //estimation convention
 
-            $objPHPExcel->getActiveSheet()->getStyle("G".$ligne)->applyFromArray($stylecontenu);
+            $objPHPExcel->getActiveSheet()->getStyle("K".$ligne)->applyFromArray($stylecontenu);
             //$objPHPExcel->getActiveSheet()->getStyle("G".$ligne)->getAlignment()->setWrapText(true);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$ligne, $value->nom_feffi);
-
-            $objPHPExcel->getActiveSheet()->getStyle("H".$ligne)->applyFromArray($stylecontenu);
-            //$objPHPExcel->getActiveSheet()->getStyle("H".$ligne)->getAlignment()->setWrapText(true);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$ligne, $value->date_signature_convention);
-
-            $objPHPExcel->getActiveSheet()->getStyle("I".$ligne)->applyFromArray($stylecontenu);
-            //$objPHPExcel->getActiveSheet()->getStyle("I".$ligne)->getAlignment()->setWrapText(true);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$ligne, $value->cout_batiment);
-
-            $objPHPExcel->getActiveSheet()->getStyle("J".$ligne)->applyFromArray($stylecontenu);
-            //$objPHPExcel->getActiveSheet()->getStyle("J".$ligne)->getAlignment()->setWrapText(true);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$ligne, $value->cout_latrine);
-
-             $objPHPExcel->getActiveSheet()->getStyle("K".$ligne)->applyFromArray($stylecontenu);
-            $objPHPExcel->getActiveSheet()->getStyle("K".$ligne)->getAlignment()->setWrapText(true);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$ligne, $value->cout_mobilier);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("K".$ligne, $value->nom_feffi);
 
             $objPHPExcel->getActiveSheet()->getStyle("L".$ligne)->applyFromArray($stylecontenu);
-            //$objPHPExcel->getActiveSheet()->getStyle("L".$ligne)->getAlignment()->setWrapText(true);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("L".$ligne, $value->cout_maitrise);
+            //$objPHPExcel->getActiveSheet()->getStyle("H".$ligne)->getAlignment()->setWrapText(true);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("L".$ligne, $value->date_signature_convention);
 
             $objPHPExcel->getActiveSheet()->getStyle("M".$ligne)->applyFromArray($stylecontenu);
-            //$objPHPExcel->getActiveSheet()->getStyle("M".$ligne)->getAlignment()->setWrapText(true);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("M".$ligne, $value->soustotaldepense);
+            //$objPHPExcel->getActiveSheet()->getStyle("I".$ligne)->getAlignment()->setWrapText(true);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("M".$ligne, $value->cout_batiment);
 
             $objPHPExcel->getActiveSheet()->getStyle("N".$ligne)->applyFromArray($stylecontenu);
-           // $objPHPExcel->getActiveSheet()->getStyle("N".$ligne)->getAlignment()->setWrapText(true);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("N".$ligne, $value->cout_sousprojet);
+            //$objPHPExcel->getActiveSheet()->getStyle("J".$ligne)->getAlignment()->setWrapText(true);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("N".$ligne, $value->cout_latrine);
 
-            $objPHPExcel->getActiveSheet()->getStyle("O".$ligne)->applyFromArray($stylecontenu);
-           //$objPHPExcel->getActiveSheet()->getStyle("O".$ligne)->getAlignment()->setWrapText(true);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("O".$ligne, $value->montant_convention);
+             $objPHPExcel->getActiveSheet()->getStyle("O".$ligne)->applyFromArray($stylecontenu);
+            //$objPHPExcel->getActiveSheet()->getStyle("K".$ligne)->getAlignment()->setWrapText(true);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("O".$ligne, $value->cout_mobilier);
 
             $objPHPExcel->getActiveSheet()->getStyle("P".$ligne)->applyFromArray($stylecontenu);
-            //$objPHPExcel->getActiveSheet()->getStyle("P".$ligne)->getAlignment()->setWrapText(true);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("P".$ligne, $value->cout_avenant);
+            //$objPHPExcel->getActiveSheet()->getStyle("L".$ligne)->getAlignment()->setWrapText(true);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("P".$ligne, $value->cout_maitrise);
 
-            $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle("Q".$ligne)->applyFromArray($stylecontenu);
-            //$objPHPExcel->getActiveSheet()->getStyle("Q".$ligne)->getAlignment()->setWrapText(true);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("Q".$ligne, $value->montant_convention + $value->cout_avenant);
+            //$objPHPExcel->getActiveSheet()->getStyle("M".$ligne)->getAlignment()->setWrapText(true);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("Q".$ligne, $value->soustotaldepense);
 
-            $colonne_value = 81;
+            $objPHPExcel->getActiveSheet()->getStyle("R".$ligne)->applyFromArray($stylecontenu);
+           // $objPHPExcel->getActiveSheet()->getStyle("R".$ligne)->getAlignment()->setWrapText(true);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("R".$ligne, $value->cout_sousprojet);
+
+            $objPHPExcel->getActiveSheet()->getStyle("S".$ligne)->applyFromArray($stylecontenu);
+           //$objPHPExcel->getActiveSheet()->getStyle("S".$ligne)->getAlignment()->setWrapText(true);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("S".$ligne, $value->montant_convention);
+
+            $objPHPExcel->getActiveSheet()->getStyle("T".$ligne)->applyFromArray($stylecontenu);
+            //$objPHPExcel->getActiveSheet()->getStyle("T".$ligne)->getAlignment()->setWrapText(true);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("T".$ligne, $value->cout_avenant);
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension("U")->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle("U".$ligne)->applyFromArray($stylecontenu);
+            //$objPHPExcel->getActiveSheet()->getStyle("U".$ligne)->getAlignment()->setWrapText(true);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue("U".$ligne, $value->montant_convention + $value->cout_avenant);
+
+            $colonne_value = 85;
 //suivi financier
             if ($params['suivi_financier_daaf_feffi']=="true")
             {
@@ -3409,7 +3438,8 @@ class Excel_bdd_construction_detail extends REST_Controller
             {
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+1).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AG".$ligne)->getAlignment()->setWrapText(true);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+1).$ligne, $value->montant_convention - ($value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe));
+                //$objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+1).$ligne, $value->montant_convention - ($value->montant_decaiss_fonct_feffi + $value->montant_paiement_mpe1 + $value->montant_paiement_mpe2 + $value->montant_paiement_mpe3 + $value->montant_paiement_mpe4 +$value->montant_paiement_mpe5 + $value->montant_paiement_mpe6+ $value->montant_paiement_mpe7+ $value->montant_paiement_mpe8+ $value->montant_paiement_mpe9+ $value->montant_paiement_mpe10 + $value->montant_paiement_moe));
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+1).$ligne, ($value->montant_convention + $value->cout_avenant) - ($value->montant_contrat_moe + $value->cout_mobilier_pme + $value->cout_latrine_pme + $value->cout_batiment_pme));
 
                 $colonne_value = $colonne_value + 1;
             }
@@ -3953,7 +3983,7 @@ class Excel_bdd_construction_detail extends REST_Controller
                 
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+4).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+4).$ligne, $value->nbr_mpe_soumissionaire_pme);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+4).$ligne, $value->liste_mpe_soumissionaire);
 
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+5).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
@@ -4365,7 +4395,6 @@ class Excel_bdd_construction_detail extends REST_Controller
             $ligne++;
         }
         
-        
     
 
         try
@@ -4509,6 +4538,12 @@ class Excel_bdd_construction_detail extends REST_Controller
             $col_sup= $col - 272;
             
             $column ="H".chr($col_sup+64);
+        }
+        elseif ($col >298 && $col<325)
+        {
+            $col_sup= $col - 298;
+            
+            $column ="I".chr($col_sup+64);
         }
         else
         {

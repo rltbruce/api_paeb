@@ -30,10 +30,10 @@ class Contrat_prestataire extends REST_Controller {
          
          if ($menus=='getcontratinvalideByconvention')
          {
-            $menu = $this->Contrat_prestataireManager->findinvalideByConvention($id_convention_entete);
-            if ($menu) 
+            $tmp = $this->Contrat_prestataireManager->findinvalideByConvention($id_convention_entete);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
                     $passation = $this->Passation_marchesManager->findpassationarrayByconvention($value->id_convention_entete);
@@ -45,11 +45,11 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['cout_batiment']    = $value->cout_batiment;
                     $data[$key]['cout_latrine']   = $value->cout_latrine;
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
-                    $data[$key]['date_signature'] = $value->date_signature;
+                    //$data[$key]['date_signature'] = $value->date_signature;
                     //$data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
                     //$data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
-                    $data[$key]['delai_execution'] = $value->delai_execution;
-                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                    //$data[$key]['delai_execution'] = $value->delai_execution;
+                    //$data[$key]['paiement_recu'] = $value->paiement_recu;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['prestataire'] = $prestataire;
                     $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
@@ -61,10 +61,10 @@ class Contrat_prestataire extends REST_Controller {
         }
         elseif ($menus=='getcontratvalideByconvention')
          {
-            $menu = $this->Contrat_prestataireManager->findvalideByConvention($id_convention_entete);
-            if ($menu) 
+            $tmp = $this->Contrat_prestataireManager->findvalideByConvention($id_convention_entete);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
                     $passation = $this->Passation_marchesManager->findpassationarrayByconvention($value->id_convention_entete);
@@ -76,11 +76,11 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['cout_batiment']    = $value->cout_batiment;
                     $data[$key]['cout_latrine']   = $value->cout_latrine;
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
-                    $data[$key]['date_signature'] = $value->date_signature;
+                    //$data[$key]['date_signature'] = $value->date_signature;
                     //$data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
                     //$data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
-                    $data[$key]['delai_execution'] = $value->delai_execution;
-                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                    //$data[$key]['delai_execution'] = $value->delai_execution;
+                    //$data[$key]['paiement_recu'] = $value->paiement_recu;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['prestataire'] = $prestataire;
                     $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
@@ -92,10 +92,10 @@ class Contrat_prestataire extends REST_Controller {
         }
         elseif ($menus=='getcontrat_mpevalideById')
          {
-            $menu = $this->Contrat_prestataireManager->findcontratvalideById($id_contrat_mpe);
-            if ($menu) 
+            $tmp = $this->Contrat_prestataireManager->findcontratvalideById($id_contrat_mpe);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
                     $passation = $this->Passation_marchesManager->findpassationarrayByconvention($value->id_convention_entete);
@@ -107,9 +107,9 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['cout_batiment']    = $value->cout_batiment;
                     $data[$key]['cout_latrine']   = $value->cout_latrine;
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
-                    $data[$key]['date_signature'] = $value->date_signature;
-                    $data[$key]['delai_execution'] = $value->delai_execution;
-                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                    //$data[$key]['date_signature'] = $value->date_signature;
+                   // $data[$key]['delai_execution'] = $value->delai_execution;
+                   // $data[$key]['paiement_recu'] = $value->paiement_recu;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['prestataire'] = $prestataire;
                     $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
@@ -121,10 +121,10 @@ class Contrat_prestataire extends REST_Controller {
         }
         elseif ($menus=='getetatcontratByconvention')
          {
-            $menu = $this->Contrat_prestataireManager->findvalideByConvention($id_convention_entete);
-            if ($menu) 
+            $tmp = $this->Contrat_prestataireManager->findvalideByConvention($id_convention_entete);
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {   
                     $avancement_financ = 0;
                     $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
@@ -143,12 +143,12 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['cout_batiment']    = $value->cout_batiment;
                     $data[$key]['cout_latrine']   = $value->cout_latrine;
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
-                    $data[$key]['date_signature'] = $value->date_signature;
-                    $data[$key]['date_prev_deb_trav'] = $montant_facture;
+                   // $data[$key]['date_signature'] = $value->date_signature;
+                   // $data[$key]['date_prev_deb_trav'] = $montant_facture;
                     //$data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
-                    $data[$key]['delai_execution'] = $value->delai_execution;
+                   // $data[$key]['delai_execution'] = $value->delai_execution;
                     $data[$key]['validation'] = $value->validation;
-                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                   // $data[$key]['paiement_recu'] = $value->paiement_recu;
                     $data[$key]['avancement_financ'] = $avancement_financ;
                     $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
                     $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
@@ -159,10 +159,11 @@ class Contrat_prestataire extends REST_Controller {
         }
         elseif ($menus=='getcontratByconvention')
          {
-            $menu = $this->Contrat_prestataireManager->findcontratByConvention($id_convention_entete);
-            if ($menu) 
-            {
-                foreach ($menu as $key => $value) 
+            $tmp = $this->Contrat_prestataireManager->findcontratByConvention($id_convention_entete);
+            if ($tmp) 
+            {  // $data = $tmp;
+               
+                foreach ($tmp as $key => $value) 
                 {
                     $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
 
@@ -175,12 +176,10 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['cout_batiment']    = $value->cout_batiment;
                     $data[$key]['cout_latrine']   = $value->cout_latrine;
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
-                    $data[$key]['date_signature'] = $value->date_signature;
-                    //$data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
-                    //$data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
-                    $data[$key]['delai_execution'] = $value->delai_execution;
+                    //$data[$key]['date_signature'] = $value->date_signature;
+                   // $data[$key]['delai_execution'] = $value->delai_execution;
                     $data[$key]['validation'] = $value->validation;
-                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                    //$data[$key]['paiement_recu'] = $value->paiement_recu;
                     $data[$key]['prestataire'] = $prestataire;
                     $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
                     $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
@@ -316,7 +315,7 @@ class Contrat_prestataire extends REST_Controller {
             $contrat_prestataire = $this->Contrat_prestataireManager->findById($id);
 
             $prestataire = $this->PrestataireManager->findById($contrat_prestataire->id_prestataire);
-            $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($contrat_prestataire->id_convention_entete);
+           // $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($contrat_prestataire->id_convention_entete);
             $passation = $this->Passation_marchesManager->findpassationarrayByconvention($contrat_prestataire->id_convention_entete);
 
             $data['passation'] = $passation;
@@ -326,26 +325,26 @@ class Contrat_prestataire extends REST_Controller {
             $data['cout_batiment']    = $contrat_prestataire->cout_batiment;
             $data['cout_latrine']   = $contrat_prestataire->cout_latrine;
             $data['cout_mobilier'] = $contrat_prestataire->cout_mobilier;
-            $data['date_signature'] = $contrat_prestataire->date_signature;
+           // $data['date_signature'] = $contrat_prestataire->date_signature;
             //$data['date_prev_deb_trav'] = $contrat_prestataire->date_prev_deb_trav;
             //$data['date_reel_deb_trav'] = $contrat_prestataire->date_reel_deb_trav;
-            $data['delai_execution'] = $contrat_prestataire->delai_execution;
-            $data['paiement'] = $contrat_prestataire->paiement;
+            //$data['delai_execution'] = $contrat_prestataire->delai_execution;
+           // $data['paiement'] = $contrat_prestataire->paiement;
 
-            $data['convention_entete'] = $convention_entete;
+            //$data['convention_entete'] = $convention_entete;
             $data['prestataire'] = $prestataire;
             $data['montant_total_ttc'] = $contrat_prestataire->cout_mobilier + $contrat_prestataire->cout_latrine + $contrat_prestataire->cout_batiment;
             $data['montant_total_ht'] = ($contrat_prestataire->cout_mobilier + $contrat_prestataire->cout_latrine + $contrat_prestataire->cout_batiment)/1;
         } 
         else 
         {
-            $menu = $this->Contrat_prestataireManager->findAll();
-            if ($menu) 
+            $tmp = $this->Contrat_prestataireManager->findAll();
+            if ($tmp) 
             {
-                foreach ($menu as $key => $value) 
+                foreach ($tmp as $key => $value) 
                 {
                     $prestataire = $this->PrestataireManager->findById($value->id_prestataire);
-                    $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
+                   // $convention_entete = $this->Convention_cisco_feffi_enteteManager->findById($value->id_convention_entete);
 
                     $passation = $this->Passation_marchesManager->findpassationarrayByconvention($value->id_convention_entete);
 
@@ -356,13 +355,13 @@ class Contrat_prestataire extends REST_Controller {
                     $data[$key]['cout_batiment']    = $value->cout_batiment;
                     $data[$key]['cout_latrine']   = $value->cout_latrine;
                     $data[$key]['cout_mobilier'] = $value->cout_mobilier;
-                    $data[$key]['date_signature'] = $value->date_signature;
+                    //$data[$key]['date_signature'] = $value->date_signature;
                     //$data[$key]['date_prev_deb_trav'] = $value->date_prev_deb_trav;
                     //$data[$key]['date_reel_deb_trav'] = $value->date_reel_deb_trav;
-                    $data[$key]['delai_execution'] = $value->delai_execution;
-                    $data[$key]['paiement_recu'] = $value->paiement_recu;
+                    //$data[$key]['delai_execution'] = $value->delai_execution;
+                    //$data[$key]['paiement_recu'] = $value->paiement_recu;
 
-                    $data[$key]['convention_entete'] = $convention_entete;
+                    //$data[$key]['convention_entete'] = $convention_entete;
                     $data[$key]['prestataire'] = $prestataire;
                     $data[$key]['montant_total_ttc'] = $value->cout_mobilier + $value->cout_latrine + $value->cout_batiment;
                     $data[$key]['montant_total_ht'] = ($value->cout_mobilier + $value->cout_latrine + $value->cout_batiment)/1;
@@ -400,13 +399,13 @@ class Contrat_prestataire extends REST_Controller {
                     'cout_batiment'    => $this->post('cout_batiment'),
                     'cout_latrine'   => $this->post('cout_latrine'),
                     'cout_mobilier' => $this->post('cout_mobilier'),
-                    'date_signature' => $this->post('date_signature'),
+                    //'date_signature' => $this->post('date_signature'),
                     //'date_prev_deb_trav' => $this->post('date_prev_deb_trav'),
                     //'date_reel_deb_trav' => $this->post('date_reel_deb_trav'),
-                    'delai_execution' => $this->post('delai_execution'),
+                    //'delai_execution' => $this->post('delai_execution'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
                     'id_prestataire' => $this->post('id_prestataire'),
-                    'paiement_recu' => $this->post('paiement_recu'),
+                    //'paiement_recu' => $this->post('paiement_recu'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data) {
@@ -438,13 +437,13 @@ class Contrat_prestataire extends REST_Controller {
                     'cout_batiment'    => $this->post('cout_batiment'),
                     'cout_latrine'   => $this->post('cout_latrine'),
                     'cout_mobilier' => $this->post('cout_mobilier'),
-                    'date_signature' => $this->post('date_signature'),
+                    //'date_signature' => $this->post('date_signature'),
                     //'date_prev_deb_trav' => $this->post('date_prev_deb_trav'),
                     //'date_reel_deb_trav' => $this->post('date_reel_deb_trav'),
-                    'delai_execution' => $this->post('delai_execution'),
+                    //'delai_execution' => $this->post('delai_execution'),
                     'id_convention_entete' => $this->post('id_convention_entete'),
                     'id_prestataire' => $this->post('id_prestataire'),
-                    'paiement_recu' => $this->post('paiement_recu'),
+                    //'paiement_recu' => $this->post('paiement_recu'),
                     'validation' => $this->post('validation')
                 );
                 if (!$data || !$id) {

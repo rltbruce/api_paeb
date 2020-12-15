@@ -362,7 +362,7 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                             inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
                             right join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf 
                             right join convention_ufp_daaf_detail as conv_ufp_de on conv_ufp_de.id_convention_ufp_daaf_entete = conv_ufp.id
-                            where conv_ufp.validation = 1 and DATE_FORMAT(conv_ufp_de.date_signature,'%Y') BETWEEN '".$date_debut."' AND '".$date_fin."'
+                            where conv_ufp.validation = 1 and conv_ufp_de.date_signature BETWEEN '".$date_debut."' AND '".$date_fin."'
                             group by conv_ufp.id,conv.id
                 )
                 UNION
@@ -389,7 +389,7 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                             inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
                             right join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf  
                             right join convention_ufp_daaf_detail as conv_ufp_de on conv_ufp_de.id_convention_ufp_daaf_entete = conv_ufp.id
-                            where conv_ufp.validation = 1 and DATE_FORMAT(conv_ufp_de.date_signature,'%Y') BETWEEN '".$date_debut."' AND '".$date_fin."'                    
+                            where conv_ufp.validation = 1 and conv_ufp_de.date_signature BETWEEN '".$date_debut."' AND '".$date_fin."'                    
 
                             group by conv_ufp.id,conv.id
                 )
@@ -417,7 +417,7 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
                             inner join convention_cisco_feffi_entete as conv on conv.id = cont_pres.id_convention_entete
                             right join convention_ufp_daaf_entete as conv_ufp on conv_ufp.id = conv.id_convention_ufpdaaf  
                             right join convention_ufp_daaf_detail as conv_ufp_de on conv_ufp_de.id_convention_ufp_daaf_entete = conv_ufp.id
-                            where conv_ufp.validation = 1 and DATE_FORMAT(conv_ufp_de.date_signature,'%Y') BETWEEN '".$date_debut."' AND '".$date_fin."'                  
+                            where conv_ufp.validation = 1 and conv_ufp_de.date_signature BETWEEN '".$date_debut."' AND '".$date_fin."'                  
 
                             group by conv_ufp.id,conv.id
                 )

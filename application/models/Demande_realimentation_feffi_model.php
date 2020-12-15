@@ -68,6 +68,21 @@ class Demande_realimentation_feffi_model extends CI_Model {
         }
     }
 
+    public function getdemandevalideByconvention($id_convention_cife_entete) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_cife_entete", $id_convention_cife_entete)                        
+                        ->where("validation IN(3,7)")
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function finddemandevalidedaafByIdconvention_cife_entete($id_convention_cife_entete) {           //mande    
         $result =  $this->db->select('*')
                         ->from($this->table)
