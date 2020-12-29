@@ -92,5 +92,22 @@ class Zap_commune_model extends CI_Model {
             return null;
         }                 
     }
+    
+    public function getzap_communetest($id_zap,$id_commune) {               
+        $result =  $this->db->select('zap_commune.*')
+                        ->from($this->table)
+                        ->join('commune','commune.id=zap_commune.id_commune')
+                        ->join('zap','zap.id=zap_commune.id_zap')
+                        ->where('commune.id',$id_commune)
+                        ->where("zap.id", $id_zap)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
 }
 ?>

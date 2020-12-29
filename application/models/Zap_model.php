@@ -163,5 +163,18 @@ class Zap_model extends CI_Model {
             return array();
         }                 
     }
+    public function getzaptest($nom) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("lower(nom)=", $nom)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    } 
 }
 ?>

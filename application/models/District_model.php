@@ -28,7 +28,7 @@ class District_model extends CI_Model {
             'code'          =>      $district['code'],
             'nom'           =>      $district['nom'],
             'id_region'     =>      $district['id_region'],
-            'coordonnees'     =>      $district['coordonnees']                       
+            //'coordonnees'     =>      $district['coordonnees']                       
         );
     }
     public function delete($id) {
@@ -198,6 +198,35 @@ class District_model extends CI_Model {
 
             ";
             return $this->db->query($sql)->result();             
+    }
+    public function getdistricttest($region,$district) {               
+        $result =  $this->db->select('district.*')
+                        ->from($this->table)
+                        ->join('region','region.id=district.id_region')
+                        ->where('lower(district.nom)=',$district)
+                        ->where("lower(region.nom)=", $region)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
+    
+    public function getdistricttest2($district) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('lower(district.nom)=',$district)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
     }
 
 

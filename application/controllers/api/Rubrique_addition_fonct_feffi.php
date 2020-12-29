@@ -5,65 +5,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Avancement_physi_batiment extends REST_Controller {
+class Rubrique_addition_fonct_feffi extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('avancement_physi_batiment_model', 'Avancement_physi_batimentManager');
-        //$this->load->model('divers_attachement_batiment_detail_model','Divers_attachement_batiment_detailManager');
+        $this->load->model('rubrique_addition_fonct_feffi_model', 'Rubrique_addition_fonct_feffiManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_contrat_prestataire = $this->get('id_contrat_prestataire');
-        $menu = $this->get('menu');
-
-         if ($menu=='getavancementBycontrat')
-         {
-            $tmp = $this->Avancement_physi_batimentManager->findavancementBycontrat($id_contrat_prestataire);
-            if ($tmp) 
-            {
-                foreach ($tmp as $key => $value) 
-                {
-                    //$attachement_detail = $this->Divers_attachement_batiment_detailManager->findById($value->pourcentage_prevu);
-
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['pourcentage']    = $value->pourcentage;
-                    $data[$key]['pourcentage_prevu']    = $value->pourcentage_prevu;
-                    $data[$key]['date']   = $value->date;
-                    //$data[$key]['attachement_detail'] = $attachement_detail;
-                }
-            } 
-                else
-                    $data = array();
-        }  
-        elseif ($id)
+            
+        if ($id)
         {
             $data = array();
-            $avancement_physi_batiment = $this->Avancement_physi_batimentManager->findById($id);
-
-            //$attachement_detail = $this->Divers_attachement_batiment_detailManager->findById($avancement_detail->id_attachement_detail);
-
-            
-            $data[$key]['id'] = $avancement_physi_batiment->id;
-            $data[$key]['pourcentage']    = $avancement_physi_batiment->pourcentage;
-            $data[$key]['date']   = $avancement_physi_batiment->date;
-            $data[$key]['pourcentage_prevu']    = $avancement_physi_batiment->pourcentage_prevu;
+            $rubrique_addition_fonct_feffi= $this->Rubrique_addition_fonct_feffiManager->findById($id);
+            $data['id'] = $rubrique_addition_fonct_feffi->id;
+            $data['libelle'] = $rubrique_addition_fonct_feffi->libelle;
+            $data['description'] = $rubrique_addition_fonct_feffi->description;
         } 
         else 
         {
-            $menu = $this->Avancement_batimentManager->findAll();
+            $menu = $this->Rubrique_addition_fonct_feffiManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
                 {
-                    //$attachement_detail = $this->Divers_attachement_batiment_detailManager->findById($value->id_attachement_detail);
-
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['pourcentage']    = $value->pourcentage;
-                    $data[$key]['date']   = $value->date;
-                    $data[$key]['pourcentage_prevu']    = $value->pourcentage_prevu;
+                    $data[$key]['libelle'] = $value->libelle;
+                    $data[$key]['description'] = $value->description;
                 }
             } 
                 else
@@ -92,11 +62,8 @@ class Avancement_physi_batiment extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'id' => $this->post('id'),
-                    'pourcentage' => $this->post('pourcentage'),
-                    'date'   => $this->post('date'),
-                    'pourcentage_prevu' => $this->post('pourcentage_prevu'),
-                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire')
+                    'libelle' => $this->post('libelle'),
+                    'description' => $this->post('description')
                 );
                 if (!$data) {
                     $this->response([
@@ -105,7 +72,7 @@ class Avancement_physi_batiment extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Avancement_batimentManager->add($data);
+                $dataId = $this->Rubrique_addition_fonct_feffiManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -121,11 +88,8 @@ class Avancement_physi_batiment extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'id' => $this->post('id'),
-                    'pourcentage' => $this->post('pourcentage'),
-                    'date'   => $this->post('date'),
-                    'pourcentage_prevu' => $this->post('pourcentage_prevu'),
-                    'id_contrat_prestataire' => $this->post('id_contrat_prestataire')
+                    'libelle' => $this->post('libelle'),
+                    'description' => $this->post('description')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -134,7 +98,7 @@ class Avancement_physi_batiment extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Avancement_batimentManager->update($id, $data);
+                $update = $this->Rubrique_addition_fonct_feffiManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -156,7 +120,7 @@ class Avancement_physi_batiment extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Avancement_batimentManager->delete($id);         
+            $delete = $this->Rubrique_addition_fonct_feffiManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

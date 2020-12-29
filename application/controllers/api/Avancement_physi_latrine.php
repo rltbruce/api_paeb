@@ -10,7 +10,7 @@ class Avancement_physi_latrine extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('avancement_physi_latrine_model', 'Avancement_physi_latrineManager');
-        $this->load->model('divers_attachement_latrine_detail_model','Divers_attachement_latrine_detailManager');
+        //$this->load->model('divers_attachement_latrine_detail_model','Divers_attachement_latrine_detailManager');
     }
 
     public function index_get() 
@@ -26,12 +26,12 @@ class Avancement_physi_latrine extends REST_Controller {
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $attachement_detail = $this->Divers_attachement_latrine_detailManager->findById($value->id_attachement_detail);
+                    //$attachement_detail = $this->Divers_attachement_latrine_detailManager->findById($value->id_attachement_detail);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['pourcentage']    = $value->pourcentage;
                     $data[$key]['date']   = $value->date;
-                    $data[$key]['attachement_detail'] = $attachement_detail;
+                    $data[$key]['pourcentage_prevu']    = $value->pourcentage_prevu;
                 }
             } 
                 else
@@ -42,13 +42,13 @@ class Avancement_physi_latrine extends REST_Controller {
             $data = array();
             $avancement_physi_latrine = $this->Avancement_physi_latrineManager->findById($id);
 
-            $attachement_detail = $this->Divers_attachement_latrine_detailManager->findById($avancement_detail->id_attachement_detail);
+            //$attachement_detail = $this->Divers_attachement_latrine_detailManager->findById($avancement_detail->id_attachement_detail);
 
             
-            $data[$key]['id'] = $value->id;
-            $data[$key]['pourcentage']    = $value->pourcentage;
-            $data[$key]['date']   = $value->date;
-            $data[$key]['attachement_detail'] = $attachement_detail;
+            $data[$key]['id'] = $avancement_physi_latrine->id;
+            $data[$key]['pourcentage']    = $avancement_physi_latrine->pourcentage;
+            $data[$key]['date']   = $avancement_physi_latrine->date;
+            $data[$key]['pourcentage_prevu']    = $avancement_physi_latrine->pourcentage_prevu;
         } 
         else 
         {
@@ -57,12 +57,12 @@ class Avancement_physi_latrine extends REST_Controller {
             {
                 foreach ($menu as $key => $value) 
                 {
-                    $attachement_detail = $this->Divers_attachement_latrine_detailManager->findById($value->id_attachement_detail);
+                    //$attachement_detail = $this->Divers_attachement_latrine_detailManager->findById($value->id_attachement_detail);
 
                     $data[$key]['id'] = $value->id;
                     $data[$key]['pourcentage']    = $value->pourcentage;
                     $data[$key]['date']   = $value->date;
-                    $data[$key]['attachement_detail'] = $attachement_detail;
+                    $data[$key]['pourcentage_prevu']    = $value->pourcentage_prevu;
                 }
             } 
                 else
@@ -94,7 +94,7 @@ class Avancement_physi_latrine extends REST_Controller {
                     'id' => $this->post('id'),
                     'pourcentage' => $this->post('pourcentage'),
                     'date'   => $this->post('date'),
-                    'id_attachement_detail' => $this->post('id_attachement_detail'),
+                    'pourcentage_prevu' => $this->post('pourcentage_prevu'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire')
                 );
                 if (!$data) {
@@ -123,7 +123,7 @@ class Avancement_physi_latrine extends REST_Controller {
                     'id' => $this->post('id'),
                     'pourcentage' => $this->post('pourcentage'),
                     'date'   => $this->post('date'),
-                    'id_attachement_detail' => $this->post('id_attachement_detail'),
+                    'pourcentage_prevu' => $this->post('pourcentage_prevu'),
                     'id_contrat_prestataire' => $this->post('id_contrat_prestataire')
                 );
                 if (!$data || !$id) {

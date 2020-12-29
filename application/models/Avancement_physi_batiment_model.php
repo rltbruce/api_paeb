@@ -28,7 +28,7 @@ class Avancement_physi_batiment_model extends CI_Model {
 
             'pourcentage' => $avancement_physi_batiment['pourcentage'],
             'date'   => $avancement_physi_batiment['date'],
-            'id_attachement_detail' => $avancement_physi_batiment['id_attachement_detail'],
+            'pourcentage_prevu' => $avancement_physi_batiment['pourcentage_prevu'],
             'id_contrat_prestataire' => $avancement_physi_batiment['id_contrat_prestataire']                    
         );
     }

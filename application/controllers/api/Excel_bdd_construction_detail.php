@@ -542,7 +542,7 @@ class Excel_bdd_construction_detail extends REST_Controller
 
                 $data[$key]['date_reel_recep_defi_mpe']= $value->date_reel_recep_defi_mpe;
 
-                $data[$key]['avancement_physique']= round(($value->avancement_batiment_mpe + $value->avancement_latrine_mpe +$value->avancement_mobilier_mpe)/3,2).' %';
+                $data[$key]['avancement_physique']= round(($value->avancement_batiment_mpe + $value->avancement_latrine_mpe +$value->avancement_mobilier_mpe),2).' %';
 
                 $data[$key]['observation_recep_mpe']= $value->observation_recep_mpe;
 
@@ -4111,7 +4111,7 @@ class Excel_bdd_construction_detail extends REST_Controller
 
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+14).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+14).$ligne, (($value->avancement_batiment_mpe + $value->avancement_latrine_mpe +$value->avancement_mobilier_mpe)/3).' %');
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+14).$ligne, (($value->avancement_batiment_mpe + $value->avancement_latrine_mpe +$value->avancement_mobilier_mpe)).' %');
 
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+15).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);

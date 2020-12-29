@@ -2,11 +2,12 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Importer_zap extends CI_Controller {
+class Importer_zap_commune extends CI_Controller {
     public function __construct() {
         parent::__construct();       
-        $this->load->model('zap_model', 'ZapManager');       
-        $this->load->model('district_model', 'DistrictManager');
+        $this->load->model('zap_commune_model', 'Zap_communeManager');       
+        $this->load->model('commune_model', 'CommuneManager');      
+        $this->load->model('zap_model', 'ZapManager');
         
 
     }
@@ -19,7 +20,7 @@ class Importer_zap extends CI_Controller {
 	}
 
 
-	public function testzap() {
+	public function testzap_commune() {
 
 		$erreur="aucun";
 		ini_set('upload_max_filesize', '200000000000000000M');  
@@ -76,10 +77,10 @@ class Importer_zap extends CI_Controller {
 		ini_set('post_max_size', '2000000000M');
 		set_time_limit(0);
         ini_set ('memory_limit', '100000000000000M');
-				$retour = $this->controler_donnees_importertestzap($name1,$repertoire);
+				$retour = $this->controler_donnees_importertestzap_commune($name1,$repertoire);
 				$rapport['nbr_inserer']=$retour['nbr_inserer'];
 				$rapport['nbr_refuser']=$retour['nbr_erreur'];
-				$rapport['zap_inserer']=$retour['zap_inserer'];
+				$rapport['zap_commune_inserer']=$retour['zap_commune_inserer'];
 				$rapport['erreur']=false;
 				$rapport["erreur_value"]= '' ;
 				echo json_encode($rapport);
@@ -95,7 +96,7 @@ class Importer_zap extends CI_Controller {
 		} 
 		
 	}
-	public function controler_donnees_importertestzap($filename,$directory) {
+	public function controler_donnees_importertestzap_commune($filename,$directory) {
 		require_once 'Classes/PHPExcel.php';
 		require_once 'Classes/PHPExcel/IOFactory.php';
 		ini_set('upload_max_filesize', '2000000000M');  
@@ -111,7 +112,7 @@ class Importer_zap extends CI_Controller {
 		//$user_ok=false;
 		$nbr_erreur=0;
 		$nbr_inserer=0;
-		$zap_inserer = array();
+		$zap_commune_inserer = array();
 		//The name of the directory that we need to create.
 		$directoryName = dirname(__FILE__) ."/../../../../../../assets/excel/".$repertoire;
 		//Check if the directory already exists.
@@ -150,9 +151,17 @@ class Importer_zap extends CI_Controller {
 					$rowIndex = $row->getRowIndex ();
 					foreach ($cellIterator as $cell)
 					{
-						if('D' == $cell->getColumn())
+						if('C' == $cell->getColumn())
 						{
-							$dist =$cell->getValue();
+							$reg =$cell->getValue();
+						}   
+						else if('D' == $cell->getColumn())
+						{
+							$dist =$cell->getValue();							
+						}  
+						elseif('E' == $cell->getColumn())
+						{
+							$com =$cell->getValue();
 						}   
 						else if('F' == $cell->getColumn())
 						{
@@ -171,32 +180,21 @@ class Importer_zap extends CI_Controller {
 						);
 						$erreur = true;													
 					}
-					if($dist=="")
-					{						
-						$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
-									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
-										 'startcolor' => array('rgb' => 'f2e641'),
-										 'endcolor'   => array('rgb' => 'f2e641')
-									 )
-						);
-						$erreur = true;													
-					}
-					/*else
+					else
 					{
 						// Vérifier si nom_feffi existe dans la BDD
-						$distl=strtolower($dist);
 						$zpl=strtolower($zp);
-						$retour_district = $this->DistrictManager->getdistricttestzap($zpl,$distl);
-						if(count($retour_district) >0)
+						$retour_zap = $this->ZapManager->getzaptest($zpl);
+						if(count($retour_zap) >0)
 						{
-							foreach($retour_district as $k=>$v)
+							foreach($retour_zap as $k=>$v)
 							{
-								$id_district = $v->id;
+								$id_zap = $v->id;
 							}	
 						}
 						else
 						{
-							$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
+							$sheet->getStyle("F".$ligne)->getFill()->applyFromArray(
 										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 											 'startcolor' => array('rgb' => 'f24141'),
 											 'endcolor'   => array('rgb' => 'f24141')
@@ -204,37 +202,71 @@ class Importer_zap extends CI_Controller {
 							);
 							$erreur = true;
 						}
-					} */ 
+					} 
+					if($com=="")
+					{						
+						$sheet->getStyle("E".$ligne)->getFill()->applyFromArray(
+									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+										 'startcolor' => array('rgb' => 'f2e641'),
+										 'endcolor'   => array('rgb' => 'f2e641')
+									 )
+						);
+						$erreur = true;													
+					}
+					else
+					{
+						// Vérifier si nom_feffi existe dans la BDD
+						$coml=strtolower($com);
+						$distl=strtolower($dist);
+						$regl=strtolower($reg);
+						$retour_commune = $this->CommuneManager->getcommunetest($regl,$distl,$coml);
+						if(count($retour_commune) >0)
+						{
+							foreach($retour_commune as $k=>$v)
+							{
+								$id_commune = $v->id;
+							}	
+						}
+						else
+						{
+							$sheet->getStyle("E".$ligne)->getFill()->applyFromArray(
+										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+											 'startcolor' => array('rgb' => 'f24141'),
+											 'endcolor'   => array('rgb' => 'f24141')
+										 )
+							);
+							$erreur = true;
+						}
+					}  
 					
 					if($erreur==false)
 					{	
 						$zpn=strtolower($zp);
-						$distn=strtolower($dist);
+						$comn=strtolower($com);
 						$replace=array('_');
 						$search= array(' ');
 						$nomfichier = $filename;		
-						$distn_=str_replace($search,$replace,$distn);
-						$doublon = $this->ZapManager->getzaptest($zpn);
+						$comn_=str_replace($search,$replace,$comn);
+						$doublon = $this->Zap_communeManager->getzap_communetest($id_zap,$id_commune);
 						if (count($doublon)>0)//mis doublon
 						{
 							$sheet->setCellValue('J'.$ligne, "Doublon");
-							array_push($zap_inserer, $doublon);
+							array_push($zap_commune_inserer, $doublon);
 							$nbr_erreur = $nbr_erreur + 1;							
 						}
 						else//ts doublon
 						{
 
-		                		//$dataId = $this->ZapManager->add($data); 
+		                		//$dataId = $this->Zap_communeManager->add($data); 
 		                	
 								$sheet->setCellValue('J'.$ligne, "ts Doublon"); 
 								$data = array(
-									//'id_district' => $id_district,
-									'nom' => $zp,
-									'code' => 'xx'
+									'id_commune' => $id_commune,
+									'id_zap' => $id_zap
 									);
-									$dataId = $this->ZapManager->add($data);        		
+									$dataId = $this->Zap_communeManager->add($data);        		
 
-		                	//array_push($zap_inserer, $data);
+		                	//array_push($zap_commune_inserer, $data);
 							$nbr_inserer = $nbr_inserer + 1;
 						}
 	        																
@@ -254,7 +286,7 @@ class Importer_zap extends CI_Controller {
 		$report['nbr_erreur']=$nbr_erreur;
 		$report['nbr_inserer']=$nbr_inserer;
 		//$report['user']=$type_latrine;
-		$report['zap_inserer']=$zap_inserer;
+		$report['zap_commune_inserer']=$zap_commune_inserer;
 		//echo json_encode($report);	
 		$objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
 		$objWriter->save(dirname(__FILE__) ."/../../../../../../assets/excel/".$repertoire. $nomfichier);

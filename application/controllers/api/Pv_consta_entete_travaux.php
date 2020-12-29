@@ -11,7 +11,7 @@ class Pv_consta_entete_travaux extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('pv_consta_entete_travaux_model', 'Pv_consta_enteteManager');
+        $this->load->model('pv_consta_entete_travaux_model', 'Pv_consta_entete_travauxManager');
         $this->load->model('facture_mpe_model', 'Facture_mpeManager');
     }
 
@@ -25,7 +25,7 @@ class Pv_consta_entete_travaux extends REST_Controller {
 
         if ($menu=="getrecapByentete_travauxcontrat")
         {
-            $tmp = $this->Pv_consta_enteteManager->getrecapByentete_travauxcontrat($id_pv_consta_entete_travaux,$id_contrat_prestataire);
+            $tmp = $this->Pv_consta_entete_travauxManager->getrecapByentete_travauxcontrat($id_pv_consta_entete_travaux,$id_contrat_prestataire);
             if ($tmp) 
             {
                 $data=$tmp[0];           
@@ -35,13 +35,13 @@ class Pv_consta_entete_travaux extends REST_Controller {
         }
         elseif ($menu=="getpv_consta_factureById")
         {
-            $tmp = $this->Pv_consta_enteteManager->getpv_consta_factureById($id_pv_consta_entete_travaux);
+            $tmp = $this->Pv_consta_entete_travauxManager->getpv_consta_factureById($id_pv_consta_entete_travaux);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value)
                 {                
                     $facture = $this->Facture_mpeManager->findfacture_mpeBypv_consta_entete($id_pv_consta_entete_travaux);
-                    $avance_global = $this->Pv_consta_enteteManager->getanvance_global_contrat($value->id,$value->id_contrat_prestataire);
+                    $avance_global = $this->Pv_consta_entete_travauxManager->getanvance_global_contrat($value->id,$value->id_contrat_prestataire);
                     if ($avance_global)
                     {                        
                         $data[$key]['avancement_global_periode'] = $avance_global[0]->periode_cumul;
@@ -60,14 +60,14 @@ class Pv_consta_entete_travaux extends REST_Controller {
         }
         elseif ($menu=="getpv_consta_entete_travauxvalideBycontrat")
         {
-            $tmp = $this->Pv_consta_enteteManager->getpv_consta_entete_travauxvalideBycontrat($id_contrat_prestataire);
+            $tmp = $this->Pv_consta_entete_travauxManager->getpv_consta_entete_travauxvalideBycontrat($id_contrat_prestataire);
             if ($tmp) 
             {
                 //$data = $tmp;
                 foreach ($tmp as $key => $value)
                 {                
                     $facture = $this->Facture_mpeManager->findfacture_mpeBypv_consta_entete($value->id);
-                    $avance_global = $this->Pv_consta_enteteManager->getanvance_global_contrat($value->id,$value->id_contrat_prestataire);
+                    $avance_global = $this->Pv_consta_entete_travauxManager->getanvance_global_contrat($value->id,$value->id_contrat_prestataire);
                     if ($avance_global)
                     {                        
                         $data[$key]['avancement_global_periode'] = $avance_global[0]->periode_cumul;
@@ -88,14 +88,14 @@ class Pv_consta_entete_travaux extends REST_Controller {
         }
         elseif ($menu=="getpv_consta_entete_travauxBycontrat")
         {
-            $tmp = $this->Pv_consta_enteteManager->getpv_consta_entete_travauxBycontrat($id_contrat_prestataire);
+            $tmp = $this->Pv_consta_entete_travauxManager->getpv_consta_entete_travauxBycontrat($id_contrat_prestataire);
             if ($tmp) 
             {
                 //$data = $tmp;
                 foreach ($tmp as $key => $value)
                 {                
                     $facture = $this->Facture_mpeManager->findfacture_mpeBypv_consta_entete($value->id);
-                    $avance_global = $this->Pv_consta_enteteManager->getanvance_global_contrat($value->id,$value->id_contrat_prestataire);
+                    $avance_global = $this->Pv_consta_entete_travauxManager->getanvance_global_contrat($value->id,$value->id_contrat_prestataire);
                     if ($avance_global)
                     {                        
                         $data[$key]['avancement_global_periode'] = $avance_global[0]->periode_cumul;
@@ -108,6 +108,9 @@ class Pv_consta_entete_travaux extends REST_Controller {
                     $data[$key]['id_contrat_prestataire'] = $value->id_contrat_prestataire;
                     $data[$key]['ato'] = 'atyy';
                     $data[$key]['facture'] = $facture;
+                    $data[$key]['validation'] = $value->validation_fact;
+                    $data[$key]['validation_fact'] = $value->validation_fact;
+                    //$data[$key]['avance_global'] = $avance_global;
                 }             
             } 
                 else
@@ -115,7 +118,7 @@ class Pv_consta_entete_travaux extends REST_Controller {
         }
         elseif ($menu=="getpv_consta_entete_travauxvalideById")
         {
-            $tmp = $this->Pv_consta_enteteManager->getpv_consta_entete_travauxvalideById($id_pv_consta_entete_travaux);
+            $tmp = $this->Pv_consta_entete_travauxManager->getpv_consta_entete_travauxvalideById($id_pv_consta_entete_travaux);
             if ($tmp) 
             {
                 $data = $tmp;            
@@ -126,7 +129,7 @@ class Pv_consta_entete_travaux extends REST_Controller {
         elseif ($id)
         {
             $data = array();
-            $pv_consta_entete_travaux = $this->Pv_consta_enteteManager->findById($id);
+            $pv_consta_entete_travaux = $this->Pv_consta_entete_travauxManager->findById($id);
             $data['id'] = $pv_consta_entete_travaux->id;
             $data['numero'] = $pv_consta_entete_travaux->numero;
             $data['date_etablissement'] = $pv_consta_entete_travaux->date_etablissement;
@@ -137,7 +140,7 @@ class Pv_consta_entete_travaux extends REST_Controller {
         } 
         else 
         {
-            $tmp = $this->Pv_consta_enteteManager->findAll();
+            $tmp = $this->Pv_consta_entete_travauxManager->findAll();
             if ($tmp) 
             {
                 $data=$tmp;
@@ -182,7 +185,7 @@ class Pv_consta_entete_travaux extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Pv_consta_enteteManager->add($data);
+                $dataId = $this->Pv_consta_entete_travauxManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -212,7 +215,7 @@ class Pv_consta_entete_travaux extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Pv_consta_enteteManager->update($id, $data);
+                $update = $this->Pv_consta_entete_travauxManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -234,7 +237,7 @@ class Pv_consta_entete_travaux extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Pv_consta_enteteManager->delete($id);         
+            $delete = $this->Pv_consta_entete_travauxManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

@@ -11,7 +11,7 @@ class Facture_mpe extends REST_Controller {
         parent::__construct();
         $this->load->model('facture_mpe_model', 'Facture_mpeManager');
         $this->load->model('contrat_prestataire_model', 'Contrat_prestataireManager');
-        //$this->load->model('attachement_travaux_model', 'Attachement_travauxManager');
+        $this->load->model('pv_consta_entete_travaux_model', 'Pv_consta_entete_travauxManager');
         $this->load->model('avancement_physi_batiment_model', 'Avancement_physi_batimentManager');
         $this->load->model('avancement_physi_latrine_model', 'Avancement_physi_latrineManager');
         $this->load->model('avancement_physi_mobilier_model', 'Avancement_physi_mobilierManager');
@@ -23,14 +23,97 @@ class Facture_mpe extends REST_Controller {
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');        
         $id_pv_consta_entete_travaux = $this->get('id_pv_consta_entete_travaux');
         $id_facture_mpe = $this->get('id_facture_mpe');
-        $menu = $this->get('menu');
+        $menu = $this->get('menu');        
+        $statu_incomplete = false;
 
         if ($menu=="getdecompte_mpeBycontratandfacture")
         {
             $tmp = $this->Facture_mpeManager->finddecompte_mpeBycontratandfacture($id_contrat_prestataire,$id_facture_mpe);
             if ($tmp) 
             {
-                foreach ($tmp as $key => $value)
+               //$data=intVal($tmp[0]->id_contrat);
+               if (intVal($tmp[0]->numero_fact)==1 )
+               {
+                $data['montant_travaux_to'] = $tmp[0]->montant_travaux_to ;
+                $data['montant_rabais_to'] = $tmp[0]->montant_rabais_to ;
+                $data['montant_ht_to'] = $tmp[0]->montant_ht_to ;
+                $data['montant_tva_to'] = $tmp[0]->montant_tva_to ;
+                $data['montant_ttc_to'] = $tmp[0]->montant_ttc_to ;
+                $data['remboursement_acompte_to'] = $tmp[0]->remboursement_acompte_to;
+                $data['penalite_retard_to'] = $tmp[0]->penalite_retard_to ;
+                $data['retenue_garantie_to'] = $tmp[0]->retenue_garantie_to ;
+                $data['remboursement_plaque_to'] = $tmp[0]->remboursement_plaque_to;
+                $data['taxe_marche_public_to'] = $tmp[0]->taxe_marche_public_to;
+                $data['net_payer_to'] = $tmp[0]->net_payer_to ;
+                $data['net_payer_avanc_to'] = $tmp[0]->net_payer_avance ;
+
+                $data['montant_travaux_pe'] = $tmp[0]->montant_travaux_pe ;
+                $data['montant_rabais_pe'] = $tmp[0]->montant_rabais_pe ;
+                $data['montant_ht_pe'] = $tmp[0]->montant_ht_pe ;
+                $data['montant_tva_pe'] = $tmp[0]->montant_tva_pe ;
+                $data['montant_ttc_pe'] = $tmp[0]->montant_ttc_pe ;
+                $data['remboursement_acompte_pe'] = $tmp[0]->remboursement_acompte_pe;
+                $data['penalite_retard_pe'] = $tmp[0]->penalite_retard_pe ;
+                $data['retenue_garantie_pe'] = $tmp[0]->retenue_garantie_pe;
+                $data['remboursement_plaque_pe'] = $tmp[0]->remboursement_plaque_pe;
+                $data['taxe_marche_public_pe'] = $tmp[0]->taxe_marche_public_pe;
+                $data['net_payer_pe'] = $tmp[0]->net_payer_pe ;
+                $data['net_payer_avanc_pe'] = 0;
+
+                $data['montant_travaux_ante'] = 0 ;
+                $data['montant_rabais_ante'] = $tmp[0]->montant_rabais_avance ;
+                $data['montant_ht_ante'] = 0 ;
+                $data['montant_tva_ante'] = 0 ;
+                $data['montant_ttc_ante'] = 0 ;
+                $data['remboursement_acompte_ante'] = 0;
+                $data['penalite_retard_ante'] = 0 ;
+                $data['retenue_garantie_ante'] = 0;
+                $data['remboursement_plaque_ante'] = 0;
+                $data['taxe_marche_public_ante'] = $tmp[0]->taxe_marche_public_avance;
+                $data['net_payer_ante'] =  $tmp[0]->net_payer_avance;
+               }
+               else
+               {
+                $data['montant_travaux_to'] = $tmp[0]->montant_travaux_to ;
+                $data['montant_rabais_to'] = $tmp[0]->montant_rabais_to ;
+                $data['montant_ht_to'] = $tmp[0]->montant_ht_to ;
+                $data['montant_tva_to'] = $tmp[0]->montant_tva_to ;
+                $data['montant_ttc_to'] = $tmp[0]->montant_ttc_to ;
+                $data['remboursement_acompte_to'] = $tmp[0]->remboursement_acompte_to;
+                $data['penalite_retard_to'] = $tmp[0]->penalite_retard_to ;
+                $data['retenue_garantie_to'] = $tmp[0]->retenue_garantie_to ;
+                $data['remboursement_plaque_to'] = $tmp[0]->remboursement_plaque_to;
+                $data['taxe_marche_public_to'] = $tmp[0]->taxe_marche_public_to;
+                $data['net_payer_to'] = $tmp[0]->net_payer_to ;
+                $data['net_payer_avanc_to'] = $tmp[0]->net_payer_avance ;
+
+                $data['montant_travaux_pe'] = $tmp[0]->montant_travaux_pe ;
+                $data['montant_rabais_pe'] = $tmp[0]->montant_rabais_pe ;
+                $data['montant_ht_pe'] = $tmp[0]->montant_ht_pe ;
+                $data['montant_tva_pe'] = $tmp[0]->montant_tva_pe ;
+                $data['montant_ttc_pe'] = $tmp[0]->montant_ttc_pe ;
+                $data['remboursement_acompte_pe'] = $tmp[0]->remboursement_acompte_pe;
+                $data['penalite_retard_pe'] = $tmp[0]->penalite_retard_pe ;
+                $data['retenue_garantie_pe'] = $tmp[0]->retenue_garantie_pe;
+                $data['remboursement_plaque_pe'] = $tmp[0]->remboursement_plaque_pe;
+                $data['taxe_marche_public_pe'] = $tmp[0]->taxe_marche_public_pe;
+                $data['net_payer_pe'] = $tmp[0]->net_payer_pe ;
+                $data['net_payer_avanc_pe'] = 0;
+
+                $data['montant_travaux_ante'] = $tmp[0]->montant_travaux_ante ;
+                $data['montant_rabais_ante'] = $tmp[0]->montant_rabais_ante ;
+                $data['montant_ht_ante'] = $tmp[0]->montant_ht_ante ;
+                $data['montant_tva_ante'] = $tmp[0]->montant_tva_ante ;
+                $data['montant_ttc_ante'] = $tmp[0]->montant_ttc_ante ;
+                $data['remboursement_acompte_ante'] = $tmp[0]->remboursement_acompte_ante;
+                $data['penalite_retard_ante'] = $tmp[0]->penalite_retard_ante ;
+                $data['retenue_garantie_ante'] = $tmp[0]->retenue_garantie_ante;
+                $data['remboursement_plaque_ante'] = $tmp[0]->remboursement_plaque_ante;
+                $data['taxe_marche_public_ante'] = $tmp[0]->taxe_marche_public_ante;
+                $data['net_payer_ante'] = $tmp[0]->net_payer_ante ;
+                $data['net_payer_avanc_ante'] = 0 ;
+               }
+                /* foreach ($tmp as $key => $value)
                 {
                     if (intval($value->nbr_fact)==1 )
                     {
@@ -117,7 +200,7 @@ class Facture_mpe extends REST_Controller {
                             $data[$key]['net_payer_ante'] = $value->net_payer_ante ;
                             $data[$key]['net_payer_avanc_ante'] = 0 ;
                     }
-                }            
+                }*/            
             } 
                 else
                     $data = array();
@@ -260,6 +343,71 @@ class Facture_mpe extends REST_Controller {
                 else
                     $data = array();
         }
+        elseif ($menu=="getcount_statubyfacture")
+        {
+            $tmp_bat = $this->Facture_mpeManager->getcount_statu_batbyfacture($id_pv_consta_entete_travaux);
+            $tmp_lat = $this->Facture_mpeManager->getcount_statu_latbyfacture($id_pv_consta_entete_travaux);
+            $tmp_mob = $this->Facture_mpeManager->getcount_statu_mobbyfacture($id_pv_consta_entete_travaux);
+            $data_statu =array();
+            if ($tmp_bat || $tmp_lat || $tmp_mob) 
+            {
+                if ($tmp_bat)
+                {$indice=0;
+                    foreach ($tmp_bat as $key => $value)
+                    {  
+                        if ($value->nombre_rubrique_designation > $value->nombre_statu_designation && $value->nombre_statu_designation!=0)
+                        {
+                            $statu_incomplete = true;
+                            $data_statu[$indice] ="batiment :". $value->libelle;
+                        } 
+                        /*$data_statu[$indice]["batiment"] = $value->nombre_rubrique_designation;
+                        $data_statu[$indice]["batiment_sta"] = $value->nombre_statu_designation;*/
+                        $indice = $indice +1;
+                    }
+                }
+                if ($tmp_lat)
+                {
+                    foreach ($tmp_lat as $key2 => $value2)
+                    {  
+                        if ($value2->nombre_rubrique_designation > $value2->nombre_statu_designation && $value2->nombre_statu_designation!=0)
+                        {
+                            $statu_incomplete = true;
+                            $data_statu[$indice] ="latrine :".$value2->libelle;
+                        } 
+                        
+                        /*$data_statu[$indice]["latrine"] = $value2->nombre_rubrique_designation;
+                        $data_statu[$indice]["latrine_stat"] = $value2->nombre_statu_designation;*/
+                        $indice = $indice +1;
+                    }
+                }
+                if ($tmp_mob)
+                {
+                    foreach ($tmp_mob as $key3 => $value3)
+                    {  
+                        if ($value3->nombre_rubrique_designation > $value3->nombre_statu_designation && $value3->nombre_statu_designation!=0)
+                        {
+                            $statu_incomplete = true;
+                            $data_statu[$indice] ="mobilier :".$value3->libelle;
+                        } 
+                        
+                        /*$data_statu[$indice]["mobilier"] = $value3->nombre_rubrique_designation;
+                        $data_statu[$indice]["mobilier_stat"] = $value3->nombre_statu_designation;*/
+                        $indice = $indice +1;
+                    }
+                }
+                if (count($data_statu)>0)
+                {
+                    $data =$data_statu; 
+                }
+                else
+                {
+                    $data=array();
+                }
+                           
+            } 
+                else
+                    $data = array();
+        }
         elseif ($id)
         {
             $data = array();
@@ -300,12 +448,14 @@ class Facture_mpe extends REST_Controller {
                 'status' => TRUE,
                 'response' => $data,
                 'message' => 'Get data success',
+                'statu_pv' => $statu_incomplete,
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
                 'status' => FALSE,
                 'response' => array(),
-                'message' => 'No data were found'
+                'message' => 'No data were found',
+                'statu_pv' => $statu_incomplete,
             ], REST_Controller::HTTP_OK);
         }
     }
@@ -382,53 +532,47 @@ class Facture_mpe extends REST_Controller {
                 }
                 $update = $this->Facture_mpeManager->update($id, $data);
                 $data_inser= array();
-                if (strval($this->post('validation')) =='4')
+                if (strval($this->post('validation')) =='2')
                 {
-                    $id_attachement_travaux = $this->post('id_attachement_travaux');
-                    $avance_a_inserer = $this->Attachement_travauxManager->getavance_a_inserer($id_attachement_travaux);
-                    $data_inser=$avance_a_inserer;
-                    $data = array(
-                    'id' => $this->post('id'),
-                    'pourcentage' => $this->post('pourcentage'),
-                    'date'   => $this->post('date'),
-                    'id_attachement_detail' => $this->post('id_attachement_detail')
-                );
-                    if ($avance_a_inserer)
+                    $id_pv_consta_entete_travaux = $this->post('id_pv_consta_entete_travaux');
+                    $avancement_a_inserer = $this->Pv_consta_entete_travauxManager->getrecapByentete_travauxcontrat($id_pv_consta_entete_travaux,$this->post('id_contrat_prestataire'));
+                    //$data_inser=$avancement_a_inserer;
+                    $max_avancement = $this->Facture_mpeManager->getmax_avancementbycontrat($this->post('id_contrat_prestataire'));
+                    $data_inser=$max_avancement;
+                    if ($avancement_a_inserer)
                     {
-                        if ($avance_a_inserer[0]->id_attachement_bat_detail)
+                        if ($max_avancement)
                         {
-                            $data_bat = array(
-                                    'pourcentage' => ($avance_a_inserer[0]->sum_quantite_cumul_bat*100)/$avance_a_inserer[0]->sum_quantite_prevu_bat,
-                                    'date'   => $avance_a_inserer[0]->date,
-                                    'id_attachement_detail' => $avance_a_inserer[0]->id_attachement_bat_detail,
-                                    'id_contrat_prestataire' => $avance_a_inserer[0]->id_contrat_prestataire
-                            );
-                            
-                            $data_in = $this->Avancement_physi_batimentManager->add($data_bat);
-                        }
-
-                        if ($avance_a_inserer[0]->id_attachement_lat_detail)
-                        {
-                            $data_lat = array(
-                                    'pourcentage' => ($avance_a_inserer[0]->sum_quantite_cumul_lat*100)/$avance_a_inserer[0]->sum_quantite_prevu_lat,
-                                    'date'   => $avance_a_inserer[0]->date,
-                                    'id_attachement_detail' => $avance_a_inserer[0]->id_attachement_lat_detail,
-                                    'id_contrat_prestataire' => $avance_a_inserer[0]->id_contrat_prestataire
-                            );
-                            
-                            $data_in = $this->Avancement_physi_latrineManager->add($data_lat);
-                        }
-
-                        if ($avance_a_inserer[0]->id_attachement_mob_detail)
-                        {
-                            $data_mob = array(
-                                    'pourcentage' => ($avance_a_inserer[0]->sum_quantite_cumul_mob*100)/$avance_a_inserer[0]->sum_quantite_prevu_mob,
-                                    'date'   => $avance_a_inserer[0]->date,
-                                    'id_attachement_detail' => $avance_a_inserer[0]->id_attachement_mob_detail,
-                                    'id_contrat_prestataire' => $avance_a_inserer[0]->id_contrat_prestataire
-                            );
-                            
-                            $data_in = $this->Avancement_physi_mobilierManager->add($data_mob);
+                           if (Round($avancement_a_inserer[0]->batiment_cumul,2)>Round($max_avancement[0]->max_avance_bat,2))
+                           {
+                                $data_bat = array(
+                                'pourcentage' => $avancement_a_inserer[0]->batiment_cumul,
+                                'pourcentage_prevu' => $avancement_a_inserer[0]->prevu_batiment,
+                                'date'   => $this->post('date_signature'),
+                                'id_contrat_prestataire' => $this->post('id_contrat_prestataire')
+                                );
+                                $data_bat = $this->Avancement_physi_batimentManager->add($data_bat);
+                           }
+                           if (Round($avancement_a_inserer[0]->latrine_cumul,2)>Round($max_avancement[0]->max_avance_lat,2))
+                           {
+                                $data_lat = array(
+                                'pourcentage' => $avancement_a_inserer[0]->latrine_cumul,
+                                'pourcentage_prevu' => $avancement_a_inserer[0]->prevu_latrine,
+                                'date'   => $this->post('date_signature'),
+                                'id_contrat_prestataire' => $this->post('id_contrat_prestataire')
+                                );
+                                $data_lat = $this->Avancement_physi_latrineManager->add($data_lat);
+                           }
+                           if (Round($avancement_a_inserer[0]->mobilier_cumul,2)>Round($max_avancement[0]->max_avance_mob,2))
+                           {
+                                $data_mob = array(
+                                'pourcentage' => $avancement_a_inserer[0]->mobilier_cumul,
+                                'pourcentage_prevu' => $avancement_a_inserer[0]->prevu_mobilier,
+                                'date'   => $this->post('date_signature'),
+                                'id_contrat_prestataire' => $this->post('id_contrat_prestataire')
+                                );
+                                $data_mob = $this->Avancement_physi_batimentManager->add($data_mob);
+                           }
                         }
                     }
                 }

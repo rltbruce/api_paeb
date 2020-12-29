@@ -111,6 +111,36 @@ class Commune_model extends CI_Model {
         if ($q->num_rows() > 0) {
             return $q->row();
         }
+    }
+    public function getcommunetest($region,$district,$commune) {               
+        $result =  $this->db->select('commune.*')
+                        ->from($this->table)
+                        ->join('district','district.id=commune.id_district')
+                        ->join('region','region.id=district.id_region')
+                        ->where('lower(commune.nom)=',$commune)
+                        ->where("lower(region.nom)=", $region)
+                        ->where("lower(district.nom)=", $district)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
+    public function getcommunetest2($commune) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('lower(commune.nom)=',$commune)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
     }	
     
 }

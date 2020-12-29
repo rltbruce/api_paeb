@@ -2,11 +2,10 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Importer_zap extends CI_Controller {
+class Importer_region extends CI_Controller {
     public function __construct() {
         parent::__construct();       
-        $this->load->model('zap_model', 'ZapManager');       
-        $this->load->model('district_model', 'DistrictManager');
+        $this->load->model('region_model', 'RegionManager');
         
 
     }
@@ -19,13 +18,11 @@ class Importer_zap extends CI_Controller {
 	}
 
 
-	public function testzap() {
+	public function testregion() {
 
 		$erreur="aucun";
-		ini_set('upload_max_filesize', '200000000000000000M');  
-		ini_set('post_max_size', '2000000000000000000000M');
-		
-        ini_set ('memory_limit', '100000000000000000000000M');
+		ini_set('upload_max_filesize', '200M');  
+		ini_set('post_max_size', '200M');
 		$replace=array('e','e','e','a','o','c','_');
 		$search= array('é','è','ê','à','ö','ç',' ');
 
@@ -72,11 +69,7 @@ class Importer_zap extends CI_Controller {
 				$rapport["erreur_value"]= $error;
 				echo json_encode($rapport);
 			}else{
-				ini_set('upload_max_filesize', '2000000000M');  
-		ini_set('post_max_size', '2000000000M');
-		set_time_limit(0);
-        ini_set ('memory_limit', '100000000000000M');
-				$retour = $this->controler_donnees_importertestzap($name1,$repertoire);
+				$retour = $this->controler_donnees_importertestregion($name1,$repertoire);
 				$rapport['nbr_inserer']=$retour['nbr_inserer'];
 				$rapport['nbr_refuser']=$retour['nbr_erreur'];
 				$rapport['zap_inserer']=$retour['zap_inserer'];
@@ -95,13 +88,13 @@ class Importer_zap extends CI_Controller {
 		} 
 		
 	}
-	public function controler_donnees_importertestzap($filename,$directory) {
+	public function controler_donnees_importertestregion($filename,$directory) {
 		require_once 'Classes/PHPExcel.php';
 		require_once 'Classes/PHPExcel/IOFactory.php';
-		ini_set('upload_max_filesize', '2000000000M');  
-		ini_set('post_max_size', '2000000000M');
+		ini_set('upload_max_filesize', '2000M');  
+		ini_set('post_max_size', '2000M');
 		set_time_limit(0);
-        ini_set ('memory_limit', '100000000000000M');
+        ini_set ('memory_limit', '10000000000M');
 		$replace=array('e','e','e','a','o','c','_');
 		$search= array('é','è','ê','à','ö','ç',' ');
 		$repertoire= $directory;
@@ -142,7 +135,7 @@ class Importer_zap extends CI_Controller {
 		foreach($rowIterator as $row)
 		{			
 			$ligne = $row->getRowIndex ();
-			$erreur = false;
+			
 				if($ligne >=3)
 				{
 					$cellIterator = $row->getCellIterator();
@@ -150,89 +143,48 @@ class Importer_zap extends CI_Controller {
 					$rowIndex = $row->getRowIndex ();
 					foreach ($cellIterator as $cell)
 					{
-						if('D' == $cell->getColumn())
+						if('C' == $cell->getColumn())
 						{
-							$dist =$cell->getValue();
-						}   
-						else if('F' == $cell->getColumn())
-						{
-							$zp =$cell->getValue();							
-						}	 
+							$nom =$cell->getValue();
+						} 	 
 					}
 					
 					// Si donnée incorrect : coleur cellule en rouge
-					if($zp=="")
+					if($nom=="")
 					{						
-						$sheet->getStyle("F".$ligne)->getFill()->applyFromArray(
+						$sheet->getStyle("C".$ligne)->getFill()->applyFromArray(
 									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 										 'startcolor' => array('rgb' => 'f2e641'),
 										 'endcolor'   => array('rgb' => 'f2e641')
 									 )
 						);
 						$erreur = true;													
-					}
-					if($dist=="")
-					{						
-						$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
-									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
-										 'startcolor' => array('rgb' => 'f2e641'),
-										 'endcolor'   => array('rgb' => 'f2e641')
-									 )
-						);
-						$erreur = true;													
-					}
-					/*else
-					{
-						// Vérifier si nom_feffi existe dans la BDD
-						$distl=strtolower($dist);
-						$zpl=strtolower($zp);
-						$retour_district = $this->DistrictManager->getdistricttestzap($zpl,$distl);
-						if(count($retour_district) >0)
-						{
-							foreach($retour_district as $k=>$v)
-							{
-								$id_district = $v->id;
-							}	
-						}
-						else
-						{
-							$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
-										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
-											 'startcolor' => array('rgb' => 'f24141'),
-											 'endcolor'   => array('rgb' => 'f24141')
-										 )
-							);
-							$erreur = true;
-						}
-					} */ 
+					}  
 					
 					if($erreur==false)
 					{	
-						$zpn=strtolower($zp);
-						$distn=strtolower($dist);
-						$replace=array('_');
-						$search= array(' ');
-						$nomfichier = $filename;		
-						$distn_=str_replace($search,$replace,$distn);
-						$doublon = $this->ZapManager->getzaptest($zpn);
+						$nomn=strtolower($nom);
+						$doublon = $this->RegionManager->getregiontest($nomn);
 						if (count($doublon)>0)//mis doublon
 						{
 							$sheet->setCellValue('J'.$ligne, "Doublon");
-							array_push($zap_inserer, $doublon);
 							$nbr_erreur = $nbr_erreur + 1;							
 						}
 						else//ts doublon
 						{
+		        			/*$sheet->getStyle("C".$ligne)->getFill()->applyFromArray(
+								array('font' => array
+											(
+												'name'  => 'Calibri',
+												'color'  =>array('rgb' => 'f2e641'),
+												'size'  => 13
+											)
+								)
+				  			 );*/
 
 		                		//$dataId = $this->ZapManager->add($data); 
 		                	
-								$sheet->setCellValue('J'.$ligne, "ts Doublon"); 
-								$data = array(
-									//'id_district' => $id_district,
-									'nom' => $zp,
-									'code' => 'xx'
-									);
-									$dataId = $this->ZapManager->add($data);        		
+								$sheet->setCellValue('J'.$ligne, "ts Doublon");        		
 
 		                	//array_push($zap_inserer, $data);
 							$nbr_inserer = $nbr_inserer + 1;

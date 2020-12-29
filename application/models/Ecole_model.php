@@ -155,4 +155,24 @@ class Ecole_model extends CI_Model {
         }                 
     }
 
+    public function getecoletest($id_region,$id_cisco,$id_commune,$id_zap,$id_fokontany,$eco)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_region',$id_region)
+                        ->where('id_cisco',$id_cisco)
+                        ->where('id_commune',$id_commune)
+                        ->where('id_zap',$id_zap)
+                        ->where('id_fokontany',$id_fokontany)
+                        ->where('lower(ecole.description)=',$eco)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

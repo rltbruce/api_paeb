@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Avancement_physi_latrine_model extends CI_Model {
-    protected $table = 'avancement_physi_latrine';
+class Rubrique_addition_fonct_feffi_model extends CI_Model {
+    protected $table = 'rubrique_addition_fonct_feffi';
 
-    public function add($avancement_physi_latrine) {
-        $this->db->set($this->_set($avancement_physi_latrine))
+    public function add($rubrique_addition_fonct_feffi) {
+        $this->db->set($this->_set($rubrique_addition_fonct_feffi))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Avancement_physi_latrine_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $avancement_physi_latrine) {
-        $this->db->set($this->_set($avancement_physi_latrine))
+    public function update($id, $rubrique_addition_fonct_feffi) {
+        $this->db->set($this->_set($rubrique_addition_fonct_feffi))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,13 +23,10 @@ class Avancement_physi_latrine_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($avancement_physi_latrine) {
+    public function _set($rubrique_addition_fonct_feffi) {
         return array(
-
-            'pourcentage' => $avancement_physi_latrine['pourcentage'],
-            'date'   => $avancement_physi_latrine['date'],
-            'pourcentage_prevu' => $avancement_physi_latrine['pourcentage_prevu'],
-            'id_contrat_prestataire' => $avancement_physi_latrine['id_contrat_prestataire']                    
+            'libelle'       =>      $rubrique_addition_fonct_feffi['libelle'],
+            'description'   =>      $rubrique_addition_fonct_feffi['description']                       
         );
     }
     public function delete($id) {
@@ -44,7 +41,7 @@ class Avancement_physi_latrine_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('date')
+                        ->order_by('description')
                         ->get()
                         ->result();
         if($result)
@@ -61,20 +58,5 @@ class Avancement_physi_latrine_model extends CI_Model {
             return $q->row();
         }
     }
-
-    public function findavancementBycontrat($id_contrat_prestataire) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
-                        ->where("id_contrat_prestataire", $id_contrat_prestataire)
-                        ->order_by('id')
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }   
 
 }

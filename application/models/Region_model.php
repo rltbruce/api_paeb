@@ -119,5 +119,18 @@ class Region_model extends CI_Model
         }else{
             return null;
         }                 
+    }
+    public function getregiontest($nom) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("lower(nom)=", $nom)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
     }    
 }

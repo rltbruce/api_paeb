@@ -283,8 +283,6 @@ class Pv_consta_entete_travaux_model extends CI_Model {
                         inner join contrat_prestataire as contrat_mpe on contrat_mpe.id= entete_travaux.id_contrat_prestataire
                         where 
                         entete_travaux.id= '".$id_pv_consta_entete_travaux."'
-
-                            group by entete_travaux.id
                 )
                 UNION
                 (
@@ -305,8 +303,6 @@ class Pv_consta_entete_travaux_model extends CI_Model {
                         inner join pv_consta_detail_lat_travaux as detail_lat_travaux on detail_lat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
                         where 
                         entete_travaux.id= '".$id_pv_consta_entete_travaux."'
-
-                            group by entete_travaux.id
                 )
                 UNION
                 (
@@ -327,8 +323,6 @@ class Pv_consta_entete_travaux_model extends CI_Model {
                         inner join pv_consta_detail_mob_travaux as detail_mob_travaux on detail_mob_travaux.id_pv_consta_entete_travaux= entete_travaux.id
                         where 
                         entete_travaux.id= '".$id_pv_consta_entete_travaux."'
-
-                            group by entete_travaux.id
                 )
                 UNION
                 (
@@ -352,8 +346,6 @@ class Pv_consta_entete_travaux_model extends CI_Model {
                         entete_travaux.id< '".$id_pv_consta_entete_travaux."' and
                         entete_travaux.id_contrat_prestataire= '".$id_contrat_prestataire."' and
                         fact_mpe.validation=2
-
-                            group by entete_travaux.id
                 ) 
                 UNION
                 (
@@ -377,7 +369,6 @@ class Pv_consta_entete_travaux_model extends CI_Model {
                         entete_travaux.id< '".$id_pv_consta_entete_travaux."' and
                         entete_travaux.id_contrat_prestataire= '".$id_contrat_prestataire."' and
                         fact_mpe.validation=2
-                            group by entete_travaux.id
                 )
                 UNION
                 (
@@ -401,12 +392,9 @@ class Pv_consta_entete_travaux_model extends CI_Model {
                         entete_travaux.id< '".$id_pv_consta_entete_travaux."' and
                         entete_travaux.id_contrat_prestataire= '".$id_contrat_prestataire."' and
                         fact_mpe.validation=2
-                            group by entete_travaux.id
                 )  
 
                 )detail
-
-                group by detail.id
 
             ";
             return $this->db->query($sql)->result();             
@@ -466,8 +454,6 @@ class Pv_consta_entete_travaux_model extends CI_Model {
                         inner join contrat_prestataire as contrat_mpe on contrat_mpe.id= entete_travaux.id_contrat_prestataire
                         where 
                         entete_travaux.id= '".$id_pv_consta_entete_travaux."'
-
-                            group by entete_travaux.id
                 )
                 UNION
                 (
@@ -488,8 +474,6 @@ class Pv_consta_entete_travaux_model extends CI_Model {
                         inner join pv_consta_detail_lat_travaux as detail_lat_travaux on detail_lat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
                         where 
                         entete_travaux.id= '".$id_pv_consta_entete_travaux."'
-
-                            group by entete_travaux.id
                 )
                 UNION
                 (
@@ -510,8 +494,6 @@ class Pv_consta_entete_travaux_model extends CI_Model {
                         inner join pv_consta_detail_mob_travaux as detail_mob_travaux on detail_mob_travaux.id_pv_consta_entete_travaux= entete_travaux.id
                         where 
                         entete_travaux.id= '".$id_pv_consta_entete_travaux."'
-
-                            group by entete_travaux.id
                 )
                 UNION
                 (
@@ -535,8 +517,6 @@ class Pv_consta_entete_travaux_model extends CI_Model {
                         entete_travaux.id< '".$id_pv_consta_entete_travaux."' and
                         entete_travaux.id_contrat_prestataire= '".$id_contrat_prestataire."' and
                         fact_mpe.validation=2
-
-                            group by entete_travaux.id
                 ) 
                 UNION
                 (
@@ -560,7 +540,6 @@ class Pv_consta_entete_travaux_model extends CI_Model {
                         entete_travaux.id< '".$id_pv_consta_entete_travaux."' and
                         entete_travaux.id_contrat_prestataire= '".$id_contrat_prestataire."' and
                         fact_mpe.validation=2
-                            group by entete_travaux.id
                 )
                 UNION
                 (
@@ -584,13 +563,9 @@ class Pv_consta_entete_travaux_model extends CI_Model {
                         entete_travaux.id< '".$id_pv_consta_entete_travaux."' and
                         entete_travaux.id_contrat_prestataire= '".$id_contrat_prestataire."' and
                         fact_mpe.validation=2
-
-                            group by entete_travaux.id
                 )  
 
                 )detail
-
-                group by detail.id
 
             ";
             return $this->db->query($sql)->result();             

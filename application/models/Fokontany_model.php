@@ -140,5 +140,38 @@ class Fokontany_model extends CI_Model {
             return null;
         }                 
     }
+    
+    public function getfokontanytest($district,$commune,$fokontany) {               
+        $result =  $this->db->select('fokontany.*')
+                        ->from($this->table)
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->join('district','district.id=commune.id_district')
+                        ->where('lower(fokontany.nom)=',$fokontany)
+                        ->where("commune.id", $commune)
+                        ->where("district.id", $district)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
+    public function getfokontanytest2($commune,$fokontany) {               
+        $result =  $this->db->select('fokontany.*')
+                        ->from($this->table)
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->where('lower(fokontany.nom)=',$fokontany)
+                        ->where("lower(commune.nom)=", $commune)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
 }
 ?>

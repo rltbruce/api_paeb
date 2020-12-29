@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Cisco_model extends CI_Model {
-    protected $table = 'cisco';
+class Addition_frais_fonctionnement_model extends CI_Model {
+    protected $table = 'addition_frais_fonctionnement';
 
-    public function add($cisco) {
-        $this->db->set($this->_set($cisco))
+    public function add($addition_frais_fonctionnement) {
+        $this->db->set($this->_set($addition_frais_fonctionnement))
                             ->insert($this->table);
         if($this->db->affected_rows() === 1) {
             return $this->db->insert_id();
@@ -12,8 +12,8 @@ class Cisco_model extends CI_Model {
             return null;
         }                    
     }
-    public function update($id, $cisco) {
-        $this->db->set($this->_set($cisco))
+    public function update($id, $addition_frais_fonctionnement) {
+        $this->db->set($this->_set($addition_frais_fonctionnement))
                             ->where('id', (int) $id)
                             ->update($this->table);
         if($this->db->affected_rows() === 1)
@@ -23,11 +23,14 @@ class Cisco_model extends CI_Model {
             return null;
         }                      
     }
-    public function _set($cisco) {
+    public function _set($addition_frais_fonctionnement) {
         return array(
-            'code'          =>      $cisco['code'],
-            'description'           =>      $cisco['description'],
-            'id_district'     =>      $cisco['id_district']                       
+
+            'observation' => $addition_frais_fonctionnement['observation'],
+            'montant'   => $addition_frais_fonctionnement['montant'],
+            'validation' => $addition_frais_fonctionnement['validation'],
+            'id_rubrique_addition' => $addition_frais_fonctionnement['id_rubrique_addition'] ,
+            'id_convention_entete' => $addition_frais_fonctionnement['id_convention_entete']                      
         );
     }
     public function delete($id) {
@@ -42,7 +45,6 @@ class Cisco_model extends CI_Model {
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->order_by('description')
                         ->get()
                         ->result();
         if($result)
@@ -60,11 +62,11 @@ class Cisco_model extends CI_Model {
         }
     }
 
-    public function findBydistrict($id_district) {               
+    public function getaddition_frais_fonctionnementById($id_addition) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->where('id_district',$id_district)
-                        ->order_by('description')
+                        ->where("id", $id_addition)
+                        ->where("validation",1)
                         ->get()
                         ->result();
         if($result)
@@ -74,14 +76,12 @@ class Cisco_model extends CI_Model {
             return null;
         }                 
     }
-
-    public function findByregion($id_region) {               
-        $result =  $this->db->select('cisco.*')
+    public function getaddition_invalideByconvention($id_convention_entete) {               
+        $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->join('district','district.id=cisco.id_district')
-                        ->join('region','region.id=district.id_region')
-                        ->where('region.id',$id_region)
-                        ->order_by('cisco.description')
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 0)
+                        ->order_by('id')
                         ->get()
                         ->result();
         if($result)
@@ -91,28 +91,20 @@ class Cisco_model extends CI_Model {
             return null;
         }                 
     }
-    public function findByNom($nom) {
-        $requete="select * from cisco where lower(description)='".$nom."'";
-        $query = $this->db->query($requete);
-        return $query->result();                
-    }
-    
-    public function getciscotest($cisco,$region) {               
+    public function getaddition_valideByconvention($id_convention_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
-                        ->join('district','district.id=cisco.id_district')
-                        ->join('region','region.id=district.id_region')
-                        ->where('lower(cisco.description)=',$cisco)
-                        ->where('lower(district.nom)=',$cisco)
-                        ->where('lower(region.nom)=',$region)
+                        ->where("id_convention_entete", $id_convention_entete)
+                        ->where("validation", 1)
+                        ->order_by('id')
                         ->get()
                         ->result();
         if($result)
         {
             return $result;
         }else{
-            return array();
+            return null;
         }                 
-    } 
+    }
 
 }

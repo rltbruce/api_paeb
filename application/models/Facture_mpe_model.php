@@ -253,6 +253,207 @@ class Facture_mpe_model extends CI_Model {
     {               
         $sql=" select 
                        detail.id_contrat as id_contrat,
+
+                       sum(detail.montant_avance) as montant_avance,
+                         sum(detail.montant_rabais_avance) as montant_rabais_avance,
+                         sum(detail.taxe_marche_public_avance) as taxe_marche_public_avance,
+                         sum(detail.net_payer_avance) as net_payer_avance,
+
+                       (sum(detail.montant_travaux_ante)+sum(detail.montant_travaux_pe)) as montant_travaux_to,
+                         (sum(detail.montant_rabais_avance)+sum(detail.montant_rabais_ante)+sum(detail.montant_rabais_pe)) as montant_rabais_to,
+                         (sum(detail.montant_ht_ante)+sum(detail.montant_ht_pe)) as montant_ht_to,
+                         (sum(detail.montant_tva_ante)+sum(detail.montant_tva_pe)) as montant_tva_to,
+                         (sum(detail.montant_ttc_ante)+sum(detail.montant_ttc_pe)) as montant_ttc_to,
+                         (sum(detail.remboursement_acompte_ante)+sum(detail.remboursement_acompte_pe)) as remboursement_acompte_to,
+                         (sum(detail.penalite_retard_ante)+sum(detail.penalite_retard_pe)) as penalite_retard_to,
+                         (sum(detail.retenue_garantie_ante)+sum(detail.retenue_garantie_pe)) as retenue_garantie_to,
+                         (sum(detail.remboursement_plaque_ante)+sum(detail.remboursement_plaque_pe)) as remboursement_plaque_to,
+                         (sum(detail.taxe_marche_public_avance)+sum(detail.taxe_marche_public_ante)+sum(detail.taxe_marche_public_pe)) as taxe_marche_public_to,
+                         (sum(detail.net_payer_avance)+sum(detail.net_payer_ante)+sum(detail.net_payer_pe)) as net_payer_to,
+
+                         sum(detail.montant_travaux_pe) as montant_travaux_pe,
+                         sum(detail.montant_rabais_pe) as montant_rabais_pe,
+                         sum(detail.montant_ht_pe) as montant_ht_pe,
+                         sum(detail.montant_tva_pe) as montant_tva_pe,
+                         sum(detail.montant_ttc_pe) as montant_ttc_pe,
+                         sum(detail.remboursement_acompte_pe) as remboursement_acompte_pe,
+                         sum(detail.penalite_retard_pe) as penalite_retard_pe,
+                         sum(detail.retenue_garantie_pe) as retenue_garantie_pe,
+                         sum(detail.remboursement_plaque_pe) as remboursement_plaque_pe,
+                         sum(detail.taxe_marche_public_pe) as taxe_marche_public_pe,
+                         sum(detail.net_payer_pe) as net_payer_pe,
+
+                         sum(detail.montant_travaux_ante) as montant_travaux_ante,
+                         sum(detail.montant_rabais_ante) as montant_rabais_ante,
+                         sum(detail.montant_ht_ante) as montant_ht_ante,
+                         sum(detail.montant_tva_ante) as montant_tva_ante,
+                         sum(detail.montant_ttc_ante) as montant_ttc_ante,
+                         sum(detail.remboursement_acompte_ante) as remboursement_acompte_ante,
+                         sum(detail.penalite_retard_ante) as penalite_retard_ante,
+                         sum(detail.retenue_garantie_ante) as retenue_garantie_ante,
+                         sum(detail.remboursement_plaque_ante) as remboursement_plaque_ante,
+                         sum(detail.taxe_marche_public_ante) as taxe_marche_public_ante,
+                         sum(detail.net_payer_ante) as net_payer_ante,
+                         
+                         sum(detail.numero_fact) as numero_fact
+
+               from (
+               
+                (
+                    select 
+                         avance.id_contrat_prestataire as id_contrat,
+                         avance.montant_avance as montant_avance,
+                         avance.montant_rabais as montant_rabais_avance,
+                         avance.taxe_marche_public as taxe_marche_public_avance,
+                         avance.net_payer as net_payer_avance,
+                         0 as montant_travaux_pe,
+                         0 as montant_rabais_pe,
+                         0 as montant_ht_pe,
+                         0 as montant_tva_pe,
+                         0 as montant_ttc_pe,
+                         0 as remboursement_acompte_pe,
+                         0 as penalite_retard_pe,
+                         0 as retenue_garantie_pe,
+                         0 as remboursement_plaque_pe,
+                         0 as taxe_marche_public_pe,
+                         0 as net_payer_pe,
+                         0 as montant_travaux_ante,
+                         0 as montant_rabais_ante,
+                         0 as montant_ht_ante,
+                         0 as montant_tva_ante,
+                         0 as montant_ttc_ante,
+                         0 as remboursement_acompte_ante,
+                         0 as penalite_retard_ante,
+                         0 as retenue_garantie_ante,
+                         0 as remboursement_plaque_ante,
+                         0 as taxe_marche_public_ante,
+                         0 as net_payer_ante,                         
+                         0 as numero_fact
+
+                        from avance_demarrage as avance
+                        where avance.id_contrat_prestataire= '".$id_contrat_prestataire."' and avance.validation = 2
+                )
+                UNION
+                (
+                    select 
+                    entete_trav.id_contrat_prestataire as id_contrat,
+                         0 as montant_avance,
+                         0 as montant_rabais_avance,
+                         0 as taxe_marche_public_avance,
+                         0 as net_payer_avance,
+                         fact_mpe.montant_travaux as montant_travaux_pe,
+                         fact_mpe.montant_rabais as montant_rabais_pe,
+                         fact_mpe.montant_ht as montant_ht_pe,
+                         fact_mpe.montant_tva as montant_tva_pe,
+                         fact_mpe.montant_ttc as montant_ttc_pe,
+                         fact_mpe.remboursement_acompte as remboursement_acompte_pe,
+                         fact_mpe.penalite_retard as penalite_retard_pe,
+                         fact_mpe.retenue_garantie as retenue_garantie_pe,
+                         fact_mpe.remboursement_plaque as remboursement_plaque_pe,
+                         fact_mpe.taxe_marche_public as axe_marche_public_pe,
+                         fact_mpe.net_payer as net_payer_pe,
+                         0 as montant_travaux_ante,
+                         0 as montant_rabais_ante,
+                         0 as montant_ht_ante,
+                         0 as montant_tva_ante,
+                         0 as montant_ttc_ante,
+                         0 as remboursement_acompte_ante,
+                         0 as penalite_retard_ante,
+                         0 as retenue_garantie_ante,
+                         0 as remboursement_plaque_ante,
+                         0 as taxe_marche_public_ante,
+                         0 as net_payer_ante,                         
+                         0 as numero_fact
+
+                        from facture_mpe as fact_mpe
+                        inner join pv_consta_entete_travaux as entete_trav on entete_trav.id=fact_mpe.id_pv_consta_entete_travaux
+                        where fact_mpe.id='".$id_facture_mpe."'
+                )
+                UNION
+                (
+                    select 
+                    entete_trav.id_contrat_prestataire as id_contrat,
+                         0 as montant_avance,
+                         0 as montant_rabais_avance,
+                         0 as taxe_marche_public_avance,
+                         0 as net_payer_avance,
+                         0 as montant_travaux_pe,
+                         0 as montant_rabais_pe,
+                         0 as montant_ht_pe,
+                         0 as montant_tva_pe,
+                         0 as montant_ttc_pe,
+                         0 as remboursement_acompte_pe,
+                         0 as penalite_retard_pe,
+                         0 as retenue_garantie_pe,
+                         0 as remboursement_plaque_pe,
+                         0 as taxe_marche_public_pe,
+                         0 as net_payer_pe,
+                         sum(fact_mpe.montant_travaux) as montant_travaux_ante,
+                         sum(fact_mpe.montant_rabais) as montant_rabais_ante,
+                         sum(fact_mpe.montant_ht) as montant_ht_ante,
+                         sum(fact_mpe.montant_tva) as montant_tva_ante,
+                         sum(fact_mpe.montant_ttc) as montant_ttc_ante,
+                         sum(fact_mpe.remboursement_acompte) as remboursement_acompte_ante,
+                         sum(fact_mpe.penalite_retard) as penalite_retard_ante,
+                         sum(fact_mpe.retenue_garantie) as retenue_garantie_ante,
+                         sum(fact_mpe.remboursement_plaque) as remboursement_plaque_ante,
+                         sum(fact_mpe.taxe_marche_public) as taxe_marche_public_ante,
+                         sum(fact_mpe.net_payer) as net_payer_ante,                         
+                         0 as numero_fact
+
+                        from facture_mpe as fact_mpe
+
+                        inner join pv_consta_entete_travaux as entete_trav on entete_trav.id=fact_mpe.id_pv_consta_entete_travaux
+                        where 
+                        entete_trav.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 2 and fact_mpe.id<'".$id_facture_mpe."'
+                )
+
+                UNION
+                (
+                    select 
+                    entete_trav.id_contrat_prestataire as id_contrat,
+                         0 as montant_avance,
+                         0 as montant_rabais_avance,
+                         0 as taxe_marche_public_avance,
+                         0 as net_payer_avance,
+                         0 as montant_travaux_pe,
+                         0 as montant_rabais_pe,
+                         0 as montant_ht_pe,
+                         0 as montant_tva_pe,
+                         0 as montant_ttc_pe,
+                         0 as remboursement_acompte_pe,
+                         0 as penalite_retard_pe,
+                         0 as retenue_garantie_pe,
+                         0 as remboursement_plaque_pe,
+                         0 as taxe_marche_public_pe,
+                         0 as net_payer_pe,
+                         0 as montant_travaux_ante,
+                         0 as montant_rabais_ante,
+                         0 as montant_ht_ante,
+                         0 as montant_tva_ante,
+                         0 as montant_ttc_ante,
+                         0 as remboursement_acompte_ante,
+                         0 as penalite_retard_ante,
+                         0 as retenue_garantie_ante,
+                         0 as remboursement_plaque_ante,
+                         0 as taxe_marche_public_ante,
+                         0 as net_payer_ante,
+                         fact_mpe.numero as numero_fact
+                            
+                            from facture_mpe as fact_mpe 
+                            inner join pv_consta_entete_travaux as entete_trav on entete_trav.id=fact_mpe.id_pv_consta_entete_travaux  
+                        where fact_mpe.id= '".$id_facture_mpe."'
+                )
+
+                )detail
+
+            ";
+            return $this->db->query($sql)->result();             
+    }
+    /*public function finddecompte_mpeBycontratandfacture($id_contrat_prestataire,$id_facture_mpe)
+    {               
+        $sql=" select 
+                       detail.id_contrat as id_contrat,
                        (sum(detail.montant_travaux_to)+sum(detail.montant_travaux_pe)) as montant_travaux_to,
                          (sum(detail.montant_rabais_to)+sum(detail.montant_rabais_pe)) as montant_rabais_to,
                          (sum(detail.montant_ht_to)+sum(detail.montant_ht_pe)) as montant_ht_to,
@@ -337,7 +538,7 @@ class Facture_mpe_model extends CI_Model {
 
                         inner join pv_consta_entete_travaux as entete_trav on entete_trav.id=fact_mpe.id_pv_consta_entete_travaux
                         where fact_mpe.id< '".$id_facture_mpe."' and
-                        entete_trav.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4
+                        entete_trav.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 2
 
                             group by id_contrat
                 )
@@ -432,7 +633,7 @@ class Facture_mpe_model extends CI_Model {
 
                         inner join pv_consta_entete_travaux as entete_trav on entete_trav.id=fact_mpe.id_pv_consta_entete_travaux
                         where 
-                        entete_trav.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id=(
+                        entete_trav.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 2 and fact_mpe.id=(
                                     select max(factu_mpe.id) 
                                         from facture_mpe as factu_mpe
                                         inner join pv_consta_entete_travaux as entete_travv on entete_travv.id=factu_mpe.id_pv_consta_entete_travaux
@@ -484,7 +685,7 @@ class Facture_mpe_model extends CI_Model {
                             from facture_mpe as fact_mpe
                          inner join pv_consta_entete_travaux as entete_trav on entete_trav.id=fact_mpe.id_pv_consta_entete_travaux   
                         where 
-                        entete_trav.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id<= '".$id_facture_mpe."'
+                        entete_trav.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 2 and fact_mpe.id<= '".$id_facture_mpe."'
 
                             group by id_contrat
                 )
@@ -532,7 +733,7 @@ class Facture_mpe_model extends CI_Model {
                             from avance_demarrage as avance_dem
 
                         where 
-                        avance_dem.id_contrat_prestataire= '".$id_contrat_prestataire."' and avance_dem.validation = 4
+                        avance_dem.id_contrat_prestataire= '".$id_contrat_prestataire."' and avance_dem.validation = 2
 
                             group by id_contrat
                 )
@@ -543,7 +744,7 @@ class Facture_mpe_model extends CI_Model {
 
             ";
             return $this->db->query($sql)->result();             
-    }
+    }*/
 
     public function finddecompte_mpeBycontrat($id_contrat_prestataire,$id_facture_mpe)
     {               
@@ -633,7 +834,7 @@ class Facture_mpe_model extends CI_Model {
 
                         inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
                         where fact_mpe.id<= '".$id_facture_mpe."' and
-                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4
+                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 2
 
                             group by id_contrat
                 )
@@ -681,7 +882,7 @@ class Facture_mpe_model extends CI_Model {
 
                         inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
                         where 
-                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id='".$id_facture_mpe."'
+                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 2 and fact_mpe.id='".$id_facture_mpe."'
                             group by id_contrat
                 )
                 UNION
@@ -728,7 +929,7 @@ class Facture_mpe_model extends CI_Model {
 
                         inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux
                         where 
-                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id=(
+                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 2 and fact_mpe.id=(
                                     select max(factu_mpe.id) 
                                         from facture_mpe as factu_mpe
                                         inner join attachement_travaux as atta_trav on atta_trav.id=factu_mpe.id_attachement_travaux
@@ -780,7 +981,7 @@ class Facture_mpe_model extends CI_Model {
                             from facture_mpe as fact_mpe
                          inner join attachement_travaux as atta_tra on atta_tra.id=fact_mpe.id_attachement_travaux   
                         where 
-                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 4 and fact_mpe.id<= '".$id_facture_mpe."'
+                        atta_tra.id_contrat_prestataire= '".$id_contrat_prestataire."' and fact_mpe.validation = 2 and fact_mpe.id<= '".$id_facture_mpe."'
 
                             group by id_contrat
                 )
@@ -828,7 +1029,7 @@ class Facture_mpe_model extends CI_Model {
                             from avance_demarrage as avance_dem
 
                         where 
-                        avance_dem.id_contrat_prestataire= '".$id_contrat_prestataire."' and avance_dem.validation = 4
+                        avance_dem.id_contrat_prestataire= '".$id_contrat_prestataire."' and avance_dem.validation = 2
 
                             group by id_contrat
                 )
@@ -840,6 +1041,143 @@ class Facture_mpe_model extends CI_Model {
             ";
             return $this->db->query($sql)->result();             
     }
+
+    public function getcount_statu_batbyfacture($id_pv_consta_entete_travaux) {
+        $this->db->select("pv_consta_rubrique_phase_bat.numero as numero, pv_consta_rubrique_phase_bat.libelle as libelle,pv_consta_rubrique_phase_bat.id as id_phase");
+    
+            $this->db ->select("(select count(pv_consta_rubrique_designation_bat.id) 
+                                        
+                                        from pv_consta_rubrique_designation_bat 
+                                            
+                                            where
+                                                    pv_consta_rubrique_designation_bat.id_rubrique_phase=id_phase
+                                ) as nombre_rubrique_designation",FALSE);
+
+            $this->db ->select("(select count(pv_consta_statu_bat_travaux.id) 
+                                        
+                                from pv_consta_statu_bat_travaux,pv_consta_rubrique_designation_bat 
+                                    
+                                    where   pv_consta_rubrique_designation_bat.id=pv_consta_statu_bat_travaux.id_rubrique_designation
+                                            and pv_consta_rubrique_designation_bat.id_rubrique_phase=id_phase 
+                                            and pv_consta_statu_bat_travaux.id_pv_consta_entete_travaux='".$id_pv_consta_entete_travaux."'
+                                            and pv_consta_statu_bat_travaux.status=1
+                        ) as nombre_statu_designation",FALSE); 
+    
+        $result =  $this->db->from('pv_consta_rubrique_phase_bat')
+                            ->order_by('numero')
+                            ->get()
+                            ->result();
+            if($result)
+            {
+                return $result;
+            }else{
+                return null;
+            }                 
+        }
+
+    public function getmax_avancementbycontrat($id_contrat_prestataire) {
+        $this->db->select("contrat_prestataire.id as id_contrat");
+    
+            $this->db ->select("(select avancement_physi_batiment.pourcentage 
+                                        
+                                        from avancement_physi_batiment 
+                                            
+                                            where
+                                                    avancement_physi_batiment.id=(select max(avance.id) from avancement_physi_batiment as avance)
+                                ) as max_avance_bat",FALSE);
+
+            $this->db ->select("(select avancement_physi_latrine.pourcentage 
+                                        
+                                from avancement_physi_latrine 
+                                    
+                                    where
+                                            avancement_physi_latrine.id=(select max(avance.id) from avancement_physi_latrine as avance)
+                        ) as max_avance_lat",FALSE); 
+            
+            $this->db ->select("(select avancement_physi_mobilier.pourcentage 
+                                        
+                        from avancement_physi_mobilier 
+                            
+                            where
+                                    avancement_physi_mobilier.id=(select max(avance.id) from avancement_physi_mobilier as avance)
+                ) as max_avance_mob",FALSE);
+        $result =  $this->db->from('contrat_prestataire')
+                            ->where('contrat_prestataire.id',$id_contrat_prestataire)
+                            ->get()
+                            ->result();
+            if($result)
+            {
+                return $result;
+            }else{
+                return null;
+            }                 
+        }
+
+        public function getcount_statu_latbyfacture($id_pv_consta_entete_travaux) {
+            $this->db->select("pv_consta_rubrique_phase_lat.numero as numero, pv_consta_rubrique_phase_lat.libelle as libelle, pv_consta_rubrique_phase_lat.pourcentage_prevu as pourcentage_prevu,pv_consta_rubrique_phase_lat.id as id_phase");
+        
+                $this->db ->select("(select count(pv_consta_rubrique_designation_lat.id) 
+                                            
+                                            from pv_consta_rubrique_designation_lat 
+                                                
+                                                where
+                                                        pv_consta_rubrique_designation_lat.id_rubrique_phase=id_phase
+                                    ) as nombre_rubrique_designation",FALSE);
+    
+                $this->db ->select("(select count(pv_consta_statu_lat_travaux.id) 
+                                            
+                                    from pv_consta_statu_lat_travaux,pv_consta_rubrique_designation_lat 
+                                        
+                                        where   pv_consta_rubrique_designation_lat.id=pv_consta_statu_lat_travaux.id_rubrique_designation
+                                                and pv_consta_rubrique_designation_lat.id_rubrique_phase=id_phase 
+                                                and pv_consta_statu_lat_travaux.id_pv_consta_entete_travaux='".$id_pv_consta_entete_travaux."'
+                                                and pv_consta_statu_lat_travaux.status=1
+                            ) as nombre_statu_designation",FALSE); 
+        
+            $result =  $this->db->from('pv_consta_rubrique_phase_lat')
+                                ->order_by('numero')
+                                ->get()
+                                ->result();
+                if($result)
+                {
+                    return $result;
+                }else{
+                    return null;
+                }                 
+            }
+            
+    public function getcount_statu_mobbyfacture($id_pv_consta_entete_travaux) {
+        $this->db->select("pv_consta_rubrique_phase_mob.numero as numero, pv_consta_rubrique_phase_mob.libelle as libelle,pv_consta_rubrique_phase_mob.id as id_phase");
+    
+            $this->db ->select("(select count(pv_consta_rubrique_designation_mob.id) 
+                                        
+                                        from pv_consta_rubrique_designation_mob 
+                                            
+                                            where
+                                                    pv_consta_rubrique_designation_mob.id_rubrique_phase=id_phase
+                                ) as nombre_rubrique_designation",FALSE);
+
+            $this->db ->select("(select count(pv_consta_statu_mob_travaux.id) 
+                                        
+                                from pv_consta_statu_mob_travaux,pv_consta_rubrique_designation_mob 
+                                    
+                                    where   pv_consta_rubrique_designation_mob.id=pv_consta_statu_mob_travaux.id_rubrique_designation
+                                            and pv_consta_rubrique_designation_mob.id_rubrique_phase=id_phase 
+                                            and pv_consta_statu_mob_travaux.id_pv_consta_entete_travaux='".$id_pv_consta_entete_travaux."'
+                                            and pv_consta_statu_mob_travaux.status=1
+                        ) as nombre_statu_designation",FALSE); 
+    
+        $result =  $this->db->from('pv_consta_rubrique_phase_mob')
+                            ->order_by('numero')
+                            ->get()
+                            ->result();
+            if($result)
+            {
+                return $result;
+            }else{
+                return null;
+            }                 
+        }
         
 
 }

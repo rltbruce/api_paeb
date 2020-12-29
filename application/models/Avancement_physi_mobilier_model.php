@@ -28,7 +28,7 @@ class Avancement_physi_mobilier_model extends CI_Model {
 
             'pourcentage' => $avancement_physi_mobilier['pourcentage'],
             'date'   => $avancement_physi_mobilier['date'],
-            'id_attachement_detail' => $avancement_physi_mobilier['id_attachement_detail'],
+            'pourcentage_prevu' => $avancement_physi_mobilier['pourcentage_prevu'],
             'id_contrat_prestataire' => $avancement_physi_mobilier['id_contrat_prestataire']                    
         );
     }
