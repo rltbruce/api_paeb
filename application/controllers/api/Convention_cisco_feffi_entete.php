@@ -110,7 +110,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['user'] = $user;                  
@@ -172,7 +173,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['user'] = $user;                  
@@ -240,7 +242,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['user'] = $user;
@@ -302,13 +305,14 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['objet'] = $value->objet;                   
                     $data[$key]['ref_financement'] = $value->ref_financement;
                     $data[$key]['ecole'] = $ecole;
-                    //$data[$key]['avancement'] = $avancement ;
+                   // $data[$key]['avancement'] = "avancement" ;
                     $data[$key]['montant_total'] = $montant;
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['validation'] = $value->validation;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['user'] = $user;
@@ -375,7 +379,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['user'] = $user;
@@ -442,7 +447,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['user'] = $user;
@@ -520,7 +526,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['user'] = $user;
@@ -582,7 +589,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['ecole'] = $ecole;
                     $data[$key]['user'] = $user;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['validation'] = $value->validation;                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     if($value->id_convention_ufpdaaf)
                     {
                       $convention_ufp_daaf_entete = $this->Convention_ufp_daaf_enteteManager->findById($value->id_convention_ufpdaaf);
@@ -650,7 +658,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['user'] = $user;
 
@@ -711,7 +720,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['user'] = $user;
 
@@ -745,7 +755,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
                     $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);                    
+                    $region = $this->RegionManager->findById($value->id_region);
                     //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
                     $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
                     
@@ -763,6 +774,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
+                    $data[$key]['region'] = $region;
 
                     $data[$key]['site'] = $site;
                     $data[$key]['ref_convention'] = $value->ref_convention;
@@ -774,7 +786,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['user'] = $user;
 
@@ -808,7 +821,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
                     $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);                    
+                    $region = $this->RegionManager->findById($value->id_region);
                     //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
                     $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
                     
@@ -825,6 +839,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
+                    $data[$key]['region'] = $region;
 
                     $data[$key]['site'] = $site;
                     $data[$key]['ref_convention'] = $value->ref_convention;
@@ -836,7 +851,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['user'] = $user;
 
@@ -870,7 +886,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
                     $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);                    
+                    $region = $this->RegionManager->findById($value->id_region);
                     //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
                     $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
                     
@@ -893,6 +910,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
+                    $data[$key]['region'] = $region;
 
                     $data[$key]['site'] = $site;
                     $data[$key]['ref_convention'] = $value->ref_convention;
@@ -904,7 +922,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['user'] = $user;
 
@@ -937,7 +956,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
                     $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);                    
+                    $region = $this->RegionManager->findById($value->id_region);
                     //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
                     $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
                     
@@ -960,6 +980,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
+                    $data[$key]['region'] = $region;
 
                     $data[$key]['site'] = $site;
                     $data[$key]['ref_convention'] = $value->ref_convention;
@@ -971,7 +992,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['user'] = $user;
 
@@ -1017,7 +1039,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
                     $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);                    
+                    $region = $this->RegionManager->findById($value->id_region);
                     $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
                     $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
                     
@@ -1038,6 +1061,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
+                    $data[$key]['region'] = $region;
 
                     $data[$key]['site'] = $site;
                     $data[$key]['ref_convention'] = $value->ref_convention;
@@ -1049,7 +1073,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['validation'] = $value->validation;
                     $data[$key]['user'] = $user;
@@ -1085,7 +1110,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
                     $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);                    
+                    $region = $this->RegionManager->findById($value->id_region);
                     $transfert = $this->Transfert_daafManager->gettransfertByconvention($value->id);
                     $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
                      
@@ -1109,6 +1135,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
+                    $data[$key]['region'] = $region;
 
                     $data[$key]['site'] = $site;
                     $data[$key]['ref_convention'] = $value->ref_convention;
@@ -1120,7 +1147,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                                       
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['user'] = $user;
 
@@ -1152,7 +1180,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $cisco = $this->CiscoManager->findById($value->id_cisco);
                     $feffi = $this->FeffiManager->findById($value->id_feffi);
                     $site = $this->SiteManager->findById($value->id_site);
-                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);                    
+                    $region = $this->RegionManager->findById($value->id_region);
                     //$avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
                     $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
                     
@@ -1175,6 +1204,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['id'] = $value->id;
                     $data[$key]['cisco'] = $cisco;
                     $data[$key]['feffi'] = $feffi;
+                    $data[$key]['region'] = $region;
 
                     $data[$key]['site'] = $site;
                     $data[$key]['ref_convention'] = $value->ref_convention;
@@ -1186,7 +1216,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;                   
                     $data[$key]['date_creation'] = $value->date_creation;
-
+                                       
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['type_convention'] = $value->type_convention;
                     $data[$key]['user'] = $user;
 
@@ -1197,6 +1228,68 @@ class Convention_cisco_feffi_entete extends REST_Controller {
             } 
                 else
                     $data = array();
+        }
+        
+        elseif ($menu=='getconventionfiltre')        
+        {
+                    
+            $tmp = $this->Convention_cisco_feffi_enteteManager->findAllByfiltre($this->generer_requete_convention_creer($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap));
+            if ($tmp) 
+            {
+                foreach ($tmp as $key => $value) 
+                {
+                    $cisco = array();
+                    $feffi = array();
+                    $site = array();
+                    $montant_detail = array();
+                    $avancement = 0;
+                    $montant = 0;
+                    $montant_trav_mob = 0;
+                    $montant_divers = 0;
+
+                    $user = $this->UserManager->findById($value->id_user);
+                    $cisco = $this->CiscoManager->findById($value->id_cisco);
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    $site = $this->SiteManager->findById($value->id_site);
+                    $ecole = $this->EcoleManager->findByIdZone($feffi->id_ecole);                    
+                    $region = $this->RegionManager->findById($value->id_region);
+                   // $avancement_detail = $this->Avancement_physi_batimentManager->getavancementByconvention($value->id);
+                    $montant_detail = $this->Batiment_constructionManager->getmontantByconvention($value->id);
+                                       
+                    if (count($montant_detail)>0)
+                    {
+                        $montant =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob+$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet; 
+                        $montant_trav_mob =  $montant_detail[0]->montant_bat+ $montant_detail[0]->montant_lat+$montant_detail[0]->montant_mob;
+                        $montant_divers =$montant_detail[0]->montant_maitrise+$montant_detail[0]->montant_sousprojet;
+                    }
+
+                    
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['cisco'] = $cisco;
+                    $data[$key]['feffi'] = $feffi;
+                    $data[$key]['region'] = $region;
+
+                    $data[$key]['site'] = $site;
+                    $data[$key]['ref_convention'] = $value->ref_convention;
+                    $data[$key]['objet'] = $value->objet;                   
+                    $data[$key]['ref_financement'] = $value->ref_financement;
+                    $data[$key]['ecole'] = $ecole;
+                    $data[$key]['ato'] = 'ato';
+                    $data[$key]['montant_total'] = $montant;
+                    $data[$key]['montant_trav_mob'] = $montant_trav_mob;
+                    $data[$key]['montant_divers'] = $montant_divers;                  
+                    $data[$key]['validation'] = $value->validation;
+                    $data[$key]['type_convention'] = $value->type_convention;                   
+                    $data[$key]['date_creation'] = $value->date_creation;                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
+                    $data[$key]['user'] = $user;
+
+
+                }
+            } 
+                else
+                    $data = array();
+                   //$data['user'] = $this->generer_requete2($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap);
         }
       /*  elseif ($menu=='reportingvuecarte') //mande       
          {
@@ -2893,7 +2986,8 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data[$key]['montant_trav_mob'] = $montant_trav_mob;
                     $data[$key]['montant_divers'] = $montant_divers;
                     $data[$key]['avancement'] = $avancement;                   
-                    $data[$key]['date_creation'] = $value->date_creation;
+                    $data[$key]['date_creation'] = $value->date_creation;                   
+                    $data[$key]['id_convention_ufpdaaf'] = $value->id_convention_ufpdaaf;
                     $data[$key]['ecole'] = $ecole;
                     
                 }
@@ -2934,7 +3028,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     'montant_total' => $this->post('montant_total'),
                     //'avancement' => $this->post('avancement'),
                     'validation' => $this->post('validation'),
-                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf'),
+                    'id_convention_ufpdaaf' => null,
                     'type_convention' => $this->post('type_convention'),
                     'id_user' => $this->post('id_user')
                 );
@@ -2960,6 +3054,11 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
             } else {
+                $id_conv_ufp=null;
+                if ($this->post('id_convention_ufpdaaf'))
+                {
+                    $id_conv_ufp=$this->post('id_convention_ufpdaaf');
+                }
                 $data = array(
                     'ref_convention' => $this->post('ref_convention'),
                     'objet' => $this->post('objet'),
@@ -2969,7 +3068,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     'id_site' => $this->post('id_site'),
                     'ref_financement' => $this->post('ref_financement'),
                     'validation' => $this->post('validation'),
-                    'id_convention_ufpdaaf' => $this->post('id_convention_ufpdaaf'),
+                    'id_convention_ufpdaaf' => $id_conv_ufp,
                     'montant_total' => $this->post('montant_total'),
                     //'avancement' => $this->post('avancement'),
                     'type_convention' => $this->post('type_convention'),

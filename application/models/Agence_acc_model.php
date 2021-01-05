@@ -59,5 +59,19 @@ class Agence_acc_model extends CI_Model {
             return $q->row();
         }
     }
+    
+    public function getagencetest($agence) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('lower(nom)=',$agence)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
 
 }

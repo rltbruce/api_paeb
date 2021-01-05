@@ -2,12 +2,11 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Importer_zap_commune extends CI_Controller {
+class Importer_avenant_convention extends CI_Controller {
     public function __construct() {
         parent::__construct();       
-        $this->load->model('zap_commune_model', 'Zap_communeManager');       
-        $this->load->model('commune_model', 'CommuneManager');      
-        $this->load->model('zap_model', 'ZapManager');
+        $this->load->model('avenant_convention_model', 'Avenant_conventionManager');       
+        $this->load->model('convention_cisco_feffi_entete_model', 'Convention_cisco_feffi_enteteManager'); 
         
 
     }
@@ -19,8 +18,7 @@ class Importer_zap_commune extends CI_Controller {
 	  	$delete = unlink($directoryName);
 	}
 
-
-	public function testzap_commune() {
+	public function testavenant_convention() {
 
 		$erreur="aucun";
 		ini_set('upload_max_filesize', '200000000000000000M');  
@@ -77,10 +75,10 @@ class Importer_zap_commune extends CI_Controller {
 		ini_set('post_max_size', '2000000000M');
 		set_time_limit(0);
         ini_set ('memory_limit', '100000000000000M');
-				$retour = $this->controler_donnees_importertestzap_commune($name1,$repertoire);
+				$retour = $this->controler_donnees_importertestcontrat_pr($name1,$repertoire);
 				$rapport['nbr_inserer']=$retour['nbr_inserer'];
 				$rapport['nbr_refuser']=$retour['nbr_erreur'];
-				$rapport['zap_commune_inserer']=$retour['zap_commune_inserer'];
+				$rapport['zap_inserer']=$retour['zap_inserer'];
 				$rapport['erreur']=false;
 				$rapport["erreur_value"]= '' ;
 				echo json_encode($rapport);
@@ -96,7 +94,7 @@ class Importer_zap_commune extends CI_Controller {
 		} 
 		
 	}
-	public function controler_donnees_importertestzap_commune($filename,$directory) {
+	public function controler_donnees_importertestcontrat_pr($filename,$directory) {
 		require_once 'Classes/PHPExcel.php';
 		require_once 'Classes/PHPExcel/IOFactory.php';
 		ini_set('upload_max_filesize', '2000000000M');  
@@ -112,7 +110,7 @@ class Importer_zap_commune extends CI_Controller {
 		//$user_ok=false;
 		$nbr_erreur=0;
 		$nbr_inserer=0;
-		$zap_commune_inserer = array();
+		$zap_inserer = array();
 		//The name of the directory that we need to create.
 		$directoryName = dirname(__FILE__) ."/../../../../../../assets/excel/".$repertoire;
 		//Check if the directory already exists.
@@ -127,13 +125,13 @@ class Importer_zap_commune extends CI_Controller {
 			// pour mise à jour après : G4 = id_fiche_paiement <=> déjà importé => à ignorer
 			$objet_read_write = PHPExcel_IOFactory::createReader('Excel2007');
 			$excel = $objet_read_write->load($lien_vers_mon_document_excel);			 
-			$sheet = $excel->getSheet(1);
+			$sheet = $excel->getSheet(0);
 			// pour lecture début - fin seulement
 			$XLSXDocument = new PHPExcel_Reader_Excel2007();
 		} else {
 			$objet_read_write = PHPExcel_IOFactory::createReader('Excel2007');
 			$excel = $objet_read_write->load($lien_vers_mon_document_excel);			 
-			$sheet = $excel->getSheet(1);
+			$sheet = $excel->getSheet(0);
 			$XLSXDocument = new PHPExcel_Reader_Excel5();
 		}
 		$Excel = $XLSXDocument->load($lien_vers_mon_document_excel);
@@ -144,35 +142,27 @@ class Importer_zap_commune extends CI_Controller {
 		{			
 			$ligne = $row->getRowIndex ();
 			$erreur = false;
-				if($ligne >=3)
+				if($ligne >=10)
 				{
 					$cellIterator = $row->getCellIterator();
 					$cellIterator->setIterateOnlyExistingCells(false);
 					$rowIndex = $row->getRowIndex ();
 					foreach ($cellIterator as $cell)
 					{
-						if('C' == $cell->getColumn())
+						if('J' == $cell->getColumn())
 						{
-							$reg =$cell->getValue();
+							$code_conv =$cell->getValue();
 						}   
-						else if('D' == $cell->getColumn())
+						else if('S' == $cell->getColumn())
 						{
-							$dist =$cell->getValue();							
-						}  
-						else if('E' == $cell->getColumn())
-						{
-							$com =$cell->getValue();
-						}   
-						else if('F' == $cell->getColumn())
-						{
-							$zp =$cell->getValue();							
+							$montant_ave =$cell->getValue();							
 						}	 
 					}
 					
 					// Si donnée incorrect : coleur cellule en rouge
-					if($zp=="")
+					if($code_conv=="")
 					{						
-						$sheet->getStyle("F".$ligne)->getFill()->applyFromArray(
+						$sheet->getStyle("J".$ligne)->getFill()->applyFromArray(
 									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 										 'startcolor' => array('rgb' => 'f2e641'),
 										 'endcolor'   => array('rgb' => 'f2e641')
@@ -183,18 +173,18 @@ class Importer_zap_commune extends CI_Controller {
 					else
 					{
 						// Vérifier si nom_feffi existe dans la BDD
-						$zpl=strtolower($zp);
-						$retour_zap = $this->ZapManager->getzaptest($zpl);
-						if(count($retour_zap) >0)
+						$code_convn=strtolower($code_conv);
+						$retour_convention = $this->Convention_cisco_feffi_enteteManager->getconventiontest($code_convn);
+						if(count($retour_convention) >0)
 						{
-							foreach($retour_zap as $k=>$v)
+							foreach($retour_convention as $k=>$v)
 							{
-								$id_zap = $v->id;
+								$id_convetion = $v->id;								
 							}	
 						}
 						else
 						{
-							$sheet->getStyle("F".$ligne)->getFill()->applyFromArray(
+							$sheet->getStyle("J".$ligne)->getFill()->applyFromArray(
 										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 											 'startcolor' => array('rgb' => 'f24141'),
 											 'endcolor'   => array('rgb' => 'f24141')
@@ -202,10 +192,11 @@ class Importer_zap_commune extends CI_Controller {
 							);
 							$erreur = true;
 						}
-					} 
-					if($com=="")
+					}
+					 
+					if($montant_ave=="")
 					{						
-						$sheet->getStyle("E".$ligne)->getFill()->applyFromArray(
+						$sheet->getStyle("S".$ligne)->getFill()->applyFromArray(
 									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 										 'startcolor' => array('rgb' => 'f2e641'),
 										 'endcolor'   => array('rgb' => 'f2e641')
@@ -213,67 +204,38 @@ class Importer_zap_commune extends CI_Controller {
 						);
 						$erreur = true;													
 					}
-					else
-					{
-						// Vérifier si nom_feffi existe dans la BDD
-						$coml=strtolower($com);
-						$distl=strtolower($dist);
-						$regl=strtolower($reg);
-						$retour_commune = $this->CommuneManager->getcommunetest($regl,$distl,$coml);
-						if(count($retour_commune) >0)
-						{
-							foreach($retour_commune as $k=>$v)
-							{
-								$id_commune = $v->id;
-							}	
-						}
-						else
-						{
-							$sheet->getStyle("E".$ligne)->getFill()->applyFromArray(
-										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
-											 'startcolor' => array('rgb' => 'f24141'),
-											 'endcolor'   => array('rgb' => 'f24141')
-										 )
-							);
-							$erreur = true;
-						}
-					}  
 					
 					if($erreur==false)
 					{	
-						$zpn=strtolower($zp);
-						$comn=strtolower($com);
-						$replace=array('_');
-						$search= array(' ');
-						$nomfichier = $filename;		
-						$comn_=str_replace($search,$replace,$comn);
-						$doublon = $this->Zap_communeManager->getzap_communetest($id_zap,$id_commune);
+						$code_convn=strtolower($code_conv);
+						$doublon = $this->Avenant_conventionManager->getavenanttest($id_convetion);
 						if (count($doublon)>0)//mis doublon
 						{
-							$sheet->setCellValue('J'.$ligne, "Doublon");
-							array_push($zap_commune_inserer, $doublon);
+							$sheet->setCellValue('IO'.$ligne, "Doublon");
+							array_push($zap_inserer, $doublon);
 							$nbr_erreur = $nbr_erreur + 1;							
 						}
 						else//ts doublon
 						{
+						   $data = array(
+							'description' => "à completer",
+							'ref_avenant'   => "à completer",
+							'montant'    => $montant_ave,
+							'date_signature' => null,
+							'id_convention_entete' => $id_convetion,
+							'validation' => 0
+						);
+						   $dataId = $this->Avenant_conventionManager->add($data);
+								$sheet->setCellValue('IO'.$ligne, "ok");        		
 
-		                		//$dataId = $this->Zap_communeManager->add($data); 
-		                	
-								$sheet->setCellValue('J'.$ligne, "ts Doublon"); 
-								$data = array(
-									'id_commune' => $id_commune,
-									'id_zap' => $id_zap
-									);
-									$dataId = $this->Zap_communeManager->add($data);        		
-
-		                	//array_push($zap_commune_inserer, $data);
+		                	//array_push($zap_inserer, $data);
 							$nbr_inserer = $nbr_inserer + 1;
 						}
 	        																
 					}
 					else//mis erreur
 					{
-						$sheet->setCellValue('J'.$ligne, "erreur");
+						$sheet->setCellValue('IO'.$ligne, "erreur");
 						$nbr_erreur = $nbr_erreur + 1;
 					}						
 						
@@ -286,7 +248,7 @@ class Importer_zap_commune extends CI_Controller {
 		$report['nbr_erreur']=$nbr_erreur;
 		$report['nbr_inserer']=$nbr_inserer;
 		//$report['user']=$type_latrine;
-		$report['zap_commune_inserer']=$zap_commune_inserer;
+		$report['zap_inserer']=$zap_inserer;
 		//echo json_encode($report);	
 		$objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
 		$objWriter->save(dirname(__FILE__) ."/../../../../../../assets/excel/".$repertoire. $nomfichier);

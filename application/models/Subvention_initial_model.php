@@ -65,6 +65,26 @@ class Subvention_initial_model extends CI_Model {
             return $q->row();
         }
     }
+    public function findByZoneobjet($id_zone_subvention,$id_acces_zone)
+    {               
+        $this->db->select('type_batiment.id as id_type_batiment,type_batiment.cout_batiment as cout_batiment,
+                            type_latrine.id as id_type_latrine,type_latrine.cout_latrine as cout_latrine,
+                            type_mobilier.id as id_type_mobilier,type_mobilier.cout_mobilier as cout_mobilier,
+                            type_cout_maitrise.id as id_type_maitrise,type_cout_maitrise.cout_maitrise as cout_maitrise,
+                            type_cout_sousprojet.id as id_type_sousprojet,type_cout_sousprojet.cout_sousprojet as cout_sousprojet')
+                ->join('type_batiment','type_batiment.id=subvention_initial.id_type_batiment')
+                ->join('type_latrine','type_latrine.id=subvention_initial.id_type_latrine')
+                ->join('type_mobilier','type_mobilier.id=subvention_initial.id_type_mobilier')
+                ->join('type_cout_maitrise','type_cout_maitrise.id=subvention_initial.id_type_cout_maitrise')
+                ->join('type_cout_sousprojet','type_cout_sousprojet.id=subvention_initial.id_type_cout_sousprojet')
+                ->where('subvention_initial.id_zone_subvention',$id_zone_subvention)
+                ->where('subvention_initial.id_acces_zone',$id_acces_zone);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0)
+        {
+            return $q->row();
+        }                 
+    }
     public function findByZone($id_zone_subvention,$id_acces_zone)
     {               
         $result =  $this->db->select('*')

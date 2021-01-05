@@ -239,5 +239,19 @@ class Contrat_be_model extends CI_Model {
             return $result=array();
         }                 
     }
+    
+    public function getcontrattest($id_convention) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_convention_entete',$id_convention)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
 
 }

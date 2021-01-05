@@ -145,5 +145,21 @@ class Feffi_model extends CI_Model {
         $query = $this->db->query($requete);
         return $query->result();                
     }
+    
+    
+    public function getfeffitest($id_ecole,$feffi) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('lower(denomination)=',$feffi)
+                        ->where("id_ecole", $id_ecole)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
 
 }

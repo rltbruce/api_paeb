@@ -58,5 +58,19 @@ class Acces_zone_model extends CI_Model {
             return $q->row();
         }
     }
+    
+    public function getzone_accesbynom($libelle) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('libelle',$libelle)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
 
 }

@@ -98,7 +98,7 @@ class Cisco_model extends CI_Model {
     }
     
     public function getciscotest($cisco,$region) {               
-        $result =  $this->db->select('*')
+        $result =  $this->db->select('cisco.*')
                         ->from($this->table)
                         ->join('district','district.id=cisco.id_district')
                         ->join('region','region.id=district.id_region')

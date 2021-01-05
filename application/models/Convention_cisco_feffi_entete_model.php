@@ -239,10 +239,9 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
         }                 
     }
 
-    public function findAllByfiltre($requete) {             //tsy mande  
-        $result =  $this->db->select('convention_cisco_feffi_entete.*')
-                        ->from($this->table)
-                        ->join('convention_cisco_feffi_detail','convention_cisco_feffi_detail.id_convention_entete=convention_cisco_feffi_entete.id')                        
+    public function findAllByfiltre($requete) {              
+        $result =  $this->db->select('DISTINCT(convention_cisco_feffi_entete.id) as dd,convention_cisco_feffi_entete.*')
+                        ->from($this->table)                       
                         ->join('site','site.id = convention_cisco_feffi_entete.id_site')
                         ->join('ecole','ecole.id = site.id_ecole')
                         ->join('zap','zap.id = ecole.id_zap')
@@ -252,7 +251,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                         ->join('region','region.id = district.id_region')
                         ->join('cisco','cisco.id_district = district.id')
                         ->where($requete)
-                        ->order_by('ref_convention')
+                        ->order_by('id')
                         ->get()
                         ->result();
         if($result)
@@ -1965,6 +1964,20 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             return $data=array();
         }               
     
+    }
+    
+    public function getconventiontest($convention) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('lower(ref_convention)=',$convention)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
     } 
 
 }

@@ -67,5 +67,19 @@ class Partenaire_relai_model extends CI_Model {
         $query = $this->db->query($requete);
         return $query->result();                
     }
+    
+    public function getpartenairetest($nom_consu) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('lower(nom)=',$nom_consu)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
 
 }

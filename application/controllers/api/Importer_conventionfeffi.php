@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Importer_ecole extends CI_Controller {
+class Importer_conventionfeffi extends CI_Controller {
     public function __construct() {
         parent::__construct();        
         $this->load->model('ecole_model', 'EcoleManager');       
@@ -11,9 +11,23 @@ class Importer_ecole extends CI_Controller {
         $this->load->model('commune_model', 'CommuneManager');       
         $this->load->model('zap_model', 'ZapManager');         
         $this->load->model('zap_commune_model', 'Zap_communeManager');     
-        $this->load->model('fokontany_model', 'FokontanyManager');
+        $this->load->model('fokontany_model', 'FokontanyManager');   
+        $this->load->model('zone_subvention_model', 'Zone_subventionManager');   
+        $this->load->model('acces_zone_model', 'Acces_zoneManager');
+        $this->load->model('feffi_model', 'FeffiManager');
+        $this->load->model('compte_feffi_model', 'Compte_feffiManager');
+        $this->load->model('site_model', 'SiteManager');
+        $this->load->model('convention_cisco_feffi_entete_model', 'Convention_cisco_feffi_enteteManager');
+        $this->load->model('convention_cisco_feffi_detail_model', 'Convention_cisco_feffi_detailManager');
+        $this->load->model('agence_acc_model', 'Agence_accManager');
+        $this->load->model('cout_sousprojet_construction_model', 'Cout_sousprojet_constructionManager');
+        $this->load->model('cout_maitrise_construction_model', 'Cout_maitrise_constructionManager');
+        $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
+        $this->load->model('latrine_construction_model', 'Latrine_constructionManager');
+        $this->load->model('mobilier_construction_model', 'Mobilier_constructionManager');
+        $this->load->model('subvention_initial_model', 'Subvention_initialManager');
         
-
+		
     }
 
 	public function remove_upload_file()
@@ -24,7 +38,7 @@ class Importer_ecole extends CI_Controller {
 	}
 
 
-	public function testecole() {
+	public function testconventionfeffi() {
 
 		$erreur="aucun";
 		ini_set('upload_max_filesize', '200000000000000000M');  
@@ -81,7 +95,7 @@ class Importer_ecole extends CI_Controller {
 		ini_set('post_max_size', '2000000000M');
 		set_time_limit(0);
         ini_set ('memory_limit', '100000000000000M');
-				$retour = $this->controler_donnees_importertestecole($name1,$repertoire);
+				$retour = $this->controler_donnees_importertestconventionfeffi($name1,$repertoire);
 				$rapport['nbr_inserer']=$retour['nbr_inserer'];
 				$rapport['nbr_refuser']=$retour['nbr_erreur'];
 				$rapport['zap_inserer']=$retour['zap_inserer'];
@@ -100,7 +114,7 @@ class Importer_ecole extends CI_Controller {
 		} 
 		
 	}
-	public function controler_donnees_importertestecole($filename,$directory) {
+	public function controler_donnees_importertestconventionfeffi($filename,$directory) {
 		require_once 'Classes/PHPExcel.php';
 		require_once 'Classes/PHPExcel/IOFactory.php';
 		ini_set('upload_max_filesize', '2000000000M');  
@@ -131,13 +145,13 @@ class Importer_ecole extends CI_Controller {
 			// pour mise à jour après : G4 = id_fiche_paiement <=> déjà importé => à ignorer
 			$objet_read_write = PHPExcel_IOFactory::createReader('Excel2007');
 			$excel = $objet_read_write->load($lien_vers_mon_document_excel);			 
-			$sheet = $excel->getSheet(1);
+			$sheet = $excel->getSheet(0);
 			// pour lecture début - fin seulement
 			$XLSXDocument = new PHPExcel_Reader_Excel2007();
 		} else {
 			$objet_read_write = PHPExcel_IOFactory::createReader('Excel2007');
 			$excel = $objet_read_write->load($lien_vers_mon_document_excel);			 
-			$sheet = $excel->getSheet(1);
+			$sheet = $excel->getSheet(0);
 			$XLSXDocument = new PHPExcel_Reader_Excel5();
 		}
 		$Excel = $XLSXDocument->load($lien_vers_mon_document_excel);
@@ -148,7 +162,7 @@ class Importer_ecole extends CI_Controller {
 		{			
 			$ligne = $row->getRowIndex ();
 			$erreur = false;
-				if($ligne >=3)
+				if($ligne >=10)
 				{
 					$cellIterator = $row->getCellIterator();
 					$cellIterator->setIterateOnlyExistingCells(false);
@@ -157,19 +171,15 @@ class Importer_ecole extends CI_Controller {
 					{
 						if('A' == $cell->getColumn())
 						{
-							$code =$cell->getValue();
+							$aac =$cell->getValue();
 						}  
 						else if('B' == $cell->getColumn())
 						{
 							$eco =$cell->getValue();
-						} 
-						else if('C' == $cell->getColumn())
-						{
-							$reg =$cell->getValue();
-						} 
+						}  
 						else if('D' == $cell->getColumn())
 						{
-							$cis =$cell->getValue();							
+							$foko =$cell->getValue();							
 						}  
 						else if('E' == $cell->getColumn())
 						{
@@ -177,42 +187,31 @@ class Importer_ecole extends CI_Controller {
 						}  
 						else if('F' == $cell->getColumn())
 						{
-							$zp =$cell->getValue();							
+							$cis =$cell->getValue();							
 						}  
 						else if('G' == $cell->getColumn())
 						{
-							$foko =$cell->getValue();							
+							$reg =$cell->getValue();							
 						}  
 						else if('H' == $cell->getColumn())
 						{
-							$vil =$cell->getValue();							
+							$acc =$cell->getValue();							
+						} 
+						else if('I' == $cell->getColumn())
+						{
+							$fef =$cell->getValue();							
+						}
+						else if('J' == $cell->getColumn())
+						{
+							$conv =$cell->getValue();							
 						}	 
 					}
 					
 					// Si donnée incorrect : coleur cellule en rouge
-					if($code=="")
-					{						
-						$sheet->getStyle("A".$ligne)->getFill()->applyFromArray(
-									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
-										 'startcolor' => array('rgb' => 'f2e641'),
-										 'endcolor'   => array('rgb' => 'f2e641')
-									 )
-						);
-						$erreur = true;													
-					}
-					if($eco=="")
-					{						
-						$sheet->getStyle("B".$ligne)->getFill()->applyFromArray(
-									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
-										 'startcolor' => array('rgb' => 'f2e641'),
-										 'endcolor'   => array('rgb' => 'f2e641')
-									 )
-						);
-						$erreur = true;													
-					}
+					
 					if($reg=="")
 					{						
-						$sheet->getStyle("C".$ligne)->getFill()->applyFromArray(
+						$sheet->getStyle("G".$ligne)->getFill()->applyFromArray(
 									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 										 'startcolor' => array('rgb' => 'f2e641'),
 										 'endcolor'   => array('rgb' => 'f2e641')
@@ -223,8 +222,8 @@ class Importer_ecole extends CI_Controller {
 					else
 					{
 						// Vérifier si nom_feffi existe dans la BDD
-						$regl=strtolower($reg);
-						$retour_region = $this->RegionManager->getregiontest($regl);
+						$regn=strtolower($reg);
+						$retour_region = $this->RegionManager->getregiontest($regn);
 						if(count($retour_region) >0)
 						{
 							foreach($retour_region as $k=>$v)
@@ -234,18 +233,19 @@ class Importer_ecole extends CI_Controller {
 						}
 						else
 						{
-							$sheet->getStyle("C".$ligne)->getFill()->applyFromArray(
+							$sheet->getStyle("G".$ligne)->getFill()->applyFromArray(
 										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 											 'startcolor' => array('rgb' => 'f24141'),
 											 'endcolor'   => array('rgb' => 'f24141')
 										 )
 							);
 							$erreur = true;
+							$sheet->setCellValue('IQ'.$ligne, 'retour_region');
 						}
 					}
 					if($cis=="")
 					{						
-						$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
+						$sheet->getStyle("F".$ligne)->getFill()->applyFromArray(
 									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 										 'startcolor' => array('rgb' => 'f2e641'),
 										 'endcolor'   => array('rgb' => 'f2e641')
@@ -256,7 +256,7 @@ class Importer_ecole extends CI_Controller {
 					else
 					{
 						// Vérifier si nom_feffi existe dans la BDD
-						$cisn=strtolower($cis);						
+						$cisn=strtolower($cis);
 						$regn=strtolower($reg);
 						$retour_cisco = $this->CiscoManager->getciscotest($cisn,$regn);
 						if(count($retour_cisco) >0)
@@ -268,15 +268,17 @@ class Importer_ecole extends CI_Controller {
 						}
 						else
 						{
-							$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
+							$sheet->getStyle("F".$ligne)->getFill()->applyFromArray(
 										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 											 'startcolor' => array('rgb' => 'f24141'),
 											 'endcolor'   => array('rgb' => 'f24141')
 										 )
 							);
 							$erreur = true;
+							$sheet->setCellValue('IQ'.$ligne, 'retour_cisco');
 						}
 					}
+					
 					if($com=="")
 					{						
 						$sheet->getStyle("E".$ligne)->getFill()->applyFromArray(
@@ -286,7 +288,7 @@ class Importer_ecole extends CI_Controller {
 									 )
 						);
 						$erreur = true;	
-						$sheet->setCellValue('K'.$ligne, 'retour_commune1');												
+						$sheet->setCellValue('IQ'.$ligne, 'retour_commune1');												
 					}
 					else
 					{
@@ -311,49 +313,12 @@ class Importer_ecole extends CI_Controller {
 										 )
 							);
 							$erreur = true;
-							$sheet->setCellValue('K'.$ligne, 'retour_commune');
-						}
-					} 
-					
-					if($zp=="")
-					{						
-						$sheet->getStyle("F".$ligne)->getFill()->applyFromArray(
-									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
-										 'startcolor' => array('rgb' => 'f2e641'),
-										 'endcolor'   => array('rgb' => 'f2e641')
-									 )
-						);
-						$erreur = true;													
-					}
-					else
-					{
-						// Vérifier si nom_feffi existe dans la BDD
-						$zpl=strtolower($zp);
-						$retour_zap = $this->Zap_communeManager->getzap_communetestnom($zpl,$id_commune);
-						if(count($retour_zap) >0)
-						{
-							foreach($retour_zap as $k=>$v)
-							{
-								$id_zap = $v->id;
-							}	
-						}
-						else
-						{
-							$sheet->getStyle("F".$ligne)->getFill()->applyFromArray(
-										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
-											 'startcolor' => array('rgb' => 'f24141'),
-											 'endcolor'   => array('rgb' => 'f24141')
-										 )
-							);
-							
-							$sheet->setCellValue('K'.$ligne, $zpl.$id_commune);
-							$erreur = true;
+							$sheet->setCellValue('IQ'.$ligne, 'retour_commune');
 						}
 					}
-					
 					if($foko=="")
 					{						
-						$sheet->getStyle("G".$ligne)->getFill()->applyFromArray(
+						$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
 									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 										 'startcolor' => array('rgb' => 'f2e641'),
 										 'endcolor'   => array('rgb' => 'f2e641')
@@ -364,8 +329,8 @@ class Importer_ecole extends CI_Controller {
 					else
 					{
 						// Vérifier si nom_feffi existe dans la BDD
-						$fokol=strtolower($foko);
-						$retour_fokontany = $this->FokontanyManager->getfokontanytestbyid_commune($id_commune,$fokol);
+						$fokon=strtolower($foko);
+						$retour_fokontany = $this->FokontanyManager->getfokontanytestbyid_commune($id_commune,$fokon);
 						if(count($retour_fokontany) >0)
 						{
 							foreach($retour_fokontany as $k=>$v)
@@ -375,7 +340,83 @@ class Importer_ecole extends CI_Controller {
 						}
 						else
 						{
-							$sheet->getStyle("G".$ligne)->getFill()->applyFromArray(
+							$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
+										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+											 'startcolor' => array('rgb' => 'f24141'),
+											 'endcolor'   => array('rgb' => 'f24141')
+										 )
+							);
+							$erreur = true;
+							$sheet->setCellValue('IQ'.$ligne, 'retour_fokontany');
+						}
+					}
+					
+					if($eco=="")
+					{						
+						$sheet->getStyle("B".$ligne)->getFill()->applyFromArray(
+									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+										 'startcolor' => array('rgb' => 'f2e641'),
+										 'endcolor'   => array('rgb' => 'f2e641')
+									 )
+						);
+						$erreur = true;													
+					}
+					else
+					{
+						// Vérifier si nom_feffi existe dans la BDD
+						$econ=strtolower($eco);
+						$retour_ecole = $this->EcoleManager->getecoletestbyid_fokontany($id_fokontany,$econ);
+						if(count($retour_ecole) >0)
+						{
+							foreach($retour_ecole as $k=>$v)
+							{
+								$id_ecole = $v->id;
+								$id_zap = $v->id_zap;
+								$id_zone_subvention = $v->id_zone_subvention;
+								$id_acces_zone = $v->id_acces_zone;
+
+								$retour_subvention_initial = $this->Subvention_initialManager->findByZoneobjet($id_zone_subvention,$id_acces_zone);
+								
+							}	
+						}
+						else
+						{
+							$sheet->getStyle("B".$ligne)->getFill()->applyFromArray(
+										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+											 'startcolor' => array('rgb' => 'f24141'),
+											 'endcolor'   => array('rgb' => 'f24141')
+										 )
+							);
+							$erreur = true;
+							$sheet->setCellValue('IQ'.$ligne, $id_fokontany.$econ);
+						}
+					}
+					
+					if($fef=="")
+					{						
+						$sheet->getStyle("I".$ligne)->getFill()->applyFromArray(
+									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+										 'startcolor' => array('rgb' => 'f2e641'),
+										 'endcolor'   => array('rgb' => 'f2e641')
+									 )
+						);
+						$erreur = true;													
+					}
+					else
+					{
+						// Vérifier si nom_feffi existe dans la BDD
+						$fefn=strtolower($fef);
+						$retour_feffi = $this->FeffiManager->getfeffitest($id_ecole,$fefn);
+						if(count($retour_feffi) >0)
+						{
+							foreach($retour_feffi as $k=>$v)
+							{
+								$id_feffi = $v->id;								
+							}	
+						}
+						else
+						{
+							$sheet->getStyle("I".$ligne)->getFill()->applyFromArray(
 										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 											 'startcolor' => array('rgb' => 'f24141'),
 											 'endcolor'   => array('rgb' => 'f24141')
@@ -384,6 +425,51 @@ class Importer_ecole extends CI_Controller {
 							$erreur = true;
 						}
 					}
+					
+					if($aac=="")
+					{						
+						$sheet->getStyle("A".$ligne)->getFill()->applyFromArray(
+									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+										 'startcolor' => array('rgb' => 'f2e641'),
+										 'endcolor'   => array('rgb' => 'f2e641')
+									 )
+						);
+						$erreur = true;													
+					}
+					else
+					{
+						// Vérifier si nom_feffi existe dans la BDD
+						$aacn=strtolower($aac);
+						$retour_aac = $this->Agence_accManager->getagencetest($aacn);
+						if(count($retour_aac) >0)
+						{
+							foreach($retour_aac as $k=>$v)
+							{
+								$id_aac = $v->id;								
+							}	
+						}
+						else
+						{
+							$sheet->getStyle("I".$ligne)->getFill()->applyFromArray(
+										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+											 'startcolor' => array('rgb' => 'f24141'),
+											 'endcolor'   => array('rgb' => 'f24141')
+										 )
+							);
+							$erreur = true;
+						}
+					}					
+					
+					if($conv=="")
+					{						
+						$sheet->getStyle("J".$ligne)->getFill()->applyFromArray(
+									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+										 'startcolor' => array('rgb' => 'f2e641'),
+										 'endcolor'   => array('rgb' => 'f2e641')
+									 )
+						);
+						$erreur = true;													
+					}
 					/*$id_region =1;
 					$id_cisco=1;
 					$id_commune=1;
@@ -391,10 +477,11 @@ class Importer_ecole extends CI_Controller {
 					$id_fokontany=1;*/
 					if($erreur==false)
 					{	
-						$doublon = $this->EcoleManager->getecoletest($id_region,$id_cisco,$id_commune,$id_zap,$id_fokontany,$eco);
+						$convn=strtolower($conv);						
+						$doublon = $this->Convention_cisco_feffi_enteteManager->getconventiontest($convn);
 						if (count($doublon)>0)//mis doublon
 						{
-							$sheet->setCellValue('J'.$ligne, "Doublon");
+							$sheet->setCellValue('IO'.$ligne, "Doublon");
 							array_push($zap_inserer, $doublon);
 							$nbr_erreur = $nbr_erreur + 1;							
 						}
@@ -403,25 +490,90 @@ class Importer_ecole extends CI_Controller {
 
 		                		//$dataId = $this->ZapManager->add($data); 
 		                	
-								$sheet->setCellValue('J'.$ligne, "ts Doublon"); 
-								$data = array(
+								//$sheet->setCellValue('IO'.$ligne, "ok"); 
+								$datasite = array(
+									'code_sous_projet' => $conv,
+									'objet_sous_projet' => 'construction ecole',
+									'id_agence_acc' => $id_aac,
+									'statu_convention' => 2,
+									'observation' => null,
 									'id_region' => $id_region,
 									'id_cisco' => $id_cisco,
 									'id_commune' => $id_commune,
 									'id_zap' => $id_zap,
-									'id_fokontany' => $id_fokontany,
-									'description' => $eco,
-									'code' => $code,
-									'lieu' => $vil,
-									'latitude'      =>      null,
-									'longitude'     =>      null,
-									'altitude'      =>      null,
-									'id_zone_subvention' => null,
-									'id_acces_zone' => null,
-									
-									);
-								$dataId = $this->EcoleManager->add($data);        		
+									'id_ecole' => $id_ecole,
+									'id_classification_site' => 2,
+									'lot' => 1,
+									'validation' => 1,
+									'acces' => $acc
+								);
+								$dataIdsite = $this->SiteManager->add($datasite);
 
+								$dataconv = array(
+									'ref_convention' => $conv,
+									'objet' => 'MOD pour la construction de 02 salles de classe équipées',
+									'id_region' => $id_region,
+									'id_cisco' => $id_cisco,
+									'id_feffi' => $id_feffi, 
+									'id_site' => $dataIdsite,
+									'ref_financement' => 'Crédit IDA N° 62170',
+									'validation' => 1,
+									'id_convention_ufpdaaf' => null,
+									'type_convention' => 1,
+									'id_user' => null,
+									'montant_total' => null
+								);
+								$dataIdcoonv = $this->Convention_cisco_feffi_enteteManager->add($dataconv);
+
+								$dataconv_detail = array(
+									'intitule' => 'Construction d’un bâtiment à 2 salles de classe éq',
+									'delai' => '120',
+									'prev_beneficiaire' => '50',
+									'prev_nbr_ecole' => '1',
+									'date_signature' =>date('Y-m-d') , 
+									'observation' => null,
+									'id_convention_entete' => $dataIdcoonv
+								);
+								$dataIdcoonv_detail = $this->Convention_cisco_feffi_detailManager->add($dataconv_detail);
+								
+								$datas_type_batiment = array(
+									'id_type_batiment'=>$retour_subvention_initial->id_type_batiment,
+									'cout_unitaire'=> $retour_subvention_initial->cout_batiment ,
+									'id_convention_entete'=> $dataIdcoonv,
+									'nbr_batiment'=>null				
+								);
+								$dataIdsubvention_batiment = $this->Batiment_constructionManager->add($datas_type_batiment);
+
+								$datas_type_latrine = array(
+									'id_type_latrine'=> $retour_subvention_initial->id_type_latrine,
+									'cout_unitaire'=> $retour_subvention_initial->cout_latrine,
+									'id_convention_entete'=> $dataIdcoonv,
+									'nbr_latrine'=>null				
+								);
+								$dataIdsubvention_latrine = $this->Latrine_constructionManager->add($datas_type_latrine);
+
+								$datas_type_mobilier = array(
+									'id_type_mobilier'=> $retour_subvention_initial->id_type_mobilier,
+									'cout_unitaire'=> $retour_subvention_initial->cout_mobilier,
+									'id_convention_entete'=> $dataIdcoonv,
+									'nbr_mobilier'=>null				
+								);
+								$dataIdsubvention_mobilier = $this->Mobilier_constructionManager->add($datas_type_mobilier);
+
+								$datas_type_maitrise = array(
+									'id_type_cout_maitrise'=> $retour_subvention_initial->id_type_maitrise,
+									'cout'=> $retour_subvention_initial->cout_maitrise,
+									'id_convention_entete'=> $dataIdcoonv				
+								);
+								$dataIdsubvention_maitrise = $this->Cout_maitrise_constructionManager->add($datas_type_maitrise);
+
+								$datas_type_sousprojet = array(
+									'id_type_cout_sousprojet'=> $retour_subvention_initial->id_type_sousprojet,
+									'cout'=> $retour_subvention_initial->cout_sousprojet,
+									'id_convention_entete'=> $dataIdcoonv				
+								);
+								$dataIdsubvention_sousprojet = $this->Cout_sousprojet_constructionManager->add($datas_type_sousprojet);
+								$sheet->setCellValue('IO'.$ligne, 'ok'); 
 		                	//array_push($zap_inserer, $data);
 							$nbr_inserer = $nbr_inserer + 1;
 						}
@@ -429,7 +581,7 @@ class Importer_ecole extends CI_Controller {
 					}
 					else//mis erreur
 					{
-						$sheet->setCellValue('J'.$ligne, "erreur");
+						$sheet->setCellValue('IO'.$ligne, "erreur");
 						$nbr_erreur = $nbr_erreur + 1;
 					}						
 						

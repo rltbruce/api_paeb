@@ -2,12 +2,20 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Importer_zap_commune extends CI_Controller {
+class Importer_feffi extends CI_Controller {
     public function __construct() {
-        parent::__construct();       
-        $this->load->model('zap_commune_model', 'Zap_communeManager');       
-        $this->load->model('commune_model', 'CommuneManager');      
-        $this->load->model('zap_model', 'ZapManager');
+        parent::__construct();        
+        $this->load->model('ecole_model', 'EcoleManager');       
+        $this->load->model('region_model', 'RegionManager');       
+        $this->load->model('cisco_model', 'CiscoManager');      
+        $this->load->model('commune_model', 'CommuneManager');       
+        $this->load->model('zap_model', 'ZapManager');         
+        $this->load->model('zap_commune_model', 'Zap_communeManager');     
+        $this->load->model('fokontany_model', 'FokontanyManager');   
+        $this->load->model('zone_subvention_model', 'Zone_subventionManager');   
+        $this->load->model('acces_zone_model', 'Acces_zoneManager');
+        $this->load->model('feffi_model', 'FeffiManager');
+        $this->load->model('compte_feffi_model', 'Compte_feffiManager');
         
 
     }
@@ -20,7 +28,7 @@ class Importer_zap_commune extends CI_Controller {
 	}
 
 
-	public function testzap_commune() {
+	public function testfeffi() {
 
 		$erreur="aucun";
 		ini_set('upload_max_filesize', '200000000000000000M');  
@@ -77,10 +85,10 @@ class Importer_zap_commune extends CI_Controller {
 		ini_set('post_max_size', '2000000000M');
 		set_time_limit(0);
         ini_set ('memory_limit', '100000000000000M');
-				$retour = $this->controler_donnees_importertestzap_commune($name1,$repertoire);
+				$retour = $this->controler_donnees_importertestecole($name1,$repertoire);
 				$rapport['nbr_inserer']=$retour['nbr_inserer'];
 				$rapport['nbr_refuser']=$retour['nbr_erreur'];
-				$rapport['zap_commune_inserer']=$retour['zap_commune_inserer'];
+				$rapport['zap_inserer']=$retour['zap_inserer'];
 				$rapport['erreur']=false;
 				$rapport["erreur_value"]= '' ;
 				echo json_encode($rapport);
@@ -96,7 +104,7 @@ class Importer_zap_commune extends CI_Controller {
 		} 
 		
 	}
-	public function controler_donnees_importertestzap_commune($filename,$directory) {
+	public function controler_donnees_importertestecole($filename,$directory) {
 		require_once 'Classes/PHPExcel.php';
 		require_once 'Classes/PHPExcel/IOFactory.php';
 		ini_set('upload_max_filesize', '2000000000M');  
@@ -112,7 +120,7 @@ class Importer_zap_commune extends CI_Controller {
 		//$user_ok=false;
 		$nbr_erreur=0;
 		$nbr_inserer=0;
-		$zap_commune_inserer = array();
+		$zap_inserer = array();
 		//The name of the directory that we need to create.
 		$directoryName = dirname(__FILE__) ."/../../../../../../assets/excel/".$repertoire;
 		//Check if the directory already exists.
@@ -127,13 +135,13 @@ class Importer_zap_commune extends CI_Controller {
 			// pour mise à jour après : G4 = id_fiche_paiement <=> déjà importé => à ignorer
 			$objet_read_write = PHPExcel_IOFactory::createReader('Excel2007');
 			$excel = $objet_read_write->load($lien_vers_mon_document_excel);			 
-			$sheet = $excel->getSheet(1);
+			$sheet = $excel->getSheet(0);
 			// pour lecture début - fin seulement
 			$XLSXDocument = new PHPExcel_Reader_Excel2007();
 		} else {
 			$objet_read_write = PHPExcel_IOFactory::createReader('Excel2007');
 			$excel = $objet_read_write->load($lien_vers_mon_document_excel);			 
-			$sheet = $excel->getSheet(1);
+			$sheet = $excel->getSheet(0);
 			$XLSXDocument = new PHPExcel_Reader_Excel5();
 		}
 		$Excel = $XLSXDocument->load($lien_vers_mon_document_excel);
@@ -144,33 +152,80 @@ class Importer_zap_commune extends CI_Controller {
 		{			
 			$ligne = $row->getRowIndex ();
 			$erreur = false;
-				if($ligne >=3)
+				if($ligne >=10)
 				{
 					$cellIterator = $row->getCellIterator();
 					$cellIterator->setIterateOnlyExistingCells(false);
 					$rowIndex = $row->getRowIndex ();
 					foreach ($cellIterator as $cell)
 					{
-						if('C' == $cell->getColumn())
+						if('B' == $cell->getColumn())
 						{
-							$reg =$cell->getValue();
-						}   
+							$eco =$cell->getValue();
+						}  
 						else if('D' == $cell->getColumn())
 						{
-							$dist =$cell->getValue();							
+							$foko =$cell->getValue();							
 						}  
 						else if('E' == $cell->getColumn())
 						{
-							$com =$cell->getValue();
-						}   
+							$com =$cell->getValue();							
+						}  
 						else if('F' == $cell->getColumn())
 						{
-							$zp =$cell->getValue();							
+							$cis =$cell->getValue();							
+						}  
+						else if('G' == $cell->getColumn())
+						{
+							$reg =$cell->getValue();							
+						}  
+						else if('H' == $cell->getColumn())
+						{
+							$acc =$cell->getValue();							
+						} 
+						else if('I' == $cell->getColumn())
+						{
+							$fef =$cell->getValue();							
 						}	 
 					}
 					
 					// Si donnée incorrect : coleur cellule en rouge
-					if($zp=="")
+					
+					if($reg=="")
+					{						
+						$sheet->getStyle("G".$ligne)->getFill()->applyFromArray(
+									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+										 'startcolor' => array('rgb' => 'f2e641'),
+										 'endcolor'   => array('rgb' => 'f2e641')
+									 )
+						);
+						$erreur = true;													
+					}
+					else
+					{
+						// Vérifier si nom_feffi existe dans la BDD
+						$regn=strtolower($reg);
+						$retour_region = $this->RegionManager->getregiontest($regn);
+						if(count($retour_region) >0)
+						{
+							foreach($retour_region as $k=>$v)
+							{
+								$id_region = $v->id;
+							}	
+						}
+						else
+						{
+							$sheet->getStyle("G".$ligne)->getFill()->applyFromArray(
+										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+											 'startcolor' => array('rgb' => 'f24141'),
+											 'endcolor'   => array('rgb' => 'f24141')
+										 )
+							);
+							$erreur = true;
+							$sheet->setCellValue('IQ'.$ligne, 'retour_region');
+						}
+					}
+					if($cis=="")
 					{						
 						$sheet->getStyle("F".$ligne)->getFill()->applyFromArray(
 									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
@@ -183,13 +238,14 @@ class Importer_zap_commune extends CI_Controller {
 					else
 					{
 						// Vérifier si nom_feffi existe dans la BDD
-						$zpl=strtolower($zp);
-						$retour_zap = $this->ZapManager->getzaptest($zpl);
-						if(count($retour_zap) >0)
+						$cisn=strtolower($cis);
+						$regn=strtolower($reg);
+						$retour_cisco = $this->CiscoManager->getciscotest($cisn,$regn);
+						if(count($retour_cisco) >0)
 						{
-							foreach($retour_zap as $k=>$v)
+							foreach($retour_cisco as $k=>$v)
 							{
-								$id_zap = $v->id;
+								$id_cisco = $v->id;
 							}	
 						}
 						else
@@ -201,8 +257,10 @@ class Importer_zap_commune extends CI_Controller {
 										 )
 							);
 							$erreur = true;
+							$sheet->setCellValue('IQ'.$ligne, 'retour_cisco');
 						}
-					} 
+					}
+					
 					if($com=="")
 					{						
 						$sheet->getStyle("E".$ligne)->getFill()->applyFromArray(
@@ -211,15 +269,16 @@ class Importer_zap_commune extends CI_Controller {
 										 'endcolor'   => array('rgb' => 'f2e641')
 									 )
 						);
-						$erreur = true;													
+						$erreur = true;	
+						$sheet->setCellValue('IQ'.$ligne, 'retour_commune1');												
 					}
 					else
 					{
 						// Vérifier si nom_feffi existe dans la BDD
-						$coml=strtolower($com);
-						$distl=strtolower($dist);
-						$regl=strtolower($reg);
-						$retour_commune = $this->CommuneManager->getcommunetest($regl,$distl,$coml);
+						$regn=strtolower($reg);
+						$distn=strtolower($cis);
+						$comn=strtolower($com);
+						$retour_commune = $this->CommuneManager->getcommunetest($regn,$distn,$comn);
 						if(count($retour_commune) >0)
 						{
 							foreach($retour_commune as $k=>$v)
@@ -236,44 +295,145 @@ class Importer_zap_commune extends CI_Controller {
 										 )
 							);
 							$erreur = true;
+							$sheet->setCellValue('IQ'.$ligne, 'retour_commune');
 						}
-					}  
+					}
+					if($foko=="")
+					{						
+						$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
+									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+										 'startcolor' => array('rgb' => 'f2e641'),
+										 'endcolor'   => array('rgb' => 'f2e641')
+									 )
+						);
+						$erreur = true;													
+					}
+					else
+					{
+						// Vérifier si nom_feffi existe dans la BDD
+						$fokon=strtolower($foko);
+						$retour_fokontany = $this->FokontanyManager->getfokontanytestbyid_commune($id_commune,$fokon);
+						if(count($retour_fokontany) >0)
+						{
+							foreach($retour_fokontany as $k=>$v)
+							{
+								$id_fokontany = $v->id;
+							}	
+						}
+						else
+						{
+							$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
+										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+											 'startcolor' => array('rgb' => 'f24141'),
+											 'endcolor'   => array('rgb' => 'f24141')
+										 )
+							);
+							$erreur = true;
+							$sheet->setCellValue('IQ'.$ligne, 'retour_fokontany');
+						}
+					}
 					
+					if($eco=="")
+					{						
+						$sheet->getStyle("B".$ligne)->getFill()->applyFromArray(
+									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+										 'startcolor' => array('rgb' => 'f2e641'),
+										 'endcolor'   => array('rgb' => 'f2e641')
+									 )
+						);
+						$erreur = true;													
+					}
+					else
+					{
+						// Vérifier si nom_feffi existe dans la BDD
+						$econ=strtolower($eco);
+						$retour_ecole = $this->EcoleManager->getecoletestbyid_fokontany($id_fokontany,$econ);
+						if(count($retour_ecole) >0)
+						{
+							foreach($retour_ecole as $k=>$v)
+							{
+								$id_ecole = $v->id;
+								$code = $v->code;
+								$description = $v->description;
+								$lieu = $v->lieu;
+								$latitude = $v->latitude;
+								$longitude = $v->longitude;
+								$altitude = $v->altitude;
+								$id_zap = $v->id_zap;
+								
+							}	
+						}
+						else
+						{
+							$sheet->getStyle("B".$ligne)->getFill()->applyFromArray(
+										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+											 'startcolor' => array('rgb' => 'f24141'),
+											 'endcolor'   => array('rgb' => 'f24141')
+										 )
+							);
+							$erreur = true;
+							$sheet->setCellValue('IQ'.$ligne, $id_fokontany.$econ);
+						}
+					}
+					
+					if($fef=="")
+					{						
+						$sheet->getStyle("I".$ligne)->getFill()->applyFromArray(
+									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+										 'startcolor' => array('rgb' => 'f2e641'),
+										 'endcolor'   => array('rgb' => 'f2e641')
+									 )
+						);
+						$erreur = true;													
+					}
+					/*$id_region =1;
+					$id_cisco=1;
+					$id_commune=1;
+					$id_zap=1;
+					$id_fokontany=1;*/
 					if($erreur==false)
 					{	
-						$zpn=strtolower($zp);
-						$comn=strtolower($com);
-						$replace=array('_');
-						$search= array(' ');
-						$nomfichier = $filename;		
-						$comn_=str_replace($search,$replace,$comn);
-						$doublon = $this->Zap_communeManager->getzap_communetest($id_zap,$id_commune);
+						$fefn=strtolower($fef);						
+						$doublon = $this->FeffiManager->getfeffitest($id_ecole,$fefn);
 						if (count($doublon)>0)//mis doublon
 						{
-							$sheet->setCellValue('J'.$ligne, "Doublon");
-							array_push($zap_commune_inserer, $doublon);
+							$sheet->setCellValue('IO'.$ligne, "Doublon");
+							array_push($zap_inserer, $doublon);
 							$nbr_erreur = $nbr_erreur + 1;							
 						}
 						else//ts doublon
 						{
 
-		                		//$dataId = $this->Zap_communeManager->add($data); 
+		                		//$dataId = $this->ZapManager->add($data); 
 		                	
-								$sheet->setCellValue('J'.$ligne, "ts Doublon"); 
+								$sheet->setCellValue('IO'.$ligne, "ok"); 
 								$data = array(
-									'id_commune' => $id_commune,
-									'id_zap' => $id_zap
+									'identifiant' => $fef,
+									'denomination' => $fef,
+									'adresse' => $foko,
+									'observation' => null,
+									'id_ecole' => $id_ecole
+									
 									);
-									$dataId = $this->Zap_communeManager->add($data);        		
+								$dataId = $this->FeffiManager->add($data);
 
-		                	//array_push($zap_commune_inserer, $data);
+								$datacompte = array(
+									'nom_banque' => "xxx",
+									'rib' => "1234",
+									'numero_compte' => "1234",
+									'adresse_banque' => "xxx",
+									'id_feffi' => $dataId
+									
+									);
+								$dataIdcompte = $this->Compte_feffiManager->add($datacompte);	
+		                	//array_push($zap_inserer, $data);
 							$nbr_inserer = $nbr_inserer + 1;
 						}
 	        																
 					}
 					else//mis erreur
 					{
-						$sheet->setCellValue('J'.$ligne, "erreur");
+						$sheet->setCellValue('IO'.$ligne, "erreur");
 						$nbr_erreur = $nbr_erreur + 1;
 					}						
 						
@@ -286,7 +446,7 @@ class Importer_zap_commune extends CI_Controller {
 		$report['nbr_erreur']=$nbr_erreur;
 		$report['nbr_inserer']=$nbr_inserer;
 		//$report['user']=$type_latrine;
-		$report['zap_commune_inserer']=$zap_commune_inserer;
+		$report['zap_inserer']=$zap_inserer;
 		//echo json_encode($report);	
 		$objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
 		$objWriter->save(dirname(__FILE__) ."/../../../../../../assets/excel/".$repertoire. $nomfichier);

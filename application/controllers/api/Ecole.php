@@ -178,7 +178,7 @@ class Ecole extends REST_Controller {
             $cisco = $this->CiscoManager->findById($ecole->id_cisco);
             $commune = $this->CommuneManager->findById($ecole->id_commune);
             $zap = $this->ZapManager->findById($ecole->id_zap);
-            $region = $this->RegionManager->findById($value->id_region);
+            $region = $this->RegionManager->findById($ecole->id_region);
             $data['id'] = $ecole->id;
             $data['code'] = $ecole->code;
             $data['lieu'] = $ecole->lieu;

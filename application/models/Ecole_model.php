@@ -175,4 +175,20 @@ class Ecole_model extends CI_Model {
         }                 
     }
 
+    public function getecoletestbyid_fokontany($id_fokontany,$econ)
+    {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_fokontany',$id_fokontany)
+                        ->where('lower(ecole.description)=',$econ)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

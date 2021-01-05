@@ -173,5 +173,20 @@ class Fokontany_model extends CI_Model {
             return array();
         }                 
     }
+    public function getfokontanytestbyid_commune($id_commune,$fokontany) {               
+        $result =  $this->db->select('fokontany.*')
+                        ->from($this->table)
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->where('lower(fokontany.nom)=',$fokontany)
+                        ->where("commune.id=", $id_commune)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
 }
 ?>

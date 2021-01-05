@@ -147,7 +147,7 @@ class Zap_model extends CI_Model {
     }
 
     public function getzap_commune_districtbyid($id_zap, $id_commune,$id_district) {               
-        $result =  $this->db->select('*')
+        $result =  $this->db->select('zap_commune.*')
                         ->from('zap_commune')
                         ->join('commune','commune.id=zap_commune.id_commune')
                         ->join('district','district.id=commune.id_district')

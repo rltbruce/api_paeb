@@ -221,5 +221,19 @@ class Passation_marches_pr_model extends CI_Model {
     }
 
     
+    public function getpassationtest($id_convention) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_convention_entete',$id_convention)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    } 
+    
 
 }

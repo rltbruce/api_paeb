@@ -73,11 +73,12 @@ class Site_model extends CI_Model {
         }
     }
 
-    public function findsiteByenpreparationandinvalide() {               
+    public function findsiteByenpreparationandinvalide($requete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where('statu_convention',0)
                         ->where('validation',0)
+                        ->where($requete)
                         ->order_by('code_sous_projet')
                         ->get()
                         ->result();
@@ -136,6 +137,20 @@ class Site_model extends CI_Model {
             return null;
         }                 
     }
+    
+    public function findsiteByfiltre($requete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where($requete)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
    /* public function findsiteInvalide() {               
         $result =  $this->db->select('*')
                         ->from($this->table)
@@ -169,19 +184,6 @@ class Site_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where('validation',0)
-                        ->where($requete)
-                        ->get()
-                        ->result();
-        if($result)
-        {
-            return $result;
-        }else{
-            return null;
-        }                 
-    }
-    public function findsiteByfiltre($requete) {               
-        $result =  $this->db->select('*')
-                        ->from($this->table)
                         ->where($requete)
                         ->get()
                         ->result();
