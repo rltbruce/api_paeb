@@ -140,7 +140,23 @@ class Fokontany_model extends CI_Model {
             return null;
         }                 
     }
-    
+    public function getfokontanynomtest($district,$commune,$fokontany) {               
+        $result =  $this->db->select('fokontany.*')
+                        ->from($this->table)
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->join('district','district.id=commune.id_district')
+                        ->where('lower(fokontany.nom)=',$fokontany)
+                        ->where("lower(commune.nom)=", $commune)
+                        ->where("lower(district.nom)=", $district)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
     public function getfokontanytest($district,$commune,$fokontany) {               
         $result =  $this->db->select('fokontany.*')
                         ->from($this->table)
@@ -188,5 +204,28 @@ class Fokontany_model extends CI_Model {
             return array();
         }                 
     }
+
+    
+    public function getfokontanybyfokontanyzapcisco($fokontany,$zap,$cisco) {               
+        $result =  $this->db->select('fokontany.*')
+                        ->from($this->table)
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->join('zap_commune','zap_commune.id_commune=commune.id')
+                        ->join('zap','zap_commune.id_zap=zap.id')
+                        ->join('district','district.id=commune.id_district')
+                        ->join('cisco','cisco.id_district=district.id')
+                        ->where('lower(fokontany.nom)=',$fokontany)
+                        ->where('lower(zap.nom)=',$zap)
+                        ->where('lower(cisco.description)=',$cisco)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
+    
 }
 ?>

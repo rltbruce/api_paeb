@@ -5,79 +5,63 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Membre_feffi extends REST_Controller {
+class Piece_justificatif_frais_fonction_feffi extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('membre_feffi_model', 'Membre_feffiManager');
-        $this->load->model('feffi_model', 'FeffiManager');
-        $this->load->model('organe_feffi_model', 'Organe_feffiManager');
-        $this->load->model('fonction_feffi_model', 'Fonction_feffiManager');
+        $this->load->model('piece_justificatif_frais_fonction_feffi_model', 'Piece_justificatif_frais_fonction_feffiManager');
+       
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_feffi = $this->get('id_feffi');
+        $id_addition_frais = $this->get('id_addition_frais');
+        $menu = $this->get('menu');
             
-        if ($id_feffi) 
-        {   $data = array();
-            $tmp = $this->Membre_feffiManager->findByfeffi($id_feffi);
+        if ($id_addition_frais)
+        {
+            $tmp = $this->Piece_justificatif_frais_fonction_feffiManager->findAllByjustificatif($id_addition_frais);
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value) 
                 {
-                    $feffi = array();
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $organe_feffi = $this->Organe_feffiManager->findById($value->id_organe_feffi);
-                    $fonction_feffi = $this->Fonction_feffiManager->findById($value->id_fonction_feffi);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['nom'] = $value->nom;
-                    $data[$key]['prenom'] = $value->prenom;
-                    $data[$key]['age'] = $value->age;
-                    $data[$key]['sexe'] = $value->sexe;
-                    $data[$key]['organe_feffi'] = $organe_feffi;
-                    $data[$key]['fonction_feffi'] = $fonction_feffi;
-                    $data[$key]['feffi'] = $feffi;
+                    if ($value->id == null)
+                    {
+                        $data[$key]['id'] = 0;
+                    }
+                    else
+                    {
+                        $data[$key]['id'] = $value->id;
+                    }
+                    
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                    $data[$key]['id_justificatif_prevu'] = $value->id_justificatif_prevu;
+                    $data[$key]['fichier'] = $value->fichier;
                 }
-            }
+            } 
+                else
+                    $data = array();
         }
         elseif ($id)
         {
             $data = array();
-            $membre_feffi = $this->Membre_feffiManager->findById($id);
-            $feffi = $this->FeffiManager->findById($membre_feffi->id_feffi);
-            $organe_feffi = $this->Organe_feffiManager->findById($membre_feffi->id_organe_feffi);
-            $fonction_feffi = $this->Fonction_feffiManager->findById($membre_feffi->id_fonction_feffi);
-            
-            $data['id'] = $membre_feffi->id;
-            $data['nom'] = $membre_feffi->nom;
-            $data['prenom'] = $membre_feffi->prenom;
-            $data['age'] = $membre_feffi->age;
-            $data['sexe'] = $membre_feffi->sexe;
-            $data['organe_feffi'] = $organe_feffi;
-            $data['fonction_feffi'] = $fonction_feffi;
-            $data['feffi'] = $feffi;
+            $piece_justificatif_frais_fonction_feffi = $this->Piece_justificatif_frais_fonction_feffiManager->findById($id);
+            $data['id'] = $piece_justificatif_frais_fonction_feffi->id;
+            $data['description'] = $piece_justificatif_frais_fonction_feffi->description;
+            $data['fichier'] = $piece_justificatif_frais_fonction_feffi->fichier;
         } 
         else 
         {
-            $menu = $this->Membre_feffiManager->findAll();
+            $menu = $this->Piece_justificatif_frais_fonction_feffiManager->findAll();
             if ($menu) 
             {
                 foreach ($menu as $key => $value) 
-                {
-                    
-                    $feffi = $this->FeffiManager->findById($value->id_feffi);
-                    $organe_feffi = $this->Organe_feffiManager->findById($value->id_organe_feffi);
-                    $fonction_feffi = $this->Fonction_feffiManager->findById($value->id_fonction_feffi);
+                {                   
                     $data[$key]['id'] = $value->id;
-                    $data[$key]['nom'] = $value->nom;
-                    $data[$key]['prenom'] = $value->prenom;
-                    $data[$key]['age'] = $value->age;
-                    $data[$key]['sexe'] = $value->sexe;
-                    $data[$key]['organe_feffi'] = $organe_feffi;
-                    $data[$key]['fonction_feffi'] = $fonction_feffi;
-                    $data[$key]['feffi'] = $feffi;
+                    $data[$key]['description'] = $value->description;
+                    $data[$key]['fichier'] = $value->fichier;
                 }
             } 
                 else
@@ -106,13 +90,9 @@ class Membre_feffi extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'nom' => $this->post('nom'),
-                    'prenom' => $this->post('prenom'),
-                    'sexe' => $this->post('sexe'),
-                    'age' => $this->post('age'),
-                    'id_organe_feffi' => $this->post('id_organe_feffi'),
-                    'id_fonction_feffi' => $this->post('id_fonction_feffi'),
-                    'id_feffi' => $this->post('id_feffi')
+                    'fichier' => $this->post('fichier'),
+                    'id_addition_frais' => $this->post('id_addition_frais'),
+                    'id_justificatif_prevu' => $this->post('id_justificatif_prevu')
                 );
                 if (!$data) {
                     $this->response([
@@ -121,7 +101,7 @@ class Membre_feffi extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Membre_feffiManager->add($data);
+                $dataId = $this->Piece_justificatif_frais_fonction_feffiManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -137,13 +117,9 @@ class Membre_feffi extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'nom' => $this->post('nom'),
-                    'prenom' => $this->post('prenom'),
-                    'sexe' => $this->post('sexe'),
-                    'age' => $this->post('age'),
-                    'id_organe_feffi' => $this->post('id_organe_feffi'),
-                    'id_fonction_feffi' => $this->post('id_fonction_feffi'),
-                    'id_feffi' => $this->post('id_feffi')
+                    'fichier' => $this->post('fichier'),
+                    'id_addition_frais' => $this->post('id_addition_frais'),
+                    'id_justificatif_prevu' => $this->post('id_justificatif_prevu')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -152,7 +128,7 @@ class Membre_feffi extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Membre_feffiManager->update($id, $data);
+                $update = $this->Piece_justificatif_frais_fonction_feffiManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -174,7 +150,7 @@ class Membre_feffi extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Membre_feffiManager->delete($id);         
+            $delete = $this->Piece_justificatif_frais_fonction_feffiManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

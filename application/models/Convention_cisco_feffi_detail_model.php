@@ -23,6 +23,17 @@ class Convention_cisco_feffi_detail_model extends CI_Model {
             return null;
         }                      
     }
+    public function update_det($id, $convention) {
+        $this->db->set($this->_set($convention))
+                            ->where('id_convention_entete', (int) $id)
+                            ->update($this->table);
+        if($this->db->affected_rows() === 1)
+        {
+            return true;
+        }else{
+            return null;
+        }                      
+    }
     public function _set($convention) {
         return array(
             'intitule' => $convention['intitule'],

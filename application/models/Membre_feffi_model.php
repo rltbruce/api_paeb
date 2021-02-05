@@ -29,7 +29,8 @@ class Membre_feffi_model extends CI_Model {
             'prenom'   =>      $membre_feffi['prenom'],
             'sexe'   =>      $membre_feffi['sexe'],
             'age'   =>      $membre_feffi['age'],
-            'occupation'   => $membre_feffi['occupation'],
+            'id_organe_feffi'   => $membre_feffi['id_organe_feffi'],
+            'id_fonction_feffi'   => $membre_feffi['id_fonction_feffi'],
             'id_feffi'    => $membre_feffi['id_feffi']                       
         );
     }
@@ -54,6 +55,18 @@ class Membre_feffi_model extends CI_Model {
         }else{
             return null;
         }                 
+    }
+    
+    public function findByMembre($id)  {
+        $this->db->select('membre_feffi.id as id,membre_feffi.nom as nom,membre_feffi.prenom as prenom,membre_feffi.id_feffi as id_feffi,
+        membre_feffi.sexe as sexe,membre_feffi.age as age,organe_feffi.libelle as organe_libelle,fonction_feffi.libelle as fonction_libelle')
+        ->join('organe_feffi','organe_feffi.id=membre_feffi.id_organe_feffi')
+        ->join('fonction_feffi','fonction_feffi.id=membre_feffi.id_fonction_feffi')
+        ->where("membre_feffi.id", $id);
+        $q = $this->db->get($this->table);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
     }
     public function findById($id)  {
         $this->db->where("id", $id);
@@ -96,5 +109,25 @@ class Membre_feffi_model extends CI_Model {
         if ($q->num_rows() > 0) {
             return $q->row();
         }
+    }
+    
+    public function getmembre_feffitest($id_organe_feffi,$id_fonction_feffi,$nom_membre,$prenom_membre)
+    {               
+        $result =  $this->db->select('membre_feffi.*')
+                        ->from($this->table)
+                        ->join('organe_feffi','organe_feffi.id=membre_feffi.id_organe_feffi')
+                        ->join('fonction_feffi','fonction_feffi.id=membre_feffi.id_fonction_feffi')
+                        ->where("membre_feffi.id_organe_feffi", $id_organe_feffi)
+                        ->where("membre_feffi.id_fonction_feffi", $id_fonction_feffi)
+                        ->where("lower(membre_feffi.nom)", $nom_membre)
+                        ->where("lower(membre_feffi.prenom)", $prenom_membre)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
     }
 }

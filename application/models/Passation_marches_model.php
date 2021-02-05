@@ -12,6 +12,17 @@ class Passation_marches_model extends CI_Model {
             return null;
         }                    
     }
+    public function update_pa($id, $passation_marches) {
+        $this->db->set($this->_set($passation_marches))
+                            ->where('id_convention_entete', (int) $id)
+                            ->update($this->table);
+        if($this->db->affected_rows() === 1)
+        {
+            return true;
+        }else{
+            return null;
+        }                      
+    }
     public function update($id, $passation_marches) {
         $this->db->set($this->_set($passation_marches))
                             ->where('id', (int) $id)

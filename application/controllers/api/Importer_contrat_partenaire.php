@@ -234,7 +234,7 @@ class Importer_contrat_partenaire extends CI_Controller {
 					}
 					if($montant_cont=="")
 					{						
-						$sheet->getStyle("J".$ligne)->getFill()->applyFromArray(
+						$sheet->getStyle("AT".$ligne)->getFill()->applyFromArray(
 									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 										 'startcolor' => array('rgb' => 'f2e641'),
 										 'endcolor'   => array('rgb' => 'f2e641')

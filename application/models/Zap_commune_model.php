@@ -125,5 +125,23 @@ class Zap_commune_model extends CI_Model {
             return array();
         }                 
     }
+    public function getzapbyzapcisco($zap,$cisco) {               
+        $result =  $this->db->select('zap.*')
+                        ->from($this->table)
+                        ->join('zap','zap.id=zap_commune.id_zap')
+                        ->join('commune','commune.id=zap_commune.id_commune')
+                        ->join('district','district.id=commune.id_district')
+                        ->join('cisco','cisco.id_district=district.id')
+                        ->where("lower(zap.nom)", $zap)
+                        ->where("lower(cisco.description)", $cisco)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
 }
 ?>

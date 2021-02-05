@@ -23,7 +23,17 @@ class Pv_consta_entete_travaux extends REST_Controller {
         $id_facture_mpe = $this->get('id_facture_mpe');
         $menu = $this->get('menu');
 
-        if ($menu=="getrecapByentete_travauxcontrat")
+        if ($menu=="getrecapBymax_travauxcontrat")
+        {
+            $tmp = $this->Pv_consta_entete_travauxManager->getrecapBymax_travauxcontrat($id_contrat_prestataire);
+            if ($tmp) 
+            {
+                $data=$tmp[0];           
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=="getrecapByentete_travauxcontrat")
         {
             $tmp = $this->Pv_consta_entete_travauxManager->getrecapByentete_travauxcontrat($id_pv_consta_entete_travaux,$id_contrat_prestataire);
             if ($tmp) 

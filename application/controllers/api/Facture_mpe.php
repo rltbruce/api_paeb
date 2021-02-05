@@ -25,8 +25,15 @@ class Facture_mpe extends REST_Controller {
         $id_facture_mpe = $this->get('id_facture_mpe');
         $menu = $this->get('menu');        
         $statu_incomplete = false;
+        $id_convention_entete = $this->get('id_convention_entete');
+        $validation = $this->get('validation');
 
-        if ($menu=="getdecompte_mpeBycontratandfacture")
+        if ($menu=="count_facture_prestatairebyconventionvalidation")
+        {
+            $tmp = $this->Facture_mpeManager->count_facture_prestatairebyconventionvalidation($id_convention_entete,$validation);            
+            $data = $tmp;
+        }
+        elseif ($menu=="getdecompte_mpeBycontratandfacture")
         {
             $tmp = $this->Facture_mpeManager->finddecompte_mpeBycontratandfacture($id_contrat_prestataire,$id_facture_mpe);
             if ($tmp) 

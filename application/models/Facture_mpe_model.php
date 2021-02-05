@@ -1178,6 +1178,41 @@ class Facture_mpe_model extends CI_Model {
                 return null;
             }                 
         }
+
+        public function countAllfactureByvalidation($invalide)
+    {
+        $result = $this->db->select("COUNT(*) as nombre_mpe, (select COUNT(facture_moe_entete.id) from facture_moe_entete where facture_moe_entete.validation='".$invalide."' and facture_moe_entete.statu_fact=2) as nombre_moe")
+                        ->from($this->table)
+                        ->where("validation", $invalide)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                  
+    }
+    public function count_facture_prestatairebyconventionvalidation($id_convention_entete,$validation)
+    {
+        $result = $this->db->select("COUNT(*) as nombre_mpe, 
+                                    (select COUNT(facture_moe_entete.id) from facture_moe_entete 
+                                        inner join contrat_bureau_etude on contrat_bureau_etude.id= facture_moe_entete.id_contrat_bureau_etude
+                                        where facture_moe_entete.validation='".$validation."' and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."') as nombre_moe")
+                        ->from($this->table)
+                        ->join('pv_consta_entete_travaux','pv_consta_entete_travaux.id=facture_mpe.id_pv_consta_entete_travaux')
+                        ->join('contrat_prestataire','contrat_prestataire.id=pv_consta_entete_travaux.id_contrat_prestataire')
+                        ->where("facture_mpe.validation", $validation)
+                        ->where("contrat_prestataire.id_convention_entete", $id_convention_entete)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                  
+    }
         
 
 }

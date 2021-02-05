@@ -256,7 +256,7 @@ class Importer_passation_bureau_etude extends CI_Controller {
 						);
 						$erreur = true;													
 					} 
-					if($date_mani=="")
+					/*if($date_mani=="")
 					{						
 						$sheet->getStyle("EF".$ligne)->getFill()->applyFromArray(
 									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
@@ -265,7 +265,7 @@ class Importer_passation_bureau_etude extends CI_Controller {
 									 )
 						);
 						$erreur = true;													
-					} 
+					} */
 					if($date_lance=="")
 					{						
 						$sheet->getStyle("EG".$ligne)->getFill()->applyFromArray(
@@ -421,7 +421,7 @@ class Importer_passation_bureau_etude extends CI_Controller {
 						   'observation' => null,
 	   
 						   'date_shortlist' => date("Y-m-d", strtotime($date_shor)),
-						   'date_manifestation' => date("Y-m-d", strtotime($date_mani)),
+						   'date_manifestation' => null,
 						   'statut' => $this->statu_moe($stat),
 	   
 						   'id_convention_entete' => $id_convetion,

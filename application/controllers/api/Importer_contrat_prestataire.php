@@ -246,7 +246,7 @@ class Importer_contrat_prestataire extends CI_Controller {
 						}
 						else
 						{
-							$sheet->getStyle("AS".$ligne)->getFill()->applyFromArray(
+							$sheet->getStyle("FV".$ligne)->getFill()->applyFromArray(
 										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
 											 'startcolor' => array('rgb' => 'f24141'),
 											 'endcolor'   => array('rgb' => 'f24141')

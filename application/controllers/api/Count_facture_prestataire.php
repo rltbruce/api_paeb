@@ -9,7 +9,7 @@ class Count_facture_prestataire extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('demande_batiment_prestataire_model', 'Demande_batiment_prestataireManager');
+        $this->load->model('facture_mpe_model', 'Facture_mpeManager');
     }
 
     public function index_get() 
@@ -17,10 +17,10 @@ class Count_facture_prestataire extends REST_Controller {
         $id = $this->get('id');
         $id_contrat_prestataire = $this->get('id_contrat_prestataire');
         $invalide = $this->get('invalide');
-        if ($invalide==2)
+        if ($invalide==0)
         {
-           $demande_batiment_prestataire = $this->Demande_batiment_prestataireManager->countAllfactureByvalidation(1);          
-            $data = $demande_batiment_prestataire;
+           $facture_prestataire = $this->Facture_mpeManager->countAllfactureByvalidation(0);          
+            $data = $facture_prestataire;
         }
        /* if ($invalide==2)
         {

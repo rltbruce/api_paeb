@@ -41,9 +41,9 @@ class Importer_fichier extends CI_Controller {
 		//$rapport['repertoire']=dirname(__FILE__) ."/../../../../../../assets/ddb/" .$repertoire;
 		$config['upload_path']          = dirname(__FILE__) ."/../../../../../../assets/".$repertoire;
 		$config['allowed_types'] = 'gif|jpg|png|xls|xlsx|doc|docx|pdf|txt';
-		$config['max_size'] = 10000;
-		$config['max_width'] = 2000;
-		$config['max_height'] = 2000;  
+		$config['max_size'] = 100000000;
+		$config['max_width'] = 200000000;
+		$config['max_height'] = 20000000;  
 		$config['overwrite'] = TRUE;
 		if (isset($_FILES['file']['tmp_name']))
 		{

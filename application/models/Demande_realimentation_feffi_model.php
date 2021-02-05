@@ -262,6 +262,55 @@ class Demande_realimentation_feffi_model extends CI_Model {
         }else{
             return null;
         }                  
+    }
+    public function getdemandefichevalideByconvention($id_convention_cife_entete)
+    {               
+        $this->db->select("tranche_deblocage_feffi.*,tranche_deblocage_feffi.id as id_tranc");
+        
+            $this->db ->select("(
+                select demande_realimentation_feffi.prevu from demande_realimentation_feffi 
+                    inner join transfert_daaf on transfert_daaf.id_demande_rea_feffi=demande_realimentation_feffi.id
+                    where transfert_daaf.validation=1 and demande_realimentation_feffi.id_convention_cife_entete= '".$id_convention_cife_entete."'
+                    and demande_realimentation_feffi.id_tranche_deblocage_feffi=id_tranc) as montant_periode",FALSE);
+            $this->db ->select("(
+                        select tranche_deblocage_feffi.code from tranche_deblocage_feffi
+                            inner join demande_realimentation_feffi on demande_realimentation_feffi.id_tranche_deblocage_feffi= tranche_deblocage_feffi.id
+                            inner join transfert_daaf on transfert_daaf.id_demande_rea_feffi=demande_realimentation_feffi.id
+                            where transfert_daaf.validation=1 and demande_realimentation_feffi.id_convention_cife_entete= '".$id_convention_cife_entete."'
+                            and demande_realimentation_feffi.id=(select max(demande_realimentation.id) from demande_realimentation_feffi as demande_realimentation
+                                inner join transfert_daaf as transfert on transfert.id_demande_rea_feffi=demande_realimentation.id                                
+                                where transfert.validation=1 and demande_realimentation.id_convention_cife_entete= '".$id_convention_cife_entete."')) as tranche_max",FALSE);
+            $this->db ->select("(
+                        select batiment_construction.cout_unitaire from batiment_construction 
+                            where batiment_construction.id_convention_entete= '".$id_convention_cife_entete."') as montant_batiment",FALSE); 
+            $this->db ->select("(
+                        select latrine_construction.cout_unitaire from latrine_construction 
+                            where latrine_construction.id_convention_entete= '".$id_convention_cife_entete."') as montant_latrine",FALSE);     
+            $this->db ->select("(
+                        select mobilier_construction.cout_unitaire from mobilier_construction 
+                            where mobilier_construction.id_convention_entete= '".$id_convention_cife_entete."') as montant_mobilier",FALSE);
+            $this->db ->select("(
+                        select cout_maitrise_construction.cout from cout_maitrise_construction 
+                            where cout_maitrise_construction.id_convention_entete= '".$id_convention_cife_entete."') as montant_maitrise",FALSE);
+                            
+            $this->db ->select("(
+                                select cout_sousprojet_construction.cout from cout_sousprojet_construction 
+                                    where cout_sousprojet_construction.id_convention_entete= '".$id_convention_cife_entete."') as montant_sousprojet",FALSE);
+        $result =  $this->db->from('tranche_deblocage_feffi')  
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+
+
+        if($result)
+        {   
+            return $result;
+        }
+        else
+        {
+            return $data=array();
+        }               
+    
     }   
 
 }

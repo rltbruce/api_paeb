@@ -1,5 +1,3 @@
-
-
 <?php
 //harizo
 defined('BASEPATH') OR exit('No direct script access allowed');
@@ -7,96 +5,38 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Facture_moe_entete extends REST_Controller {
+class Piece_justificatif_frais_fonction_feffi_prevu extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('facture_moe_entete_model', 'Facture_moe_enteteManager');
-        //$this->load->model('facture_mpe_model', 'Facture_mpeManager');
+        $this->load->model('piece_justificatif_frais_fonction_feffi_prevu_model', 'Piece_justificatif_frais_fonction_feffi_prevuManager');
     }
 
     public function index_get() 
     {
         $id = $this->get('id');
-        $id_contrat_bureau_etude = $this->get('id_contrat_bureau_etude');
-        $id_facture_moe = $this->get('id_facture_moe');
+        $id_tranche = $this->get('id_tranche'); 
         $menu = $this->get('menu');
 
-        if ($menu=="getfacture_moevalideBycontrat")
-        {
-            $tmp = $this->Facture_moe_enteteManager->getfacture_moevalideBycontrat($id_contrat_bureau_etude);
-            if ($tmp) 
-            {
-                $data = $tmp;            
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($menu=="getfacture_moevalideById")
-        {
-            $tmp = $this->Facture_moe_enteteManager->getfacture_moevalideById($id_facture_moe);
-            if ($tmp) 
-            {
-                $data = $tmp;            
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($menu=="getfacturedisponibleBycontrat")
-        {
-            $tmp = $this->Facture_moe_enteteManager->getfacturedisponibleBycontrat($id_contrat_bureau_etude);
-            if ($tmp) 
-            {
-                $data = $tmp;            
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($menu=="getfactureemidpfiBycontrat")
-        {
-            $tmp = $this->Facture_moe_enteteManager->getfactureemidpfiBycontrat($id_contrat_bureau_etude);
-            if ($tmp) 
-            {
-                $data = $tmp;            
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($menu=="getfacture_moe_enteteinvalideBycontrat")
-        {
-            $tmp = $this->Facture_moe_enteteManager->getfacture_moe_enteteinvalideBycontrat($id_contrat_bureau_etude);
-            if ($tmp) 
-            {
-                $data = $tmp;            
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($menu=="getfacture_moe_enteteBycontrat")
-        {
-            $tmp = $this->Facture_moe_enteteManager->getfacture_moe_enteteBycontrat($id_contrat_bureau_etude);
-            if ($tmp) 
-            {
-                $data = $tmp;            
-            } 
-                else
-                    $data = array();
-        }
-        elseif ($id)
+       if ($id)
         {
             $data = array();
-            $facture_moe_entete = $this->Facture_moe_enteteManager->findById($id);
-            $data['id'] = $facture_moe_entete->id;
-            $data['numero'] = $facture_moe_entete->numero;
-            $data['date_br'] = $facture_moe_entete->date_br;
-            $data['id_contrat_bureau_etude'] = $facture_moe_entete->id_contrat_bureau_etude;
+            $piece_justificatif_frais_fonction_feffi_prevu= $this->Piece_justificatif_frais_fonction_feffi_prevuManager->findById($id);
+            $data['id'] = $piece_justificatif_frais_fonction_feffi_prevu->id;
+            $data['code'] = $piece_justificatif_frais_fonction_feffi_prevu->code;
+            $data['intitule'] = $piece_justificatif_frais_fonction_feffi_prevu->intitule;
         } 
         else 
         {
-            $tmp = $this->Facture_moe_enteteManager->findAll();
-            if ($tmp) 
+            $menu = $this->Piece_justificatif_frais_fonction_feffi_prevuManager->findAll();
+            if ($menu) 
             {
-                $data=$tmp;
+                foreach ($menu as $key => $value) 
+                {
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['code'] = $value->code;
+                    $data[$key]['intitule'] = $value->intitule;
+                }
             } 
                 else
                     $data = array();
@@ -124,11 +64,8 @@ class Facture_moe_entete extends REST_Controller {
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'numero' => $this->post('numero'),
-                    'date_br' => $this->post('date_br'),
-                    'id_contrat_bureau_etude' => $this->post('id_contrat_bureau_etude'),
-                    'validation' => $this->post('validation'),
-                    'statu_fact' => $this->post('statu_fact')
+                    'code' => $this->post('code'),
+                    'intitule' => $this->post('intitule')
                 );
                 if (!$data) {
                     $this->response([
@@ -137,7 +74,7 @@ class Facture_moe_entete extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Facture_moe_enteteManager->add($data);
+                $dataId = $this->Piece_justificatif_frais_fonction_feffi_prevuManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -153,11 +90,8 @@ class Facture_moe_entete extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'numero' => $this->post('numero'),
-                    'date_br' => $this->post('date_br'),
-                    'id_contrat_bureau_etude' => $this->post('id_contrat_bureau_etude'),
-                    'validation' => $this->post('validation'),
-                    'statu_fact' => $this->post('statu_fact')
+                    'code' => $this->post('code'),
+                    'intitule' => $this->post('intitule')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -166,7 +100,7 @@ class Facture_moe_entete extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Facture_moe_enteteManager->update($id, $data);
+                $update = $this->Piece_justificatif_frais_fonction_feffi_prevuManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -188,7 +122,7 @@ class Facture_moe_entete extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Facture_moe_enteteManager->delete($id);         
+            $delete = $this->Piece_justificatif_frais_fonction_feffi_prevuManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

@@ -136,7 +136,7 @@ class Ecole_model extends CI_Model {
 
     public function findByfiltre($requete)
     {               
-        $result =  $this->db->select('ecole.*')
+        $result =  $this->db->select('DISTINCT(ecole.id) as id_dist,ecole.*')
                         ->from($this->table)
                         ->join('fokontany','fokontany.id=ecole.id_fokontany')
                         ->join('commune','commune.id=fokontany.id_commune')
@@ -165,6 +165,27 @@ class Ecole_model extends CI_Model {
                         ->where('id_zap',$id_zap)
                         ->where('id_fokontany',$id_fokontany)
                         ->where('lower(ecole.description)=',$eco)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+    public function getecoletest2($district,$commune,$fokontany,$eco)
+    {               
+        $result =  $this->db->select('ecole.*')
+                        ->from($this->table)
+                        ->join('fokontany','fokontany.id=ecole.id_fokontany')
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->join('district','district.id=commune.id_district')
+                        ->join('cisco','cisco.id_district=district.id')
+                        ->where('lower(ecole.description)=',$eco)
+                        ->where('lower(district.nom)=',$district)
+                        ->where('lower(commune.nom)=',$commune)
+                        ->where('lower(fokontany.nom)=',$fokontany)
                         ->get()
                         ->result();
         if($result)

@@ -31,6 +31,7 @@ class Excel_bdd_construction_detail extends REST_Controller
         $id_region = $this->get('id_region');
         $id_commune = $this->get('id_commune');
         $repertoire = $this->get('repertoire');
+        $id_zap = $this->get('id_zap');
 
 
         $suivi_financier_daaf_feffi= $this->get('suivi_financier_daaf_feffi');
@@ -96,7 +97,7 @@ class Excel_bdd_construction_detail extends REST_Controller
             $params['indicateur']= $indicateur;
             $params['transfert_reliquat']= $transfert_reliquat;
 
-            $tmp = $this->Convention_cisco_feffi_enteteManager->finddonneeexporter($this->generer_requete($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot));
+            $tmp = $this->Convention_cisco_feffi_enteteManager->finddonneeexporter($this->generer_requete_convention_cisco_feffi($id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap));
             if ($tmp) 
             {
                 $data =$tmp;
@@ -121,7 +122,7 @@ class Excel_bdd_construction_detail extends REST_Controller
         }
         else
         {   
-            $tmp = $this->Convention_cisco_feffi_enteteManager->finddonneeexporter($this->generer_requete($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot));
+            $tmp = $this->Convention_cisco_feffi_enteteManager->finddonneeexporter($this->generer_requete_convention_cisco_feffi($id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap));
             if ($tmp) 
             {
                 foreach ($tmp as $key => $value)
@@ -4447,6 +4448,42 @@ class Excel_bdd_construction_detail extends REST_Controller
             return $res." Kg" ;
         }
     }
+    public function generer_requete_convention_cisco_feffi($id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap)
+    {
+            //$requete = "date_creation BETWEEN '".$date_debut."' AND '".$date_fin."' " ;
+            $requete ="region.id='".$id_region."'" ;
+            
+            if (($id_cisco!='*')&&($id_cisco!='undefined')&&($id_cisco!='null')) 
+            {
+                $requete = $requete." AND convention_cisco_feffi_entete.id_cisco='".$id_cisco."'" ;
+            }
+
+            if (($id_commune!='*')&&($id_commune!='undefined')&&($id_commune!='null')) 
+            {
+                $requete = $requete." AND commune.id='".$id_commune."'" ;
+            }
+
+            if (($id_ecole!='*')&&($id_ecole!='undefined')&&($id_ecole!='null')) 
+            {
+                $requete = $requete." AND ecole.id='".$id_ecole."'" ;
+            }
+
+            if (($id_convention_entete!='*')&&($id_convention_entete!='undefined')&&($id_convention_entete!='null')) 
+            {
+                $requete = $requete." AND convention_cisco_feffi_entete.id='".$id_convention_entete."'" ;
+            }
+            if (($lot!='*')&&($lot!='undefined')&&($lot!='null')) 
+            {
+                $requete = $requete." AND site.lot='".$lot."'" ;
+            }
+
+            if (($id_zap!='*')&&($id_zap!='undefined')&&($id_zap!='null')) 
+            {
+                $requete = $requete." AND zap.id='".$id_zap."'" ;
+            }
+            
+        return $requete ;
+    } 
     public function generer_requete($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot)
     {
             $requete = "Convention_cisco_feffi_detail.date_signature BETWEEN '".$date_debut."' AND '".$date_fin."' " ;

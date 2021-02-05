@@ -114,5 +114,19 @@ class Cisco_model extends CI_Model {
             return array();
         }                 
     } 
+    
+    public function getciscobynomcisco($cisco) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('lower(cisco.description)=',$cisco)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return array();
+        }                 
+    }
 
 }

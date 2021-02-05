@@ -20,7 +20,25 @@ class Pv_consta_statu_lat_travaux extends REST_Controller {
         $id_pv_consta_entete_travaux = $this->get('id_pv_consta_entete_travaux');
         $menu = $this->get('menu');
 
-        if ($menu == 'getcount_desination_statubyphasecontrat') 
+        if ($menu == 'getcount_desination_inferieur6byphasecontrat') 
+        {   $data = array();
+            $tmp = $this->Pv_consta_statu_lat_travauxManager->getcount_desination_inferieur6byphasecontrat($id_rubrique_phase,$id_pv_consta_entete_travaux,$id_contrat_prestataire);
+           
+            if ($tmp) 
+            {
+                $data = $tmp;
+            }
+        }
+        elseif ($menu == 'getcount_desination_statubyphasecontrat_bureau') 
+        {   $data = array();
+            $tmp = $this->Pv_consta_statu_lat_travauxManager->getcount_desination_statubyphasecontrat_bureau($id_rubrique_phase,$id_pv_consta_entete_travaux,$id_contrat_prestataire);
+           
+            if ($tmp) 
+            {
+                $data = $tmp;
+            }
+        }
+        elseif ($menu == 'getcount_desination_statubyphasecontrat') 
         {   $data = array();
             $tmp = $this->Pv_consta_statu_lat_travauxManager->getcount_desination_statubyphasecontrat($id_rubrique_phase,$id_pv_consta_entete_travaux,$id_contrat_prestataire);
            

@@ -162,4 +162,30 @@ class Feffi_model extends CI_Model {
         }                 
     }
 
+    
+    public function getfeffibyfeffifokozapcisco($feffi,$fokontany,$zap,$cisco)
+    {               
+        $result =  $this->db->select('feffi.*')
+                        ->from($this->table)
+                        ->join('ecole','ecole.id=feffi.id_ecole')
+                        ->join('fokontany','fokontany.id=ecole.id_fokontany')
+                        ->join('commune','commune.id=fokontany.id_commune')
+                        ->join('district','district.id=commune.id_district')
+                        ->join('cisco','cisco.id_district=district.id') 
+                        ->join('zap_commune','zap_commune.id_commune=commune.id')  
+                        ->join('zap','zap_commune.id_zap=zap.id')                       
+                        ->where('lower(fokontany.nom)=',$fokontany)
+                        ->where('lower(zap.nom)=',$zap)
+                        ->where('lower(cisco.description)=',$cisco)
+                        ->where('lower(feffi.denomination)=',$feffi)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
 }

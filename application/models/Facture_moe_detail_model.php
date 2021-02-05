@@ -245,7 +245,7 @@ class Facture_moe_detail_model extends CI_Model {
 
 
     public function getmontant_prevu_sous_rubrique($id_contrat_bureau_etude,$id_sousrubrique) {               
-        $this->db->select('sum(divers_calendrier_paie_moe_prevu.montant_prevu) as montant_prevu')
+        $this->db->select('sum(divers_calendrier_paie_moe_prevu.montant_prevu) as montant_prevu,divers_sousrubrique_calendrier_paie_moe_detail.pourcentage as pourcentage')
                 ->join("divers_sousrubrique_calendrier_paie_moe_detail", "divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail")
                         ->where('id_sousrubrique',$id_sousrubrique)
                         ->where('id_contrat_bureau_etude',$id_contrat_bureau_etude);
@@ -283,7 +283,7 @@ class Facture_moe_detail_model extends CI_Model {
                 ->where("facture_moe_entete.id_contrat_bureau_etude", $id_contrat_bureau_etude)
                 ->where("facture_moe_entete.id<", $id_facture_moe_entete)
                 ->where("code", $code)
-                ->where("validation", 4);
+                ->where("validation", 2);
         $q = $this->db->get($this->table);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -311,7 +311,7 @@ class Facture_moe_detail_model extends CI_Model {
                 ->where("facture_moe_entete.id_contrat_bureau_etude", $id_contrat_bureau_etude)
                 ->where("facture_moe_entete.id>=", $id_facture_moe_entete)
                 ->where_in("code", $code)
-                ->where_in("validation",[4,0]);
+                ->where_in("validation",[2,0]);
         $q = $this->db->get($this->table);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -387,6 +387,394 @@ class Facture_moe_detail_model extends CI_Model {
         }else{
             return null;
         }               
+    }
+    
+    /*public function getfacturedetailbyconventionandcode($id_convention_entete,$code)
+     {
+        $result =  $this->db->select("sum(facture_moe_detail.montant_periode )as montant_periode,
+                                        facture_moe_detail.id as id_facture_detail,
+                                        divers_calendrier_paie_moe_prevu.montant_prevu as montant_prevu,
+                                        divers_calendrier_paie_moe_prevu.id as id_prevu,
+                                        facture_moe_entete.id as id_facture_entete,
+                                        ")
+                        ->from($this->table)
+                        ->join("divers_calendrier_paie_moe_prevu", "divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu")
+                        ->join("divers_sousrubrique_calendrier_paie_moe_detail", "divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail")
+                        ->join("contrat_bureau_etude", "contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude")
+                        ->join("facture_moe_entete", "facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete")
+                        ->where("contrat_bureau_etude.id_convention_entete", $id_convention_entete)
+                        ->where("divers_sousrubrique_calendrier_paie_moe_detail.code", $code)
+                        ->where("facture_moe_entete.validation IN(0,2)")
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }               
+    }*/
+
+    public function getfacturedetailsupprbyconventionandcode($id_convention_entete,$code)
+    {
+        $this->db->select("convention_cisco_feffi_entete.id as id_conv");
+    
+        $this->db ->select("(select facture_moe_detail.id 
+                                        
+                                        from facture_moe_detail,facture_moe_entete,divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                                            
+                                            where facture_moe_detail.id_calendrier_paie_moe_prevu=divers_calendrier_paie_moe_prevu.id 
+                                                    and facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete 
+                                                    and divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu 
+                                                    and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail
+                                                    and contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                                                    and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."'
+                                                    and divers_sousrubrique_calendrier_paie_moe_detail.code='".$code."'
+                                                    and facture_moe_entete.validation=0 and facture_moe_entete.statu_fact=1
+                                ) as id_detail",FALSE);
+        $this->db ->select("(select divers_calendrier_paie_moe_prevu.id 
+                                        
+                                from divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                                    
+                                    where contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude 
+                                            and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail  
+                                            and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."'
+                                            and divers_sousrubrique_calendrier_paie_moe_detail.code='".$code."'
+                        ) as id_prevu",FALSE);
+
+        $this->db ->select("(select divers_calendrier_paie_moe_prevu.montant_prevu 
+                                        
+                        from divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                            
+                            where contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude 
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail  
+                                    and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."'
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.code='".$code."'
+                ) as montant_prevu",FALSE);
+            
+        $this->db ->select("(select facture_moe_entete.id 
+                                        
+                        from facture_moe_entete,contrat_bureau_etude 
+                            
+                            where contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                                    and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."'
+                                    and facture_moe_entete.validation=0 and facture_moe_entete.statu_fact=1
+                ) as id_entete",FALSE);
+         $this->db ->select("(select max(facture_moe_entete.numero) 
+                                        
+                from facture_moe_entete,contrat_bureau_etude 
+                    
+                    where contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                            and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."'
+                            and facture_moe_entete.validation IN(0,2)
+        ) as num_max",FALSE);
+        
+        $this->db ->select("(select contrat_bureau_etude.id 
+                                        
+                from contrat_bureau_etude 
+                    
+                    where contrat_bureau_etude.id_convention_entete='".$id_convention_entete."'
+        ) as id_contrat",FALSE);
+                
+    
+        $result =  $this->db->from('convention_cisco_feffi_entete')
+                            ->where('convention_cisco_feffi_entete.id',$id_convention_entete)
+                            ->get()
+                            ->result();
+            if($result)
+            {
+                return $result;
+            }else{
+                return null;
+            }                 
+    }
+    public function getfacturedetailbyconventionandcode($id_convention_entete,$code)
+    {
+        $this->db->select("convention_cisco_feffi_entete.id as id_conv");
+    
+        $this->db ->select("(select facture_moe_detail.id 
+                                        
+                                        from facture_moe_detail,facture_moe_entete,divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                                            
+                                            where facture_moe_detail.id_calendrier_paie_moe_prevu=divers_calendrier_paie_moe_prevu.id 
+                                                    and facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete 
+                                                    and divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu 
+                                                    and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail
+                                                    and contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                                                    and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."'
+                                                    and divers_sousrubrique_calendrier_paie_moe_detail.code='".$code."'
+                                                    and facture_moe_entete.validation IN(0,2)
+                                ) as id_detail",FALSE);
+        $this->db ->select("(select divers_calendrier_paie_moe_prevu.id 
+                                        
+                                from divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                                    
+                                    where contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude 
+                                            and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail  
+                                            and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."'
+                                            and divers_sousrubrique_calendrier_paie_moe_detail.code='".$code."'
+                        ) as id_prevu",FALSE);
+
+        $this->db ->select("(select divers_calendrier_paie_moe_prevu.montant_prevu 
+                                        
+                        from divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                            
+                            where contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude 
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail  
+                                    and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."'
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.code='".$code."'
+                ) as montant_prevu",FALSE);
+            
+        $this->db ->select("(select facture_moe_entete.id 
+                                        
+                        from facture_moe_entete,contrat_bureau_etude 
+                            
+                            where contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                                    and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."'
+                                    and facture_moe_entete.validation=0 and facture_moe_entete.statu_fact=1
+                ) as id_entete",FALSE);
+         $this->db ->select("(select max(facture_moe_entete.numero) 
+                                        
+                from facture_moe_entete,contrat_bureau_etude 
+                    
+                    where contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                            and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."'
+                            and facture_moe_entete.validation IN(0,2)
+        ) as num_max",FALSE);
+        
+        $this->db ->select("(select contrat_bureau_etude.id 
+                                        
+                from contrat_bureau_etude 
+                    
+                    where contrat_bureau_etude.id_convention_entete='".$id_convention_entete."'
+        ) as id_contrat",FALSE);
+                
+    
+        $result =  $this->db->from('convention_cisco_feffi_entete')
+                            ->where('convention_cisco_feffi_entete.id',$id_convention_entete)
+                            ->get()
+                            ->result();
+            if($result)
+            {
+                return $result;
+            }else{
+                return null;
+            }                 
+    }
+
+    public function getfacturedetailp5p6supprbyconventionandcode($id_convention_entete)
+    {
+        $this->db->select("convention_cisco_feffi_entete.id as id_conv");
+    
+        $this->db ->select("(select facture_moe_detail.id 
+                                        
+                                        from facture_moe_detail,facture_moe_entete,divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                                            
+                                            where facture_moe_detail.id_calendrier_paie_moe_prevu=divers_calendrier_paie_moe_prevu.id 
+                                                    and facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete 
+                                                    and divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu 
+                                                    and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail
+                                                    and contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                                                    and contrat_bureau_etude.id_convention_entete=id_conv
+                                                    and divers_sousrubrique_calendrier_paie_moe_detail.code='p5'
+                                                    and facture_moe_entete.validation=0 and statu_fact=1
+                                ) as id_detail_p5",FALSE);
+
+        $this->db ->select("(select facture_moe_detail.id
+
+                                from facture_moe_detail,facture_moe_entete,divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                                    
+                                    where facture_moe_detail.id_calendrier_paie_moe_prevu=divers_calendrier_paie_moe_prevu.id 
+                                            and facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete 
+                                            and divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu 
+                                            and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail
+                                            and contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                                            and contrat_bureau_etude.id_convention_entete=id_conv
+                                            and divers_sousrubrique_calendrier_paie_moe_detail.code='p6'
+                                            and facture_moe_entete.validation=0 and statu_fact=1
+                        ) as id_detail_p6",FALSE);
+        $this->db ->select("(select divers_calendrier_paie_moe_prevu.id 
+                                        
+                                from divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                                    
+                                    where contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude 
+                                            and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail  
+                                            and contrat_bureau_etude.id_convention_entete=id_conv
+                                            and divers_sousrubrique_calendrier_paie_moe_detail.code='p5'
+                        ) as id_prevu_p5",FALSE);
+        
+        $this->db ->select("(select divers_calendrier_paie_moe_prevu.id 
+                                        
+                        from divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                            
+                            where contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude 
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail  
+                                    and contrat_bureau_etude.id_convention_entete=id_conv
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.code='p6'
+                ) as id_prevu_p6",FALSE);
+
+        $this->db ->select("(select divers_calendrier_paie_moe_prevu.montant_prevu 
+                                        
+                        from divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                            
+                            where contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude 
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail  
+                                    and contrat_bureau_etude.id_convention_entete=id_conv
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.code='p5'
+                ) as montant_prevu_p5",FALSE);
+
+        $this->db ->select("(select divers_calendrier_paie_moe_prevu.montant_prevu 
+                                        
+                        from divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                            
+                            where contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude 
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail  
+                                    and contrat_bureau_etude.id_convention_entete=id_conv
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.code='p6'
+                ) as montant_prevu_p6",FALSE);
+            
+        $this->db ->select("(select facture_moe_entete.id 
+                                        
+                        from facture_moe_entete,contrat_bureau_etude 
+                            
+                            where contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                                    and contrat_bureau_etude.id_convention_entete=id_conv
+                                    and facture_moe_entete.validation=0 and statu_fact=1
+                ) as id_entete",FALSE);
+         $this->db ->select("(select max(facture_moe_entete.numero) 
+                                        
+                from facture_moe_entete,contrat_bureau_etude 
+                    
+                    where contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                            and contrat_bureau_etude.id_convention_entete=id_conv
+                            and facture_moe_entete.validation IN(0,2)
+        ) as num_max",FALSE);
+        
+        $this->db ->select("(select contrat_bureau_etude.id 
+                                        
+                from contrat_bureau_etude 
+                    
+                    where contrat_bureau_etude.id_convention_entete=id_conv
+        ) as id_contrat",FALSE);
+                
+    
+        $result =  $this->db->from('convention_cisco_feffi_entete')
+                            ->where('convention_cisco_feffi_entete.id',$id_convention_entete)
+                            ->get()
+                            ->result();
+            if($result)
+            {
+                return $result;
+            }else{
+                return null;
+            }                 
+    }
+    public function getfacturedetailp5p6byconventionandcode($id_convention_entete)
+    {
+        $this->db->select("convention_cisco_feffi_entete.id as id_conv");
+    
+        $this->db ->select("(select facture_moe_detail.id 
+                                        
+                                        from facture_moe_detail,facture_moe_entete,divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                                            
+                                            where facture_moe_detail.id_calendrier_paie_moe_prevu=divers_calendrier_paie_moe_prevu.id 
+                                                    and facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete 
+                                                    and divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu 
+                                                    and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail
+                                                    and contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                                                    and contrat_bureau_etude.id_convention_entete=id_conv
+                                                    and divers_sousrubrique_calendrier_paie_moe_detail.code='p5'
+                                                    and facture_moe_entete.validation IN(0,2)
+                                ) as id_detail_p5",FALSE);
+
+        $this->db ->select("(select facture_moe_detail.id
+
+                                from facture_moe_detail,facture_moe_entete,divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                                    
+                                    where facture_moe_detail.id_calendrier_paie_moe_prevu=divers_calendrier_paie_moe_prevu.id 
+                                            and facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete 
+                                            and divers_calendrier_paie_moe_prevu.id=facture_moe_detail.id_calendrier_paie_moe_prevu 
+                                            and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail
+                                            and contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                                            and contrat_bureau_etude.id_convention_entete=id_conv
+                                            and divers_sousrubrique_calendrier_paie_moe_detail.code='p6'
+                                            and facture_moe_entete.validation IN(0,2)
+                        ) as id_detail_p6",FALSE);
+        $this->db ->select("(select divers_calendrier_paie_moe_prevu.id 
+                                        
+                                from divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                                    
+                                    where contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude 
+                                            and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail  
+                                            and contrat_bureau_etude.id_convention_entete=id_conv
+                                            and divers_sousrubrique_calendrier_paie_moe_detail.code='p5'
+                        ) as id_prevu_p5",FALSE);
+        
+        $this->db ->select("(select divers_calendrier_paie_moe_prevu.id 
+                                        
+                        from divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                            
+                            where contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude 
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail  
+                                    and contrat_bureau_etude.id_convention_entete=id_conv
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.code='p6'
+                ) as id_prevu_p6",FALSE);
+
+        $this->db ->select("(select divers_calendrier_paie_moe_prevu.montant_prevu 
+                                        
+                        from divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                            
+                            where contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude 
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail  
+                                    and contrat_bureau_etude.id_convention_entete=id_conv
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.code='p5'
+                ) as montant_prevu_p5",FALSE);
+
+        $this->db ->select("(select divers_calendrier_paie_moe_prevu.montant_prevu 
+                                        
+                        from divers_calendrier_paie_moe_prevu,contrat_bureau_etude,divers_sousrubrique_calendrier_paie_moe_detail 
+                            
+                            where contrat_bureau_etude.id=divers_calendrier_paie_moe_prevu.id_contrat_bureau_etude 
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.id=divers_calendrier_paie_moe_prevu.id_sousrubrique_detail  
+                                    and contrat_bureau_etude.id_convention_entete=id_conv
+                                    and divers_sousrubrique_calendrier_paie_moe_detail.code='p6'
+                ) as montant_prevu_p6",FALSE);
+            
+        $this->db ->select("(select facture_moe_entete.id 
+                                        
+                        from facture_moe_entete,contrat_bureau_etude 
+                            
+                            where contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                                    and contrat_bureau_etude.id_convention_entete=id_conv
+                                    and facture_moe_entete.validation=0 and statu_fact=1
+                ) as id_entete",FALSE);
+         $this->db ->select("(select max(facture_moe_entete.numero) 
+                                        
+                from facture_moe_entete,contrat_bureau_etude 
+                    
+                    where contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude  
+                            and contrat_bureau_etude.id_convention_entete=id_conv
+                            and facture_moe_entete.validation IN(0,2)
+        ) as num_max",FALSE);
+        
+        $this->db ->select("(select contrat_bureau_etude.id 
+                                        
+                from contrat_bureau_etude 
+                    
+                    where contrat_bureau_etude.id_convention_entete=id_conv
+        ) as id_contrat",FALSE);
+                
+    
+        $result =  $this->db->from('convention_cisco_feffi_entete')
+                            ->where('convention_cisco_feffi_entete.id',$id_convention_entete)
+                            ->get()
+                            ->result();
+            if($result)
+            {
+                return $result;
+            }else{
+                return null;
+            }                 
     }
 /*
 

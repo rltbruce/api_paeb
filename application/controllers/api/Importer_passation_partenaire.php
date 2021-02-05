@@ -310,7 +310,7 @@ class Importer_passation_partenaire extends CI_Controller {
 										'stat' => null,
 										'siege' => null
 									);
-									$dataId = $this->Partenaire_relaiManager->add($data_consu);							
+									$dataId_p = $this->Partenaire_relaiManager->add($data_consu);							
 								}
 								else
 								{

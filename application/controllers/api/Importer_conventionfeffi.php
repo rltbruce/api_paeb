@@ -53,6 +53,7 @@ class Importer_conventionfeffi extends CI_Controller {
 
 		$repertoire=$_POST['repertoire'];
 		$name_fichier=$_POST['name_fichier'];
+		$lot=$_POST['lot'];
 
 		$repertoire=str_replace($search,$replace,$repertoire);
 		$name_fichier=str_replace($searchname,$replacename,$name_fichier);
@@ -95,7 +96,7 @@ class Importer_conventionfeffi extends CI_Controller {
 		ini_set('post_max_size', '2000000000M');
 		set_time_limit(0);
         ini_set ('memory_limit', '100000000000000M');
-				$retour = $this->controler_donnees_importertestconventionfeffi($name1,$repertoire);
+				$retour = $this->controler_donnees_importertestconventionfeffi($name1,$repertoire,$lot);
 				$rapport['nbr_inserer']=$retour['nbr_inserer'];
 				$rapport['nbr_refuser']=$retour['nbr_erreur'];
 				$rapport['zap_inserer']=$retour['zap_inserer'];
@@ -114,7 +115,7 @@ class Importer_conventionfeffi extends CI_Controller {
 		} 
 		
 	}
-	public function controler_donnees_importertestconventionfeffi($filename,$directory) {
+	public function controler_donnees_importertestconventionfeffi($filename,$directory,$lot) {
 		require_once 'Classes/PHPExcel.php';
 		require_once 'Classes/PHPExcel/IOFactory.php';
 		ini_set('upload_max_filesize', '2000000000M');  
@@ -204,6 +205,10 @@ class Importer_conventionfeffi extends CI_Controller {
 						else if('J' == $cell->getColumn())
 						{
 							$conv =$cell->getValue();							
+						}
+						else if('K' == $cell->getColumn())
+						{
+							$date_conv=$cell->getFormattedValue();							
 						}	 
 					}
 					
@@ -470,6 +475,17 @@ class Importer_conventionfeffi extends CI_Controller {
 						);
 						$erreur = true;													
 					}
+					
+					if($date_conv =="")
+					{						
+						$sheet->getStyle("K".$ligne)->getFill()->applyFromArray(
+									 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+										 'startcolor' => array('rgb' => 'f2e641'),
+										 'endcolor'   => array('rgb' => 'f2e641')
+									 )
+						);
+						$erreur = true;													
+					}
 					/*$id_region =1;
 					$id_cisco=1;
 					$id_commune=1;
@@ -483,7 +499,20 @@ class Importer_conventionfeffi extends CI_Controller {
 						{
 							$sheet->setCellValue('IO'.$ligne, "Doublon");
 							array_push($zap_inserer, $doublon);
-							$nbr_erreur = $nbr_erreur + 1;							
+							$nbr_erreur = $nbr_erreur + 1;
+							/*foreach ($doublon as $keyc => $valuec) {
+								$id_c=$valuec->id;
+								$dataconv_detail = array(
+									'intitule' => 'Construction d’un bâtiment à 2 salles de classe éq',
+									'delai' => '120',
+									'prev_beneficiaire' => '50',
+									'prev_nbr_ecole' => '1',
+									'date_signature' =>date("Y-m-d",strtotime($date_conv)) , 
+									'observation' => null,
+									'id_convention_entete' => $valuec->id
+								);
+								$dataIdcoonv_detail = $this->Convention_cisco_feffi_detailManager->update_det($valuec->id,$dataconv_detail);
+							}	*/						
 						}
 						else//ts doublon
 						{
@@ -503,7 +532,7 @@ class Importer_conventionfeffi extends CI_Controller {
 									'id_zap' => $id_zap,
 									'id_ecole' => $id_ecole,
 									'id_classification_site' => 2,
-									'lot' => 1,
+									'lot' => $lot,
 									'validation' => 1,
 									'acces' => $acc
 								);
@@ -530,7 +559,7 @@ class Importer_conventionfeffi extends CI_Controller {
 									'delai' => '120',
 									'prev_beneficiaire' => '50',
 									'prev_nbr_ecole' => '1',
-									'date_signature' =>date('Y-m-d') , 
+									'date_signature' =>date("Y-m-d",strtotime($date_conv)) , 
 									'observation' => null,
 									'id_convention_entete' => $dataIdcoonv
 								);

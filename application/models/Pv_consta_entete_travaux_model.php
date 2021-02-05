@@ -570,6 +570,189 @@ class Pv_consta_entete_travaux_model extends CI_Model {
             ";
             return $this->db->query($sql)->result();             
     }
+    public function getrecapBymax_travauxcontrat($id_contrat_prestataire)
+    {               
+        $sql=" select 
+                        detail.id as id,
+                        detail.id_contrat as id_contrat,
+                       sum(detail.periode_bat) as cumul_periode_batiment,
+                       sum( detail.periode_lat) as cumul_periode_latrine,
+                       sum(detail.periode_mob) as cumul_periode_mobilier,
+                       sum(detail.anterieur_bat) as cumul_anterieur_batiment,
+                       sum( detail.anterieur_lat) as cumul_anterieur_latrine,
+                       sum(detail.anterieur_mob) as cumul_anterieur_mobilier,
+                       sum(detail.cout_batiment) as cout_bat,
+                       sum(detail.cout_latrine) as cout_lat,
+                       sum(detail.cout_mobilier) as cout_mob,
+                       (sum(detail.cout_batiment)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)) as prevu_batiment,
+                       (sum(detail.cout_latrine)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)) as prevu_latrine,
+                       (sum(detail.cout_mobilier)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)) as prevu_mobilier,
+                       (((sum(detail.cout_batiment)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.periode_bat))/100  as periode_batiment,
+                       (((sum(detail.cout_latrine)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.periode_lat))/100  as periode_latrine,
+                       (((sum(detail.cout_mobilier)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.periode_mob))/100  as periode_mobilier,
+                       (((sum(detail.cout_batiment)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.anterieur_bat))/100  as anterieur_batiment,
+                       (((sum(detail.cout_latrine)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.anterieur_lat))/100  as anterieur_latrine,
+                       (((sum(detail.cout_mobilier)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.anterieur_mob))/100  as anterieur_mobilier,                      
+                       
+                       ((((sum(detail.cout_batiment)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.periode_bat))/100)+((((sum(detail.cout_batiment)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.anterieur_bat))/100)  as batiment_cumul,
+                       ((((sum(detail.cout_latrine)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.periode_lat))/100)+((((sum(detail.cout_latrine)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.anterieur_lat))/100)  as latrine_cumul,
+                       ((((sum(detail.cout_mobilier)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.periode_mob))/100)+((((sum(detail.cout_mobilier)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.anterieur_mob))/100)  as mobilier_cumul,
+                       
+                     ((sum(detail.cout_batiment)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))+((sum(detail.cout_latrine)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))+((sum(detail.cout_mobilier)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine))) as prevu_cumul,
+                     ((((sum(detail.cout_batiment)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.periode_bat))/100)+((((sum(detail.cout_latrine)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.periode_lat))/100)+((((sum(detail.cout_mobilier)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.periode_mob))/100)  as periode_cumul,                     
+                     ((((sum(detail.cout_batiment)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.anterieur_bat))/100)+((((sum(detail.cout_latrine)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.anterieur_lat))/100)+((((sum(detail.cout_mobilier)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.anterieur_mob))/100)  as anterieur_cumul,
+
+                     (((((sum(detail.cout_batiment)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.periode_bat))/100)+((((sum(detail.cout_batiment)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.anterieur_bat))/100))+(((((sum(detail.cout_latrine)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.periode_lat))/100)+((((sum(detail.cout_latrine)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.anterieur_lat))/100))+(((((sum(detail.cout_mobilier)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.periode_mob))/100)+((((sum(detail.cout_mobilier)*100)/(sum(detail.cout_batiment) + sum( detail.cout_mobilier) + sum(detail.cout_latrine)))*sum(detail.anterieur_mob))/100))  as total_cumul
+
+               from (
+               
+                (
+                    select 
+                        entete_travaux.id as id,
+                        entete_travaux.id_contrat_prestataire as id_contrat,
+                         sum(detail_bat_travaux.periode) as periode_bat,
+                         0 as periode_lat,
+                         0 as periode_mob,
+                         0 as anterieur_bat,
+                         0 as anterieur_lat,
+                         0 as anterieur_mob,
+                         contrat_mpe.cout_batiment as cout_batiment,
+                         contrat_mpe.cout_latrine as cout_latrine,
+                         contrat_mpe.cout_mobilier as cout_mobilier
+
+                        from pv_consta_entete_travaux as entete_travaux
+                        inner join pv_consta_detail_bat_travaux as detail_bat_travaux on detail_bat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                        inner join contrat_prestataire as contrat_mpe on contrat_mpe.id= entete_travaux.id_contrat_prestataire
+                        where 
+                        entete_travaux.id= (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                        inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id 
+                        where tete_trav.id_contrat_prestataire='".$id_contrat_prestataire."' and fac_mpe.validation=2)
+                )
+                UNION
+                (
+                    select 
+                        entete_travaux.id as id,
+                        entete_travaux.id_contrat_prestataire as id_contrat,
+                         0 as periode_bat,
+                         sum(detail_lat_travaux.periode) as periode_lat,
+                         0 as periode_mob,
+                         0 as anterieur_bat,
+                         0 as anterieur_lat,
+                         0 as anterieur_mob,
+                         0 as cout_batiment,
+                         0 as cout_latrine,
+                         0 as cout_mobilier
+
+                        from pv_consta_entete_travaux as entete_travaux
+                        inner join pv_consta_detail_lat_travaux as detail_lat_travaux on detail_lat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                        where 
+                        entete_travaux.id= (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                                        inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id 
+                                        where tete_trav.id_contrat_prestataire='".$id_contrat_prestataire."' and fac_mpe.validation=2)
+                )
+                UNION
+                (
+                    select 
+                        entete_travaux.id as id,
+                        entete_travaux.id_contrat_prestataire as id_contrat,
+                         0 as periode_bat,
+                         0 as periode_lat,
+                         sum(detail_mob_travaux.periode) as periode_mob,
+                         0 as anterieur_bat,
+                         0 as anterieur_lat,
+                         0 as anterieur_mob,
+                         0 as cout_batiment,
+                         0 as cout_latrine,
+                         0 as cout_mobilier
+
+                        from pv_consta_entete_travaux as entete_travaux
+                        inner join pv_consta_detail_mob_travaux as detail_mob_travaux on detail_mob_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                        where 
+                        entete_travaux.id= (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                        inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id 
+                        where tete_trav.id_contrat_prestataire='".$id_contrat_prestataire."' and fac_mpe.validation=2)
+                )
+                UNION
+                (
+                    select 
+                        entete_travaux.id as id,
+                        entete_travaux.id_contrat_prestataire as id_contrat,
+                         0 as periode_bat,
+                         0 as periode_lat,
+                         0 as periode_mob,
+                         sum(detail_bat_travaux.periode) as anterieur_bat,
+                         0 as anterieur_lat,
+                         0 as anterieur_mob,
+                         0 as cout_batiment,
+                         0 as cout_latrine,
+                         0 as cout_mobilier
+
+                        from pv_consta_entete_travaux as entete_travaux
+                        inner join pv_consta_detail_bat_travaux as detail_bat_travaux on detail_bat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                        inner join facture_mpe as fact_mpe on fact_mpe.id_pv_consta_entete_travaux=entete_travaux.id
+                        where 
+                        entete_travaux.id< (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                        inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id 
+                        where tete_trav.id_contrat_prestataire='".$id_contrat_prestataire."' and fac_mpe.validation=2) and
+                        entete_travaux.id_contrat_prestataire= '".$id_contrat_prestataire."' and
+                        fact_mpe.validation=2
+                ) 
+                UNION
+                (
+                    select 
+                        entete_travaux.id as id,
+                        entete_travaux.id_contrat_prestataire as id_contrat,
+                         0 as periode_bat,
+                         0 as periode_lat,
+                         0 as periode_mob,
+                         0 as anterieur_bat,
+                         sum(detail_lat_travaux.periode) as anterieur_lat,
+                         0 as anterieur_mob,
+                         0 as cout_batiment,
+                         0 as cout_latrine,
+                         0 as cout_mobilier
+
+                        from pv_consta_entete_travaux as entete_travaux
+                        inner join pv_consta_detail_lat_travaux as detail_lat_travaux on detail_lat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                        inner join facture_mpe as fact_mpe on fact_mpe.id_pv_consta_entete_travaux=entete_travaux.id
+                        where 
+                        entete_travaux.id< (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                        inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id 
+                        where tete_trav.id_contrat_prestataire='".$id_contrat_prestataire."' and fac_mpe.validation=2) and
+                        entete_travaux.id_contrat_prestataire= '".$id_contrat_prestataire."' and
+                        fact_mpe.validation=2
+                )
+                UNION
+                (
+                    select 
+                        entete_travaux.id as id,
+                        entete_travaux.id_contrat_prestataire as id_contrat,
+                         0 as periode_bat,
+                         0 as periode_lat,
+                         0 as periode_mob,
+                         0 as anterieur_bat,
+                         0 as anterieur_lat,
+                         sum(detail_mob_travaux.periode) as anterieur_mob,
+                         0 as cout_batiment,
+                         0 as cout_latrine,
+                         0 as cout_mobilier
+
+                        from pv_consta_entete_travaux as entete_travaux
+                        inner join pv_consta_detail_mob_travaux as detail_mob_travaux on detail_mob_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                        inner join facture_mpe as fact_mpe on fact_mpe.id_pv_consta_entete_travaux=entete_travaux.id
+                        where 
+                        entete_travaux.id< (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                        inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id 
+                        where tete_trav.id_contrat_prestataire='".$id_contrat_prestataire."' and fac_mpe.validation=2) and
+                        entete_travaux.id_contrat_prestataire= '".$id_contrat_prestataire."' and
+                        fact_mpe.validation=2
+                )  
+
+                )detail
+
+            ";
+            return $this->db->query($sql)->result();             
+    }
 
     public function getavance_a_inserer($id_attachement_travaux)
     {               

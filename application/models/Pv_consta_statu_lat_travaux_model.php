@@ -77,5 +77,25 @@ class Pv_consta_statu_lat_travaux_model extends CI_Model {
             return null;
         }                  
     }
+    
+    public function getcount_desination_inferieur6byphasecontrat($id_rubrique_phase,$id_pv_consta_entete_travaux,$id_contrat_prestataire)
+    {
+        $result = $this->db->select('COUNT(*) as nombre')
+                        ->from($this->table)
+                        ->join('pv_consta_rubrique_designation_lat','pv_consta_rubrique_designation_lat.id=pv_consta_statu_lat_travaux.id_rubrique_designation')
+                        //->join('pv_consta_rubrique_phase_lat','pv_consta_rubrique_phase_lat.id=pv_consta_rubrique_designation_lat.id_rubrique_phase')
+                        ->where("pv_consta_statu_lat_travaux.status", 1)
+                        ->where("pv_consta_statu_lat_travaux.id_pv_consta_entete_travaux", $id_pv_consta_entete_travaux)
+                        ->where("pv_consta_rubrique_designation_lat.id_rubrique_phase", $id_rubrique_phase)
+                        ->where("pv_consta_rubrique_designation_lat.numero <", 6)
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                  
+    }
    
 }

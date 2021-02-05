@@ -29,7 +29,8 @@ class Facture_moe_entete_model extends CI_Model {
             'numero' => $facture_moe_entete['numero'],
             'date_br' => $facture_moe_entete['date_br'],
             'id_contrat_bureau_etude' => $facture_moe_entete['id_contrat_bureau_etude'],
-            'validation'    =>  $facture_moe_entete['validation']                      
+            'validation'    =>  $facture_moe_entete['validation'],
+            'statu_fact'    =>  $facture_moe_entete['statu_fact']                      
         );
     }
     public function delete($id) {
@@ -95,6 +96,7 @@ class Facture_moe_entete_model extends CI_Model {
                         ->from($this->table)
                         ->where('id_contrat_bureau_etude',$id_contrat_bureau_etude)
                         ->where('validation',0)
+                        ->where('statu_fact',2)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -137,6 +139,44 @@ class Facture_moe_entete_model extends CI_Model {
             return null;
         }                 
     }
+    public function getfacture_moevalideBycontrat($id_contrat_bureau_etude)
+    {               
+        $this->db->select("facture_moe_entete.*, facture_moe_entete.id as id_fact,(contrat_bureau_etude.montant_contrat) as cout_contrat");
+        
+            $this->db ->select("(
+                select cout_contrat-sum(facture_moe_detail.montant_periode) from facture_moe_detail 
+                    inner join facture_moe_entete on facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete
+                    where facture_moe_entete.id<= id_fact and facture_moe_entete.validation=2 and facture_moe_entete.id_contrat_bureau_etude= '".$id_contrat_bureau_etude."' ) as reste_payer",FALSE); 
+            $this->db ->select("(
+                        select sum(facture_moe_detail.montant_periode) from facture_moe_detail 
+                            inner join facture_moe_entete on facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete
+                            where facture_moe_entete.id= id_fact and facture_moe_entete.validation=2 ) as montant_facture",FALSE);
+            $this->db ->select("(
+                        select (sum(facture_moe_detail.montant_periode)*100)/cout_contrat from facture_moe_detail 
+                            inner join facture_moe_entete on facture_moe_entete.id=facture_moe_detail.id_facture_moe_entete
+                            where facture_moe_entete.id= id_fact and facture_moe_entete.validation=2 ) as pourcentage",FALSE);       
+
+        $result =  $this->db->from('facture_moe_entete')
+                    
+                    
+                        ->join('contrat_bureau_etude','contrat_bureau_etude.id=facture_moe_entete.id_contrat_bureau_etude')
+                        ->where("facture_moe_entete.id_contrat_bureau_etude", $id_contrat_bureau_etude)
+                        ->where("facture_moe_entete.validation", 2)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+
+
+        if($result)
+        {   
+            return $result;
+        }
+        else
+        {
+            return $data=array();
+        }               
+    
+    } 
         
 
 }

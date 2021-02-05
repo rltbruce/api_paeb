@@ -26,7 +26,61 @@ class Demande_realimentation_feffi extends REST_Controller {
         $validation= $this->get('validation');
         $id_cisco = $this->get('id_cisco');
 
-        if ($menu=='getdemandevalideByconvention') //mande
+        if ($menu=='getdemandefichevalideByconvention') //mande
+        {
+            $tmp = $this->Demande_realimentation_feffiManager->getdemandefichevalideByconvention($id_convention_cife_entete);
+            if ($tmp) 
+            { 
+                foreach ($tmp as $key => $value) 
+                {
+                    if ($value->montant_periode)
+                    {
+                        $tranche_p = explode(" ", $value->code);
+                        $tranche_paiment = $tranche_p[1];
+
+                        $tranche_m = explode(" ", $value->tranche_max);
+                        $tranche_max = $tranche_m[1];
+                        $montant_periode = 0;
+                        $montant_anterieur = 0;
+                        if (intVal($tranche_paiment)==intVal($tranche_max) )
+                        {
+                            $montant_anterieur = 0;
+                            $montant_periode = $value->montant_periode;
+                        }
+                        if (intVal($tranche_paiment)<intVal($tranche_max) )
+                        {
+                            $montant_periode = 0;
+                            $montant_anterieur = $value->montant_periode;
+                        }
+                        
+                        $data[$key]['libelle'] = $value->libelle." ".$value->description;
+                        $data[$key]['prevu'] = (($value->montant_batiment + $value->montant_latrine + $value->montant_mobilier + $value->montant_maitrise + $value->montant_sousprojet)*$value->pourcentage)/100;
+                        $data[$key]['cumul'] = $montant_periode + $montant_anterieur;
+                        $data[$key]['montant_anterieur'] = $montant_anterieur;
+                        $data[$key]['montant_periode'] = $montant_periode;
+                        $data[$key]['pourcentage'] = (($montant_periode+$montant_anterieur)*100)/($value->montant_batiment + $value->montant_latrine + $value->montant_mobilier + $value->montant_maitrise + $value->montant_sousprojet);
+                        $data[$key]['reste'] = ((($value->montant_batiment + $value->montant_latrine + $value->montant_mobilier + $value->montant_maitrise + $value->montant_sousprojet)*$value->pourcentage)/100)-$montant_anterieur-$montant_periode;
+                        
+                        
+                    }
+                    else
+                    {   
+                        $montant_periode = 0;
+                        $montant_anterieur = 0;
+                        $data[$key]['libelle'] = $value->libelle." ".$value->description;
+                        $data[$key]['prevu'] = (($value->montant_batiment + $value->montant_latrine + $value->montant_mobilier + $value->montant_maitrise + $value->montant_sousprojet)*$value->pourcentage)/100;
+                        $data[$key]['cumul'] = $montant_periode + $montant_anterieur;
+                        $data[$key]['montant_anterieur'] = $montant_anterieur;
+                        $data[$key]['montant_periode'] = $montant_periode;
+                        $data[$key]['pourcentage'] = (($montant_periode+$montant_anterieur)*100)/($value->montant_batiment + $value->montant_latrine + $value->montant_mobilier + $value->montant_maitrise + $value->montant_sousprojet);
+                        $data[$key]['reste'] = ((($value->montant_batiment + $value->montant_latrine + $value->montant_mobilier + $value->montant_maitrise + $value->montant_sousprojet)*$value->pourcentage)/100)-$montant_anterieur-$montant_periode;
+                    }
+                }
+            } 
+                else
+                    $data = array();
+        }
+        elseif ($menu=='getdemandevalideByconvention') //mande
         {
             $tmp = $this->Demande_realimentation_feffiManager->getdemandevalideByconvention($id_convention_cife_entete);
             if ($tmp) 

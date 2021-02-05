@@ -177,7 +177,7 @@ class Importer_passation_prestataire extends CI_Controller {
 						}  
 						else if('FP' == $cell->getColumn())
 						{
-							$date_demande_ano=$cell->getValue();							
+							$date_demande_ano=$cell->getFormattedValue();							
 						}  
 						else if('FQ' == $cell->getColumn())
 						{
@@ -422,6 +422,13 @@ class Importer_passation_prestataire extends CI_Controller {
 									else
 									{
 										$sheet->setCellValue('IP'.$ligne, "doublon partenaire");
+										foreach ($doublon_consu as $key => $value) {
+											$data_mpe_soum = array(
+												'id_passation_marches' => $dataId,
+												'id_prestataire' => $value->id
+											);
+											$dataId_mpe_soum = $this->Mpe_soumissionaireManager->add($data_mpe_soum);
+										}
 									}
 								}
 								

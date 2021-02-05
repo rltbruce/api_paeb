@@ -5,70 +5,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // afaka fafana refa ts ilaina
 require APPPATH . '/libraries/REST_Controller.php';
 
-class Membre_titulaire extends REST_Controller {
+class Organe_feffi extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('membre_titulaire_model', 'Membre_titulaireManager');
-        $this->load->model('membre_feffi_model', 'Membre_feffiManager');
-        $this->load->model('compte_feffi_model', 'Compte_feffiManager');
+        $this->load->model('organe_feffi_model', 'Organe_feffiManager');
     }
 
-    public function index_get() 
-    {
+    public function index_get() {
         $id = $this->get('id');
-        $id_compte = $this->get('id_compte');
-        $id_membre = $this->get('id_membre');
-            
-        if ($id_compte) 
-        {   
-            $tmp = $this->Membre_titulaireManager->findBycompte($id_compte);
-            if ($tmp) 
+        $menu = $this->get('menu');
+        $id_cisco = $this->get('id_cisco');
+            if ($id) 
             {
-                foreach ($tmp as $key => $value) 
-                {
-                    $compte = array();
-                    $membre = array();
-                    $compte = $this->Compte_feffiManager->findById($value->id_compte);
-                    $membre = $this->Membre_feffiManager->findByMembre($value->id_membre);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['membre'] = $membre;
-                    $data[$key]['compte'] = $compte;
-                }
-            }else
                 $data = array();
-        }
-        elseif ($id)
-        {
-            $data = array();
-            $compte = array();
-            $membre = array();
-            $tmp = $this->Membre_titulaireManager->findBycompte($id);
-            $compte = $this->Compte_feffiManager->findById($tmp->id_compte);
-            $membre = $this->Membre_feffiManager->findByMembre($tmp->id_membre);
-            $data['id'] = $tmp->id;
-            $data['membre'] = $membre;
-            $data['compte'] = $compte;
-        } 
-        else 
-        {
-            $tmp = $this->Membre_titulaireManager->findAll();
-            if ($tmp) 
+                $organe_feffi = $this->Organe_feffiManager->findById($id);
+                $data['id'] = $organe_feffi->id;
+                $data['libelle'] = $organe_feffi->libelle;
+                $data['description'] = $organe_feffi->description;
+            } 
+            else 
             {
-                foreach ($tmp as $key => $value) 
+                $tmp = $this->Organe_feffiManager->findAll();
+                if ($tmp)
                 {
-                    $compte = array();
-                    $membre = array();
-                    $compte = $this->Compte_feffiManager->findById($value->id_compte);
-                    $membre = $this->Membre_feffiManager->findByMembre($value->id_membre);
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['membre'] = $membre;
-                    $data[$key]['compte'] = $compte;
-                }
-            }else
-                $data = array();
-        }
-    
+                   $data=$tmp; 
+                } else
+                    $data = array();
+            }
         
         if (count($data)>0) {
             $this->response([
@@ -84,15 +48,14 @@ class Membre_titulaire extends REST_Controller {
             ], REST_Controller::HTTP_OK);
         }
     }
-    public function index_post() 
-    {
+    public function index_post() {
         $id = $this->post('id') ;
         $supprimer = $this->post('supprimer') ;
         if ($supprimer == 0) {
             if ($id == 0) {
                 $data = array(
-                    'id_compte' => $this->post('id_compte'),
-                    'id_membre' => $this->post('id_membre')
+                    'libelle' => $this->post('libelle'),
+                    'description' => $this->post('description')
                 );
                 if (!$data) {
                     $this->response([
@@ -101,7 +64,7 @@ class Membre_titulaire extends REST_Controller {
                         'message' => 'No request found'
                             ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $dataId = $this->Membre_titulaireManager->add($data);
+                $dataId = $this->Organe_feffiManager->add($data);
                 if (!is_null($dataId)) {
                     $this->response([
                         'status' => TRUE,
@@ -117,8 +80,8 @@ class Membre_titulaire extends REST_Controller {
                 }
             } else {
                 $data = array(
-                    'id_compte' => $this->post('id_compte'),
-                    'id_membre' => $this->post('id_membre')
+                    'libelle' => $this->post('libelle'),
+                    'description' => $this->post('description')
                 );
                 if (!$data || !$id) {
                     $this->response([
@@ -127,7 +90,7 @@ class Membre_titulaire extends REST_Controller {
                         'message' => 'No request found'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
-                $update = $this->Membre_titulaireManager->update($id, $data);
+                $update = $this->Organe_feffiManager->update($id, $data);
                 if(!is_null($update)) {
                     $this->response([
                         'status' => TRUE,
@@ -149,7 +112,7 @@ class Membre_titulaire extends REST_Controller {
                     'message' => 'No request found'
                         ], REST_Controller::HTTP_BAD_REQUEST);
             }
-            $delete = $this->Membre_titulaireManager->delete($id);         
+            $delete = $this->Organe_feffiManager->delete($id);         
             if (!is_null($delete)) {
                 $this->response([
                     'status' => TRUE,

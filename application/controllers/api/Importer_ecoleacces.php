@@ -305,14 +305,19 @@ class Importer_ecoleacces extends CI_Controller {
 					else
 					{
 						// Vérifier si nom_feffi existe dans la BDD
+						$regn=strtolower($reg);
+						$distn=strtolower($cis);
+						$comn=strtolower($com);
 						$fokon=strtolower($foko);
-						$retour_fokontany = $this->FokontanyManager->getfokontanytestbyid_commune($id_commune,$fokon);
+						//$retour_fokontany = $this->FokontanyManager->getfokontanytestbyid_commune($id_commune,$fokon);
+						$retour_fokontany = $this->FokontanyManager->getfokontanynomtest($distn,$comn,$fokon);
 						if(count($retour_fokontany) >0)
 						{
 							foreach($retour_fokontany as $k=>$v)
 							{
 								$id_fokontany = $v->id;
-							}	
+							}
+						//	$sheet->setCellValue('IQ'.$ligne, $id_fokontany);	
 						}
 						else
 						{
@@ -340,8 +345,11 @@ class Importer_ecoleacces extends CI_Controller {
 					else
 					{
 						// Vérifier si nom_feffi existe dans la BDD
+						$distn=strtolower($cis);
+						$comn=strtolower($com);
+						$fokon=strtolower($foko);
 						$econ=strtolower($eco);
-						$retour_ecole = $this->EcoleManager->getecoletestbyid_fokontany($id_fokontany,$econ);
+						$retour_ecole = $this->EcoleManager->getecoletest2($distn,$comn,$fokon,$econ);
 						if(count($retour_ecole) >0)
 						{
 							foreach($retour_ecole as $k=>$v)
@@ -366,7 +374,7 @@ class Importer_ecoleacces extends CI_Controller {
 										 )
 							);
 							$erreur = true;
-							$sheet->setCellValue('IQ'.$ligne, $id_fokontany.$econ);
+							//$sheet->setCellValue('IQ'.$ligne, $id_fokontany.$econ);
 						}
 					}
 					
@@ -423,7 +431,7 @@ class Importer_ecoleacces extends CI_Controller {
 									);
 									$erreur = true;
 								}
-								$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
+								//$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
 								
 							}
 							if ($acc=="HPR2" || $acc=="HPR 2")
@@ -465,7 +473,7 @@ class Importer_ecoleacces extends CI_Controller {
 									);
 									$erreur = true;
 								}
-								$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
+								//$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
 							} 
 							if ($acc=="HPR3" || $acc=="HPR 3")
 							{
@@ -506,7 +514,7 @@ class Importer_ecoleacces extends CI_Controller {
 									);
 									$erreur = true;
 								}
-								$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
+							//	$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
 							}
 
 							if ($acc=="HPU1" || $acc=="HPU 1")
@@ -548,7 +556,7 @@ class Importer_ecoleacces extends CI_Controller {
 									);
 									$erreur = true;
 								}
-								$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
+								//$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
 							}
 							if ($acc=="HPU2" || $acc=="HPU 2")
 							{
@@ -589,7 +597,7 @@ class Importer_ecoleacces extends CI_Controller {
 									);
 									$erreur = true;
 								}
-								$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
+								//$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
 							} 
 							if ($acc=="HPU3" || $acc=="HPU 3")
 							{
@@ -630,7 +638,7 @@ class Importer_ecoleacces extends CI_Controller {
 									);
 									$erreur = true;
 								}
-								$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
+								//$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
 							}
 
 							if ($acc=="CO1" || $acc=="CO 1")
@@ -672,7 +680,7 @@ class Importer_ecoleacces extends CI_Controller {
 									);
 									$erreur = true;
 								}
-								$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
+								//$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
 							}
 							if ($acc=="CO2" || $acc=="CO 2")
 							{
@@ -713,7 +721,7 @@ class Importer_ecoleacces extends CI_Controller {
 									);
 									$erreur = true;
 								}
-								$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
+								//$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
 							}
 							if ($acc=="CO3" || $acc=="CO 3")
 							{
@@ -754,7 +762,7 @@ class Importer_ecoleacces extends CI_Controller {
 									);
 									$erreur = true;
 								}
-								$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
+								//$sheet->setCellValue('IP'.$ligne, $acc.':'.$id_zone.'/'.$id_acces);
 							}
 					}
 					/*$id_region =1;
@@ -782,7 +790,10 @@ class Importer_ecoleacces extends CI_Controller {
 								);
 								
 								$update = $this->EcoleManager->update($id_ecole, $data);
-								$sheet->setCellValue('IO'.$ligne, "ok");	
+								$sheet->setCellValue('IO'.$ligne, "ok");
+								//$sheet->setCellValue('IP'.$ligne, $id_ecole);
+								
+								//$sheet->setCellValue('IQ'.$ligne, $id_zone);	
 		                	
 							/*	$sheet->setCellValue('J'.$ligne, "ts Doublon"); 
 								

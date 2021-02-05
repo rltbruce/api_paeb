@@ -19,7 +19,7 @@ class Addition_frais_fonctionnement extends REST_Controller {
         $id_convention_entete = $this->get('id_convention_entete');
         $id_rubrique_addition = $this->get('id_rubrique_addition');
         $id_addition = $this->get('id_addition');
-        $menu = $this->get('menu');
+        $menu = $this->get('menu');//getaddition_frais_valideById
 
         if ($menu=='getaddition_valideByconvention')
         {
