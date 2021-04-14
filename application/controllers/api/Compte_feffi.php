@@ -18,7 +18,49 @@ class Compte_feffi extends REST_Controller {
     {
         $id = $this->get('id');
         $id_feffi = $this->get('id_feffi');
+       /* $maj=$this->get('maj');
+
             
+        if ($maj==1) 
+        { 
+            $menu = $this->Compte_feffiManager->findAll();
+            if ($menu) 
+            {
+                foreach ($menu as $key => $value) 
+                {
+                    $feffi = array();
+                    $feffi = $this->FeffiManager->findById($value->id_feffi);
+                    
+                    $ecole = $this->Compte_feffiManager->findByIdecole($value->id_feffi);
+                    $tmp[$key]['ecole'] = $ecole->description;
+                    //$membre_feffi = $this->Membre_feffiManager->findById($value->id_membre_feffi);
+                    //$tmp[$key]['membre_feffi'] = $membre_feffi;
+                    $tmp[$key]['id'] = $value->id;
+                    $tmp[$key]['rib'] = $value->rib;
+                    $tmp[$key]['nom_banque'] = $value->nom_banque;
+                    $tmp[$key]['numero_compte'] = $value->numero_compte;
+                    $tmp[$key]['adresse_banque'] = $value->adresse_banque;
+                    $tmp[$key]['intitule'] = $value->intitule;
+                    
+                    $tmp[$key]['feffi'] = $feffi;
+                    $data[$key] = array(
+                        'id' => $value->id,
+                        'rib' => $value->rib,
+                        'nom_banque' => $value->nom_banque,
+                        'adresse_banque' => $value->adresse_banque,
+                        'numero_compte' => $value->numero_compte,
+                        //'id_membre_feffi' => $this->post('id_membre_feffi'),
+                        'id_feffi' => $feffi->id,
+                        'intitule' => 'PAEB construction FEFFI '.$ecole->description
+                    );
+                    $update = $this->Compte_feffiManager->update($value->id, $data[$key]);
+
+                }
+            } 
+                else
+                    $data = array();
+        }
+        else*/
         if ($id_feffi) 
         {   $data = array();
             $tmp = $this->Compte_feffiManager->findByfeffi($id_feffi);
@@ -35,6 +77,7 @@ class Compte_feffi extends REST_Controller {
                     $data[$key]['rib'] = $value->rib;
                     $data[$key]['adresse_banque'] = $value->adresse_banque;
                     $data[$key]['numero_compte'] = $value->numero_compte;
+                    $data[$key]['intitule'] = $value->intitule;
                    
                     $data[$key]['feffi'] = $feffi;
 
@@ -53,6 +96,7 @@ class Compte_feffi extends REST_Controller {
             $data['nom_banque'] = $compte_feffi->nom_banque;
             $data['numero_compte'] = $compte_feffi->numero_compte;
             $data['adresse_banque'] = $compte_feffi->adresse_banque;
+            $data['intitule'] = $compte_feffi->intitule;
             
             $data['feffi'] = $feffi;
         } 
@@ -72,6 +116,7 @@ class Compte_feffi extends REST_Controller {
                     $data[$key]['nom_banque'] = $value->nom_banque;
                     $data[$key]['numero_compte'] = $value->numero_compte;
                     $data[$key]['adresse_banque'] = $value->adresse_banque;
+                    $data[$key]['intitule'] = $value->intitule;
                     
                     $data[$key]['feffi'] = $feffi;
                 }
@@ -107,7 +152,8 @@ class Compte_feffi extends REST_Controller {
                     'adresse_banque' => $this->post('adresse_banque'),
                     'numero_compte' => $this->post('numero_compte'),
                     //'id_membre_feffi' => $this->post('id_membre_feffi'),
-                    'id_feffi' => $this->post('id_feffi')
+                    'id_feffi' => $this->post('id_feffi'),
+                    'intitule' => $this->post('intitule')
                 );
                 if (!$data) {
                     $this->response([
@@ -137,7 +183,8 @@ class Compte_feffi extends REST_Controller {
                     'adresse_banque' => $this->post('adresse_banque'),
                     'numero_compte' => $this->post('numero_compte'),
                     //'id_membre_feffi' => $this->post('id_membre_feffi'),
-                    'id_feffi' => $this->post('id_feffi')
+                    'id_feffi' => $this->post('id_feffi'),
+                    'intitule' => $this->post('intitule')
                 );
                 if (!$data || !$id) {
                     $this->response([

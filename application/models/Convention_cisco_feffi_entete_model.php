@@ -1010,11 +1010,98 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
             $this->db ->select("(select reception_mpe.observation from reception_mpe,contrat_prestataire, convention_cisco_feffi_entete where reception_mpe.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and reception_mpe.validation = '1' and convention_cisco_feffi_entete.id = id_conv) as observation_recep_mpe",FALSE);
 
-            $this->db ->select("(select max(avancement_physi_batiment.pourcentage) from avancement_physi_batiment,contrat_prestataire, convention_cisco_feffi_entete where  avancement_physi_batiment.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as avancement_batiment_mpe",FALSE);
+           // $this->db ->select("(select max(avancement_physi_batiment.pourcentage) from avancement_physi_batiment,contrat_prestataire, convention_cisco_feffi_entete where  avancement_physi_batiment.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as avancement_batiment_mpe",FALSE);
 
-            $this->db ->select("(select max(avancement_physi_latrine.pourcentage) from avancement_physi_latrine,contrat_prestataire, convention_cisco_feffi_entete where  avancement_physi_latrine.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as avancement_latrine_mpe",FALSE);
+           // $this->db ->select("(select max(avancement_physi_latrine.pourcentage) from avancement_physi_latrine,contrat_prestataire, convention_cisco_feffi_entete where  avancement_physi_latrine.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as avancement_latrine_mpe",FALSE);
 
-           $this->db ->select("(select max(avancement_physi_mobilier.pourcentage) from avancement_physi_mobilier,contrat_prestataire, convention_cisco_feffi_entete where  avancement_physi_mobilier.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as avancement_mobilier_mpe",FALSE);
+           //$this->db ->select("(select max(avancement_physi_mobilier.pourcentage) from avancement_physi_mobilier,contrat_prestataire, convention_cisco_feffi_entete where  avancement_physi_mobilier.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and convention_cisco_feffi_entete.id = id_conv) as avancement_mobilier_mpe",FALSE);
+//avancement physique
+
+        $this->db ->select("(
+            select sum(detail_bat_travaux.periode) from pv_consta_detail_bat_travaux as detail_bat_travaux
+                inner join pv_consta_entete_travaux as entete_travaux on detail_bat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                
+                where 
+                entete_travaux.id= (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                    inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id
+                    inner join contrat_prestataire as contrat_m on contrat_m.id= tete_trav.id_contrat_prestataire
+                    inner join convention_cisco_feffi_entete as convent on convent.id= contrat_m.id_convention_entete 
+                    where convent.id=id_conv and fac_mpe.validation=2)) as periode_bat_avance_phy",FALSE);
+            $this->db ->select("(
+                select sum(detail_lat_travaux.periode) from pv_consta_detail_lat_travaux as detail_lat_travaux
+                    inner join pv_consta_entete_travaux as entete_travaux on detail_lat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                    
+                    where 
+                        entete_travaux.id= (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                            inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id
+                            inner join contrat_prestataire as contrat_m on contrat_m.id= tete_trav.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as convent on convent.id= contrat_m.id_convention_entete 
+                            where convent.id=id_conv and fac_mpe.validation=2)) as periode_lat_avance_phy",FALSE);  
+            $this->db ->select("(
+                select sum(detail_mob_travaux.periode) from pv_consta_detail_mob_travaux as detail_mob_travaux
+                    inner join pv_consta_entete_travaux as entete_travaux on detail_mob_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                    
+                    where 
+                        entete_travaux.id= (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                            inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id
+                            inner join contrat_prestataire as contrat_m on contrat_m.id= tete_trav.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as convent on convent.id= contrat_m.id_convention_entete 
+                            where convent.id=id_conv and fac_mpe.validation=2)) as periode_mob_avance_phy",FALSE);
+            
+            $this->db ->select("(
+                select sum(detail_bat_travaux.periode) from pv_consta_detail_bat_travaux as detail_bat_travaux
+                    inner join pv_consta_entete_travaux as entete_travaux on detail_bat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                    inner join contrat_prestataire as contrat_mpe on contrat_mpe.id= entete_travaux.id_contrat_prestataire
+                    inner join convention_cisco_feffi_entete as convention on convention.id= contrat_mpe.id_convention_entete
+                    inner join facture_mpe as fact_mpe on fact_mpe.id_pv_consta_entete_travaux=entete_travaux.id
+                    where 
+                        convention.id=id_conv and fact_mpe.validation=2 and
+                        entete_travaux.id< (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                            inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id
+                            inner join contrat_prestataire as contrat_m on contrat_m.id= tete_trav.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as convent on convent.id= contrat_m.id_convention_entete 
+                            where convent.id=id_conv and fac_mpe.validation=2)) as anterieur_bat_avance_phy",FALSE);
+            $this->db ->select("(
+                select sum(detail_lat_travaux.periode) from pv_consta_detail_lat_travaux as detail_lat_travaux
+                        inner join pv_consta_entete_travaux as entete_travaux on detail_lat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                        inner join contrat_prestataire as contrat_mpe on contrat_mpe.id= entete_travaux.id_contrat_prestataire
+                        inner join convention_cisco_feffi_entete as convention on convention.id= contrat_mpe.id_convention_entete
+                        inner join facture_mpe as fact_mpe on fact_mpe.id_pv_consta_entete_travaux=entete_travaux.id
+                        where 
+                            convention.id=id_conv and fact_mpe.validation=2 and
+                            entete_travaux.id< (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                                inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id
+                                inner join contrat_prestataire as contrat_m on contrat_m.id= tete_trav.id_contrat_prestataire
+                                inner join convention_cisco_feffi_entete as convent on convent.id= contrat_m.id_convention_entete 
+                                where convent.id=id_conv and fac_mpe.validation=2)) as anterieur_lat_avance_phy",FALSE);
+            $this->db ->select("(
+                select sum(detail_mob_travaux.periode) from pv_consta_detail_mob_travaux as detail_mob_travaux
+                    inner join pv_consta_entete_travaux as entete_travaux on detail_mob_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                    inner join contrat_prestataire as contrat_mpe on contrat_mpe.id= entete_travaux.id_contrat_prestataire
+                    inner join convention_cisco_feffi_entete as convention on convention.id= contrat_mpe.id_convention_entete
+                    inner join facture_mpe as fact_mpe on fact_mpe.id_pv_consta_entete_travaux=entete_travaux.id
+                    where 
+                        convention.id=id_conv and fact_mpe.validation=2 and
+                        entete_travaux.id< (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                            inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id
+                            inner join contrat_prestataire as contrat_m on contrat_m.id= tete_trav.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as convent on convent.id= contrat_m.id_convention_entete 
+                            where convent.id=id_conv and fac_mpe.validation=2)) as anterieur_mob_avance_phy",FALSE);
+
+        $this->db ->select("(
+            select contrat_mpe.cout_batiment from contrat_prestataire as contrat_mpe
+                where contrat_mpe.id_convention_entete = id_conv ) as cout_batiment_avance_phy",FALSE);
+
+        $this->db ->select("(
+            select contrat_mpe.cout_latrine from contrat_prestataire as contrat_mpe
+                where contrat_mpe.id_convention_entete = id_conv ) as cout_latrine_avance_phy",FALSE);
+
+        $this->db ->select("(
+            select contrat_mpe.cout_mobilier from contrat_prestataire as contrat_mpe
+                where contrat_mpe.id_convention_entete = id_conv ) as cout_mobilier_avance_phy",FALSE);
+        $this->db ->select("(
+            select contrat_mpe.cout_mobilier + contrat_mpe.cout_latrine + contrat_mpe.cout_batiment  from contrat_prestataire as contrat_mpe
+                where contrat_mpe.id_convention_entete = id_conv ) as montant_contrat_avance_phy",FALSE);
 
 //PAIEMENT MPE talou fa ts net fotsiny
           /*  $this->db ->select("(select facture_mpe.montant_ttc from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '2' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='1') as montant_paiement_mpe1",FALSE);
@@ -1114,15 +1201,16 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
             $this->db ->select("(select facture_mpe.date_approbation from facture_mpe,pv_consta_entete_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_pv_consta_entete_travaux=pv_consta_entete_travaux.id and pv_consta_entete_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '2' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.numero='11') as date_approbation_mpe11",FALSE);
 
             
-            $this->db ->select("(select facture_mpe.net_payer from pv_consta_entete_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_pv_consta_entete_travaux=pv_consta_entete_travaux.id and pv_consta_entete_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '2' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,pv_consta_entete_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where fact_mpe.id_pv_consta_entete_travaux=atta_tra.id and atta_tra.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv and fact_mpe.id <(select max(fact_mpe.id) from facture_mpe as fact_mp,pv_consta_entete_travaux as atta_tr, contrat_prestataire as contra_mp, convention_cisco_feffi_entete as conve_mp where fact_mp.id_pv_consta_entete_travaux=atta_tr.id and atta_tr.id_contrat_prestataire=contra_mp.id and contra_mp.id_convention_entete= conve_mp.id and fact_mp.validation = '4' and conve_mp.id = id_conv))) as anterieur_mpe",FALSE);
+            $this->db ->select("(select sum(facture_mpe.net_payer) from pv_consta_entete_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_pv_consta_entete_travaux=pv_consta_entete_travaux.id and pv_consta_entete_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '2' and convention_cisco_feffi_entete.id = id_conv and 
+                                        facture_mpe.id<(select max(fact_mpe.id) from facture_mpe as fact_mpe,pv_consta_entete_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where fact_mpe.id_pv_consta_entete_travaux=atta_tra.id and atta_tra.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '2' and conve_m.id = id_conv)) as anterieur_mpe",FALSE);
 
                 $this->db ->select("(select sum(facture_mpe.net_payer) from pv_consta_entete_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_pv_consta_entete_travaux=pv_consta_entete_travaux.id and pv_consta_entete_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '2' and convention_cisco_feffi_entete.id = id_conv) as cumul_mpe",FALSE);
 
-                $this->db ->select("(select facture_mpe.net_payer from pv_consta_entete_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_pv_consta_entete_travaux=pv_consta_entete_travaux.id and pv_consta_entete_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '2' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,pv_consta_entete_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where fact_mpe.id_pv_consta_entete_travaux=atta_tra.id and atta_tra.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '4' and conve_m.id = id_conv )) as periode_mpe",FALSE);
+                $this->db ->select("(select facture_mpe.net_payer from pv_consta_entete_travaux,facture_mpe, contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_pv_consta_entete_travaux=pv_consta_entete_travaux.id and pv_consta_entete_travaux.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '2' and convention_cisco_feffi_entete.id = id_conv and facture_mpe.id=(select max(fact_mpe.id) from facture_mpe as fact_mpe,pv_consta_entete_travaux as atta_tra, contrat_prestataire as contra_m, convention_cisco_feffi_entete as conve_m where fact_mpe.id_pv_consta_entete_travaux=atta_tra.id and atta_tra.id_contrat_prestataire=contra_m.id and contra_m.id_convention_entete= conve_m.id and fact_mpe.validation = '2' and conve_m.id = id_conv )) as periode_mpe",FALSE);
 
-                $this->db ->select("(select avance_demarrage.net_payer from avance_demarrage,contrat_prestataire where avance_demarrage.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and avance_demarrage.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_avance_mpe",FALSE);
+                $this->db ->select("(select avance_demarrage.net_payer from avance_demarrage,contrat_prestataire where avance_demarrage.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and avance_demarrage.validation = '2' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_avance_mpe",FALSE);
 
-                $this->db ->select("(select avance_demarrage.date_approbation from avance_demarrage,contrat_prestataire where avance_demarrage.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and avance_demarrage.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as date_approbation_avance_mpe",FALSE);
+                $this->db ->select("(select avance_demarrage.date_approbation from avance_demarrage,contrat_prestataire where avance_demarrage.id_contrat_prestataire=contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and avance_demarrage.validation = '2' and convention_cisco_feffi_entete.id = id_conv) as date_approbation_avance_mpe",FALSE);
 
 
 //transfert reliquat
@@ -1416,7 +1504,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                inner join demande_realimentation_feffi as demande on demande.id_convention_cife_entete = convention.id
 
                 where 
-                        demande.validation= 4
+                        demande.validation= 5
                             group by convention.id
              
 
@@ -1791,7 +1879,7 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
                inner join demande_realimentation_feffi as demande on demande.id_convention_cife_entete = convention.id
 
                 where 
-                        demande.validation= 5
+                        demande.validation= 6
                             group by convention.id
                             having count(demande.id)>0
              
@@ -1906,6 +1994,118 @@ class Convention_cisco_feffi_entete_model extends CI_Model {
 
             ";
             return $this->db->query($sql)->result();                  
+    }
+    
+
+    public function convention_cisco_feffi_avancement($id_convention_ufpdaaf)
+    {               
+        $this->db->select("convention_cisco_feffi_entete.id as id_conv, convention_cisco_feffi_entete.*");
+        
+            $this->db ->select("(
+                select sum(detail_bat_travaux.periode) from pv_consta_detail_bat_travaux as detail_bat_travaux
+                    inner join pv_consta_entete_travaux as entete_travaux on detail_bat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                    
+                    where 
+                    entete_travaux.id= (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                        inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id
+                        inner join contrat_prestataire as contrat_m on contrat_m.id= tete_trav.id_contrat_prestataire
+                        inner join convention_cisco_feffi_entete as convent on convent.id= contrat_m.id_convention_entete 
+                        where convent.id=id_conv and fac_mpe.validation=2)) as periode_bat",FALSE);
+                $this->db ->select("(
+                    select sum(detail_lat_travaux.periode) from pv_consta_detail_lat_travaux as detail_lat_travaux
+                        inner join pv_consta_entete_travaux as entete_travaux on detail_lat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                        
+                        where 
+                            entete_travaux.id= (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                                inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id
+                                inner join contrat_prestataire as contrat_m on contrat_m.id= tete_trav.id_contrat_prestataire
+                                inner join convention_cisco_feffi_entete as convent on convent.id= contrat_m.id_convention_entete 
+                                where convent.id=id_conv and fac_mpe.validation=2)) as periode_lat",FALSE);  
+                $this->db ->select("(
+                    select sum(detail_mob_travaux.periode) from pv_consta_detail_mob_travaux as detail_mob_travaux
+                        inner join pv_consta_entete_travaux as entete_travaux on detail_mob_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                        
+                        where 
+                            entete_travaux.id= (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                                inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id
+                                inner join contrat_prestataire as contrat_m on contrat_m.id= tete_trav.id_contrat_prestataire
+                                inner join convention_cisco_feffi_entete as convent on convent.id= contrat_m.id_convention_entete 
+                                where convent.id=id_conv and fac_mpe.validation=2)) as periode_mob",FALSE);
+                
+                $this->db ->select("(
+                    select sum(detail_bat_travaux.periode) from pv_consta_detail_bat_travaux as detail_bat_travaux
+                        inner join pv_consta_entete_travaux as entete_travaux on detail_bat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                        inner join contrat_prestataire as contrat_mpe on contrat_mpe.id= entete_travaux.id_contrat_prestataire
+                        inner join convention_cisco_feffi_entete as convention on convention.id= contrat_mpe.id_convention_entete
+                        inner join facture_mpe as fact_mpe on fact_mpe.id_pv_consta_entete_travaux=entete_travaux.id
+                        where 
+                            convention.id=id_conv and fact_mpe.validation=2 and
+                            entete_travaux.id< (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                                inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id
+                                inner join contrat_prestataire as contrat_m on contrat_m.id= tete_trav.id_contrat_prestataire
+                                inner join convention_cisco_feffi_entete as convent on convent.id= contrat_m.id_convention_entete 
+                                where convent.id=id_conv and fac_mpe.validation=2)) as anterieur_bat",FALSE);
+                $this->db ->select("(
+                    select sum(detail_lat_travaux.periode) from pv_consta_detail_lat_travaux as detail_lat_travaux
+                            inner join pv_consta_entete_travaux as entete_travaux on detail_lat_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                            inner join contrat_prestataire as contrat_mpe on contrat_mpe.id= entete_travaux.id_contrat_prestataire
+                            inner join convention_cisco_feffi_entete as convention on convention.id= contrat_mpe.id_convention_entete
+                            inner join facture_mpe as fact_mpe on fact_mpe.id_pv_consta_entete_travaux=entete_travaux.id
+                            where 
+                                convention.id=id_conv and fact_mpe.validation=2 and
+                                entete_travaux.id< (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                                    inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id
+                                    inner join contrat_prestataire as contrat_m on contrat_m.id= tete_trav.id_contrat_prestataire
+                                    inner join convention_cisco_feffi_entete as convent on convent.id= contrat_m.id_convention_entete 
+                                    where convent.id=id_conv and fac_mpe.validation=2)) as anterieur_lat",FALSE);
+                $this->db ->select("(
+                    select sum(detail_mob_travaux.periode) from pv_consta_detail_mob_travaux as detail_mob_travaux
+                        inner join pv_consta_entete_travaux as entete_travaux on detail_mob_travaux.id_pv_consta_entete_travaux= entete_travaux.id
+                        inner join contrat_prestataire as contrat_mpe on contrat_mpe.id= entete_travaux.id_contrat_prestataire
+                        inner join convention_cisco_feffi_entete as convention on convention.id= contrat_mpe.id_convention_entete
+                        inner join facture_mpe as fact_mpe on fact_mpe.id_pv_consta_entete_travaux=entete_travaux.id
+                        where 
+                            convention.id=id_conv and fact_mpe.validation=2 and
+                            entete_travaux.id< (select max(tete_trav.id) from pv_consta_entete_travaux as tete_trav 
+                                inner join facture_mpe as fac_mpe on fac_mpe.id_pv_consta_entete_travaux=tete_trav.id
+                                inner join contrat_prestataire as contrat_m on contrat_m.id= tete_trav.id_contrat_prestataire
+                                inner join convention_cisco_feffi_entete as convent on convent.id= contrat_m.id_convention_entete 
+                                where convent.id=id_conv and fac_mpe.validation=2)) as anterieur_mob",FALSE);
+            
+            $this->db ->select("(
+                select contrat_mpe.cout_batiment from contrat_prestataire as contrat_mpe
+                    where contrat_mpe.id_convention_entete = id_conv ) as cout_batiment",FALSE);
+            
+            $this->db ->select("(
+                select contrat_mpe.cout_latrine from contrat_prestataire as contrat_mpe
+                    where contrat_mpe.id_convention_entete = id_conv ) as cout_latrine",FALSE);
+            
+            $this->db ->select("(
+                select contrat_mpe.cout_mobilier from contrat_prestataire as contrat_mpe
+                    where contrat_mpe.id_convention_entete = id_conv ) as cout_mobilier",FALSE);
+            $this->db ->select("(
+                select contrat_mpe.cout_mobilier + contrat_mpe.cout_latrine + contrat_mpe.cout_batiment  from contrat_prestataire as contrat_mpe
+                    where contrat_mpe.id_convention_entete = id_conv ) as montant_contrat",FALSE);     
+
+       
+        $result =  $this->db->from('convention_cisco_feffi_entete')
+                    
+                    ->where('convention_cisco_feffi_entete.id_convention_ufpdaaf',$id_convention_ufpdaaf)
+                    ->group_by('id_conv')
+                                       
+                    ->get()
+                    ->result();
+
+
+        if($result)
+        {   
+            return $result;
+        }
+        else
+        {
+            return $data=array();
+        }               
+    
     }
 
     public function findreporting($now,$date_last, $id_district)

@@ -30,7 +30,8 @@ class Compte_feffi_model extends CI_Model {
             'numero_compte'           =>      $compte_feffi['numero_compte'],
             'adresse_banque'          =>      $compte_feffi['adresse_banque'],
             //'id_membre_feffi'           =>      $compte_feffi['id_membre_feffi'],
-            'id_feffi'     =>      $compte_feffi['id_feffi']                       
+            'id_feffi'     =>      $compte_feffi['id_feffi'] ,
+            'intitule'     =>      $compte_feffi['intitule']                      
         );
     }
     public function delete($id) {
@@ -62,6 +63,15 @@ class Compte_feffi_model extends CI_Model {
             return $q->row();
         }
     }
+   /* public function findByIdecole($id)  {
+        $this->db->select("ecole.description")
+        ->join("ecole", 'ecole.id=feffi.id_ecole')
+        ->where("feffi.id", $id);
+        $q = $this->db->get('feffi');
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+    }*/
 
     public function findByfeffi($id_feffi) {               
         $result =  $this->db->select('*')

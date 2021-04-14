@@ -21,8 +21,8 @@ class Importer_fichier extends CI_Controller {
 		$replace=array('e','e','e','a','o','c','_');
 		$search= array('é','è','ê','à','ö','ç',' ');
 
-		$replacename=array('_','_','_');
-		$searchname= array('/','"\"',' ');
+		$replacename=array('_','_','_','_');
+		$searchname= array('/','"\"',' ','\'');
 
 		$repertoire= $_POST['repertoire'];
 		$name_fichier=$_POST['name_fichier'];

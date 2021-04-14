@@ -157,11 +157,35 @@ class Importer_passation_prestataire extends CI_Controller {
 						}  
 						else if('FJ' == $cell->getColumn())
 						{
-							$date_lance =$cell->getFormattedValue();
+							//$date_lance =$cell->getFormattedValue();
+							$date_lance =$cell->getValue();
+							if(isset($date_lance) && $date_lance>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_lance = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_lance)); 
+								}
+							} 
+							else 
+							{
+								$date_lance=null;
+							}
 						}  
 						else if('FK' == $cell->getColumn())
 						{
-							$date_ram =$cell->getFormattedValue();							
+							//$date_ram =$cell->getFormattedValue();
+							$date_ram =$cell->getValue();
+							if(isset($date_ram) && $date_ram>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_ram = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_ram)); 
+								}
+							} 
+							else 
+							{
+								$date_ram=null;
+							}							
 						}  
 						else if('FM' == $cell->getColumn())
 						{
@@ -173,31 +197,115 @@ class Importer_passation_prestataire extends CI_Controller {
 						}  
 						else if('FO' == $cell->getColumn())
 						{
-							$date_rap =$cell->getFormattedValue();							
+							//$date_rap =$cell->getFormattedValue();
+							$date_rap =$cell->getValue();
+							if(isset($date_rap) && $date_rap>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_rap = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_rap)); 
+								}
+							} 
+							else 
+							{
+								$date_rap=null;
+							}							
 						}  
 						else if('FP' == $cell->getColumn())
 						{
-							$date_demande_ano=$cell->getFormattedValue();							
+							//$date_demande_ano=$cell->getFormattedValue();
+							$date_demande_ano =$cell->getValue();
+							if(isset($date_demande_ano) && $date_demande_ano>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_demande_ano = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_demande_ano)); 
+								}
+							} 
+							else 
+							{
+								$date_demande_ano=null;
+							}							
 						}  
 						else if('FQ' == $cell->getColumn())
 						{
-							$date_ano  =$cell->getFormattedValue();							
+							//$date_ano  =$cell->getFormattedValue();
+							$date_ano =$cell->getValue();
+							if(isset($date_ano) && $date_ano>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_ano = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_ano)); 
+								}
+							} 
+							else 
+							{
+								$date_ano=null;
+							}							
 						}  
 						else if('FR' == $cell->getColumn())
 						{
-							$date_inten =$cell->getFormattedValue();							
+							//$date_inten =$cell->getFormattedValue();
+							$date_inten =$cell->getValue();
+							if(isset($date_inten) && $date_inten>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_inten = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_inten)); 
+								}
+							} 
+							else 
+							{
+								$date_inten=null;
+							}							
 						}  
 						else if('FS' == $cell->getColumn())
 						{
-							$date_attri =$cell->getFormattedValue();							
+							//$date_attri =$cell->getFormattedValue();
+							$date_attri =$cell->getValue();
+							if(isset($date_attri) && $date_attri>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_attri = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_attri)); 
+								}
+							} 
+							else 
+							{
+								$date_attri=null;
+							}							
 						}  
 						else if('FT' == $cell->getColumn())
 						{
-							$date_signat =$cell->getFormattedValue();							
+							//$date_signat =$cell->getFormattedValue();
+							$date_signat =$cell->getValue();
+							if(isset($date_signat) && $date_signat>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_signat = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_signat)); 
+								}
+							} 
+							else 
+							{
+								$date_signat=null;
+							}							
 						}  
 						else if('FU' == $cell->getColumn())
 						{
-							$date_os =$cell->getFormattedValue();							
+							//$date_os =$cell->getFormattedValue();
+							$date_os =$cell->getValue();
+							if(isset($date_os) && $date_os>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_os = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_os)); 
+								}
+							} 
+							else 
+							{
+								$date_os=null;
+							}							
 						}  
 						else if('FV' == $cell->getColumn())
 						{

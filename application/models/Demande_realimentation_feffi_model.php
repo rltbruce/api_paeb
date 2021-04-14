@@ -83,6 +83,22 @@ class Demande_realimentation_feffi_model extends CI_Model {
             return null;
         }                 
     }
+    
+    public function getetatdemandeByconvention($id_convention_cife_entete) {           //mande    
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_cife_entete", $id_convention_cife_entete)                        
+                        ->where("validation IN(1,2,3,4)")
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function finddemandevalidedaafByIdconvention_cife_entete($id_convention_cife_entete) {           //mande    
         $result =  $this->db->select('*')
                         ->from($this->table)
@@ -102,7 +118,7 @@ class Demande_realimentation_feffi_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_cife_entete", $id_convention_cife_entete)                        
-                        ->where("validation IN(4,5,7)")
+                        ->where("validation IN(6,8)")
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -118,6 +134,7 @@ class Demande_realimentation_feffi_model extends CI_Model {
                         ->from($this->table)
                         ->where("id_convention_cife_entete", $id_convention_cife_entete)                        
                         ->where("validation IN(1,3)")
+                        //->where("validation =1")
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -176,7 +193,7 @@ class Demande_realimentation_feffi_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_cife_entete", $id_convention_cife_entete)                        
-                        ->where("validation", 4)
+                        ->where("validation", 5)
                         ->order_by('id')
                         ->get()
                         ->result();
@@ -205,7 +222,7 @@ class Demande_realimentation_feffi_model extends CI_Model {
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id", $id_demande_realimentation)                        
-                        ->where("validation !=", 4)
+                        ->where("validation !=", 5)
                         ->get()
                         ->result();
         if($result)
@@ -231,11 +248,27 @@ class Demande_realimentation_feffi_model extends CI_Model {
         }                 
     }
 
-    public function finddemandedisponibleByconvention($id_convention_cife_entete) {               
+    public function finddemandedisponibleufpfByconvention($id_convention_cife_entete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)
                         ->where("id_convention_cife_entete", $id_convention_cife_entete)
-                        ->where("validation >", 0)
+                        ->where("validation IN(1,2,3,4)")
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
+    public function finddemandedisponibledaafByconvention($id_convention_cife_entete) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_convention_cife_entete", $id_convention_cife_entete)
+                        ->where("validation >", 5)
                         ->order_by('id')
                         ->get()
                         ->result();

@@ -195,8 +195,9 @@ class Facture_mpe_model extends CI_Model {
         $this->db->select("facture_mpe.*, facture_mpe.id as id_fact,(contrat_prestataire.cout_batiment+contrat_prestataire.cout_latrine+contrat_prestataire.cout_mobilier) as cout_contrat,((facture_mpe.montant_travaux*100)/(contrat_prestataire.cout_batiment + contrat_prestataire.cout_latrine + contrat_prestataire.cout_mobilier)) as pourcentage");
         
             $this->db ->select("(
-                select cout_contrat-sum(facture_mpe.net_payer) from facture_mpe
-            where facture_mpe.id<= id_fact and facture_mpe.validation=2 ) as reste_payer",FALSE);        
+                select cout_contrat-sum(facture_mpe.net_payer) from facture_mpe as fact_mpe
+                inner join pv_consta_entete_travaux as pv_consta_entete on pv_consta_entete.id=fact_mpe.id_pv_consta_entete_travaux
+            where fact_mpe.id<= id_fact and fact_mpe.validation=2 and pv_consta_entete.id_contrat_prestataire='".$id_contrat_prestataire."') as reste_payer",FALSE);        
 
         $result =  $this->db->from('facture_mpe')
                     
@@ -1181,7 +1182,7 @@ class Facture_mpe_model extends CI_Model {
 
         public function countAllfactureByvalidation($invalide)
     {
-        $result = $this->db->select("COUNT(*) as nombre_mpe, (select COUNT(facture_moe_entete.id) from facture_moe_entete where facture_moe_entete.validation='".$invalide."' and facture_moe_entete.statu_fact=2) as nombre_moe")
+        $result = $this->db->select("COUNT(*) as nombre_mpe, (select COUNT(facture_moe_entete.id) from facture_moe_entete where facture_moe_entete.validation='".$invalide."' and facture_moe_entete.statu_fact=2) as nombre_moe, (select COUNT(avance_demarrage.id) from avance_demarrage where avance_demarrage.validation='".$invalide."') as nombre_avanc")
                         ->from($this->table)
                         ->where("validation", $invalide)
                         ->get()
@@ -1198,7 +1199,10 @@ class Facture_mpe_model extends CI_Model {
         $result = $this->db->select("COUNT(*) as nombre_mpe, 
                                     (select COUNT(facture_moe_entete.id) from facture_moe_entete 
                                         inner join contrat_bureau_etude on contrat_bureau_etude.id= facture_moe_entete.id_contrat_bureau_etude
-                                        where facture_moe_entete.validation='".$validation."' and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."') as nombre_moe")
+                                        where facture_moe_entete.validation='".$validation."'and facture_moe_entete.statu_fact=2 and contrat_bureau_etude.id_convention_entete='".$id_convention_entete."') as nombre_moe, 
+                                        (select COUNT(avance_demarrage.id) from avance_demarrage 
+                                            inner join contrat_prestataire on contrat_prestataire.id= avance_demarrage.id_contrat_prestataire
+                                            where avance_demarrage.validation='".$validation."' and contrat_prestataire.id_convention_entete='".$id_convention_entete."') as nombre_avanc")
                         ->from($this->table)
                         ->join('pv_consta_entete_travaux','pv_consta_entete_travaux.id=facture_mpe.id_pv_consta_entete_travaux')
                         ->join('contrat_prestataire','contrat_prestataire.id=pv_consta_entete_travaux.id_contrat_prestataire')

@@ -127,28 +127,33 @@ class Excel_bdd_construction_detail extends REST_Controller
             {
                 foreach ($tmp as $key => $value)
                 {                   
-
+                    $periode_batiment_avance_phy =0;
+                    $periode_latrine_avance_phy =0;
+                    $periode_mobilier_avance_phy =0;
+                    $anterieur_batiment_avance_phy =0;
+                    $anterieur_latrine_avance_phy =0;
+                    $anterieur_mobilier_avance_phy =0;
 
                     $data[$key]['suivi_financier_daaf_feffi']= $suivi_financier_daaf_feffi;
-            $data[$key]['suivi_financier_feffi_prestataire']= $suivi_financier_feffi_prestataire;
-            $data[$key]['suivi_financier_feffi_fonctionnement']= $suivi_financier_feffi_fonctionnement;
-            $data[$key]['total_convention_decaissee']= $total_convention_decaissee;
-            $data[$key]['reliquat_des_fonds']= $reliquat_des_fonds;
+                    $data[$key]['suivi_financier_feffi_prestataire']= $suivi_financier_feffi_prestataire;
+                    $data[$key]['suivi_financier_feffi_fonctionnement']= $suivi_financier_feffi_fonctionnement;
+                    $data[$key]['total_convention_decaissee']= $total_convention_decaissee;
+                    $data[$key]['reliquat_des_fonds']= $reliquat_des_fonds;
 
-            $data[$key]['partenaire_relais']= $partenaire_relais;
-            $data[$key]['suivi_passation_marches_pr']= $suivi_passation_marches_pr;
-            $data[$key]['suivi_prestation_pr']= $suivi_prestation_pr;
+                    $data[$key]['partenaire_relais']= $partenaire_relais;
+                    $data[$key]['suivi_passation_marches_pr']= $suivi_passation_marches_pr;
+                    $data[$key]['suivi_prestation_pr']= $suivi_prestation_pr;
 
-            $data[$key]['maitrise_oeuvre']= $maitrise_oeuvre;
-            $data[$key]['suivi_passation_marches_moe']= $suivi_passation_marches_moe;
-            $data[$key]['suivi_prestation_moe']= $suivi_prestation_moe;
-            $data[$key]['suivi_paiement_moe']= $suivi_paiement_moe;
-            $data[$key]['police_assurance_moe']= $police_assurance_moe;
+                    $data[$key]['maitrise_oeuvre']= $maitrise_oeuvre;
+                    $data[$key]['suivi_passation_marches_moe']= $suivi_passation_marches_moe;
+                    $data[$key]['suivi_prestation_moe']= $suivi_prestation_moe;
+                    $data[$key]['suivi_paiement_moe']= $suivi_paiement_moe;
+                    $data[$key]['police_assurance_moe']= $police_assurance_moe;
 
-            $data[$key]['entreprise']= $entreprise;
-            $data[$key]['suivi_passation_marches_mpe']= $suivi_passation_marches_mpe;
-            $data[$key]['suivi_execution_travau_mpe']= $suivi_execution_travau_mpe;
-            $data[$key]['suivi_paiement_mpe']= $suivi_paiement_mpe;
+                    $data[$key]['entreprise']= $entreprise;
+                    $data[$key]['suivi_passation_marches_mpe']= $suivi_passation_marches_mpe;
+                    $data[$key]['suivi_execution_travau_mpe']= $suivi_execution_travau_mpe;
+                    $data[$key]['suivi_paiement_mpe']= $suivi_paiement_mpe;
         //donnee globale             
                     $data[$key]['nom_agence']= $value->nom_agence;
                     $data[$key]['nom_ecole']= $value->nom_ecole;
@@ -543,8 +548,39 @@ class Excel_bdd_construction_detail extends REST_Controller
 
                 $data[$key]['date_reel_recep_defi_mpe']= $value->date_reel_recep_defi_mpe;
 
-                $data[$key]['avancement_physique']= round(($value->avancement_batiment_mpe + $value->avancement_latrine_mpe +$value->avancement_mobilier_mpe),2).' %';
-
+               // $data[$key]['avancement_physique']= round(($value->avancement_batiment_mpe + $value->avancement_latrine_mpe +$value->avancement_mobilier_mpe),2).' %';
+               $avancement_phisique= 0;
+               if ($value->montant_contrat_avance_phy!=null)
+               {
+                   if ($value->periode_bat_avance_phy)
+                       {
+                           $periode_batiment_avance_phy = $value->periode_bat_avance_phy;
+                       }
+                       if ($value->periode_lat_avance_phy)
+                       {
+                           $periode_latrine_avance_phy = $value->periode_lat_avance_phy;
+                       }
+                       if ($value->periode_mob_avance_phy)
+                       {
+                           $periode_mobilier_avance_phy = $value->periode_mob_avance_phy;
+                       }
+                       if ($value->anterieur_bat_avance_phy)
+                       {
+                           $anterieur_batiment_avance_phy = $value->anterieur_bat_avance_phy;
+                       }
+                       if ($value->anterieur_lat_avance_phy)
+                       {
+                           $anterieur_latrine_avance_phy = $value->anterieur_lat_avance_phy;
+                       }
+                       if ($value->anterieur_mob_avance_phy)
+                       {
+                           $anterieur_mobilier_avance_phy = $value->anterieur_mob_avance_phy;
+                       }
+                       $avancement_phisique =((((($value->cout_batiment_avance_phy*100)/$value->montant_contrat_avance_phy)*$anterieur_batiment_avance_phy)/100)+(((($value->cout_batiment_avance_phy*100)/$value->montant_contrat_avance_phy)*$periode_batiment_avance_phy)/100)
+                   )+((((($value->cout_latrine_avance_phy*100)/$value->montant_contrat_avance_phy)*$anterieur_latrine_avance_phy)/100)+(((($value->cout_latrine_avance_phy*100)/$value->montant_contrat_avance_phy)*$periode_latrine_avance_phy)/100)
+                   )+((((($value->cout_mobilier_avance_phy*100)/$value->montant_contrat_avance_phy)*$anterieur_mobilier_avance_phy)/100)+(((($value->cout_mobilier_avance_phy*100)/$value->montant_contrat_avance_phy)*$periode_mobilier_avance_phy)/100));
+               }
+               $data[$key]['avancement_physique']= $avancement_phisique;
                 $data[$key]['observation_recep_mpe']= $value->observation_recep_mpe;
 
                 $data[$key]['date_expiration_police_mpe']= $value->date_expiration_police_mpe;
@@ -3250,6 +3286,12 @@ class Excel_bdd_construction_detail extends REST_Controller
         
         foreach ($data as $key => $value)
         {  
+            $periode_batiment_avance_phy =0;
+            $periode_latrine_avance_phy =0;
+            $periode_mobilier_avance_phy =0;
+            $anterieur_batiment_avance_phy =0;
+            $anterieur_latrine_avance_phy =0;
+            $anterieur_mobilier_avance_phy =0;
 
 //donnee globale             
             $objPHPExcel->getActiveSheet()->getStyle("A".$ligne)->applyFromArray($stylecontenu);
@@ -4112,7 +4154,38 @@ class Excel_bdd_construction_detail extends REST_Controller
 
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+14).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+14).$ligne, (($value->avancement_batiment_mpe + $value->avancement_latrine_mpe +$value->avancement_mobilier_mpe)).' %');
+                $avancement_phisique= 0;
+                if ($value->montant_contrat_avance_phy!=null)
+                {
+                    if ($value->periode_bat_avance_phy)
+                        {
+                            $periode_batiment_avance_phy = $value->periode_bat_avance_phy;
+                        }
+                        if ($value->periode_lat_avance_phy)
+                        {
+                            $periode_latrine_avance_phy = $value->periode_lat_avance_phy;
+                        }
+                        if ($value->periode_mob_avance_phy)
+                        {
+                            $periode_mobilier_avance_phy = $value->periode_mob_avance_phy;
+                        }
+                        if ($value->anterieur_bat_avance_phy)
+                        {
+                            $anterieur_batiment_avance_phy = $value->anterieur_bat_avance_phy;
+                        }
+                        if ($value->anterieur_lat_avance_phy)
+                        {
+                            $anterieur_latrine_avance_phy = $value->anterieur_lat_avance_phy;
+                        }
+                        if ($value->anterieur_mob_avance_phy)
+                        {
+                            $anterieur_mobilier_avance_phy = $value->anterieur_mob_avance_phy;
+                        }
+                        $avancement_phisique =((((($value->cout_batiment_avance_phy*100)/$value->montant_contrat_avance_phy)*$anterieur_batiment_avance_phy)/100)+(((($value->cout_batiment_avance_phy*100)/$value->montant_contrat_avance_phy)*$periode_batiment_avance_phy)/100)
+                    )+((((($value->cout_latrine_avance_phy*100)/$value->montant_contrat_avance_phy)*$anterieur_latrine_avance_phy)/100)+(((($value->cout_latrine_avance_phy*100)/$value->montant_contrat_avance_phy)*$periode_latrine_avance_phy)/100)
+                    )+((((($value->cout_mobilier_avance_phy*100)/$value->montant_contrat_avance_phy)*$anterieur_mobilier_avance_phy)/100)+(((($value->cout_mobilier_avance_phy*100)/$value->montant_contrat_avance_phy)*$periode_mobilier_avance_phy)/100));
+                }
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($this->colonne($colonne_value+14).$ligne, $avancement_phisique.' %');
 
                 $objPHPExcel->getActiveSheet()->getStyle($this->colonne($colonne_value+15).$ligne)->applyFromArray($stylecontenu);
                 //$objPHPExcel->getActiveSheet()->getStyle("AK".$ligne)->getAlignment()->setWrapText(true);

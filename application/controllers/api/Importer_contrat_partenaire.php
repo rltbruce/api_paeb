@@ -242,6 +242,20 @@ class Importer_contrat_partenaire extends CI_Controller {
 						);
 						$erreur = true;													
 					}
+					else
+					{
+						if (is_numeric($montant_cont) == false)
+						{
+							$sheet->getStyle("AT".$ligne)->getFill()->applyFromArray(
+								array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+									'startcolor' => array('rgb' => 'f2e641'),
+									'endcolor'   => array('rgb' => 'f2e641')
+								)
+							);
+							$erreur = true;
+						}
+						
+					}
 					
 					if($erreur==false)
 					{	

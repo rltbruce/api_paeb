@@ -283,6 +283,19 @@ class Importer_contrat_mpe extends CI_Controller {
 						);
 						$erreur = true;													
 					}
+					else
+					{
+						if (is_numeric($cout_batiment) == false))
+						{
+							$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
+								array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+									'startcolor' => array('rgb' => 'f2e641'),
+									'endcolor'   => array('rgb' => 'f2e641')
+								)
+							);
+							$erreur = true;
+						}
+					}
 					if($cout_latrine=="")
 					{						
 						$sheet->getStyle("E".$ligne)->getFill()->applyFromArray(
@@ -292,6 +305,19 @@ class Importer_contrat_mpe extends CI_Controller {
 									 )
 						);
 						$erreur = true;													
+					}
+					else
+					{
+						if (is_numeric($cout_latrine) == false))
+						{
+							$sheet->getStyle("E".$ligne)->getFill()->applyFromArray(
+								array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+									'startcolor' => array('rgb' => 'f2e641'),
+									'endcolor'   => array('rgb' => 'f2e641')
+								)
+							);
+							$erreur = true;	
+						}
 					}
 					if($cout_mobilier=="")
 					{						
@@ -303,6 +329,19 @@ class Importer_contrat_mpe extends CI_Controller {
 						);
 						$erreur = true;													
 					}
+					else
+					{
+						if (is_numeric($cout_mobilier) == false))
+						{
+							$sheet->getStyle("F".$ligne)->getFill()->applyFromArray(
+								array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+									'startcolor' => array('rgb' => 'f2e641'),
+									'endcolor'   => array('rgb' => 'f2e641')
+								)
+							);
+							$erreur = true;	
+						}
+					
 					
 					if($date_signature=="")
 					{						

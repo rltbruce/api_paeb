@@ -38,7 +38,7 @@ class Convention_ufp_daaf_entete extends REST_Controller {
             $tmp = $this->Convention_ufp_daaf_enteteManager->findetatconventionByfiltre($date_debut,$date_fin);
             if ($tmp) 
             {
-                $data = $tmp;
+                $data=$tmp;
             } 
                 else
                     $data = array();
@@ -204,21 +204,8 @@ class Convention_ufp_daaf_entete extends REST_Controller {
             $tmp = $this->Convention_ufp_daaf_enteteManager->findetatConvention_now($annee);
             if ($tmp) 
             {
-                /*foreach ($tmp as $key => $value) 
-                {
-                    $data[$key]['id'] = $value->id;
-                    $data[$key]['ref_convention'] = $value->ref_convention;
-                    $data[$key]['objet'] = $value->objet;
-                    $data[$key]['ref_financement'] = $value->ref_financement;
-                    $data[$key]['montant_convention'] = $value->montant_convention;                    
-                    $data[$key]['montant_trans_comm'] = $value->montant_trans_comm;
-                    $data[$key]['frais_bancaire'] = $value->frais_bancaire;
-                    $data[$key]['num_vague'] = $value->num_vague;
-                    $data[$key]['validation'] = $value->validation;
-                    $data[$key]['nbr_beneficiaire'] = $value->nbr_beneficiaire;
-                    
-                }*/
-                $data=$tmp;
+               $data=$tmp;
+                
             } 
                 else
                     $data = array();

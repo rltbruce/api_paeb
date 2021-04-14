@@ -91,6 +91,23 @@ class Facture_moe_entete_model extends CI_Model {
             return null;
         }                 
     }
+    
+    public function getfacture_moe_enteteinvalideBycontratstat12($id_contrat_bureau_etude) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('id_contrat_bureau_etude',$id_contrat_bureau_etude)
+                        ->where('validation',0)
+                        //->where('statu_fact',2)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function getfacture_moe_enteteinvalideBycontrat($id_contrat_bureau_etude) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

@@ -64,6 +64,22 @@ class Transfert_ufp_model extends CI_Model {
         }
     }
 
+    public function gettransfertvalidebyid_demande($id_demande_deblocage_daaf) {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where("id_demande_deblocage_daaf", $id_demande_deblocage_daaf)
+                        ->where("validation", 1)
+                        ->order_by('id')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
+
     public function findBydemande_deblocage_daaf($id_demande_deblocage_daaf) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

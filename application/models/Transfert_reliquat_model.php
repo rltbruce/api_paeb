@@ -155,9 +155,9 @@ class transfert_reliquat_model extends CI_Model {
 
 
 //PAIEMENT MPE
-            $this->db ->select("(select sum(facture_mpe.net_payer) from facture_mpe,attachement_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_attachement_travaux=attachement_travaux.id and attachement_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_mpe",FALSE);
+            $this->db ->select("(select sum(facture_mpe.net_payer) from facture_mpe,pv_consta_entete_travaux,contrat_prestataire, convention_cisco_feffi_entete where facture_mpe.id_pv_consta_entete_travaux=pv_consta_entete_travaux.id and pv_consta_entete_travaux.id_contrat_prestataire = contrat_prestataire.id and contrat_prestataire.id_convention_entete= convention_cisco_feffi_entete.id and facture_mpe.validation = '2' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_mpe",FALSE);
 //PAIEMENT MOE
-            $this->db ->select("(select sum(facture_moe_detail.montant_periode) from facture_moe_detail,facture_moe_entete, contrat_bureau_etude, convention_cisco_feffi_entete where facture_moe_detail.id_facture_moe_entete= facture_moe_entete.id and facture_moe_entete.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and facture_moe_entete.validation = '4' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_moe",FALSE);
+            $this->db ->select("(select sum(facture_moe_detail.montant_periode) from facture_moe_detail,facture_moe_entete, contrat_bureau_etude, convention_cisco_feffi_entete where facture_moe_detail.id_facture_moe_entete= facture_moe_entete.id and facture_moe_entete.id_contrat_bureau_etude=contrat_bureau_etude.id and contrat_bureau_etude.id_convention_entete= convention_cisco_feffi_entete.id and facture_moe_entete.validation = '2' and convention_cisco_feffi_entete.id = id_conv) as montant_paiement_moe",FALSE);
 
     $result =  $this->db->from('convention_cisco_feffi_entete')
                         

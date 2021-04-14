@@ -156,7 +156,19 @@ class Importer_contrat_prestataire extends CI_Controller {
 						}						   
 						else if('FT' == $cell->getColumn())
 						{
-							$date_signat =$cell->getFormattedValue();							
+							//$date_signat =$cell->getFormattedValue();	
+							$date_signat =$cell->getValue();
+							if(isset($date_signat) && $date_signat>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_signat = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_signat)); 
+								}
+							} 
+							else 
+							{
+								$date_signat=null;
+							}						
 						}   
 						else if('FV' == $cell->getColumn())
 						{

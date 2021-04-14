@@ -62,6 +62,16 @@ class Facture_moe_entete extends REST_Controller {
                 else
                     $data = array();
         }
+        elseif ($menu=="getfacture_moe_enteteinvalideBycontratstat12")
+        {
+            $tmp = $this->Facture_moe_enteteManager->getfacture_moe_enteteinvalideBycontratstat12($id_contrat_bureau_etude);
+            if ($tmp) 
+            {
+                $data = $tmp;            
+            } 
+                else
+                    $data = array();
+        }
         elseif ($menu=="getfacture_moe_enteteinvalideBycontrat")
         {
             $tmp = $this->Facture_moe_enteteManager->getfacture_moe_enteteinvalideBycontrat($id_contrat_bureau_etude);

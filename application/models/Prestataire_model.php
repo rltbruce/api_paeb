@@ -41,6 +41,22 @@ class Prestataire_model extends CI_Model {
             return null;
         }  
     }
+    public function prestataireBysousmissionnaire($id_convention_entete) {               
+        $result =  $this->db->select('prestataire.*')
+                        ->from('mpe_soumissionaire')
+                        ->join('prestataire','prestataire.id=mpe_soumissionaire.id_prestataire')
+                        ->join('passation_marches','passation_marches.id=mpe_soumissionaire.id_passation_marches')
+                        ->where('id_convention_entete',$id_convention_entete)
+                        ->order_by('nom')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findAll() {               
         $result =  $this->db->select('*')
                         ->from($this->table)

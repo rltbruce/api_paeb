@@ -208,7 +208,19 @@ class Importer_conventionfeffi extends CI_Controller {
 						}
 						else if('K' == $cell->getColumn())
 						{
-							$date_conv=$cell->getFormattedValue();							
+							//$date_conv=$cell->getFormattedValue();
+							$date_conv =$cell->getValue();
+							if(isset($date_conv) && $date_conv>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_conv = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_conv)); 
+								}
+							} 
+							else 
+							{
+								$date_conv=null;
+							}							
 						}	 
 					}
 					
@@ -335,25 +347,40 @@ class Importer_conventionfeffi extends CI_Controller {
 					{
 						// Vérifier si nom_feffi existe dans la BDD
 						$fokon=strtolower($foko);
-						$retour_fokontany = $this->FokontanyManager->getfokontanytestbyid_commune($id_commune,$fokon);
-						if(count($retour_fokontany) >0)
+						if (isset($id_commune)) 
 						{
-							foreach($retour_fokontany as $k=>$v)
+							$retour_fokontany = $this->FokontanyManager->getfokontanytestbyid_commune($id_commune,$fokon);
+							if(count($retour_fokontany) >0)
 							{
-								$id_fokontany = $v->id;
-							}	
+								foreach($retour_fokontany as $k=>$v)
+								{
+									$id_fokontany = $v->id;
+								}	
+							}
+							else
+							{
+								$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
+											array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+												'startcolor' => array('rgb' => 'f24141'),
+												'endcolor'   => array('rgb' => 'f24141')
+											)
+								);
+								$erreur = true;
+								$sheet->setCellValue('IQ'.$ligne, 'retour_fokontany');
+							}
 						}
 						else
 						{
-							$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
-										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
-											 'startcolor' => array('rgb' => 'f24141'),
-											 'endcolor'   => array('rgb' => 'f24141')
-										 )
-							);
-							$erreur = true;
-							$sheet->setCellValue('IQ'.$ligne, 'retour_fokontany');
+								$sheet->getStyle("D".$ligne)->getFill()->applyFromArray(
+									array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+										'startcolor' => array('rgb' => 'f24141'),
+										'endcolor'   => array('rgb' => 'f24141')
+									)
+								);
+								$erreur = true;
+								$sheet->setCellValue('IQ'.$ligne, 'retour_fokontany');
 						}
+						
 					}
 					
 					if($eco=="")
@@ -370,31 +397,45 @@ class Importer_conventionfeffi extends CI_Controller {
 					{
 						// Vérifier si nom_feffi existe dans la BDD
 						$econ=strtolower($eco);
-						$retour_ecole = $this->EcoleManager->getecoletestbyid_fokontany($id_fokontany,$econ);
-						if(count($retour_ecole) >0)
+						if (isset($id_fokontany))
 						{
-							foreach($retour_ecole as $k=>$v)
+							$retour_ecole = $this->EcoleManager->getecoletestbyid_fokontany($id_fokontany,$econ);
+							if(count($retour_ecole) >0)
 							{
-								$id_ecole = $v->id;
-								$id_zap = $v->id_zap;
-								$id_zone_subvention = $v->id_zone_subvention;
-								$id_acces_zone = $v->id_acces_zone;
+								foreach($retour_ecole as $k=>$v)
+								{
+									$id_ecole = $v->id;
+									$id_zap = $v->id_zap;
+									$id_zone_subvention = $v->id_zone_subvention;
+									$id_acces_zone = $v->id_acces_zone;
 
-								$retour_subvention_initial = $this->Subvention_initialManager->findByZoneobjet($id_zone_subvention,$id_acces_zone);
-								
-							}	
+									$retour_subvention_initial = $this->Subvention_initialManager->findByZoneobjet($id_zone_subvention,$id_acces_zone);
+									
+								}	
+							}
+							else
+							{
+								$sheet->getStyle("B".$ligne)->getFill()->applyFromArray(
+											array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+												'startcolor' => array('rgb' => 'f24141'),
+												'endcolor'   => array('rgb' => 'f24141')
+											)
+								);
+								$erreur = true;
+								$sheet->setCellValue('IQ'.$ligne, $id_fokontany.$econ);
+							}
 						}
 						else
 						{
 							$sheet->getStyle("B".$ligne)->getFill()->applyFromArray(
-										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
-											 'startcolor' => array('rgb' => 'f24141'),
-											 'endcolor'   => array('rgb' => 'f24141')
-										 )
+								array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+									'startcolor' => array('rgb' => 'f24141'),
+									'endcolor'   => array('rgb' => 'f24141')
+								)
 							);
 							$erreur = true;
-							$sheet->setCellValue('IQ'.$ligne, $id_fokontany.$econ);
 						}
+						
 					}
 					
 					if($fef=="")
@@ -411,24 +452,39 @@ class Importer_conventionfeffi extends CI_Controller {
 					{
 						// Vérifier si nom_feffi existe dans la BDD
 						$fefn=strtolower($fef);
-						$retour_feffi = $this->FeffiManager->getfeffitest($id_ecole,$fefn);
-						if(count($retour_feffi) >0)
+						if (isset($id_ecole)) 
 						{
-							foreach($retour_feffi as $k=>$v)
+							$retour_feffi = $this->FeffiManager->getfeffitest($id_ecole,$fefn);
+							if(count($retour_feffi) >0)
 							{
-								$id_feffi = $v->id;								
-							}	
-						}
-						else
+								foreach($retour_feffi as $k=>$v)
+								{
+									$id_feffi = $v->id;								
+								}	
+							}
+							else
+							{
+								$sheet->getStyle("I".$ligne)->getFill()->applyFromArray(
+											array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+												'startcolor' => array('rgb' => 'f24141'),
+												'endcolor'   => array('rgb' => 'f24141')
+											)
+								);
+								$erreur = true;
+							}
+						} 
+						else 
 						{
 							$sheet->getStyle("I".$ligne)->getFill()->applyFromArray(
-										 array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
-											 'startcolor' => array('rgb' => 'f24141'),
-											 'endcolor'   => array('rgb' => 'f24141')
-										 )
+								array('type'       => PHPExcel_Style_Fill::FILL_SOLID,'rotation'   => 0,
+									'startcolor' => array('rgb' => 'f24141'),
+									'endcolor'   => array('rgb' => 'f24141')
+								)
 							);
 							$erreur = true;
 						}
+						
+						
 					}
 					
 					if($aac=="")

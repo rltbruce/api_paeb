@@ -41,6 +41,15 @@ class Batiment_construction_model extends CI_Model {
             return null;
         }  
     }
+    public function delete_detail($id) {
+         $this->db->where('id_convention_entete', (int) $id)->delete($this->table);
+         if($this->db->affected_rows() === 1)
+         {
+             return true;
+         }else{
+             return null;
+         }  
+     }
 
    /* public function delete($id)
     {

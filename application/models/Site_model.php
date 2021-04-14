@@ -72,7 +72,21 @@ class Site_model extends CI_Model {
             return $q->row();
         }
     }
-
+    public function findsiteByenpreparationinvalide() {               
+        $result =  $this->db->select('*')
+                        ->from($this->table)
+                        ->where('statu_convention',0)
+                        ->where('validation',0)
+                        ->order_by('code_sous_projet')
+                        ->get()
+                        ->result();
+        if($result)
+        {
+            return $result;
+        }else{
+            return null;
+        }                 
+    }
     public function findsiteByenpreparationandinvalide($requete) {               
         $result =  $this->db->select('*')
                         ->from($this->table)

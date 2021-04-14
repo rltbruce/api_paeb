@@ -39,8 +39,10 @@ class Demande_deblocage_daaf_syst_model extends CI_Model {
             return null;
         }  
     }
-    public function findAll() {               
-        $result =  $this->db->select('*')
+    public function findAll() {  
+       // $this->db->reconnect();             
+        $result =  $this->db
+                            ->select('*')
                         ->from($this->table)
                         ->order_by('id')
                         ->get()

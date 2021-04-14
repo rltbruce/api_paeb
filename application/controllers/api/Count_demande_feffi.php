@@ -21,9 +21,9 @@ class Count_demande_feffi extends REST_Controller {
            $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByvalidation(1);          
             $data = $demande_realimentation_feffi;
         }
-        if ($validation==5)
+        if ($validation==6)
         {
-           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByvalidation(5);          
+           $demande_realimentation_feffi = $this->Demande_realimentation_feffiManager->countAllByvalidation(6);          
             $data = $demande_realimentation_feffi;
         }
         if ($validation==3)

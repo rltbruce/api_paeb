@@ -30,6 +30,15 @@ class Cout_maitrise_construction_model extends CI_Model {
             'cout'                      =>      $cout_maitrise_construction['cout']                       
         );
     }
+    public function delete_detail($id) {
+         $this->db->where('id_convention_entete', (int) $id)->delete($this->table);
+         if($this->db->affected_rows() === 1)
+         {
+             return true;
+         }else{
+             return null;
+         }  
+     }
     public function delete($id) {
         $this->db->where('id', (int) $id)->delete($this->table);
         if($this->db->affected_rows() === 1)

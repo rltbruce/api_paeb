@@ -315,8 +315,15 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
         }else{
             return null;
         }                 
-    } 
+    }
+    
     public function findetatconventionByfiltre($date_debut,$date_fin)
+    {               
+        $sql = " CALL avancement_phy_stockbyconv_ufp_date('".$date_debut."','".$date_fin."') " ;
+
+        return $this->db->query($sql)->result();            
+    } 
+    /*public function findetatconventionByfiltre($date_debut,$date_fin)
     {               
         $sql="
 
@@ -428,8 +435,23 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
 
             ";
             return $this->db->query($sql)->result();             
-    }
+    }*/
     public function findetatConvention_now($annee)
+    {               
+        $sql = " CALL avancement_phy_stockbyconv_ufp_annee('".$annee."') " ;
+
+        return $this->db->query($sql)->result();            
+    }
+    public function avancement_physi_stockconv_ufp_all()
+    {               
+        $sql = " CALL avancement_physi_stockconv_ufp_all() " ;
+        $query = $this->db->query($sql);
+        $rep = $query->result();
+        $query->next_result();
+        $query->free_result();
+        return $rep;            
+    }
+   /* public function findetatConvention_now($annee)
     {               
         $sql="
 
@@ -541,7 +563,7 @@ class Convention_ufp_daaf_entete_model extends CI_Model {
 
             ";
             return $this->db->query($sql)->result();             
-    }
+    }*/
     public function avancement_convention()
     {               
         $sql="

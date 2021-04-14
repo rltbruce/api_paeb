@@ -20,7 +20,7 @@ class Count_avancement_travaux extends REST_Controller {
         $id = $this->get('id');
         $invalide = $this->get('invalide');
         $data = array();
-            $avancement = $this->Convention_ufp_daaf_enteteManager->avancement_convention();
+            $avancement = $this->Convention_ufp_daaf_enteteManager->avancement_physi_stockconv_ufp_all();
 
             $demande_deblocage_daaf_syst = $this->Demande_deblocage_daaf_systManager->findAll();
             $tranche_deblocage_daaf_syst = $this->Tranche_deblocage_daafManager->findById($demande_deblocage_daaf_syst[0]->id_tranche_deblocage_daaf);
@@ -31,7 +31,7 @@ class Count_avancement_travaux extends REST_Controller {
 
                 foreach ($avancement as $key => $value) 
                 {  
-                    $avancement_total = 0;
+                    $avancement_total = $value->avancement_physique;
                     
                     $demande_deblocage_daaf = $this->Demande_deblocage_daafManager->getmax_demande_daafbyconvention($value->id_conv_ufp);
                     if ($demande_deblocage_daaf)
@@ -45,12 +45,12 @@ class Count_avancement_travaux extends REST_Controller {
                         $data[$key]['avancement_latrine'] = $value->avancement_latrine;
                         $data[$key]['avancement_mobilier'] = $value->avancement_mobilier;*/
 
-                        if ($value->nbr_conv)
+                        /*if ($value->nbr_conv)
                         {
                             $avancement_total = round((($value->avancement_batiment+$value->avancement_latrine+$value->avancement_mobilier)/3)/$value->nbr_conv,4);
                             //$avancement_total = 50;
                             //$avancement_total = round((($value->avancement_batiment+$value->avancement_latrine)/2)/$value->nbr_conv,4);
-                        }
+                        }*/
                         /*$data[$key]['avancement_total'] = $avancement_total;
                         $data[$key]['nbr_conv'] = $value->nbr_conv;
                         $data[$key]['dem'] = $demande_deblocage_daaf[0];
@@ -87,7 +87,7 @@ class Count_avancement_travaux extends REST_Controller {
                                         'date' => date( "Y-m-d"),
                                         'id_tranche_deblocage_daaf' => $demande_deblocage_daaf_syst[0]->id_tranche_deblocage_daaf,                    
                                         'id_convention_ufp_daaf_entete' => $convention_ufp_daaf_entete->id,
-                                        'validation' => 1
+                                        'validation' => 0
                                     );
                                     //$data[$key]['dat'] = $a_inserer;
                                    $dataId= $this->Demande_deblocage_daafManager->add($a_inserer);

@@ -156,15 +156,51 @@ class Importer_passation_partenaire extends CI_Controller {
 						}  
 						else if('AN' == $cell->getColumn())
 						{
-							$date_manife =$cell->getFormattedValue();
+							//$date_manife =$cell->getFormattedValue();
+							$date_manife =$cell->getValue();
+							if(isset($date_manife) && $date_manife>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_manife = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_manife)); 
+								}
+							} 
+							else 
+							{
+								$date_manife=null;
+							}
 						}  
 						else if('AO' == $cell->getColumn())
 						{
-							$date_lance =$cell->getFormattedValue();							
+							//$date_lance =$cell->getFormattedValue();
+							$date_lance =$cell->getValue();
+							if(isset($date_lance) && $date_lance>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_lance = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_lance)); 
+								}
+							} 
+							else 
+							{
+								$date_lance=null;
+							}							
 						}  
 						else if('AP' == $cell->getColumn())
 						{
-							$date_rem =$cell->getFormattedValue();							
+							//$date_rem =$cell->getFormattedValue();
+							$date_rem =$cell->getValue();
+							if(isset($date_rem) && $date_rem>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_rem = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_rem)); 
+								}
+							} 
+							else 
+							{
+								$date_rem=null;
+							}							
 						}  
 						else if('AQ' == $cell->getColumn())
 						{
@@ -172,7 +208,19 @@ class Importer_passation_partenaire extends CI_Controller {
 						}  
 						else if('AR' == $cell->getColumn())
 						{
-							$date_os =$cell->getFormattedValue();							
+							//$date_os =$cell->getFormattedValue();
+							$date_os =$cell->getValue();
+							if(isset($date_os) && $date_os>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_os = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_os)); 
+								}
+							} 
+							else 
+							{
+								$date_os=null;
+							}							
 						}  
 						else if('AS' == $cell->getColumn())
 						{

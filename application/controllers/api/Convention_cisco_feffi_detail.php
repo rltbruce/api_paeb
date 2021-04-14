@@ -12,6 +12,11 @@ class Convention_cisco_feffi_detail extends REST_Controller {
         $this->load->model('convention_cisco_feffi_detail_model', 'Convention_cisco_feffi_detailManager');
         $this->load->model('convention_cisco_feffi_entete_model', 'Convention_cisco_feffi_enteteManager');
         $this->load->model('compte_feffi_model', 'Compte_feffiManager');
+        $this->load->model('batiment_construction_model', 'Batiment_constructionManager');
+        $this->load->model('latrine_construction_model', 'Latrine_constructionManager');
+        $this->load->model('mobilier_construction_model', 'Mobilier_constructionManager');
+        $this->load->model('cout_maitrise_construction_model', 'Cout_maitrise_constructionManager');
+        $this->load->model('cout_sousprojet_construction_model', 'Cout_sousprojet_constructionManager');
         //$this->load->model('zone_subvention_model', 'Zone_subventionManager');
         //$this->load->model('acces_zone_model', 'Acces_zoneManager');
        // $this->load->model('composant_model', 'ComposantManager');
@@ -23,8 +28,22 @@ class Convention_cisco_feffi_detail extends REST_Controller {
         $id_convention_entete = $this->get('id_convention_entete');
         $id_zone_subvention = $this->get('id_zone_subvention');
         $id_acces_zone = $this->get('id_acces_zone');
+        
+        $id_convention_entete_delete = $this->get('id_convention_entete_delete');
+        $menu = $this->get('menu');
 
-        if ($id_convention_entete)
+        if ($menu=="deletededail")
+        {
+            $detail = $this->Convention_cisco_feffi_detailManager->delete_detail($id_convention_entete_delete );
+            $batiment = $this->Batiment_constructionManager->delete_detail($id_convention_entete_delete );
+            $latrine = $this->Latrine_constructionManager->delete_detail($id_convention_entete_delete );
+            $mobilier = $this->Mobilier_constructionManager->delete_detail($id_convention_entete_delete );
+            $cout_maitrise = $this->Cout_maitrise_constructionManager->delete_detail($id_convention_entete_delete );
+            $cout_sousprojet = $this->Cout_sousprojet_constructionManager->delete_detail($id_convention_entete_delete );
+            $data = array();
+            
+        }
+        elseif ($id_convention_entete)
         {
             $detail = $this->Convention_cisco_feffi_detailManager->findAllByEntete($id_convention_entete );
             if ($detail) 

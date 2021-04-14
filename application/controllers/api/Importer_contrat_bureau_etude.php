@@ -166,7 +166,18 @@ class Importer_contrat_bureau_etude extends CI_Controller {
 						}						   
 						else if('EO' == $cell->getColumn())
 						{
-							$date_cont =$cell->getFormattedValue();							
+							$date_cont =$cell->getValue();
+							if(isset($date_cont) && $date_cont>"")
+							{
+								if(PHPExcel_Shared_Date::isDateTime($cell))
+								{
+									$date_cont = date($format='Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($date_cont)); 
+								}
+							} 
+							else 
+							{
+								$date_cont=null;
+							}							
 						}	 
 					}
 					

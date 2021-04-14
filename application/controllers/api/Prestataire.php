@@ -15,8 +15,30 @@ class Prestataire extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
+        $menu = $this->get('menu');
+        $id_convention_entete = $this->get('id_convention_entete');
             
-        if ($id)
+        if ($menu=="prestataireBysousmissionnaire")
+        {
+            $tmp = $this->PrestataireManager->prestataireBysousmissionnaire($id_convention_entete);
+            if ($tmp) 
+            {
+                $data=$tmp;
+                /*foreach ($tmp as $key => $value) 
+                {
+                    $district = array();
+                    $data[$key]['id'] = $value->id;
+                    $data[$key]['telephone'] = $value->telephone;
+                    $data[$key]['nom'] = $value->nom;
+                    $data[$key]['nif'] = $value->nif;
+                    $data[$key]['stat'] = $value->stat;
+                    $data[$key]['siege'] = $value->siege;
+                }*/
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($id)
         {
             $data = array();
             $prestataire = $this->PrestataireManager->findById($id);
