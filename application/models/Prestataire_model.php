@@ -97,5 +97,10 @@ class Prestataire_model extends CI_Model {
             return array();
         }                 
     }
+    public function getprestatairebylike($nom) {
+		$requete="select * from prestataire where lower(nom) like '%".$nom."%'";
+		$query = $this->db->query($requete);
+        return $query->result();				
+	}
 
 }

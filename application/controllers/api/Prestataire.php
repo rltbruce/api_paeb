@@ -17,8 +17,19 @@ class Prestataire extends REST_Controller {
         $id = $this->get('id');
         $menu = $this->get('menu');
         $id_convention_entete = $this->get('id_convention_entete');
+        $mpe_like = $this->get('mpe_like');
             
-        if ($menu=="prestataireBysousmissionnaire")
+        if ($menu=="getprestatairebylike")
+        {   $mpe = strtolower($mpe_like);
+            $tmp = $this->PrestataireManager->getprestatairebylike($mpe);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($menu=="prestataireBysousmissionnaire")
         {
             $tmp = $this->PrestataireManager->prestataireBysousmissionnaire($id_convention_entete);
             if ($tmp) 

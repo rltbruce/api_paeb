@@ -82,5 +82,10 @@ class Bureau_etude_model extends CI_Model {
             return array();
         }                 
     }
+    public function getbureau_etudebylike($nom) {
+		$requete="select * from bureau_etude where lower(nom) like '%".$nom."%'";
+		$query = $this->db->query($requete);
+        return $query->result();				
+	}
 
 }

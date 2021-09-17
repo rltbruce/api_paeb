@@ -1597,7 +1597,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
            //$data[0] = $date_last;
           //$data[1] = $now;
        }
-      /* 
+       
         elseif ($menu=='getdonneeexporter') //mande       
          {
                     
@@ -1743,7 +1743,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($menu=='getconventionNeeddemandefeffivalidationufp') //mande       
+       /* elseif ($menu=='getconventionNeeddemandefeffivalidationufp') //mande       
         {
                     
             $tmp = $this->Convention_cisco_feffi_enteteManager->getconventionNeeddemandefeffivalidationufp();
@@ -1809,7 +1809,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
             } 
                 else
                     $data = array();
-        }
+        }*/
         elseif ($menu=='getconventionNeeddemandefeffivalidationpdfi') //mande       
         {
                     
@@ -2172,7 +2172,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                 else
                     $data = array();
         }
-        elseif ($menu=='getconventionvalidedaafBydate') //mande       
+       /* elseif ($menu=='getconventionvalidedaafBydate') //mande       
         {
                     
             $tmp = $this->Convention_cisco_feffi_enteteManager->findconventionvalidedaafBydate($this->generer_requete($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot));
@@ -2251,7 +2251,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
             } 
                 else
                     $data = array();
-        }
+        }*/
         elseif ($menu=='getconventionvalideufpBydate') //mande       
         {
                     
@@ -2395,7 +2395,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                     $data = array();
                    //$data['user'] = $this->generer_requete2($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap);
         }
-        elseif ($menu=='getconventionfiltre') //tsy mande       
+       /* elseif ($menu=='getconventionfiltre') //tsy mande       
         {
                     
             $tmp = $this->Convention_cisco_feffi_enteteManager->findAllByfiltre($this->generer_requete2($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap));
@@ -2457,7 +2457,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                 else
                     $data = array();
                    //$data['user'] = $this->generer_requete2($date_debut,$date_fin,$id_region,$id_cisco,$id_commune,$id_ecole,$id_convention_entete,$lot,$id_zap);
-        }
+        }*/
         elseif ($menu=='getconventioninvalidefiltre') //mande       
         {
                     
@@ -3217,7 +3217,7 @@ class Convention_cisco_feffi_entete extends REST_Controller {
                 else
                     $data = array();
         } 
-        elseif ($menu=='getconventionByecole')
+       /* elseif ($menu=='getconventionByecole')
         {
             $tmp = $this->Convention_cisco_feffi_enteteManager->findconventionByid_ecole($id_ecole);
             if ($tmp) 

@@ -15,8 +15,20 @@ class Bureau_etude extends REST_Controller {
     public function index_get() 
     {
         $id = $this->get('id');
-            
-        if ($id)
+        $menu = $this->get('menu');
+        $moe_like = $this->get('moe_like');
+
+        if ($menu=="getbureau_etudebylike")
+        {   $moe = strtolower($moe_like);
+            $tmp = $this->Bureau_etudeManager->getbureau_etudebylike($moe);
+            if ($tmp) 
+            {
+                $data=$tmp;
+            } 
+                else
+                    $data = array();
+        } 
+        elseif ($id)
         {
             $data = array();
             $bureau_etude = $this->Bureau_etudeManager->findById($id);
